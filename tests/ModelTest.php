@@ -7,7 +7,7 @@ use Neat\Object\Model;
 use PHPUnit\Framework\TestCase;
 use Neat\Object\Tests\User;
 
-class UserTest extends TestCase
+class ModelTest extends TestCase
 {
     /**
      * @var User
