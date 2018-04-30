@@ -74,7 +74,7 @@ class User extends Entity {
 
   /**
    * @var string
-   **/
+   */
   public $name;
   
   public function group()
@@ -89,7 +89,7 @@ $groupRelation = $user->group();
 class User {
   /**
    * @var string
-   **/
+   */
   public $name;
   
   // Approach 1
