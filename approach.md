@@ -2,6 +2,10 @@
 
 Developping an ORM isn't easy, much choices need to be made. In order to create a well thought through ORM I started to document some of the possible approaches, their Pro's Con's and some code examples. The goal here is not to create an ORM with a static hell, everything being a service, creating proxy classes for every Entity or having to write a shit load of bootstrap code. Instead we want an efficient approach with low coupling and a nice readable syntax.
 
+## Final approach
+
+Both the Entity approach and the Entity Manager approach have their pros and cons. So we'we chosen to use an approach based on both of them. We'll create a EntityTrait which will have a static Entity Manager. It will also have some functions for retrieving and storing them. The Entity Manager will be the hard of the ORM as it will supply the Entity with the database connection and it's repository class/object.
+
 ## Preferred approach
 
 The Entity Manager approach allows an Entity to be 100% decoupled from the database which allows you to use it for many other things. The big drawback of this approach is that you'll need the Entity manager almost everywhere.
