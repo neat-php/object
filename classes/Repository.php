@@ -2,7 +2,6 @@
 
 namespace Neat\Object;
 
-use Neat\Database\Query;
 use Neat\Database\Result;
 
 class Repository
@@ -13,7 +12,7 @@ class Repository
     private $entityManager;
 
     /**
-     * @var Model
+     * @var self
      */
     private $entity;
 
@@ -92,7 +91,7 @@ class Repository
         return $query;
     }
 
-    private function getTableName(): string
+    public function getTableName(): string
     {
         if ($this->hasMethod('getTableName')) {
             return $this->entity::getTableName();
@@ -106,13 +105,23 @@ class Repository
     /**
      * @return array|string
      */
-    private function getIdentifier()
+    public function getIdentifier()
     {
         if ($this->hasMethod('getIdentifier')) {
             return $this->entity::getIdentifier();
         }
 
         return 'id';
+    }
+
+    /**
+     * Returns the default remote identifier by convention tableName_id
+     *
+     * @return string
+     */
+    public function getRemoteIdentifier()
+    {
+        return $this->getTableName() . '_id';
     }
 
     private function hasMethod(string $methodName): bool
