@@ -29,8 +29,11 @@ class EntityManager
      */
     public function getRepository(string $entity): Repository
     {
-        // @TODO make it possible to overwrite the used repository for a specified Entity
+        $repositoryClass = Repository::class;
+        if (defined("$entity::REPOSITORY")) {
+            $repositoryClass = $entity::REPOSITORY;
+        }
 
-        return new Repository($this, $entity);
+        return new $repositoryClass($this, $entity);
     }
 }
