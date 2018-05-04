@@ -2,10 +2,9 @@
 
 namespace Neat\Object\Test;
 
-use Neat\Database\Connection;
-use Neat\Object\Model;
+use Neat\Object\EntityManager;
+use Neat\Object\EntityTrait;
 use PHPUnit\Framework\TestCase;
-use Neat\Object\Tests\User;
 
 class ModelTest extends TestCase
 {
@@ -15,16 +14,23 @@ class ModelTest extends TestCase
     private $user;
 
     /**
-     * @var Connection
+     * Factory
+     *
+     * @var Factory
      */
-    private $connection;
+    private $create;
+
+    /**
+     * @var EntityManager
+     */
+    private $manager;
 
     public function setUp()
     {
+        $this->create = new Factory($this);
         $this->user = new User;
-        $pdo = new \PDO('sqlite::memory:');
-        $this->connection = new Connection($pdo);
-        Model::setConnection($this->connection);
+        $this->manager = $this->create->entityManager();
+        EntityTrait::setEntityManager($this->manager);
     }
 
     /**
@@ -36,7 +42,7 @@ class ModelTest extends TestCase
     protected function minifySQL($query)
     {
         $replace = [
-            '|\s+|m'     => ' ',
+            '|\s+|m' => ' ',
             '|\s*,\s*|m' => ',',
             '|\s*=\s*|m' => '=',
         ];
@@ -60,13 +66,47 @@ class ModelTest extends TestCase
         );
     }
 
-    public function testTableName()
+    public function testRepository()
     {
-        $this->assertEquals('user', User::getTableName());
+        $this->assertEquals($this->create->entityManager(), User::getEntityManager());
     }
 
-    public function testQuery()
+//    public function testQuery()
+//    {
+//        $this->assertSQL('SELECT * FROM user', User::query()->getSelectQuery());
+//    }
+
+    public function testCreateFromArray()
     {
-        $this->assertSQL('SELECT * FROM user', User::query()->getSelectQuery());
+        // We can't use now because it will fail comparing anything smaller than seconds
+        $updateDate = new \DateTime(date('Y-m-d H:i:s'));
+        $array = [
+            'id' => 1,
+            'username' => 'jdoe',
+            'first_name' => 'John',
+            'middle_name' => null,
+            'last_name' => 'Doe',
+            'active' => 1,
+            'update_date' => $updateDate->format('Y-m-d H:i:s'),
+            'type_id' => null,
+        ];
+        $user = User::createFromArray($array);
+        $objectArray = $array;
+        $objectArray['active'] = true;
+        $objectArray['update_date'] = $updateDate;
+        $this->assertEquals(
+            array_values(array_merge($objectArray, ['active' => true, 'update_date' => $updateDate])),
+            [$user->id, $user->username, $user->firstName, $user->middleName, $user->lastName, $user->active, $user->updateDate, $user->typeId],
+            'Test object values');
+        $this->assertEquals($array, $user->toArray(), 'Test toArray method');
     }
+
+//    public function testFindById()
+//    {
+//        $user = User::findById(1);
+//        $this->assertInstanceOf(User::class, $user);
+//        $this->assertEquals('John', $user->firstName);
+//        $user = User::findById(0);
+//        $this->assertEquals(null, $user);
+//    }
 }
