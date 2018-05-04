@@ -64,7 +64,7 @@ trait EntityTrait
         $result = static::getRepository()
             ->findAll($where, $orderBy);
 
-        return array_map([static::class, 'createFromArray'], $result->rfows());
+        return array_map([static::class, 'createFromArray'], $result->rows());
     }
 
     protected static function getRepository()
