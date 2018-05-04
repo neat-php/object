@@ -8,14 +8,19 @@ trait EntityTrait
     /**
      * @var EntityManager
      */
-    protected static $entityManager;
+    public static $entityManager;
 
     /**
      * @param mixed $entityManager
      */
     public static function setEntityManager(EntityManager $entityManager)
     {
-        static::$entityManager = $entityManager;
+        EntityTrait::$entityManager = $entityManager;
+    }
+
+    public static function getEntityManager(): EntityManager
+    {
+        return EntityTrait::$entityManager;
     }
 
     /**
