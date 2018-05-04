@@ -26,6 +26,7 @@ class Repository
     {
         $this->entityManager = $entityManager;
         $this->entity = $entity;
+        $this->reflection = new \ReflectionClass($this->entity);
         if (!$this->hasMethod('fromArray') ||
             !$this->hasMethod('toArray')) {
             throw new \RuntimeException("Entity $this->entity doesn't have the required methods fromArray and toArray");
@@ -52,10 +53,10 @@ class Repository
         return $this->findAll([$this->getIdentifier() => $id]);
     }
 
-    public function findOne($query, string $orderBy = null): Result
+    public function findOne($conditions, string $orderBy = null): Result
     {
         $query = $this->query()
-            ->where($query)
+            ->where($conditions)
             ->limit(1);
 
         if ($orderBy) {
@@ -70,10 +71,10 @@ class Repository
      * @param string|null $orderBy
      * @return Result
      */
-    public function findAll($query, string $orderBy = null): Result
+    public function findAll($conditions, string $orderBy = null): Result
     {
         $query = $this->query()
-            ->where($query);
+            ->where($conditions);
 
         if ($orderBy) {
             $query->orderBy($orderBy);
@@ -84,10 +85,8 @@ class Repository
 
     public function query()
     {
-        $query = new Query($this->entityManager->getConnection());
-
         // @TODO add an alias for advanced querying
-        $query->select('*')
+        $query = $this->entityManager->getConnection()->select('*')
             ->from($this->getTableName());
 
         return $query;
@@ -118,15 +117,6 @@ class Repository
 
     private function hasMethod(string $methodName): bool
     {
-        return $this->getReflection()->hasMethod($methodName);
-    }
-
-    private function getReflection(): \ReflectionClass
-    {
-        if (!$this->reflection) {
-            $this->reflection = new \ReflectionClass($this->entity);
-        }
-
-        return $this->reflection;
+        return $this->reflection->hasMethod($methodName);
     }
 }
