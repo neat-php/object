@@ -69,6 +69,6 @@ trait EntityTrait
 
     protected static function getRepository()
     {
-        return static::$entityManager->getRepository(static::class);
+        return static::getEntityManager()->getRepository(static::class);
     }
 }
