@@ -27,7 +27,7 @@ class User extends Entity
     public $firstName;
 
     /**
-     * @var string
+     * @var
      */
     public $middleName;
 

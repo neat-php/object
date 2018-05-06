@@ -6,9 +6,32 @@ namespace Neat\Object\Test;
 use Neat\Database\Connection;
 use Neat\Object\EntityManager;
 use Neat\Object\Repository;
+use PDO;
 
 class Factory extends \Neat\Database\Test\Factory
 {
+    public function pdo()
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('CREATE TABLE user (
+                      id          INTEGER PRIMARY KEY,
+                      type_id     INTEGER  NOT NULL,
+                      username    TEXT     NOT NULL,
+                      first_name  TEXT     NOT NULL,
+                      middle_name TEXT     NULL,
+                      last_name   TEXT     NOT NULL,
+                      active      INTEGER  NOT NULL DEFAULT 1,
+                      update_date DATETIME NOT NULL
+                    )');
+        $pdo->exec("INSERT INTO user (id, type_id, username, first_name, middle_name, last_name, active, update_date)
+                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, CURRENT_TIMESTAMP),
+                      (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, CURRENT_TIMESTAMP),
+                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, CURRENT_TIMESTAMP)");
+
+        return $pdo;
+    }
+
     /**
      * @param Connection|null $connection
      * @return EntityManager

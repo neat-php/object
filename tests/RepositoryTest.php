@@ -38,6 +38,15 @@ class RepositoryTest extends TestCase
     public function testTableName()
     {
         $this->assertEquals('user', $this->userRepository->getTableName());
+
+        $this->assertEquals(Weirdo::getTableName(), $this->create->repository(Weirdo::class)->getTableName());
+    }
+
+    public function testIdentifier()
+    {
+        $this->assertEquals('id', $this->create->repository(User::class)->getIdentifier());
+
+        $this->assertEquals(Weirdo::getIdentifier(), $this->create->repository(Weirdo::class)->getIdentifier());
     }
 
     public function testFindById()

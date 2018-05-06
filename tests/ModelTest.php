@@ -101,12 +101,23 @@ class ModelTest extends TestCase
         $this->assertEquals($array, $user->toArray(), 'Test toArray method');
     }
 
-//    public function testFindById()
-//    {
-//        $user = User::findById(1);
-//        $this->assertInstanceOf(User::class, $user);
-//        $this->assertEquals('John', $user->firstName);
-//        $user = User::findById(0);
-//        $this->assertEquals(null, $user);
-//    }
+    public function testFindById()
+    {
+        $user = User::findById(1);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals('John', $user->firstName);
+        $user = User::findById(0);
+        $this->assertEquals(null, $user);
+    }
+
+    public function testFindAll()
+    {
+        $users = User::findAll(['id' => 1]);
+        $this->assertInternalType('array', $users);
+        $user = array_shift($users);
+        $this->assertInstanceOf(User::class, $user);
+
+        $users = User::findAll(['id' => 0]);
+        $this->assertInternalType('array', $users);
+    }
 }
