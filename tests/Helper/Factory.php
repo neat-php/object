@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Neat\Object\Test;
+namespace Neat\Object\Test\Helper;
 
 use Neat\Database\Connection;
 use Neat\Object\EntityManager;

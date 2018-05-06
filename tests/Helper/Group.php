@@ -1,10 +1,10 @@
 <?php
 
-
-namespace Neat\Object\Test;
+namespace Neat\Object\Test\Helper;
 
 use Neat\Object\ArrayConversion;
 use Neat\Object\Entity;
+use Neat\Object\Test\Helper\GroupRepository;
 
 class Group extends Entity
 {

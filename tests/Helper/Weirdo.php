@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object\Test;
+namespace Neat\Object\Test\Helper;
 
 use Neat\Object\ArrayConversion;
 use Neat\Object\EntityTrait;

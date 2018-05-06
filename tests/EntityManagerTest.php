@@ -2,7 +2,11 @@
 
 namespace Neat\Object\Test;
 
-use Neat\Object\Repository;
+use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\Group;
+use Neat\Object\Test\Helper\GroupRepository;
+use Neat\Object\Test\Helper\NoEntity;
+use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 
 class EntityManagerTest extends TestCase

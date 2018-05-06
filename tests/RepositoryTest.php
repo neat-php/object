@@ -3,6 +3,9 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Repository;
+use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\User;
+use Neat\Object\Test\Helper\Weirdo;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase

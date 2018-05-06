@@ -4,6 +4,8 @@ namespace Neat\Object\Test;
 
 use Neat\Object\EntityManager;
 use Neat\Object\EntityTrait;
+use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 
 class ModelTest extends TestCase
