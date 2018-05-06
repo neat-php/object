@@ -27,8 +27,8 @@ class ModelTest extends TestCase
 
     public function setUp()
     {
-        $this->create = new Factory($this);
-        $this->user = new User;
+        $this->create  = new Factory($this);
+        $this->user    = new User;
         $this->manager = $this->create->entityManager();
         EntityTrait::setEntityManager($this->manager);
     }
@@ -42,7 +42,7 @@ class ModelTest extends TestCase
     protected function minifySQL($query)
     {
         $replace = [
-            '|\s+|m' => ' ',
+            '|\s+|m'     => ' ',
             '|\s*,\s*|m' => ',',
             '|\s*=\s*|m' => '=',
         ];
@@ -79,24 +79,35 @@ class ModelTest extends TestCase
     public function testCreateFromArray()
     {
         // We can't use now because it will fail comparing anything smaller than seconds
-        $updateDate = new \DateTime(date('Y-m-d H:i:s'));
-        $array = [
-            'id' => 1,
-            'username' => 'jdoe',
-            'first_name' => 'John',
-            'middle_name' => null,
-            'last_name' => 'Doe',
-            'active' => 1,
-            'update_date' => $updateDate->format('Y-m-d H:i:s'),
-            'type_id' => null,
+        $updateDate                 = new \DateTime(date('Y-m-d H:i:s'));
+        $array                      = [
+            'id'           => 1,
+            'type_id'      => null,
+            'username'     => 'jdoe',
+            'first_name'   => 'John',
+            'middle_name'  => null,
+            'last_name'    => 'Doe',
+            'active'       => 1,
+            'update_date'  => $updateDate->format('Y-m-d H:i:s'),
+            'deleted_date' => null,
         ];
-        $user = User::createFromArray($array);
-        $objectArray = $array;
-        $objectArray['active'] = true;
+        $user                       = User::createFromArray($array);
+        $objectArray                = $array;
+        $objectArray['active']      = true;
         $objectArray['update_date'] = $updateDate;
         $this->assertEquals(
             array_values(array_merge($objectArray, ['active' => true, 'update_date' => $updateDate])),
-            [$user->id, $user->username, $user->firstName, $user->middleName, $user->lastName, $user->active, $user->updateDate, $user->typeId],
+            [
+                $user->id,
+                $user->typeId,
+                $user->username,
+                $user->firstName,
+                $user->middleName,
+                $user->lastName,
+                $user->active,
+                $user->updateDate,
+                $user->deletedDate,
+            ],
             'Test object values');
         $this->assertEquals($array, $user->toArray(), 'Test toArray method');
     }

@@ -43,6 +43,11 @@ class User extends Entity
      */
     public $updateDate;
 
+    /**
+     * @var \DateTime
+     */
+    public $deletedDate;
+
 //    public function type()
 //    {
 //        return $this->belongsToOne(Type::class);
