@@ -39,7 +39,7 @@ class Repository
     public function findById($id): Result
     {
         if (is_array($this->getIdentifier()) && is_array($id)) {
-            return $this->findAll($id);
+            return $this->findOne($id);
         }
         if (is_array($this->getIdentifier())) {
             throw new \RuntimeException("Entity $this->entity has a composed key, finding by id requires an array, $id given");
@@ -49,7 +49,7 @@ class Repository
             throw new \RuntimeException("Entity $this->entity doesn't have a composed key, finding by id requires an int or string, $printed given");
         }
 
-        return $this->findAll([$this->getIdentifier() => $id]);
+        return $this->findOne([$this->getIdentifier() => $id]);
     }
 
     public function findOne($conditions, string $orderBy = null): Result
