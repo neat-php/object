@@ -70,10 +70,12 @@ class Repository
      * @param string|null $orderBy
      * @return Result
      */
-    public function findAll($conditions, string $orderBy = null): Result
+    public function findAll($conditions = null, string $orderBy = null): Result
     {
-        $query = $this->query()
-            ->where($conditions);
+        $query = $this->query();
+        if ($conditions) {
+            $query->where($conditions);
+        }
 
         if ($orderBy) {
             $query->orderBy($orderBy);
