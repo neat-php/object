@@ -65,7 +65,7 @@ class Factory extends \Neat\Database\Test\Factory
         return $this->case
             ->getMockBuilder(Repository::class)
             ->setMethods($methods)
-            ->setConstructorArgs([$entity, $entityManager ?: $this->entityManager()])
+            ->setConstructorArgs([$entityManager ?: $this->entityManager(), $entity])
             ->getMock();
     }
 }
