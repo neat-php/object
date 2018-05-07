@@ -15,12 +15,12 @@ trait EntityTrait
      */
     public static function setEntityManager(EntityManager $entityManager)
     {
-        EntityTrait::$entityManager = $entityManager;
+        static::$entityManager = $entityManager;
     }
 
     public static function getEntityManager(): EntityManager
     {
-        return EntityTrait::$entityManager;
+        return static::$entityManager ?: EntityTrait::$entityManager;
     }
 
     /**
