@@ -12,21 +12,21 @@ trait ArrayConversion
      *
      * @var \ReflectionProperty[]
      */
-    private static $propertyFields;
+    protected static $propertyFields;
 
     /**
      * Property types
      *
      * @var string[]
      */
-    private static $propertyTypes;
+    protected static $propertyTypes;
 
     /**
      * No_Storage fields
      *
      * @var string[]
      */
-    private static $nostoreFields;
+    protected static $nostoreFields;
 
     /**
      * Gets a list of properties indexed lower_cased key
@@ -35,9 +35,9 @@ trait ArrayConversion
      */
     private static function getPropertyFields()
     {
-        if (!isset(self::$propertyFields)) {
-            self::$propertyFields = [];
-            $class = new \ReflectionClass(get_called_class());
+        if (!isset(static::$propertyFields[static::class])) {
+            static::$propertyFields[static::class] = [];
+            $class                                 = new \ReflectionClass(get_called_class());
             foreach ($class->getProperties() as $property) {
                 if ($property->isStatic()) {
                     continue;
@@ -55,19 +55,19 @@ trait ArrayConversion
                     $key = strtolower($property->getName());
                 }
                 $property->setAccessible(true);
-                self::$propertyFields[$key] = $property;
+                static::$propertyFields[static::class][$key] = $property;
             }
         }
 
-        return self::$propertyFields;
+        return static::$propertyFields[static::class];
     }
 
     private static function parsePropertyFieldDocs()
     {
-        self::$propertyTypes = [];
-        self::$nostoreFields = [];
+        static::$propertyTypes[static::class] = [];
+        static::$nostoreFields[static::class] = [];
 
-        foreach (self::getPropertyFields() as $key => $property) {
+        foreach (static::getPropertyFields() as $key => $property) {
             $parameters = [];
 
             // @var => Datatype
@@ -78,11 +78,11 @@ trait ArrayConversion
             } else {
                 $type = '';
             }
-            self::$propertyTypes[$key] = $type;
+            static::$propertyTypes[static::class][$key] = $type;
 
             // @nostorage => Heeft geen veld in de database
             if (preg_match('/\\s@nostorage\\s/', $property->getDocComment(), $parameters)) {
-                self::$nostoreFields[] = $key;
+                static::$nostoreFields[static::class][] = $key;
             }
         }
 
@@ -96,20 +96,20 @@ trait ArrayConversion
      */
     private static function getPropertyTypes()
     {
-        if (!isset(self::$propertyTypes)) {
-            self::parsePropertyFieldDocs();
+        if (!isset(static::$propertyTypes[static::class])) {
+            static::parsePropertyFieldDocs();
         }
 
-        return self::$propertyTypes;
+        return static::$propertyTypes[static::class];
     }
 
     private static function getNoStorageFields()
     {
-        if (!isset(self::$nostoreFields)) {
-            self::parsePropertyFieldDocs();
+        if (!isset(static::$nostoreFields[static::class])) {
+            static::parsePropertyFieldDocs();
         }
 
-        return self::$nostoreFields;
+        return static::$nostoreFields[static::class];
     }
 
     /**
@@ -149,8 +149,8 @@ trait ArrayConversion
     public function toArray(): array
     {
         $array = [];
-        $types = self::getPropertyTypes();
-        foreach (self::getPropertyFields() as $key => $property) {
+        $types = static::getPropertyTypes();
+        foreach (static::getPropertyFields() as $key => $property) {
             if (!in_array($key, $this->getNoStorageFields())) {
                 $array[$key] = $this->toArrayValue($property, $types[$key]);
             }
@@ -195,8 +195,8 @@ trait ArrayConversion
      */
     public function fromArray(array $array)
     {
-        $types = self::getPropertyTypes();
-        foreach (self::getPropertyFields() as $key => $property) {
+        $types = static::getPropertyTypes();
+        foreach (static::getPropertyFields() as $key => $property) {
             if (!in_array($key, $this->getNoStorageFields())) {
                 $value = isset($array[$key]) ? $array[$key] : null;
                 $this->fromArrayValue($property, $types[$key], $value);
