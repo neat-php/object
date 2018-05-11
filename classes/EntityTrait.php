@@ -2,7 +2,6 @@
 
 namespace Neat\Object;
 
-
 trait EntityTrait
 {
     /**
@@ -47,7 +46,7 @@ trait EntityTrait
      */
     public static function findById($id)
     {
-        $result = static::getRepository()
+        $result = static::repository()
             ->findById($id);
 
         return static::createFromArray($result->row());
@@ -60,14 +59,13 @@ trait EntityTrait
      */
     public static function findAll($where, $orderBy = null)
     {
-
-        $result = static::getRepository()
+        $result = static::repository()
             ->findAll($where, $orderBy);
 
         return array_map([static::class, 'createFromArray'], $result->rows());
     }
 
-    protected static function getRepository()
+    protected static function repository()
     {
         return static::getEntityManager()->getRepository(static::class);
     }

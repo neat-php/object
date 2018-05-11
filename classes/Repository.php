@@ -24,8 +24,8 @@ class Repository
     public function __construct(EntityManager $entityManager, string $entity)
     {
         $this->entityManager = $entityManager;
-        $this->entity = $entity;
-        $this->reflection = new \ReflectionClass($this->entity);
+        $this->entity        = $entity;
+        $this->reflection    = new \ReflectionClass($this->entity);
         if (!$this->hasMethod('fromArray') ||
             !$this->hasMethod('toArray')) {
             throw new \RuntimeException("Entity $this->entity doesn't have the required methods fromArray and toArray");
@@ -42,11 +42,12 @@ class Repository
             return $this->findOne($id);
         }
         if (is_array($this->getIdentifier())) {
-            throw new \RuntimeException("Entity $this->entity has a composed key, finding by id requires an array, $id given");
+            $printed = print_r($id, true);
+            throw new \RuntimeException("Entity $this->entity has a composed key, finding by id requires an array, given: $printed");
         }
         if (is_array($id)) {
             $printed = print_r($id, true);
-            throw new \RuntimeException("Entity $this->entity doesn't have a composed key, finding by id requires an int or string, $printed given");
+            throw new \RuntimeException("Entity $this->entity doesn't have a composed key, finding by id requires an int or string, given: $printed");
         }
 
         return $this->findOne([$this->getIdentifier() => $id]);
