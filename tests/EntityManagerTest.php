@@ -4,7 +4,6 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;
-use Neat\Object\Test\Helper\GroupRepository;
 use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
@@ -28,10 +27,7 @@ class EntityManagerTest extends TestCase
             $this->create->entityManager()->getRepository(User::class)
         );
 
-        $this->assertEquals(
-            new GroupRepository($this->create->entityManager(), Group::class),
-            $this->create->entityManager()->getRepository(Group::class)
-        );
+        $this->assertInstanceOf(Group::REPOSITORY, $this->create->entityManager()->getRepository(Group::class));
 
         $this->expectException(\RuntimeException::class);
         $this->create->entityManager()->getRepository(NoEntity::class);

@@ -54,12 +54,27 @@ class RepositoryTest extends TestCase
         $this->assertSame(UserGroup::getIdentifier(), $this->repository(UserGroup::class)->getIdentifier());
     }
 
-        $this->assertEquals(Weirdo::getIdentifier(), $this->create->repository(Weirdo::class)->getIdentifier());
+    public function testFind()
+    {
+        /** @var Repository $userRepository */
+        $userRepository = $this->create->repository(User::class);
+        $result = $userRepository->findAll();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertCount(3, $result->rows());
+
+        $result = $userRepository->findAll(['active' => false]);
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertCount(1, $result->rows());
     }
 
     public function testFindById()
     {
-        $this->assertTrue(true, "@TODO");
+        $userGroupData = ['user_id' => 1, 'group_id' => 2];
+
+        $userGroup = UserGroup::findById($userGroupData);
+        $this->assertInstanceOf(UserGroup::class, $userGroup);
+        $this->assertEquals(1, $userGroup->userId);
+        $this->assertEquals(2, $userGroup->groupId);
     }
 
     public function testFindAll()

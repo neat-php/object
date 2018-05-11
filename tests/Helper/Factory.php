@@ -25,9 +25,16 @@ class Factory extends \Neat\Database\Test\Factory
                       deleted_date DATETIME NULL
                     )');
         $pdo->exec("INSERT INTO user (id, type_id, username, first_name, middle_name, last_name, active, update_date, deleted_date)
-                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, CURRENT_TIMESTAMP, null),
+                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, CURRENT_TIMESTAMP, NULL),
                       (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, CURRENT_TIMESTAMP, null)");
+                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, CURRENT_TIMESTAMP, NULL)");
+        $pdo->exec("CREATE TABLE user_group (
+                      user_id  INTEGER NOT NULL,
+                      group_id INTEGER NOT NULL,
+                      CONSTRAINT user_group_user_id_group_id_pk PRIMARY KEY (user_id, group_id)
+                    );");
+        $pdo->exec("INSERT INTO user_group (user_id, group_id) 
+                    VALUES (1, 2)");
 
         return $pdo;
     }
