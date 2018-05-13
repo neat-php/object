@@ -4,7 +4,6 @@ namespace Neat\Object\Test\Helper;
 
 use Neat\Object\ArrayConversion;
 use Neat\Object\Entity;
-use Neat\Object\Test\Helper\GroupRepository;
 
 class Group extends Entity
 {
@@ -26,4 +25,9 @@ class Group extends Entity
      * @var string
      */
     public $description;
+
+    public static function getRemoteIdentifier()
+    {
+        return 'groupid';
+    }
 }

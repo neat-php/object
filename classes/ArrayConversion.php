@@ -64,6 +64,10 @@ trait ArrayConversion
 
     private static function parsePropertyFieldDocs()
     {
+        if (isset(static::$propertyTypes[static::class]) && isset(static::$nostoreFields[static::class])) {
+            return true;
+        }
+
         static::$propertyTypes[static::class] = [];
         static::$nostoreFields[static::class] = [];
 
@@ -96,18 +100,14 @@ trait ArrayConversion
      */
     private static function getPropertyTypes()
     {
-        if (!isset(static::$propertyTypes[static::class])) {
-            static::parsePropertyFieldDocs();
-        }
+        static::parsePropertyFieldDocs();
 
         return static::$propertyTypes[static::class];
     }
 
     private static function getNoStorageFields()
     {
-        if (!isset(static::$nostoreFields[static::class])) {
-            static::parsePropertyFieldDocs();
-        }
+        static::parsePropertyFieldDocs();
 
         return static::$nostoreFields[static::class];
     }

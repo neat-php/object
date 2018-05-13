@@ -4,8 +4,8 @@ namespace Neat\Object\Test;
 
 use Neat\Database\Result;
 use Neat\Object\EntityTrait;
-use Neat\Object\Repository;
 use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
 use Neat\Object\Test\Helper\Weirdo;
@@ -54,17 +54,14 @@ class RepositoryTest extends TestCase
         $this->assertSame(UserGroup::getIdentifier(), $this->repository(UserGroup::class)->getIdentifier());
     }
 
-    public function testFind()
+    public function testFindOne()
     {
-        /** @var Repository $userRepository */
         $userRepository = $this->create->repository(User::class);
-        $result = $userRepository->findAll();
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertCount(3, $result->rows());
 
-        $result = $userRepository->findAll(['active' => false]);
+        $result = $userRepository->findOne('id < 3', 'id DESC');
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertCount(1, $result->rows());
+        $row = $result->row();
+        $this->assertSame('2', $row['id']);
     }
 
     public function testFindById()
@@ -77,9 +74,37 @@ class RepositoryTest extends TestCase
         $this->assertEquals(2, $userGroup->groupId);
     }
 
+    public function testFindByIdSingle()
+    {
+        $this->expectException(\RuntimeException::class);
+        User::findById([1, 2]);
+    }
+
+    public function testFindByIdComposed()
+    {
+        $this->expectException(\RuntimeException::class);
+        UserGroup::findById('test');
+    }
+
     public function testFindAll()
     {
-        $this->assertTrue(true, "@TODO");
+        $userRepository = $this->create->repository(User::class);
+        $result         = $userRepository->findAll(null, 'id DESC');
+        $this->assertInstanceOf(Result::class, $result);
+        $rows = $result->rows();
+        $this->assertCount(3, $rows);
+        $row = array_shift($rows);
+        $this->assertSame('3', $row['id']);
+
+        $result = $userRepository->findAll(['active' => false]);
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertCount(1, $result->rows());
+    }
+
+    public function testGetRemoteIdentifier()
+    {
+        $this->assertSame('user_id', User::getEntityManager()->getRepository(User::class)->getRemoteIdentifier());
+        $this->assertSame('groupid', Group::getEntityManager()->getRepository(Group::class)->getRemoteIdentifier());
     }
 
 //    public function testQuery()

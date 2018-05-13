@@ -124,6 +124,10 @@ class Repository
      */
     public function getRemoteIdentifier()
     {
+        if ($this->hasMethod('getRemoteIdentifier')) {
+            return $this->entity::getRemoteIdentifier();
+        }
+
         return $this->getTableName() . '_id';
     }
 

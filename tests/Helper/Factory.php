@@ -9,6 +9,14 @@ use PDO;
 
 class Factory extends \Neat\Database\Test\Factory
 {
+    /**
+     * @var \DateTime
+     */
+    public $createdDate;
+
+    /**
+     * @return PDO
+     */
     public function pdo()
     {
         $pdo = new PDO('sqlite::memory:');
@@ -24,17 +32,26 @@ class Factory extends \Neat\Database\Test\Factory
                       update_date  DATETIME NOT NULL,
                       deleted_date DATETIME NULL
                     )');
-        $pdo->exec("INSERT INTO user (id, type_id, username, first_name, middle_name, last_name, active, update_date, deleted_date)
-                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, CURRENT_TIMESTAMP, NULL),
-                      (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, CURRENT_TIMESTAMP, NULL)");
-        $pdo->exec("CREATE TABLE user_group (
+        $this->createdDate = new \DateTime();
+        $pdo->exec("INSERT INTO `user` (id, type_id, username, first_name, middle_name, last_name, active, update_date, deleted_date)
+                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, '{$this->createdDate->format('Y-m-d H:i:s')}', NULL),
+                      (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, '{$this->createdDate->format('Y-m-d H:i:s')}', '{$this->createdDate->format('Y-m-d H:i:s')}'),
+                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, '{$this->createdDate->format('Y-m-d H:i:s')}', NULL)");
+        $pdo->exec("CREATE TABLE `user_group` (
                       user_id  INTEGER NOT NULL,
                       group_id INTEGER NOT NULL,
                       CONSTRAINT user_group_user_id_group_id_pk PRIMARY KEY (user_id, group_id)
                     );");
-        $pdo->exec("INSERT INTO user_group (user_id, group_id) 
+        $pdo->exec("INSERT INTO `user_group` (user_id, group_id) 
                     VALUES (1, 2)");
+        $pdo->exec("CREATE TABLE `group` (
+                      id    INTEGER PRIMARY KEY,
+                      name       NOT NULL,
+                      title TEXT NOT NULL
+                    )");
+        $pdo->exec("INSERT INTO `group` (id, name, title)
+                    VALUES (1, 'test_name', 'Test Title'),
+                      (2, 'test_name_2', 'Test Title 2');");
 
         return $pdo;
     }
