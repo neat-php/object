@@ -36,7 +36,7 @@ class ArrayCollection implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     protected function validate($item, $method)
     {
-        if (!$item instanceof $this->type) {
+        if ($this->type && !$item instanceof $this->type) {
             $class = get_class($item);
             throw new \TypeError("Argument 1 passed to $method must be of the type {$this->type}, $class given");
         }
@@ -134,7 +134,7 @@ class ArrayCollection implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Returns the first item in the array
      *
-     * @return Entity|mixed
+     * @return mixed
      */
     public function first()
     {
@@ -142,7 +142,7 @@ class ArrayCollection implements \ArrayAccess, \IteratorAggregate, \Countable
     }
 
     /**
-     * @param Entity|mixed $item
+     * @param mixed $item
      * @return $this
      */
     public function push($item)
@@ -192,7 +192,7 @@ class ArrayCollection implements \ArrayAccess, \IteratorAggregate, \Countable
     public function column($column, $arrayCollection = null)
     {
         if ($arrayCollection) {
-            return new $arrayCollection($this->map($column));
+            return new $arrayCollection($this->column($column));
         }
 
         return array_column($this->items, $column);
