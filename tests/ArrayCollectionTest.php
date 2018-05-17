@@ -3,6 +3,8 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\ArrayCollection;
+use Neat\Object\Test\Helper\User;
+use Neat\Object\Test\Helper\UserGroup;
 use PHPUnit\Framework\TestCase;
 
 class ArrayCollectionTest extends TestCase
@@ -52,10 +54,11 @@ class ArrayCollectionTest extends TestCase
 
     public function testMap()
     {
-        $this->assertSame($this->firstNames(), $this->arrayCollection->map(function ($data) {
+        $firstNames = $this->firstNames();
+        $this->assertSame($firstNames, $this->arrayCollection->map(function ($data) {
             return $data['firstName'];
         }));
-        $firstNameCollection = new ArrayCollection($this->firstNames());
+        $firstNameCollection = new ArrayCollection($firstNames);
         $this->assertEquals($firstNameCollection, $this->arrayCollection->map(function ($data) {
             return $data['firstName'];
         }, ArrayCollection::class));
@@ -68,35 +71,91 @@ class ArrayCollectionTest extends TestCase
 //        $this->assertNull($this->arrayCollection['notExistingKey']);
     }
 
-//    public function testPush()
-//    {
-//
-//    }
-//
-//    public function testColumn()
-//    {
-//
-//    }
-//
-//    public function testOffsetSet()
-//    {
-//
-//    }
-//
-//    public function testFilter()
-//    {
-//
-//    }
-//
-//    public function testGetIterator()
-//    {
-//
-//    }
+    public function testPush()
+    {
+        $arrayCollection = new ArrayCollection([]);
+        $arrayCollection->push("test");
+        $this->assertSame('test', $arrayCollection->first());
+        $this->assertCount(1, $arrayCollection);
+    }
+
+    public function testColumn()
+    {
+        $firstNames = array_values($this->firstNames());
+        $this->assertSame($firstNames, $this->arrayCollection->column('firstName'));
+        $this->assertEquals(new ArrayCollection($firstNames),
+            $this->arrayCollection->column('firstName', ArrayCollection::class));
+
+    }
+
+    public function testOffsetSet()
+    {
+        $this->arrayCollection['test'] = 'test';
+        $this->assertSame('test', $this->arrayCollection['test']);
+        $this->assertCount(4, $this->arrayCollection);
+    }
+
+    public function testFilter()
+    {
+        $expected = [
+            'jdoe'    => $this->array['jdoe'],
+            'janedoe' => $this->array['janedoe'],
+        ];
+
+        $this->assertEquals(new ArrayCollection($expected), $this->arrayCollection->filter(function ($data): bool {
+            return !$data['middleName'];
+        }));
+    }
+
+    public function testGetIterator()
+    {
+        $arrayCollection = new ArrayCollection(['foo' => 'bar',]);
+        foreach ($arrayCollection as $key => $value) {
+            $this->assertSame('foo', $key);
+            $this->assertSame('bar', $value);
+            break;
+        }
+    }
+
+    public function testTypedArray()
+    {
+        $user            = new User();
+        $arrayCollection = new ArrayCollection([$user]);
+        $this->assertSame(User::class, $this->getPrivateProperty($arrayCollection, 'type'));
+        $this->assertSame($user, $arrayCollection->first());
+
+        $this->expectException(\TypeError::class);
+        $arrayCollection->push(new UserGroup);
+    }
+
+    public function testTypeDefinedArray()
+    {
+        $user            = new User();
+        $arrayCollection = new ArrayCollection([$user], User::class);
+        $this->assertSame(User::class, $this->getPrivateProperty($arrayCollection, 'type'));
+
+        $this->expectException(\TypeError::class);
+        $arrayCollection->push(new UserGroup);
+    }
 
     private function firstNames()
     {
         return array_map(function ($data) {
             return $data['firstName'];
         }, $this->array);
+    }
+
+    private function getPrivateProperty($class, $property)
+    {
+        $reflectionClass = new \ReflectionClass($class);
+
+        $reflectionProperty = $reflectionClass->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        if (is_object($class)) {
+            return $reflectionProperty->getValue($class);
+        }
+
+        return $reflectionProperty->getValue();
     }
 }
