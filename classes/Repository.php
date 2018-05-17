@@ -17,19 +17,32 @@ class Repository
     private $entity;
 
     /**
-     * @var \ReflectionClass
+     * @var string
      */
-    private $reflection;
+    private $tableName;
 
-    public function __construct(EntityManager $entityManager, string $entity)
-    {
+    /**
+     * @var string|array
+     */
+    private $identifier;
+
+    /**
+     * Repository constructor.
+     * @param EntityManager $entityManager
+     * @param string $entity
+     * @param string|null $tableName
+     * @param mixed|null $identifier
+     */
+    public function __construct(
+        EntityManager $entityManager,
+        string $entity,
+        string $tableName = null,
+        $identifier = null
+    ) {
         $this->entityManager = $entityManager;
         $this->entity        = $entity;
-        $this->reflection    = new \ReflectionClass($this->entity);
-        if (!$this->hasMethod('fromArray') ||
-            !$this->hasMethod('toArray')) {
-            throw new \RuntimeException("Entity $this->entity doesn't have the required methods fromArray and toArray");
-        }
+        $this->tableName     = $tableName ?: $this->getTableName();
+        $this->identifier    = $identifier ?: $this->getIdentifier();
     }
 
     /**
@@ -38,10 +51,10 @@ class Repository
      */
     public function findById($id): Result
     {
-        if (is_array($this->getIdentifier()) && is_array($id)) {
+        if (is_array($this->identifier) && is_array($id)) {
             return $this->findOne($id);
         }
-        if (is_array($this->getIdentifier())) {
+        if (is_array($this->identifier)) {
             $printed = print_r($id, true);
             throw new \RuntimeException("Entity $this->entity has a composed key, finding by id requires an array, given: $printed");
         }
@@ -50,7 +63,7 @@ class Repository
             throw new \RuntimeException("Entity $this->entity doesn't have a composed key, finding by id requires an int or string, given: $printed");
         }
 
-        return $this->findOne([$this->getIdentifier() => $id]);
+        return $this->findOne([$this->identifier => $id]);
     }
 
     public function findOne($conditions, string $orderBy = null): Result
@@ -89,17 +102,13 @@ class Repository
     {
         // @TODO add an alias for advanced querying
         $query = $this->entityManager->getConnection()->select('*')
-            ->from($this->getTableName());
+            ->from($this->tableName);
 
         return $query;
     }
 
     public function getTableName(): string
     {
-        if ($this->hasMethod('getTableName')) {
-            return $this->entity::getTableName();
-        }
-
         $path = explode('\\', $this->entity);
 
         return strtolower(array_pop($path));
@@ -110,29 +119,6 @@ class Repository
      */
     public function getIdentifier()
     {
-        if ($this->hasMethod('getIdentifier')) {
-            return $this->entity::getIdentifier();
-        }
-
         return 'id';
-    }
-
-    /**
-     * Returns the default remote identifier by convention tableName_id
-     *
-     * @return string
-     */
-    public function getRemoteIdentifier()
-    {
-        if ($this->hasMethod('getRemoteIdentifier')) {
-            return $this->entity::getRemoteIdentifier();
-        }
-
-        return $this->getTableName() . '_id';
-    }
-
-    private function hasMethod(string $methodName): bool
-    {
-        return $this->reflection->hasMethod($methodName);
     }
 }

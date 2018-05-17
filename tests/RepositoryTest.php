@@ -5,7 +5,6 @@ namespace Neat\Object\Test;
 use Neat\Database\Result;
 use Neat\Object\EntityTrait;
 use Neat\Object\Test\Helper\Factory;
-use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
 use Neat\Object\Test\Helper\Weirdo;
@@ -24,11 +23,6 @@ class RepositoryTest extends TestCase
         EntityTrait::setEntityManager($this->create->entityManager());
     }
 
-    private function repository($entity)
-    {
-        return $this->create->repository($entity);
-    }
-
 //    public function testFindOne()
 //    {
 //        $where = ['where' => 'constraint'];
@@ -43,15 +37,22 @@ class RepositoryTest extends TestCase
 
     public function testTableName()
     {
-        $this->assertSame('user', $this->repository(User::class)->getTableName());
-        $this->assertSame(Weirdo::getTableName(), $this->repository(Weirdo::class)->getTableName());
+        $this->assertSame('user', $this->callMethod(User::class, 'repository')->getTableName());
+        $this->assertSame('user', $this->getProperty($this->callMethod(User::class, 'repository'), 'tableName'));
+        $this->assertSame('weirdo', $this->callMethod(Weirdo::class, 'repository')->getTableName());
+        $this->assertSame(
+            Weirdo::getTableName(), $this->getProperty($this->callMethod(Weirdo::class, 'repository'), 'tableName')
+        );
     }
 
     public function testIdentifier()
     {
-        $this->assertSame('id', $this->repository(User::class)->getIdentifier());
-        $this->assertSame(Weirdo::getIdentifier(), $this->repository(Weirdo::class)->getIdentifier());
-        $this->assertSame(UserGroup::getIdentifier(), $this->repository(UserGroup::class)->getIdentifier());
+        $userRepository      = $this->callMethod(User::class, 'repository');
+        $weirdoRepository    = $this->callMethod(Weirdo::class, 'repository');
+        $userGroupRepository = $this->callMethod(UserGroup::class, 'repository');
+        $this->assertSame('id', $this->getProperty($userRepository, 'identifier'));
+        $this->assertSame(Weirdo::getIdentifier(), $this->getProperty($weirdoRepository, 'identifier'));
+        $this->assertSame(UserGroup::getIdentifier(), $this->getProperty($userGroupRepository, 'identifier'));
     }
 
     public function testFindOne()
@@ -101,14 +102,35 @@ class RepositoryTest extends TestCase
         $this->assertCount(1, $result->rows());
     }
 
-    public function testGetRemoteIdentifier()
-    {
-        $this->assertSame('user_id', User::getEntityManager()->getRepository(User::class)->getRemoteIdentifier());
-        $this->assertSame('groupid', Group::getEntityManager()->getRepository(Group::class)->getRemoteIdentifier());
-    }
-
 //    public function testQuery()
 //    {
 //
 //    }
+
+    private function callMethod($class, $method, ...$arguments)
+    {
+        $reflectionClass  = new \ReflectionClass($class);
+        $reflectionMethod = $reflectionClass->getMethod($method);
+        $reflectionMethod->setAccessible(true);
+
+        if (is_object($class)) {
+            return $reflectionMethod->invoke($class, $arguments);
+        }
+
+        return $reflectionMethod->invoke(null, $arguments);
+    }
+
+    private function getProperty($class, $property)
+    {
+        $reflectionClass = new \ReflectionClass($class);
+
+        $reflectionProperty = $reflectionClass->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        if (is_object($class)) {
+            return $reflectionProperty->getValue($class);
+        }
+
+        return $reflectionProperty->getValue();
+    }
 }

@@ -65,8 +65,11 @@ trait EntityTrait
         return array_map([static::class, 'createFromArray'], $result->rows());
     }
 
-    protected static function repository()
+    /**
+     * @return Repository
+     */
+    protected static function repository(): Repository
     {
-        return static::getEntityManager()->getRepository(static::class);
+        return new Repository(static::getEntityManager(), static::class);
     }
 }

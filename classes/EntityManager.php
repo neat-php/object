@@ -22,18 +22,4 @@ class EntityManager
     {
         return $this->connection;
     }
-
-    /**
-     * @param string $entity
-     * @return mixed|Repository
-     */
-    public function getRepository(string $entity): Repository
-    {
-        $repositoryClass = Repository::class;
-        if (defined("$entity::REPOSITORY")) {
-            $repositoryClass = $entity::REPOSITORY;
-        }
-
-        return new $repositoryClass($this, $entity);
-    }
 }
