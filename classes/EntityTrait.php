@@ -38,6 +38,11 @@ trait EntityTrait
         return $static;
     }
 
+    public static function createFromRows(array $rows)
+    {
+        return array_map(['static', 'createFromArray'], $rows);
+    }
+
     /**
      * Finds an model by it's primary key, pass an array in case of an composed key
      *
@@ -55,14 +60,23 @@ trait EntityTrait
     /**
      * @param array|string $where
      * @param null|string $orderBy
-     * @return static[]
+     * @return ArrayCollection
      */
     public static function findAll($where, $orderBy = null)
     {
         $result = static::repository()
             ->findAll($where, $orderBy);
 
-        return array_map([static::class, 'createFromArray'], $result->rows());
+        return static::collection(static::createFromRows($result->rows()));
+    }
+
+    /**
+     * @param array $array
+     * @return ArrayCollection
+     */
+    protected static function collection(array $array)
+    {
+        return new ArrayCollection($array);
     }
 
     /**

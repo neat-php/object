@@ -2,6 +2,7 @@
 
 namespace Neat\Object\Test;
 
+use Neat\Object\ArrayCollection;
 use Neat\Object\EntityManager;
 use Neat\Object\EntityTrait;
 use Neat\Object\Test\Helper\Factory;
@@ -126,11 +127,13 @@ class ModelTest extends TestCase
     public function testFindAll()
     {
         $users = User::findAll(['id' => 1]);
-        $this->assertInternalType('array', $users);
-        $user = array_shift($users);
+        $this->assertInstanceOf(ArrayCollection::class, $users);
+        $user = $users->first();
         $this->assertInstanceOf(User::class, $user);
+        $this->assertCount(1, $users);
 
         $users = User::findAll(['id' => 0]);
-        $this->assertInternalType('array', $users);
+        $this->assertInstanceOf(ArrayCollection::class, $users);
+        $this->assertCount(0, $users);
     }
 }
