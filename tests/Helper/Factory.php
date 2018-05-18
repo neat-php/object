@@ -79,9 +79,13 @@ class Factory extends \Neat\Database\Test\Factory
             ->getMock();
     }
 
-    public function repository(string $entity, EntityManager $entityManager = null)
+    /**
+     * @param string $entity
+     * @return Repository
+     */
+    public function repository(string $entity)
     {
-        return new Repository($entityManager ?: $this->entityManager(), $entity);
+        return $this->callMethod($entity, 'repository');
     }
 
     public function mockedRepository(string $entity, EntityManager $entityManager = null, array $methods = [])
@@ -91,5 +95,18 @@ class Factory extends \Neat\Database\Test\Factory
             ->setMethods($methods)
             ->setConstructorArgs([$entityManager ?: $this->entityManager(), $entity])
             ->getMock();
+    }
+
+    public function callMethod($class, $method, ...$arguments)
+    {
+        $reflectionClass  = new \ReflectionClass($class);
+        $reflectionMethod = $reflectionClass->getMethod($method);
+        $reflectionMethod->setAccessible(true);
+
+        if (is_object($class)) {
+            return $reflectionMethod->invoke($class, $arguments);
+        }
+
+        return $reflectionMethod->invoke(null, $arguments);
     }
 }

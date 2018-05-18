@@ -12,11 +12,6 @@ class Repository
     private $entityManager;
 
     /**
-     * @var self
-     */
-    private $entity;
-
-    /**
      * @var string
      */
     private $tableName;
@@ -29,20 +24,14 @@ class Repository
     /**
      * Repository constructor.
      * @param EntityManager $entityManager
-     * @param string $entity
      * @param string|null $tableName
      * @param mixed|null $identifier
      */
-    public function __construct(
-        EntityManager $entityManager,
-        string $entity,
-        string $tableName = null,
-        $identifier = null
-    ) {
+    public function __construct(EntityManager $entityManager, string $tableName, $identifier)
+    {
         $this->entityManager = $entityManager;
-        $this->entity        = $entity;
-        $this->tableName     = $tableName ?: $this->getTableName();
-        $this->identifier    = $identifier ?: $this->getIdentifier();
+        $this->tableName     = $tableName;
+        $this->identifier    = $identifier;
     }
 
     /**
@@ -56,11 +45,11 @@ class Repository
         }
         if (is_array($this->identifier)) {
             $printed = print_r($id, true);
-            throw new \RuntimeException("Entity $this->entity has a composed key, finding by id requires an array, given: $printed");
+            throw new \RuntimeException("Entity $this->tableName has a composed key, finding by id requires an array, given: $printed");
         }
         if (is_array($id)) {
             $printed = print_r($id, true);
-            throw new \RuntimeException("Entity $this->entity doesn't have a composed key, finding by id requires an int or string, given: $printed");
+            throw new \RuntimeException("Entity $this->tableName doesn't have a composed key, finding by id requires an int or string, given: $printed");
         }
 
         return $this->findOne([$this->identifier => $id]);
@@ -105,20 +94,5 @@ class Repository
             ->from($this->tableName);
 
         return $query;
-    }
-
-    public function getTableName(): string
-    {
-        $path = explode('\\', $this->entity);
-
-        return strtolower(array_pop($path));
-    }
-
-    /**
-     * @return array|string
-     */
-    public function getIdentifier()
-    {
-        return 'id';
     }
 }

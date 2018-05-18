@@ -79,11 +79,23 @@ trait EntityTrait
         return new ArrayCollection($array);
     }
 
+    protected static function getTableName()
+    {
+        $path = explode('\\', static::class);
+
+        return strtolower(array_pop($path));
+    }
+
+    protected static function getIdentifier()
+    {
+        return 'id';
+    }
+
     /**
      * @return Repository
      */
     protected static function repository(): Repository
     {
-        return new Repository(static::getEntityManager(), static::class);
+        return new Repository(static::getEntityManager(), static::getTableName(), static::getIdentifier());
     }
 }

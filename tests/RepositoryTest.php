@@ -37,22 +37,23 @@ class RepositoryTest extends TestCase
 
     public function testTableName()
     {
-        $this->assertSame('user', $this->callMethod(User::class, 'repository')->getTableName());
-        $this->assertSame('user', $this->getProperty($this->callMethod(User::class, 'repository'), 'tableName'));
-        $this->assertSame('weirdo', $this->callMethod(Weirdo::class, 'repository')->getTableName());
-        $this->assertSame(
-            Weirdo::getTableName(), $this->getProperty($this->callMethod(Weirdo::class, 'repository'), 'tableName')
-        );
+        $this->assertSame('user', $this->callMethod(User::class, 'getTableName'));
+        $this->assertSame('user', $this->getProperty($this->create->repository(User::class), 'tableName'));
+        $this->assertSame('user_weirdo', $this->callMethod(Weirdo::class, 'getTableName'));
+        $this->assertSame('user_weirdo', $this->getProperty($this->create->repository(Weirdo::class), 'tableName'));
     }
 
     public function testIdentifier()
     {
-        $userRepository      = $this->callMethod(User::class, 'repository');
-        $weirdoRepository    = $this->callMethod(Weirdo::class, 'repository');
-        $userGroupRepository = $this->callMethod(UserGroup::class, 'repository');
+        $userRepository      = $this->create->repository(User::class);
+        $weirdoRepository    = $this->create->repository(Weirdo::class);
+        $userGroupRepository = $this->create->repository(UserGroup::class);
+        $this->assertSame('id', $this->callMethod(User::class, 'getIdentifier'));
         $this->assertSame('id', $this->getProperty($userRepository, 'identifier'));
-        $this->assertSame(Weirdo::getIdentifier(), $this->getProperty($weirdoRepository, 'identifier'));
-        $this->assertSame(UserGroup::getIdentifier(), $this->getProperty($userGroupRepository, 'identifier'));
+        $this->assertSame('key', Weirdo::getIdentifier());
+        $this->assertSame('key', $this->getProperty($weirdoRepository, 'identifier'));
+        $this->assertSame(['user_id', 'group_id'], UserGroup::getIdentifier());
+        $this->assertSame(['user_id', 'group_id'], $this->getProperty($userGroupRepository, 'identifier'));
     }
 
     public function testFindOne()
@@ -109,15 +110,7 @@ class RepositoryTest extends TestCase
 
     private function callMethod($class, $method, ...$arguments)
     {
-        $reflectionClass  = new \ReflectionClass($class);
-        $reflectionMethod = $reflectionClass->getMethod($method);
-        $reflectionMethod->setAccessible(true);
-
-        if (is_object($class)) {
-            return $reflectionMethod->invoke($class, $arguments);
-        }
-
-        return $reflectionMethod->invoke(null, $arguments);
+        return $this->create->callMethod($class, $method, ...$arguments);
     }
 
     private function getProperty($class, $property)
