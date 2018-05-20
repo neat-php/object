@@ -10,16 +10,38 @@ trait EntityTrait
     public static $entityManager;
 
     /**
-     * @param mixed $entityManager
+     * @param EntityManager $entityManager
      */
     public static function setEntityManager(EntityManager $entityManager)
     {
         static::$entityManager = $entityManager;
     }
 
+    /**
+     * @return EntityManager
+     */
     public static function getEntityManager(): EntityManager
     {
         return static::$entityManager ?: EntityTrait::$entityManager;
+    }
+
+    /**
+     * @return Repository
+     */
+    protected static function repository(): Repository
+    {
+        return static::getRepository(static::getEntityManager(), static::getTableName(), static::getIdentifier());
+    }
+
+    /**
+     * @param EntityManager $entityManager
+     * @param string $tableName
+     * @param string|array $identifier
+     * @return Repository
+     */
+    protected static function getRepository(EntityManager $entityManager, string $tableName, $identifier): Repository
+    {
+        return new Repository($entityManager, $tableName, $identifier);
     }
 
     /**
@@ -38,6 +60,10 @@ trait EntityTrait
         return $static;
     }
 
+    /**
+     * @param array $rows
+     * @return array
+     */
     public static function createFromRows(array $rows)
     {
         return array_map(['static', 'createFromArray'], $rows);
@@ -79,6 +105,59 @@ trait EntityTrait
         return new ArrayCollection($array);
     }
 
+    public function store()
+    {
+        $repository = static::repository();
+        $identifier = $this->identifier();
+        if ($identifier && $repository->exists($identifier)) {
+            $repository->update($identifier, $this->toArray());
+        } else {
+            $id         = $repository->create($this->toArray());
+            $identifier = $this->identifierProperties();
+            if ($id && count($identifier) === 1) {
+                /** @var \ReflectionProperty $property */
+                $property = array_shift($identifier);
+                $property->setValue($this, $id);
+            }
+        }
+
+    }
+
+    public function identifier()
+    {
+        $identifier = $this->identifierProperties();
+        if (count($identifier) === 1) {
+            $property = reset($identifier);
+
+            return $property->getValue($this);
+        }
+
+        return array_map(function (\ReflectionProperty $property) {
+            return $property->getValue($this);
+        }, $identifier);
+    }
+
+    /**
+     * @return \ReflectionProperty[]
+     */
+    protected function identifierProperties()
+    {
+        /** @var \ReflectionProperty[] $properties */
+        $properties = static::getPropertyFields();
+        $identifier = static::getIdentifier();
+
+        if (is_array($identifier)) {
+            return array_filter($properties, function ($key) use ($identifier) {
+                return in_array($key, $identifier);
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
+        return [$identifier => $properties[$identifier]];
+    }
+
+    /**
+     * @return string
+     */
     protected static function getTableName()
     {
         $path = explode('\\', static::class);
@@ -86,16 +165,11 @@ trait EntityTrait
         return strtolower(array_pop($path));
     }
 
+    /**
+     * @return string
+     */
     protected static function getIdentifier()
     {
         return 'id';
-    }
-
-    /**
-     * @return Repository
-     */
-    protected static function repository(): Repository
-    {
-        return new Repository(static::getEntityManager(), static::getTableName(), static::getIdentifier());
     }
 }

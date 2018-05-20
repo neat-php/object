@@ -103,6 +103,28 @@ class RepositoryTest extends TestCase
         $this->assertCount(1, $result->rows());
     }
 
+    public function testCreate()
+    {
+        $userRepository = $this->create->repository(User::class);
+        $data           = [
+            'username'     => 'ttest',
+            'type_id'      => '1',
+            'first_name'   => 'test_first',
+            'middle_name'  => null,
+            'last_name'    => 'test_last',
+            'active'       => '1',
+            'update_date'  => '2018-05-20',
+            'deleted_date' => null,
+        ];
+        $id             = $userRepository->create($data);
+        $this->assertNotNull($id);
+        $data['id'] = (string)$id;
+        $this->assertEquals($data, $userRepository->findById($id)->row());
+
+        $data['active'] = '0';
+        $userRepository->update($data['id'], $data);
+    }
+
 //    public function testQuery()
 //    {
 //

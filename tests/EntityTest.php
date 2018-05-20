@@ -7,9 +7,10 @@ use Neat\Object\EntityManager;
 use Neat\Object\EntityTrait;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
+use Neat\Object\Test\Helper\UserGroup;
 use PHPUnit\Framework\TestCase;
 
-class ModelTest extends TestCase
+class EntityTest extends TestCase
 {
     /**
      * @var User
@@ -135,5 +136,40 @@ class ModelTest extends TestCase
         $users = User::findAll(['id' => 0]);
         $this->assertInstanceOf(ArrayCollection::class, $users);
         $this->assertCount(0, $users);
+    }
+
+    public function testExists()
+    {
+        $userRepository = $this->create->repository(User::class);
+        $this->assertTrue($userRepository->exists(3));
+        $this->assertFalse($userRepository->exists(4));
+    }
+
+    public function testStore()
+    {
+        $user             = new User;
+        $user->username   = 'ffox';
+        $user->typeId     = 1;
+        $user->firstName  = 'Frank';
+        $user->lastName   = 'Fox';
+        $user->active     = true;
+        $user->updateDate = new \DateTime('today');
+
+        $user->store();
+        $this->assertNotNull($user->id);
+
+        $dbUser = User::findById($user->id);
+        $this->assertEquals($user, $dbUser);
+        $dbUser->active   = false;
+        $user->updateDate = new \DateTime('today +1hour');
+        $user->store();
+        $this->assertSame($user->id, $dbUser->id);
+
+        $userGroup          = new UserGroup;
+        $userGroup->userId  = $user->id;
+        $userGroup->groupId = 3;
+        $userGroup->store();
+        $this->assertEquals($user->id, $userGroup->userId);
+        $this->assertEquals(3, $userGroup->groupId);
     }
 }

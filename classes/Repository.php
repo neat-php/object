@@ -36,25 +36,29 @@ class Repository
 
     /**
      * @param int|string|array $id
+     * @return boolean
+     */
+    public function exists($id): bool
+    {
+        return $this->entityManager->getConnection()
+                ->select('count(1)')->from($this->tableName)->where($this->where($id))->limit(1)
+                ->query()->value() === '1';
+    }
+
+    /**
+     * @param int|string|array $id
      * @return Result
      */
     public function findById($id): Result
     {
-        if (is_array($this->identifier) && is_array($id)) {
-            return $this->findOne($id);
-        }
-        if (is_array($this->identifier)) {
-            $printed = print_r($id, true);
-            throw new \RuntimeException("Entity $this->tableName has a composed key, finding by id requires an array, given: $printed");
-        }
-        if (is_array($id)) {
-            $printed = print_r($id, true);
-            throw new \RuntimeException("Entity $this->tableName doesn't have a composed key, finding by id requires an int or string, given: $printed");
-        }
-
-        return $this->findOne([$this->identifier => $id]);
+        return $this->findOne($this->where($id));
     }
 
+    /**
+     * @param array|string $conditions
+     * @param string|null $orderBy
+     * @return Result
+     */
     public function findOne($conditions, string $orderBy = null): Result
     {
         $query = $this->query()
@@ -87,12 +91,71 @@ class Repository
         return $query->query();
     }
 
+    /**
+     * @return \Neat\Database\Query
+     */
     public function query()
     {
         // @TODO add an alias for advanced querying
-        $query = $this->entityManager->getConnection()->select('*')
-            ->from($this->tableName);
+        $query = $this->entityManager->getConnection()
+            ->select('*')->from($this->tableName);
 
         return $query;
+    }
+
+    /**
+     * @param array $data
+     * @return int
+     */
+    public function create(array $data)
+    {
+        $this->entityManager->getConnection()
+            ->insert($this->tableName, $data);
+
+        return $this->entityManager->getConnection()->insertedId();
+    }
+
+    /**
+     * @param int|string|array $id
+     * @param array $data
+     * @return false|int
+     */
+    public function update($id, array $data)
+    {
+        return $this->entityManager->getConnection()
+            ->update($this->tableName, $data, $this->where($id));
+    }
+
+    /**
+     * Validates the identifier to prevent unexpected behaviour
+     *
+     * @param int|string|array $id
+     */
+    public function validateIdentifier($id)
+    {
+        $printed = print_r($id, true);
+        if (is_array($this->identifier) && !is_array($id)) {
+            throw new \RuntimeException("Entity $this->tableName has a composed key, finding by id requires an array, given: $printed");
+        }
+        if (is_array($id) && !is_array($this->identifier)) {
+            throw new \RuntimeException("Entity $this->tableName doesn't have a composed key, finding by id requires an int or string, given: $printed");
+        }
+    }
+
+    /**
+     * Creates the where condition for the identifier
+     *
+     * @param int|string|array $id
+     * @return array
+     */
+    public function where($id)
+    {
+        $this->validateIdentifier($id);
+
+        if (!is_array($id)) {
+            return [$this->identifier => $id];
+        } else {
+            return $id;
+        }
     }
 }
