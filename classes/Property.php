@@ -1,0 +1,145 @@
+<?php
+
+namespace Neat\Object;
+
+use DateTime;
+use DateTimeInterface;
+use ReflectionClass;
+use ReflectionProperty;
+
+class Property
+{
+    /**
+     * Reflection
+     *
+     * @var ReflectionProperty
+     */
+    protected $reflection;
+
+    /**
+     * Type
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * Property constructor
+     *
+     * @param ReflectionProperty $reflection
+     * @note Activates the reflection's accessible flag
+     */
+    public function __construct(ReflectionProperty $reflection)
+    {
+        $reflection->setAccessible(true);
+
+        $this->reflection = $reflection;
+
+        if (preg_match('/\\s@var\\s([\\w\\\\]+)\\s/', $reflection->getDocComment(), $matches)) {
+            $this->type = strtr(ltrim($matches[1], '\\'), [
+                'integer' => 'int',
+                'boolean' => 'bool',
+            ]);
+        }
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return $this->reflection->getName();
+    }
+
+    /**
+     * Get type
+     *
+     * @return string|null
+     */
+    public function type()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get Value
+     *
+     * @param object $object
+     * @return mixed
+     */
+    public function get($object)
+    {
+        $value = $this->reflection->getValue($object);
+        if ($value === null) {
+            return null;
+        }
+
+        switch ($this->type) {
+            case 'bool':
+                return $value ? 1 : 0;
+            case 'int':
+                return (int) $value;
+            case 'DateTime':
+                if (!$value instanceof DateTimeInterface) {
+                    $value = new DateTime($value);
+                }
+
+                return $value->format('Y-m-d H:i:s');
+            default:
+                return $value;
+        }
+    }
+
+    /**
+     * Set value
+     *
+     * @param object $object
+     * @param mixed  $value
+     */
+    public function set($object, $value)
+    {
+        if ($value !== null) {
+            switch ($this->type) {
+                case 'bool':
+                case 'int':
+                    settype($value, $this->type);
+                    break;
+                case 'DateTime':
+                    $value = new DateTime($value);
+                    break;
+            }
+        }
+
+        $this->reflection->setValue($object, $value);
+    }
+
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * Capture properties for a class
+     *
+     * @param string $class
+     * @return Property[]
+     */
+    public static function list($class)
+    {
+        $properties = [];
+        /** @noinspection PhpUnhandledExceptionInspection */
+        foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
+            if ($reflection->isStatic()) {
+                continue;
+            }
+
+            if (preg_match('/\\s@nostorage\\s/', $reflection->getDocComment())) {
+                continue;
+            }
+
+            $key = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $reflection->getName()));
+
+            $properties[$key] = new static($reflection);
+        }
+
+        return $properties;
+    }
+}

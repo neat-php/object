@@ -2,6 +2,7 @@
 
 namespace Neat\Object\Test\Helper;
 
+use DateTime;
 use Neat\Object\Entity;
 
 class User extends Entity
@@ -39,12 +40,19 @@ class User extends Entity
     public $active;
 
     /**
+     * @var int
+     * @nostorage
+     */
+    public $ignored;
+
+    /**
      * @var \DateTime
+     * @note intentional fully qualified class name
      */
     public $updateDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $deletedDate;
 

@@ -115,9 +115,9 @@ trait EntityTrait
             $id         = $repository->create($this->toArray());
             $identifier = $this->identifierProperties();
             if ($id && count($identifier) === 1) {
-                /** @var \ReflectionProperty $property */
+                /** @var Property $property */
                 $property = array_shift($identifier);
-                $property->setValue($this, $id);
+                $property->set($this, $id);
             }
         }
 
@@ -129,11 +129,11 @@ trait EntityTrait
         if (count($identifier) === 1) {
             $property = reset($identifier);
 
-            return $property->getValue($this);
+            return $property->get($this);
         }
 
-        return array_map(function (\ReflectionProperty $property) {
-            return $property->getValue($this);
+        return array_map(function (Property $property) {
+            return $property->get($this);
         }, $identifier);
     }
 
@@ -142,8 +142,8 @@ trait EntityTrait
      */
     protected function identifierProperties()
     {
-        /** @var \ReflectionProperty[] $properties */
-        $properties = static::getPropertyFields();
+        /** @var Property[] $properties */
+        $properties = Property::list(static::class);
         $identifier = static::getIdentifier();
 
         if (is_array($identifier)) {
