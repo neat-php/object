@@ -2,7 +2,7 @@
 
 namespace Neat\Object\Test;
 
-use Neat\Object\ArrayCollection;
+use Neat\Object\Collection;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +12,7 @@ class ArrayCollectionTest extends TestCase
     private $array;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      */
     private $arrayCollection;
 
@@ -23,7 +23,7 @@ class ArrayCollectionTest extends TestCase
             'janedoe' => ['firstName' => 'Jane', 'middleName' => null, 'lastName' => 'Doe'],
             'bthecow' => ['firstName' => 'Bob', 'middleName' => 'the', 'lastName' => 'Cow'],
         ];
-        $this->arrayCollection = new ArrayCollection($this->array);
+        $this->arrayCollection = new Collection($this->array);
     }
 
     public function testCount()
@@ -58,10 +58,10 @@ class ArrayCollectionTest extends TestCase
         $this->assertSame($firstNames, $this->arrayCollection->map(function ($data) {
             return $data['firstName'];
         }));
-        $firstNameCollection = new ArrayCollection($firstNames);
+        $firstNameCollection = new Collection($firstNames);
         $this->assertEquals($firstNameCollection, $this->arrayCollection->map(function ($data) {
             return $data['firstName'];
-        }, ArrayCollection::class));
+        }, Collection::class));
     }
 
     public function testOffsetGet()
@@ -73,7 +73,7 @@ class ArrayCollectionTest extends TestCase
 
     public function testPush()
     {
-        $arrayCollection = new ArrayCollection([]);
+        $arrayCollection = new Collection([]);
         $arrayCollection->push("test");
         $this->assertSame('test', $arrayCollection->first());
         $this->assertCount(1, $arrayCollection);
@@ -83,8 +83,8 @@ class ArrayCollectionTest extends TestCase
     {
         $firstNames = array_values($this->firstNames());
         $this->assertSame($firstNames, $this->arrayCollection->column('firstName'));
-        $this->assertEquals(new ArrayCollection($firstNames),
-            $this->arrayCollection->column('firstName', ArrayCollection::class));
+        $this->assertEquals(new Collection($firstNames),
+            $this->arrayCollection->column('firstName', Collection::class));
 
     }
 
@@ -102,14 +102,14 @@ class ArrayCollectionTest extends TestCase
             'janedoe' => $this->array['janedoe'],
         ];
 
-        $this->assertEquals(new ArrayCollection($expected), $this->arrayCollection->filter(function ($data): bool {
+        $this->assertEquals(new Collection($expected), $this->arrayCollection->filter(function ($data): bool {
             return !$data['middleName'];
         }));
     }
 
     public function testGetIterator()
     {
-        $arrayCollection = new ArrayCollection(['foo' => 'bar',]);
+        $arrayCollection = new Collection(['foo' => 'bar',]);
         foreach ($arrayCollection as $key => $value) {
             $this->assertSame('foo', $key);
             $this->assertSame('bar', $value);
@@ -120,7 +120,7 @@ class ArrayCollectionTest extends TestCase
     public function testTypedArray()
     {
         $user            = new User();
-        $arrayCollection = new ArrayCollection([$user]);
+        $arrayCollection = new Collection([$user]);
         $this->assertSame(User::class, $this->getPrivateProperty($arrayCollection, 'type'));
         $this->assertSame($user, $arrayCollection->first());
 
@@ -131,7 +131,7 @@ class ArrayCollectionTest extends TestCase
     public function testTypeDefinedArray()
     {
         $user            = new User();
-        $arrayCollection = new ArrayCollection([$user], User::class);
+        $arrayCollection = new Collection([$user], User::class);
         $this->assertSame(User::class, $this->getPrivateProperty($arrayCollection, 'type'));
 
         $this->expectException(\TypeError::class);

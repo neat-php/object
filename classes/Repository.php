@@ -2,36 +2,52 @@
 
 namespace Neat\Object;
 
+use Neat\Database\Connection;
+use Neat\Database\Query;
 use Neat\Database\Result;
 
 class Repository
 {
     /**
-     * @var EntityManager
+     * @var Connection
      */
-    private $entityManager;
+    private $connection;
 
     /**
      * @var string
      */
-    private $tableName;
+    private $entity;
 
     /**
-     * @var string|array
+     * @var string
      */
-    private $identifier;
+    private $name;
+
+    /**
+     * @var array
+     */
+    private $key;
+
+    /**
+     * @var Property
+     */
+    private $properties;
 
     /**
      * Repository constructor.
-     * @param EntityManager $entityManager
+     * @param Connection $connection
+     * @param string $entity
      * @param string|null $tableName
      * @param mixed|null $identifier
      */
-    public function __construct(EntityManager $entityManager, string $tableName, $identifier)
+    public function __construct(Connection $connection, string $entity, string $tableName, array $identifier)
     {
-        $this->entityManager = $entityManager;
-        $this->tableName     = $tableName;
-        $this->identifier    = $identifier;
+        $this->connection = $connection;
+        $this->entity     = $entity;
+        $this->name       = $tableName;
+        $this->key        = $identifier;
+
+        $this->properties = Property::list($entity);
     }
 
     /**
@@ -40,16 +56,16 @@ class Repository
      */
     public function exists($id): bool
     {
-        return $this->entityManager->getConnection()
-                ->select('count(1)')->from($this->tableName)->where($this->where($id))->limit(1)
+        return $this->connection
+                ->select('count(1)')->from($this->name)->where($this->where($id))->limit(1)
                 ->query()->value() === '1';
     }
 
     /**
      * @param int|string|array $id
-     * @return Result
+     * @return mixed
      */
-    public function findById($id): Result
+    public function findById($id)
     {
         return $this->findOne($this->where($id));
     }
@@ -57,9 +73,9 @@ class Repository
     /**
      * @param array|string $conditions
      * @param string|null $orderBy
-     * @return Result
+     * @return mixed
      */
-    public function findOne($conditions, string $orderBy = null): Result
+    public function findOne($conditions, string $orderBy = null)
     {
         $query = $this->query()
             ->where($conditions)
@@ -69,15 +85,47 @@ class Repository
             $query->orderBy($orderBy);
         }
 
-        return $query->query();
+        $result = $query->query();
+        $row    = $result->row();
+
+        if (!$row) {
+            return null;
+        }
+
+        return $this->createFromRow($row);
     }
 
     /**
-     * @param string|[] $query
+     * @param string|array $conditions
+     * @param string|null $orderBy
+     * @return Collection
+     */
+    public function findAll($conditions = null, string $orderBy = null): Collection
+    {
+        $result = $this->find($conditions, $orderBy);
+
+        return new Collection($this->createFromRows($result->rows()));
+    }
+
+    /**
+     * @param string|array $conditions
+     * @param string|null $orderBy
+     * @return \Generator
+     */
+    public function iterateAll($conditions = null, string $orderBy = null)
+    {
+        $result = $this->find($conditions, $orderBy);
+        foreach ($result as $row) {
+            yield $this->createFromRow($row);
+        }
+    }
+
+    /**
+     * @param string|[] $conditions
      * @param string|null $orderBy
      * @return Result
      */
-    public function findAll($conditions = null, string $orderBy = null): Result
+    public function find($conditions = null, string $orderBy = null): Result
     {
         $query = $this->query();
         if ($conditions) {
@@ -92,15 +140,29 @@ class Repository
     }
 
     /**
-     * @return \Neat\Database\Query
+     * @param string|null $alias
+     * @return Query
      */
-    public function query()
+    public function query(string $alias = null)
     {
-        // @TODO add an alias for advanced querying
-        $query = $this->entityManager->getConnection()
-            ->select('*')->from($this->tableName);
+        $query = $this->connection
+            ->select('*')->from($this->name, $alias);
 
         return $query;
+    }
+
+    public function store($entity)
+    {
+        $data = $this->toArray($entity);
+        $identifier = $this->identifier($entity);
+        if ($identifier && array_filter($identifier) && $this->exists($identifier)) {
+            $this->update($identifier, $data);
+        } else {
+            $id = $this->create($data);
+            if ($id && count($this->key) === 1) {
+                $this->properties[reset($this->key)]->set($entity, $id);
+            }
+        }
     }
 
     /**
@@ -109,10 +171,10 @@ class Repository
      */
     public function create(array $data)
     {
-        $this->entityManager->getConnection()
-            ->insert($this->tableName, $data);
+        $this->connection
+            ->insert($this->name, $data);
 
-        return $this->entityManager->getConnection()->insertedId();
+        return $this->connection->insertedId();
     }
 
     /**
@@ -122,8 +184,73 @@ class Repository
      */
     public function update($id, array $data)
     {
-        return $this->entityManager->getConnection()
-            ->update($this->tableName, $data, $this->where($id));
+        return $this->connection
+            ->update($this->name, $data, $this->where($id));
+    }
+
+    /**
+     * Converts to an associative array
+     *
+     * @param object $entity
+     * @return array
+     */
+    public function toArray($entity): array
+    {
+        $array = [];
+        foreach ($this->properties as $key => $property) {
+            $array[$key] = $property->get($entity);
+        }
+
+        return $array;
+    }
+
+    /**
+     * Converts from an associative array
+     *
+     * @param $entity
+     * @param array $array
+     * @return mixed
+     */
+    public function fromArray($entity, $array)
+    {
+        foreach ($this->properties as $key => $property) {
+            $property->set($entity, $array[$key] ?? null);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Instantiates an entity with the row data
+     *
+     * @param array $array
+     * @return mixed
+     */
+    public function createFromRow(array $array)
+    {
+        return $this->fromArray(new $this->entity, $array);
+    }
+
+    /**
+     * @param array $rows
+     * @return array
+     */
+    public function createFromRows(array $rows): array
+    {
+        return array_map([$this, 'createFromRow'], $rows);
+    }
+
+    /**
+     * @param $entity
+     * @return array
+     */
+    private function identifier($entity)
+    {
+        $keys = array_combine($this->key, $this->key);
+
+        return array_map(function (string $key) use ($entity) {
+            return $this->properties[$key]->get($entity);
+        }, $keys);
     }
 
     /**
@@ -131,14 +258,15 @@ class Repository
      *
      * @param int|string|array $id
      */
-    public function validateIdentifier($id)
+    private function validateIdentifier($id)
     {
         $printed = print_r($id, true);
-        if (is_array($this->identifier) && !is_array($id)) {
-            throw new \RuntimeException("Entity $this->tableName has a composed key, finding by id requires an array, given: $printed");
+        if (count($this->key) > 1 && !is_array($id)) {
+            throw new \RuntimeException("Entity $this->entity has a composed key, finding by id requires an array, given: $printed");
         }
-        if (is_array($id) && !is_array($this->identifier)) {
-            throw new \RuntimeException("Entity $this->tableName doesn't have a composed key, finding by id requires an int or string, given: $printed");
+        if (is_array($id) && count($this->key) !== count($id)) {
+            $keys = print_r($this->key, true);
+            throw new \RuntimeException("Entity $this->entity requires the following keys: $keys, given: $printed");
         }
     }
 
@@ -148,12 +276,13 @@ class Repository
      * @param int|string|array $id
      * @return array
      */
-    public function where($id)
+    private function where($id)
     {
         $this->validateIdentifier($id);
+        $key = reset($this->key);
 
         if (!is_array($id)) {
-            return [$this->identifier => $id];
+            return [$key => $id];
         } else {
             return $id;
         }

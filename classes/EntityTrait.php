@@ -5,68 +5,11 @@ namespace Neat\Object;
 trait EntityTrait
 {
     /**
-     * @var EntityManager
-     */
-    public static $entityManager;
-
-    /**
-     * @param EntityManager $entityManager
-     */
-    public static function setEntityManager(EntityManager $entityManager)
-    {
-        static::$entityManager = $entityManager;
-    }
-
-    /**
-     * @return EntityManager
-     */
-    public static function getEntityManager(): EntityManager
-    {
-        return static::$entityManager ?: EntityTrait::$entityManager;
-    }
-
-    /**
      * @return Repository
      */
-    protected static function repository(): Repository
+    public static function repository(): Repository
     {
-        return static::getRepository(static::getEntityManager(), static::getTableName(), static::getIdentifier());
-    }
-
-    /**
-     * @param EntityManager $entityManager
-     * @param string $tableName
-     * @param string|array $identifier
-     * @return Repository
-     */
-    protected static function getRepository(EntityManager $entityManager, string $tableName, $identifier): Repository
-    {
-        return new Repository($entityManager, $tableName, $identifier);
-    }
-
-    /**
-     * @param array|null $row
-     * @return static|null
-     */
-    public static function createFromArray($row)
-    {
-        if (!$row) {
-            return null;
-        }
-
-        $static = new static();
-        $static->fromArray($row);
-
-        return $static;
-    }
-
-    /**
-     * @param array $rows
-     * @return array
-     */
-    public static function createFromRows(array $rows)
-    {
-        return array_map(['static', 'createFromArray'], $rows);
+        return EntityManager::instance()->repository(static::class);
     }
 
     /**
@@ -77,88 +20,28 @@ trait EntityTrait
      */
     public static function findById($id)
     {
-        $result = static::repository()
-            ->findById($id);
-
-        return static::createFromArray($result->row());
+        return static::repository()->findById($id);
     }
 
     /**
      * @param array|string $where
      * @param null|string $orderBy
-     * @return ArrayCollection
+     * @return Collection
      */
     public static function findAll($where, $orderBy = null)
     {
-        $result = static::repository()
-            ->findAll($where, $orderBy);
-
-        return static::collection(static::createFromRows($result->rows()));
-    }
-
-    /**
-     * @param array $array
-     * @return ArrayCollection
-     */
-    protected static function collection(array $array)
-    {
-        return new ArrayCollection($array);
+        return static::repository()->findAll($where, $orderBy);
     }
 
     public function store()
     {
-        $repository = static::repository();
-        $identifier = $this->identifier();
-        if ($identifier && $repository->exists($identifier)) {
-            $repository->update($identifier, $this->toArray());
-        } else {
-            $id         = $repository->create($this->toArray());
-            $identifier = $this->identifierProperties();
-            if ($id && count($identifier) === 1) {
-                /** @var Property $property */
-                $property = array_shift($identifier);
-                $property->set($this, $id);
-            }
-        }
-
-    }
-
-    public function identifier()
-    {
-        $identifier = $this->identifierProperties();
-        if (count($identifier) === 1) {
-            $property = reset($identifier);
-
-            return $property->get($this);
-        }
-
-        return array_map(function (Property $property) {
-            return $property->get($this);
-        }, $identifier);
-    }
-
-    /**
-     * @return \ReflectionProperty[]
-     */
-    protected function identifierProperties()
-    {
-        /** @var Property[] $properties */
-        $properties = Property::list(static::class);
-        $identifier = static::getIdentifier();
-
-        if (is_array($identifier)) {
-            return array_filter($properties, function ($key) use ($identifier) {
-                return in_array($key, $identifier);
-            }, ARRAY_FILTER_USE_KEY);
-        }
-
-        return [$identifier => $properties[$identifier]];
+        $this::repository()->store($this);
     }
 
     /**
      * @return string
      */
-    protected static function getTableName()
+    public static function getTableName(): string
     {
         $path = explode('\\', static::class);
 
@@ -166,10 +49,10 @@ trait EntityTrait
     }
 
     /**
-     * @return string
+     * @return array
      */
-    protected static function getIdentifier()
+    public static function getKey(): array
     {
-        return 'id';
+        return ['id'];
     }
 }

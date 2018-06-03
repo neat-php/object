@@ -2,7 +2,7 @@
 
 namespace Neat\Object;
 
-class ArrayCollection implements \ArrayAccess, \IteratorAggregate, \Countable
+class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * @var array

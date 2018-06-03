@@ -62,7 +62,7 @@ class Factory extends \Neat\Database\Test\Factory
      */
     public function entityManager(Connection $connection = null)
     {
-        return new EntityManager($connection ?: $this->connection());
+        return EntityManager::create($connection ?: $this->connection());
     }
 
     /**

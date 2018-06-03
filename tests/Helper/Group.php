@@ -2,13 +2,10 @@
 
 namespace Neat\Object\Test\Helper;
 
-use Neat\Object\ArrayConversion;
 use Neat\Object\Entity;
 
 class Group extends Entity
 {
-    use ArrayConversion;
-
     const REPOSITORY = GroupRepository::class;
 
     /**

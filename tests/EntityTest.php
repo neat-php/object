@@ -2,9 +2,7 @@
 
 namespace Neat\Object\Test;
 
-use Neat\Object\ArrayCollection;
-use Neat\Object\EntityManager;
-use Neat\Object\EntityTrait;
+use Neat\Object\Collection;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
@@ -13,28 +11,20 @@ use PHPUnit\Framework\TestCase;
 class EntityTest extends TestCase
 {
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
      * Factory
      *
      * @var Factory
      */
     private $create;
 
-    /**
-     * @var EntityManager
-     */
-    private $manager;
+    public static function setUpBeforeClass()
+    {
+
+    }
 
     public function setUp()
     {
         $this->create  = new Factory($this);
-        $this->user    = new User;
-        $this->manager = $this->create->entityManager();
-        EntityTrait::setEntityManager($this->manager);
     }
 
     /**
@@ -70,52 +60,6 @@ class EntityTest extends TestCase
         );
     }
 
-    public function testRepository()
-    {
-        $this->assertEquals($this->create->entityManager(), User::getEntityManager());
-    }
-
-//    public function testQuery()
-//    {
-//        $this->assertSQL('SELECT * FROM user', User::query()->getSelectQuery());
-//    }
-
-    public function testCreateFromArray()
-    {
-        // We can't use now because it will fail comparing anything smaller than seconds
-        $updateDate                 = new \DateTime(date('Y-m-d H:i:s'));
-        $array                      = [
-            'id'           => 1,
-            'type_id'      => null,
-            'username'     => 'jdoe',
-            'first_name'   => 'John',
-            'middle_name'  => null,
-            'last_name'    => 'Doe',
-            'active'       => 1,
-            'update_date'  => $updateDate->format('Y-m-d H:i:s'),
-            'deleted_date' => null,
-        ];
-        $user                       = User::createFromArray($array);
-        $objectArray                = $array;
-        $objectArray['active']      = true;
-        $objectArray['update_date'] = $updateDate;
-        $this->assertEquals(
-            array_values(array_merge($objectArray, ['active' => true, 'update_date' => $updateDate])),
-            [
-                $user->id,
-                $user->typeId,
-                $user->username,
-                $user->firstName,
-                $user->middleName,
-                $user->lastName,
-                $user->active,
-                $user->updateDate,
-                $user->deletedDate,
-            ],
-            'Test object values');
-        $this->assertEquals($array, $user->toArray(), 'Test toArray method');
-    }
-
     public function testFindById()
     {
         $user = User::findById(1);
@@ -128,13 +72,13 @@ class EntityTest extends TestCase
     public function testFindAll()
     {
         $users = User::findAll(['id' => 1]);
-        $this->assertInstanceOf(ArrayCollection::class, $users);
+        $this->assertInstanceOf(Collection::class, $users);
         $user = $users->first();
         $this->assertInstanceOf(User::class, $user);
         $this->assertCount(1, $users);
 
         $users = User::findAll(['id' => 0]);
-        $this->assertInstanceOf(ArrayCollection::class, $users);
+        $this->assertInstanceOf(Collection::class, $users);
         $this->assertCount(0, $users);
     }
 

@@ -8,6 +8,13 @@ use Neat\Object\Entity;
 class User extends Entity
 {
     /**
+     * Static no storage field
+     *
+     * @var null
+     */
+    public static $nostorage;
+
+    /**
      * @var int
      */
     public $id;

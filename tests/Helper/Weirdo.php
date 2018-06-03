@@ -2,21 +2,19 @@
 
 namespace Neat\Object\Test\Helper;
 
-use Neat\Object\ArrayConversion;
 use Neat\Object\EntityTrait;
 
 class Weirdo
 {
     use EntityTrait;
-    use ArrayConversion;
 
     public static function getTableName()
     {
         return 'user_weirdo';
     }
 
-    public static function getIdentifier()
+    public static function getKey(): array
     {
-        return 'key';
+        return ['key'];
     }
 }
