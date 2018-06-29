@@ -2,7 +2,7 @@
 
 namespace Neat\Object;
 
-class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
+class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
 {
     /**
      * @var array
@@ -196,5 +196,17 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
         }
 
         return array_column($this->items, $column);
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return $this->items;
     }
 }
