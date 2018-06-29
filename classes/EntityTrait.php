@@ -34,13 +34,13 @@ trait EntityTrait
     }
 
     /**
-     * @param array|string $where
+     * @param array|string $conditions
      * @param null|string $orderBy
      * @return Collection
      */
-    public static function findAll($where, $orderBy = null)
+    public static function findAll($conditions = null, $orderBy = null)
     {
-        return static::repository()->findAll($where, $orderBy);
+        return static::repository()->findAll($conditions, $orderBy);
     }
 
     public function store()
