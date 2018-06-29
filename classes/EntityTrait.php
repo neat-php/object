@@ -24,6 +24,16 @@ trait EntityTrait
     }
 
     /**
+     * @param string|array|null $conditions
+     * @param string|null $orderBy
+     * @return static|null
+     */
+    public static function findOne($conditions, $orderBy = null)
+    {
+        return static::repository()->findOne($conditions, $orderBy);
+    }
+
+    /**
      * @param array|string $where
      * @param null|string $orderBy
      * @return Collection
