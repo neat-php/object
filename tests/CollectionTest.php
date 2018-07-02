@@ -138,6 +138,11 @@ class CollectionTest extends TestCase
         $arrayCollection->push(new UserGroup);
     }
 
+    public function testJsonSerialize()
+    {
+        $this->assertEquals(json_encode($this->array), json_encode($this->collection));
+    }
+
     private function firstNames()
     {
         return array_map(function ($data) {
