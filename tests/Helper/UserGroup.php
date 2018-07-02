@@ -7,22 +7,14 @@ use Neat\Object\Entity;
 class UserGroup extends Entity
 {
     /**
+     * @key
      * @var int
      */
     public $userId;
 
     /**
+     * @key
      * @var int
      */
     public $groupId;
-
-    public static function getKey(): array
-    {
-        return ['user_id', 'group_id'];
-    }
-
-    public static function getTableName(): string
-    {
-        return 'user_group';
-    }
 }

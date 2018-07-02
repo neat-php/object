@@ -47,22 +47,4 @@ trait EntityTrait
     {
         $this::repository()->store($this);
     }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        $path = explode('\\', static::class);
-
-        return strtolower(array_pop($path));
-    }
-
-    /**
-     * @return array
-     */
-    public static function getKey(): array
-    {
-        return ['id'];
-    }
 }

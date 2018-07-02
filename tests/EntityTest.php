@@ -21,7 +21,7 @@ class EntityTest extends TestCase
     public function setUp()
     {
         $this->create = new Factory($this);
-        Manager::create($this->create->connection());
+        $this->create->manager();
     }
 
     /**

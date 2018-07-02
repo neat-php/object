@@ -43,7 +43,9 @@ class Factory extends \Neat\Database\Test\Factory
                       CONSTRAINT user_group_user_id_group_id_pk PRIMARY KEY (user_id, group_id)
                     );");
         $pdo->exec("INSERT INTO `user_group` (user_id, group_id) 
-                    VALUES (1, 2)");
+                    VALUES (1, 1), 
+                    (1, 2),
+                    (1, 3);");
         $pdo->exec("CREATE TABLE `group` (
                       id    INTEGER PRIMARY KEY,
                       name       NOT NULL,

@@ -21,7 +21,7 @@ class Repository
     /**
      * @var string
      */
-    private $name;
+    private $table;
 
     /**
      * @var array
@@ -37,17 +37,17 @@ class Repository
      * Repository constructor.
      * @param Connection $connection
      * @param string $entity
-     * @param string|null $tableName
-     * @param mixed|null $identifier
+     * @param string|null $table
+     * @param Property[] $key
+     * @param string[] $properties
      */
-    public function __construct(Connection $connection, string $entity, string $tableName, array $identifier)
+    public function __construct(Connection $connection, string $entity, string $table, array $key, array $properties)
     {
         $this->connection = $connection;
         $this->entity     = $entity;
-        $this->name       = $tableName;
-        $this->key        = $identifier;
-
-        $this->properties = Property::list($entity);
+        $this->table      = $table;
+        $this->key        = $key;
+        $this->properties = $properties;
     }
 
     /**
@@ -57,7 +57,7 @@ class Repository
     public function exists($id): bool
     {
         return $this->connection
-                ->select('count(1)')->from($this->name)->where($this->where($id))->limit(1)
+                ->select('count(1)')->from($this->table)->where($this->where($id))->limit(1)
                 ->query()->value() === '1';
     }
 
@@ -146,14 +146,14 @@ class Repository
     public function query(string $alias = null)
     {
         $query = $this->connection
-            ->select('*')->from($this->name, $alias);
+            ->select('*')->from($this->table, $alias);
 
         return $query;
     }
 
     public function store($entity)
     {
-        $data = $this->toArray($entity);
+        $data       = $this->toArray($entity);
         $identifier = $this->identifier($entity);
         if ($identifier && array_filter($identifier) && $this->exists($identifier)) {
             $this->update($identifier, $data);
@@ -172,7 +172,7 @@ class Repository
     public function create(array $data)
     {
         $this->connection
-            ->insert($this->name, $data);
+            ->insert($this->table, $data);
 
         return $this->connection->insertedId();
     }
@@ -185,7 +185,7 @@ class Repository
     public function update($id, array $data)
     {
         return $this->connection
-            ->update($this->name, $data, $this->where($id));
+            ->update($this->table, $data, $this->where($id));
     }
 
     /**

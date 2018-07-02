@@ -7,7 +7,6 @@ use Neat\Object\Manager;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
-use Neat\Object\Test\Helper\Weirdo;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
@@ -25,37 +24,13 @@ class RepositoryTest extends TestCase
     public static function setUpBeforeClass()
     {
         $factory = new Factory(new self);
-        Manager::create($factory->connection(), 'repository-test');
+        Manager::create($factory->connection(), null, 'repository-test');
     }
 
     public function setUp()
     {
         $this->create  = new Factory($this);
         $this->manager = Manager::instance('repository-test');
-    }
-
-    public function testTableName()
-    {
-        $userRepository   = $this->manager->repository(User::class);
-        $weirdoRepository = $this->manager->repository(Weirdo::class);
-
-        $this->assertSame('user', $this->callMethod(User::class, 'getTableName'));
-        $this->assertSame('user', $this->getProperty($userRepository, 'name'));
-        $this->assertSame('user_weirdo', $this->callMethod(Weirdo::class, 'getTableName'));
-        $this->assertSame('user_weirdo', $this->getProperty($weirdoRepository, 'name'));
-    }
-
-    public function testIdentifier()
-    {
-        $userRepository      = $this->manager->repository(User::class);
-        $weirdoRepository    = $this->manager->repository(Weirdo::class);
-        $userGroupRepository = $this->manager->repository(UserGroup::class);
-        $this->assertSame(['id'], User::getKey());
-        $this->assertSame(['id'], $this->getProperty($userRepository, 'key'));
-        $this->assertSame(['key'], Weirdo::getKey());
-        $this->assertSame(['key'], $this->getProperty($weirdoRepository, 'key'));
-        $this->assertSame(['user_id', 'group_id'], UserGroup::getKey());
-        $this->assertSame(['user_id', 'group_id'], $this->getProperty($userGroupRepository, 'key'));
     }
 
     public function testFindOne()

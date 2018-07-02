@@ -115,29 +115,41 @@ class Property
         $this->reflection->setValue($object, $value);
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * @return bool
+     */
+    public function static()
+    {
+        return $this->reflection->isStatic();
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function docBlock()
+    {
+        return $this->reflection->getDocComment();
+    }
+
     /**
      * Capture properties for a class
      *
      * @param string $class
+     * @param Policy $policy
      * @return Property[]
+     * @throws \ReflectionException
      */
-    public static function list($class)
+    public static function list($class, Policy $policy)
     {
         $properties = [];
         /** @noinspection PhpUnhandledExceptionInspection */
         foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
-            if ($reflection->isStatic()) {
+            $property = new static($reflection);
+            if ($policy->skip($property)) {
                 continue;
             }
 
-            if (preg_match('/\\s@nostorage\\s/', $reflection->getDocComment())) {
-                continue;
-            }
-
-            $key = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $reflection->getName()));
-
-            $properties[$key] = new static($reflection);
+            $properties[$policy->column($property)] = new static($reflection);
         }
 
         return $properties;

@@ -6,6 +6,13 @@ use Neat\Object\Manager;
 use Neat\Object\Test\Helper\Factory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ManagerTest
+ *
+ * @todo add test with custom policy
+ *
+ * @package Neat\Object\Test
+ */
 class ManagerTest extends TestCase
 {
     /**
@@ -32,9 +39,9 @@ class ManagerTest extends TestCase
 
     public function testCreateCustom()
     {
-        $connection = $this->create->connection();
-        $manager    = Manager::create($connection, 'create-custom-test');
-        $this->assertNotSame($manager, Manager::instance());
-        $this->assertSame($manager, Manager::instance('create-custom-test'));
+        $connection    = $this->create->connection();
+        $customManager = Manager::create($connection, null, 'create-custom-test');
+        $this->assertNotSame($customManager, Manager::instance());
+        $this->assertSame($customManager, Manager::instance('create-custom-test'));
     }
 }
