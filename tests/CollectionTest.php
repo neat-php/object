@@ -7,59 +7,59 @@ use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
 use PHPUnit\Framework\TestCase;
 
-class ArrayCollectionTest extends TestCase
+class CollectionTest extends TestCase
 {
     private $array;
 
     /**
      * @var Collection
      */
-    private $arrayCollection;
+    private $collection;
 
     public function setUp()
     {
-        $this->array           = [
+        $this->array      = [
             'jdoe'    => ['firstName' => 'John', 'middleName' => null, 'lastName' => 'Doe'],
             'janedoe' => ['firstName' => 'Jane', 'middleName' => null, 'lastName' => 'Doe'],
             'bthecow' => ['firstName' => 'Bob', 'middleName' => 'the', 'lastName' => 'Cow'],
         ];
-        $this->arrayCollection = new Collection($this->array);
+        $this->collection = new Collection($this->array);
     }
 
     public function testCount()
     {
-        $this->assertSame(3, $this->arrayCollection->count());
+        $this->assertSame(3, $this->collection->count());
     }
 
     public function testFirst()
     {
         $data = reset($this->array);
-        $this->assertSame($data, $this->arrayCollection->first());
+        $this->assertSame($data, $this->collection->first());
         // Assert that it didn't change
-        $this->assertSame($data, $this->arrayCollection->first());
+        $this->assertSame($data, $this->collection->first());
 
     }
 
     public function testOffsetExists()
     {
-        $this->assertTrue(isset($this->arrayCollection['jdoe']));
-        $this->assertFalse(isset($this->arrayCollection['notExistingKey']));
+        $this->assertTrue(isset($this->collection['jdoe']));
+        $this->assertFalse(isset($this->collection['notExistingKey']));
     }
 
     public function testOffsetUnset()
     {
-        unset($this->arrayCollection['jdoe']);
-        $this->assertFalse(isset($this->arrayCollection['jdoe']));
+        unset($this->collection['jdoe']);
+        $this->assertFalse(isset($this->collection['jdoe']));
     }
 
     public function testMap()
     {
         $firstNames = $this->firstNames();
-        $this->assertSame($firstNames, $this->arrayCollection->map(function ($data) {
+        $this->assertSame($firstNames, $this->collection->map(function ($data) {
             return $data['firstName'];
         }));
         $firstNameCollection = new Collection($firstNames);
-        $this->assertEquals($firstNameCollection, $this->arrayCollection->map(function ($data) {
+        $this->assertEquals($firstNameCollection, $this->collection->map(function ($data) {
             return $data['firstName'];
         }, Collection::class));
     }
@@ -67,7 +67,7 @@ class ArrayCollectionTest extends TestCase
     public function testOffsetGet()
     {
         $data = reset($this->array);
-        $this->assertSame($data, $this->arrayCollection['jdoe']);
+        $this->assertSame($data, $this->collection['jdoe']);
 //        $this->assertNull($this->arrayCollection['notExistingKey']);
     }
 
@@ -82,17 +82,17 @@ class ArrayCollectionTest extends TestCase
     public function testColumn()
     {
         $firstNames = array_values($this->firstNames());
-        $this->assertSame($firstNames, $this->arrayCollection->column('firstName'));
+        $this->assertSame($firstNames, $this->collection->column('firstName'));
         $this->assertEquals(new Collection($firstNames),
-            $this->arrayCollection->column('firstName', Collection::class));
+            $this->collection->column('firstName', Collection::class));
 
     }
 
     public function testOffsetSet()
     {
-        $this->arrayCollection['test'] = 'test';
-        $this->assertSame('test', $this->arrayCollection['test']);
-        $this->assertCount(4, $this->arrayCollection);
+        $this->collection['test'] = 'test';
+        $this->assertSame('test', $this->collection['test']);
+        $this->assertCount(4, $this->collection);
     }
 
     public function testFilter()
@@ -102,7 +102,7 @@ class ArrayCollectionTest extends TestCase
             'janedoe' => $this->array['janedoe'],
         ];
 
-        $this->assertEquals(new Collection($expected), $this->arrayCollection->filter(function ($data): bool {
+        $this->assertEquals(new Collection($expected), $this->collection->filter(function ($data): bool {
             return !$data['middleName'];
         }));
     }
