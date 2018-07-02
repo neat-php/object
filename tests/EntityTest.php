@@ -3,7 +3,6 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Collection;
-use Neat\Object\Manager;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
@@ -18,10 +17,15 @@ class EntityTest extends TestCase
      */
     private $create;
 
+    public static function setUpBeforeClass()
+    {
+        $factory = new Factory(new self);
+        $factory->manager();
+    }
+
     public function setUp()
     {
         $this->create = new Factory($this);
-        $this->create->manager();
     }
 
     /**
