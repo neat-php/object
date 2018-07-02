@@ -66,7 +66,16 @@ class EntityTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals('John', $user->firstName);
         $user = User::findById(0);
-        $this->assertEquals(null, $user);
+        $this->assertNull($user);
+    }
+
+    public function testFindOne()
+    {
+        $user = User::findOne(['first_name' => 'John']);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals('John', $user->firstName);
+        $user = User::findOne(['first_name' => 'not existing']);
+        $this->assertNull($user);
     }
 
     public function testFindAll()
