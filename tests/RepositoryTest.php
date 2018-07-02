@@ -123,28 +123,4 @@ class RepositoryTest extends TestCase
         $data['active'] = '0';
         $userRepository->update($data['id'], $data);
     }
-
-//    public function testQuery()
-//    {
-//
-//    }
-
-    private function callMethod($class, $method, ...$arguments)
-    {
-        return $this->create->callMethod($class, $method, ...$arguments);
-    }
-
-    private function getProperty($class, $property)
-    {
-        $reflectionClass = new \ReflectionClass($class);
-
-        $reflectionProperty = $reflectionClass->getProperty($property);
-        $reflectionProperty->setAccessible(true);
-
-        if (is_object($class)) {
-            return $reflectionProperty->getValue($class);
-        }
-
-        return $reflectionProperty->getValue();
-    }
 }
