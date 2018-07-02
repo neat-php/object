@@ -9,7 +9,7 @@ trait EntityTrait
      */
     public static function repository(): Repository
     {
-        return EntityManager::instance()->repository(static::class);
+        return Manager::instance()->repository(static::class);
     }
 
     /**

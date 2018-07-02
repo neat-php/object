@@ -3,7 +3,7 @@
 namespace Neat\Object\Test;
 
 use Neat\Database\Result;
-use Neat\Object\EntityManager;
+use Neat\Object\Manager;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
@@ -18,26 +18,26 @@ class RepositoryTest extends TestCase
     private $create;
 
     /**
-     * @var EntityManager
+     * @var Manager
      */
-    private $entityManager;
+    private $manager;
 
     public static function setUpBeforeClass()
     {
         $factory = new Factory(new self);
-        EntityManager::create($factory->connection(), 'repository-test');
+        Manager::create($factory->connection(), 'repository-test');
     }
 
     public function setUp()
     {
-        $this->create        = new Factory($this);
-        $this->entityManager = EntityManager::instance('repository-test');
+        $this->create  = new Factory($this);
+        $this->manager = Manager::instance('repository-test');
     }
 
     public function testTableName()
     {
-        $userRepository   = $this->entityManager->repository(User::class);
-        $weirdoRepository = $this->entityManager->repository(Weirdo::class);
+        $userRepository   = $this->manager->repository(User::class);
+        $weirdoRepository = $this->manager->repository(Weirdo::class);
 
         $this->assertSame('user', $this->callMethod(User::class, 'getTableName'));
         $this->assertSame('user', $this->getProperty($userRepository, 'name'));
@@ -47,9 +47,9 @@ class RepositoryTest extends TestCase
 
     public function testIdentifier()
     {
-        $userRepository      = $this->entityManager->repository(User::class);
-        $weirdoRepository    = $this->entityManager->repository(Weirdo::class);
-        $userGroupRepository = $this->entityManager->repository(UserGroup::class);
+        $userRepository      = $this->manager->repository(User::class);
+        $weirdoRepository    = $this->manager->repository(Weirdo::class);
+        $userGroupRepository = $this->manager->repository(UserGroup::class);
         $this->assertSame(['id'], User::getKey());
         $this->assertSame(['id'], $this->getProperty($userRepository, 'key'));
         $this->assertSame(['key'], Weirdo::getKey());
@@ -60,7 +60,7 @@ class RepositoryTest extends TestCase
 
     public function testFindOne()
     {
-        $userRepository = $this->entityManager->repository(User::class);
+        $userRepository = $this->manager->repository(User::class);
 
         $user = $userRepository->findOne('id < 3', 'id DESC');
         $this->assertInstanceOf(User::class, $user);
@@ -70,7 +70,7 @@ class RepositoryTest extends TestCase
     public function testFindById()
     {
         $userGroupData       = ['user_id' => 1, 'group_id' => 2];
-        $userGroupRepository = $this->entityManager->repository(UserGroup::class);
+        $userGroupRepository = $this->manager->repository(UserGroup::class);
 
         $userGroup = $userGroupRepository->findById($userGroupData);
         $this->assertInstanceOf(UserGroup::class, $userGroup);
@@ -81,27 +81,27 @@ class RepositoryTest extends TestCase
     public function testFindByIdSingle()
     {
         $this->expectException(\RuntimeException::class);
-        $userRepository = $this->entityManager->repository(User::class);
+        $userRepository = $this->manager->repository(User::class);
         $userRepository->findById([1, 2]);
     }
 
     public function testFindByIdComposed()
     {
         $this->expectException(\RuntimeException::class);
-        $userGroupRepository = $this->entityManager->repository(UserGroup::class);
+        $userGroupRepository = $this->manager->repository(UserGroup::class);
         $userGroupRepository->findById('test');
     }
 
     public function testFindByIdComposedArray()
     {
         $this->expectException(\RuntimeException::class);
-        $userGroupRepository = $this->entityManager->repository(UserGroup::class);
+        $userGroupRepository = $this->manager->repository(UserGroup::class);
         $userGroupRepository->findById(['test']);
     }
 
     public function testFindAll()
     {
-        $userRepository = $this->entityManager->repository(User::class);
+        $userRepository = $this->manager->repository(User::class);
         $result         = $userRepository->find(null, 'id DESC');
         $this->assertInstanceOf(Result::class, $result);
         $rows = $result->rows();
@@ -116,7 +116,7 @@ class RepositoryTest extends TestCase
 
     public function testIterateAll()
     {
-        $userRepository = $this->entityManager->repository(User::class);
+        $userRepository = $this->manager->repository(User::class);
 
         $this->assertCount(3, $userRepository->iterateAll());
         $i = 1;
@@ -128,7 +128,7 @@ class RepositoryTest extends TestCase
 
     public function testCreate()
     {
-        $userRepository = $this->entityManager->repository(User::class);
+        $userRepository = $this->manager->repository(User::class);
         $data           = [
             'username'     => 'ttest',
             'type_id'      => '1',
@@ -142,7 +142,7 @@ class RepositoryTest extends TestCase
         $id             = $userRepository->create($data);
         $this->assertNotNull($id);
         $data['id'] = (string)$id;
-        $user = $userRepository->fromArray(new User, $data);
+        $user       = $userRepository->fromArray(new User, $data);
         $this->assertEquals($user, $userRepository->findById($id));
 
         $data['active'] = '0';

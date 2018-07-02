@@ -1,12 +1,14 @@
 <?php
 
-
 namespace Neat\Object;
-
 
 use Neat\Database\Connection;
 
-class EntityManager
+/**
+ * Class Manager
+ * @package Neat\Object
+ */
+class Manager
 {
     /**
      * @var self[]
@@ -23,6 +25,10 @@ class EntityManager
      */
     private $repositories = [];
 
+    /**
+     * Manager constructor.
+     * @param Connection $connection
+     */
     private function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -43,7 +49,8 @@ class EntityManager
     public function repository(string $entity)
     {
         if (!isset($this->repositories[$entity])) {
-            $this->repositories[$entity] = new Repository($this->connection, $entity, $entity::getTableName(), $entity::getKey());
+            $this->repositories[$entity] = new Repository($this->connection, $entity, $entity::getTableName(),
+                $entity::getKey());
         }
 
         return $this->repositories[$entity];
@@ -51,7 +58,7 @@ class EntityManager
 
     /**
      * @param string $instance
-     * @return EntityManager
+     * @return Manager
      */
     public static function instance(string $instance = 'default')
     {
@@ -61,7 +68,7 @@ class EntityManager
     /**
      * @param Connection $connection
      * @param string $instance
-     * @return EntityManager
+     * @return Manager
      */
     public static function create(Connection $connection, string $instance = 'default')
     {
