@@ -81,15 +81,30 @@ class EntityTest extends TestCase
 
     public function testFindAll()
     {
+        $users = User::findAll();
+        $this->assertInternalType('array', $users);
+        $this->assertCount(3, $users);
+        $user = reset($users);
+        $this->assertInstanceOf(User::class, $user);
+
         $users = User::findAll(['id' => 1]);
-        $this->assertInstanceOf(Collection::class, $users);
-        $user = $users->first();
+        $this->assertInternalType('array', $users);
+        $user = reset($users);
         $this->assertInstanceOf(User::class, $user);
         $this->assertCount(1, $users);
 
         $users = User::findAll(['id' => 0]);
-        $this->assertInstanceOf(Collection::class, $users);
+        $this->assertInternalType('array', $users);
         $this->assertCount(0, $users);
+    }
+
+    public function testCollection()
+    {
+        $usersCollection = User::collection();
+        $this->assertInstanceOf(Collection::class, $usersCollection);
+        $this->assertCount(3, $usersCollection);
+        $user = $usersCollection->first();
+        $this->assertInstanceOf(User::class, $user);
     }
 
     public function testExists()

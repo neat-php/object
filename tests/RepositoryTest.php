@@ -3,6 +3,7 @@
 namespace Neat\Object\Test;
 
 use Neat\Database\Result;
+use Neat\Object\Collection;
 use Neat\Object\Manager;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
@@ -31,15 +32,6 @@ class RepositoryTest extends TestCase
     {
         $this->create  = new Factory($this);
         $this->manager = Manager::instance('repository-test');
-    }
-
-    public function testFindOne()
-    {
-        $userRepository = $this->manager->repository(User::class);
-
-        $user = $userRepository->findOne('id < 3', 'id DESC');
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertSame(2, $user->id);
     }
 
     public function testFindById()
@@ -74,19 +66,66 @@ class RepositoryTest extends TestCase
         $userGroupRepository->findById(['test']);
     }
 
-    public function testFindAll()
+    public function testFindOne()
+    {
+        $userRepository = $this->manager->repository(User::class);
+
+        $user = $userRepository->findOne('id < 3', 'id DESC');
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame(2, $user->id);
+    }
+
+    public function testFind()
     {
         $userRepository = $this->manager->repository(User::class);
         $result         = $userRepository->find(null, 'id DESC');
         $this->assertInstanceOf(Result::class, $result);
         $rows = $result->rows();
         $this->assertCount(3, $rows);
-        $row = array_shift($rows);
+        $row = reset($rows);
         $this->assertSame('3', $row['id']);
 
         $result = $userRepository->find(['active' => false]);
         $this->assertInstanceOf(Result::class, $result);
         $this->assertCount(1, $result->rows());
+
+        $result = $userRepository->find('active = 1');
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertCount(2, $result->rows());
+
+        $query = $userRepository->query('u');
+        $query->where('active = 1');
+        $result = $userRepository->find($query);
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertCount(2, $result->rows());
+
+        $result = $userRepository->find('1 = 2');
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertCount(0, $result->rows());
+    }
+
+    public function testFindAll()
+    {
+        $userRepository = $this->manager->repository(User::class);
+        $users          = $userRepository->findAll(null, 'id DESC');
+        $this->assertInternalType('array', $users);
+        $this->assertCount(3, $users);
+        $user = reset($users);
+        $this->assertSame(3, $user->id);
+
+        $users = $userRepository->findAll(['active' => false]);
+        $this->assertInternalType('array', $users);
+        $this->assertCount(1, $users);
+    }
+
+    public function testCollection()
+    {
+        $userRepository  = $this->manager->repository(User::class);
+        $usersCollection = $userRepository->collection();
+        $this->assertInstanceOf(Collection::class, $usersCollection);
+        $this->assertCount(3, $usersCollection);
+        $user = $usersCollection->first();
+        $this->assertInstanceOf(User::class, $user);
     }
 
     public function testIterateAll()

@@ -2,6 +2,8 @@
 
 namespace Neat\Object;
 
+use Neat\Database\Query;
+
 trait EntityTrait
 {
     /**
@@ -13,7 +15,7 @@ trait EntityTrait
     }
 
     /**
-     * Finds an model by it's primary key, pass an array in case of an composed key
+     * Finds an model by it's primary key, pass an array in case of a composed key
      *
      * @param integer|array $id
      * @return static|null
@@ -24,7 +26,7 @@ trait EntityTrait
     }
 
     /**
-     * @param string|array|null $conditions
+     * @param Query|string|array|null $conditions
      * @param string|null $orderBy
      * @return static|null
      */
@@ -34,13 +36,22 @@ trait EntityTrait
     }
 
     /**
-     * @param array|string $conditions
+     * @param Query|string|array|null $conditions
      * @param null|string $orderBy
-     * @return Collection
+     * @return static[]
      */
     public static function findAll($conditions = null, $orderBy = null)
     {
         return static::repository()->findAll($conditions, $orderBy);
+    }
+
+    /**
+     * @param Query|string|array|null $conditions
+     * @return Collection
+     */
+    public static function collection($conditions = null)
+    {
+        return static::repository()->collection($conditions);
     }
 
     public function store()

@@ -71,15 +71,19 @@ class Repository
     }
 
     /**
-     * @param array|string $conditions
+     * @param Query|array|string $conditions
      * @param string|null $orderBy
      * @return mixed
      */
-    public function findOne($conditions, string $orderBy = null)
+    public function findOne($conditions = null, string $orderBy = null)
     {
-        $query = $this->query()
-            ->where($conditions)
-            ->limit(1);
+        $query = $conditions instanceof Query ? $conditions : $this->query();
+
+        if ($conditions && !$conditions instanceof Query) {
+            $query->where($conditions);
+        }
+
+        $query->limit(1);
 
         if ($orderBy) {
             $query->orderBy($orderBy);
@@ -96,19 +100,28 @@ class Repository
     }
 
     /**
-     * @param string|array $conditions
+     * @param Query|string|array|null $conditions
      * @param string|null $orderBy
-     * @return Collection
+     * @return array
      */
-    public function findAll($conditions = null, string $orderBy = null): Collection
+    public function findAll($conditions = null, string $orderBy = null): array
     {
         $result = $this->find($conditions, $orderBy);
 
-        return new Collection($this->createFromRows($result->rows()));
+        return $this->createFromRows($result->rows());
     }
 
     /**
-     * @param string|array $conditions
+     * @param Query|string|array|null $conditions
+     * @return Collection
+     */
+    public function collection($conditions = null): Collection
+    {
+        return new Collection($this->findAll($conditions));
+    }
+
+    /**
+     * @param Query|string|array|null $conditions
      * @param string|null $orderBy
      * @return \Generator
      */
@@ -121,14 +134,18 @@ class Repository
     }
 
     /**
-     * @param string|[] $conditions
+     * @param Query|string|array $conditions
      * @param string|null $orderBy
      * @return Result
      */
     public function find($conditions = null, string $orderBy = null): Result
     {
-        $query = $this->query();
-        if ($conditions) {
+        if ($conditions instanceof Query) {
+            $query = $conditions;
+        } else {
+            $query = $this->query();
+        }
+        if ($conditions && !$conditions instanceof Query) {
             $query->where($conditions);
         }
 
