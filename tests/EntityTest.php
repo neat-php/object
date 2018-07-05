@@ -19,13 +19,13 @@ class EntityTest extends TestCase
 
     public static function setUpBeforeClass()
     {
-        $factory = new Factory(new self);
+        $factory = new Factory;
         $factory->manager();
     }
 
     public function setUp()
     {
-        $this->create = new Factory($this);
+        $this->create = new Factory;
     }
 
     /**
