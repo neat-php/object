@@ -24,13 +24,13 @@ class RepositoryTest extends TestCase
 
     public static function setUpBeforeClass()
     {
-        $factory = new Factory(new self);
+        $factory = new Factory;
         EntityManager::create($factory->connection(), 'repository-test');
     }
 
     public function setUp()
     {
-        $this->create        = new Factory($this);
+        $this->create        = new Factory;
         $this->entityManager = EntityManager::instance('repository-test');
     }
 

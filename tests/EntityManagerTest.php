@@ -15,7 +15,7 @@ class EntityManagerTest extends TestCase
 
     public function setUp()
     {
-        $this->create = new Factory($this);
+        $this->create = new Factory;
     }
 
     public function testGetConnection()

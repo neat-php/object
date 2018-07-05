@@ -7,7 +7,7 @@ use Neat\Object\EntityManager;
 use Neat\Object\Repository;
 use PDO;
 
-class Factory extends \Neat\Database\Test\Factory
+class Factory
 {
     /**
      * @var \DateTime
@@ -57,6 +57,21 @@ class Factory extends \Neat\Database\Test\Factory
     }
 
     /**
+     * Create connection
+     *
+     * @param PDO $pdo
+     * @return Connection
+     */
+    public function connection($pdo = null)
+    {
+        if (!$pdo) {
+            $pdo = $this->pdo();
+        }
+
+        return new Connection($pdo);
+    }
+
+    /**
      * @param Connection|null $connection
      * @return EntityManager
      */
@@ -66,35 +81,12 @@ class Factory extends \Neat\Database\Test\Factory
     }
 
     /**
-     * @param Connection|null $connection
-     * @param array $methods
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    public function mockedEntityManager(Connection $connection = null, array $methods = [])
-    {
-        return $this->case
-            ->getMockBuilder(EntityManager::class)
-            ->setMethods($methods)
-            ->setConstructorArgs([$connection ?: $this->connection()])
-            ->getMock();
-    }
-
-    /**
      * @param string $entity
      * @return Repository
      */
     public function repository(string $entity)
     {
         return $this->callMethod($entity, 'repository');
-    }
-
-    public function mockedRepository(string $entity, EntityManager $entityManager = null, array $methods = [])
-    {
-        return $this->case
-            ->getMockBuilder(Repository::class)
-            ->setMethods($methods)
-            ->setConstructorArgs([$entityManager ?: $this->entityManager(), $entity])
-            ->getMock();
     }
 
     public function callMethod($class, $method, ...$arguments)

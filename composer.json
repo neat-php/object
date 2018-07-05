@@ -18,8 +18,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Neat\\Object\\Test\\": "tests/",
-      "Neat\\Database\\Test\\": "vendor/neat/database/tests/"
+      "Neat\\Object\\Test\\": "tests/"
     }
   },
   "require": {
