@@ -24,7 +24,7 @@
   },
   "require": {
     "php": ">=7.0",
-    "neat/database": "dev-master"
+    "neat/database": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.0",
