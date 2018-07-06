@@ -213,4 +213,47 @@ class PolicyTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->policy->key(NoEntity::class);
     }
+
+    /**
+     * @return array
+     */
+    public function provideForeignKeys()
+    {
+        return [
+            [User::class, 'user_id'],
+            [Group::class, 'group_id'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideForeignKeys
+     * @param string $class
+     * @param string $foreignKey
+     */
+    public function testForeignKey(string $class, string $foreignKey)
+    {
+        $this->assertEquals($foreignKey, $this->policy->foreignKey($class));
+    }
+
+    /**
+     * @return array
+     */
+    public function provideJunctionTables()
+    {
+        return [
+            [User::class, Group::class, 'user_group'],
+            [Group::class, User::class, 'group_user'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideJunctionTables
+     * @param string $owner
+     * @param string $owned
+     * @param string $junctionTable
+     */
+    public function testJunctionTable($owner, $owned, $junctionTable)
+    {
+        $this->assertEquals($junctionTable, $this->policy->junctionTable($owner, $owned));
+    }
 }

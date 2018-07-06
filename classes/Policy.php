@@ -132,4 +132,23 @@ class Policy
 
         throw new \RuntimeException('Unable to determine the key');
     }
+
+    /**
+     * @param string $class
+     * @return string
+     */
+    public function foreignKey(string $class): string
+    {
+        return $this->table($class) . '_id';
+    }
+
+    /**
+     * @param string $owner
+     * @param string $owned
+     * @return string
+     */
+    public function junctionTable(string $owner, string $owned): string
+    {
+        return $this->table($owner) . '_' . $this->table($owned);
+    }
 }
