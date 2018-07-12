@@ -166,37 +166,29 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
-     * Get mapped item results as array (or new collection when a class is specified)
+     * Get mapped item results as new collection
      *
      * The callback should accept an `$item` parameter
      *
      * @param callable $callback
-     * @param string   $class (optional)
-     * @return array
+     * @param string   $type (optional)
+     * @return Collection|array
      */
-    public function map(callable $callback, $class = null)
+    public function map(callable $callback, $type = null)
     {
-        if ($class) {
-            return new $class($this->map($callback));
-        }
-
-        return array_map($callback, $this->items);
+        return new Collection(array_map($callback, $this->items), $type);
     }
 
     /**
-     * Get given column for every item as array (or new collection when a class is specified)
+     * Get given column for every item as new collection
      *
      * @param string $column
-     * @param string $class (optional)
-     * @return array
+     * @param string $type (optional)
+     * @return Collection|array
      */
-    public function column($column, $class = null)
+    public function column($column, $type = null)
     {
-        if ($class) {
-            return new $class($this->column($column));
-        }
-
-        return array_column($this->items, $column);
+        return new Collection(array_column($this->items, $column), $type);
     }
 
     /**

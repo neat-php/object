@@ -52,18 +52,6 @@ class CollectionTest extends TestCase
         $this->assertFalse(isset($this->collection['jdoe']));
     }
 
-    public function testMap()
-    {
-        $firstNames = $this->firstNames();
-        $this->assertSame($firstNames, $this->collection->map(function ($data) {
-            return $data['firstName'];
-        }));
-        $firstNameCollection = new Collection($firstNames);
-        $this->assertEquals($firstNameCollection, $this->collection->map(function ($data) {
-            return $data['firstName'];
-        }, Collection::class));
-    }
-
     public function testOffsetGet()
     {
         $data = reset($this->array);
@@ -81,11 +69,8 @@ class CollectionTest extends TestCase
 
     public function testColumn()
     {
-        $firstNames = array_values($this->firstNames());
-        $this->assertSame($firstNames, $this->collection->column('firstName'));
-        $this->assertEquals(new Collection($firstNames),
-            $this->collection->column('firstName', Collection::class));
-
+        $expected = new Collection(array_values($this->firstNames()));
+        $this->assertEquals($expected, $this->collection->column('firstName'));
     }
 
     public function testOffsetSet()
@@ -93,6 +78,14 @@ class CollectionTest extends TestCase
         $this->collection['test'] = 'test';
         $this->assertSame('test', $this->collection['test']);
         $this->assertCount(4, $this->collection);
+    }
+
+    public function testMap()
+    {
+        $firstNameCollection = new Collection($this->firstNames());
+        $this->assertEquals($firstNameCollection, $this->collection->map(function ($data) {
+            return $data['firstName'];
+        }));
     }
 
     public function testFilter()
