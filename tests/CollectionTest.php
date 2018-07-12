@@ -120,22 +120,22 @@ class CollectionTest extends TestCase
     public function testTypedArray()
     {
         $user            = new User();
-        $arrayCollection = new Collection([$user]);
-        $this->assertSame(User::class, $this->getPrivateProperty($arrayCollection, 'type'));
-        $this->assertSame($user, $arrayCollection->first());
+        $collection = new Collection([$user]);
+        $this->assertSame(User::class, $collection->type());
+        $this->assertSame($user, $collection->first());
 
         $this->expectException(\TypeError::class);
-        $arrayCollection->push(new UserGroup);
+        $collection->push(new UserGroup);
     }
 
     public function testTypeDefinedArray()
     {
-        $user            = new User();
-        $arrayCollection = new Collection([$user], User::class);
-        $this->assertSame(User::class, $this->getPrivateProperty($arrayCollection, 'type'));
+        $user       = new User();
+        $collection = new Collection([$user], User::class);
+        $this->assertSame(User::class, $collection->type());
 
         $this->expectException(\TypeError::class);
-        $arrayCollection->push(new UserGroup);
+        $collection->push(new UserGroup);
     }
 
     public function testJsonSerialize()
@@ -148,19 +148,5 @@ class CollectionTest extends TestCase
         return array_map(function ($data) {
             return $data['firstName'];
         }, $this->array);
-    }
-
-    private function getPrivateProperty($class, $property)
-    {
-        $reflectionClass = new \ReflectionClass($class);
-
-        $reflectionProperty = $reflectionClass->getProperty($property);
-        $reflectionProperty->setAccessible(true);
-
-        if (is_object($class)) {
-            return $reflectionProperty->getValue($class);
-        }
-
-        return $reflectionProperty->getValue();
     }
 }

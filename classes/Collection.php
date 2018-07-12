@@ -38,6 +38,16 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
+     * Get type
+     *
+     * @return string
+     */
+    public function type()
+    {
+        return $this->type;
+    }
+
+    /**
      * Validate item
      *
      * @param mixed  $item
