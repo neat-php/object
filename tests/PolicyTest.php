@@ -8,6 +8,7 @@ use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class PolicyTest extends TestCase
 {
@@ -21,12 +22,12 @@ class PolicyTest extends TestCase
         $this->policy = new Policy;
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create property
      *
      * @param string $name
      * @return Property
-     * @throws \ReflectionException
      */
     public function createProperty($name)
     {
@@ -127,15 +128,12 @@ class PolicyTest extends TestCase
      */
     public function testKey(string $entity, array $key)
     {
-        $this->assertSame($key, $this->policy->key(Property::list($entity, $this->policy)));
+        $this->assertSame($key, $this->policy->key($this->policy->properties($entity)));
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testKeyFailure()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->policy->key(Property::list(NoEntity::class, $this->policy));
+        $this->expectException(RuntimeException::class);
+        $this->policy->key($this->policy->properties(NoEntity::class));
     }
 }

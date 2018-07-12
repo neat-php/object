@@ -72,12 +72,11 @@ class Manager
      */
     private function createRepository(string $entity)
     {
-        $connection = $this->connection;
+        $properties = $this->policy->properties($entity);
         $table      = $this->policy->table($entity);
-        $properties = Property::list($entity, $this->policy);
         $key        = $this->policy->key($properties);
 
-        return new Repository($connection, $entity, $table, $key, $properties);
+        return new Repository($this->connection, $entity, $table, $key, $properties);
     }
 
     /**

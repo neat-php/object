@@ -2,6 +2,8 @@
 
 namespace Neat\Object;
 
+use ReflectionClass;
+
 class Policy
 {
     /**
@@ -26,6 +28,29 @@ class Policy
     public function column(Property $property): string
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $property->name()));
+    }
+
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * Get properties for class
+     *
+     * @param string $class
+     * @return Property[]
+     */
+    public function properties(string $class)
+    {
+        $properties = [];
+        /** @noinspection PhpUnhandledExceptionInspection */
+        foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
+            $property = new Property($reflection);
+            if ($this->skip($property)) {
+                continue;
+            }
+
+            $properties[$this->column($property)] = $property;
+        }
+
+        return $properties;
     }
 
     /**

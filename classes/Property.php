@@ -4,7 +4,6 @@ namespace Neat\Object;
 
 use DateTime;
 use DateTimeInterface;
-use ReflectionClass;
 use ReflectionProperty;
 
 class Property
@@ -129,29 +128,5 @@ class Property
     public function docBlock()
     {
         return $this->reflection->getDocComment();
-    }
-
-    /** @noinspection PhpDocMissingThrowsInspection */
-    /**
-     * Capture properties for a class
-     *
-     * @param string $class
-     * @param Policy $policy
-     * @return Property[]
-     */
-    public static function list($class, Policy $policy)
-    {
-        $properties = [];
-        /** @noinspection PhpUnhandledExceptionInspection */
-        foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
-            $property = new static($reflection);
-            if ($policy->skip($property)) {
-                continue;
-            }
-
-            $properties[$policy->column($property)] = new static($reflection);
-        }
-
-        return $properties;
     }
 }
