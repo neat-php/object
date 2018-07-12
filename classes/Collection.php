@@ -25,16 +25,12 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * Collection constructor
      *
      * @param array  $items
-     * @param string $type
+     * @param string $type (optional)
      */
     public function __construct(array $items, string $type = null)
     {
         $this->items = $items;
-        if ($type) {
-            $this->type = $type;
-        } elseif (($item = reset($items)) && is_object($item)) {
-            $this->type = get_class($item);
-        }
+        $this->type  = $type;
     }
 
     /**

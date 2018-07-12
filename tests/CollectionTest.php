@@ -117,18 +117,17 @@ class CollectionTest extends TestCase
         }
     }
 
-    public function testTypedArray()
+    public function testUntypedCollection()
     {
-        $user            = new User();
+        $user       = new User();
         $collection = new Collection([$user]);
-        $this->assertSame(User::class, $collection->type());
+        $this->assertNull($collection->type());
         $this->assertSame($user, $collection->first());
 
-        $this->expectException(\TypeError::class);
         $collection->push(new UserGroup);
     }
 
-    public function testTypeDefinedArray()
+    public function testTypedCollection()
     {
         $user       = new User();
         $collection = new Collection([$user], User::class);
