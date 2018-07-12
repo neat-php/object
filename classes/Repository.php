@@ -16,7 +16,7 @@ class Repository
     /**
      * @var string
      */
-    private $entity;
+    private $class;
 
     /**
      * @var string
@@ -37,15 +37,15 @@ class Repository
      * Repository constructor
      *
      * @param Connection $connection
-     * @param string     $entity
+     * @param string     $class
      * @param string     $table
      * @param string[]   $key
      * @param Property[] $properties
      */
-    public function __construct(Connection $connection, string $entity, string $table, array $key, array $properties)
+    public function __construct(Connection $connection, string $class, string $table, array $key, array $properties)
     {
         $this->connection = $connection;
-        $this->entity     = $entity;
+        $this->class      = $class;
         $this->table      = $table;
         $this->key        = $key;
         $this->properties = $properties;
@@ -271,7 +271,7 @@ class Repository
      */
     public function createFromRow(array $array)
     {
-        return $this->fromArray(new $this->entity, $array);
+        return $this->fromArray(new $this->class, $array);
     }
 
     /**
@@ -309,11 +309,11 @@ class Repository
     {
         $printed = print_r($id, true);
         if (count($this->key) > 1 && !is_array($id)) {
-            throw new \RuntimeException("Entity $this->entity has a composed key, finding by id requires an array, given: $printed");
+            throw new \RuntimeException("Entity $this->class has a composed key, finding by id requires an array, given: $printed");
         }
         if (is_array($id) && count($this->key) !== count($id)) {
             $keys = print_r($this->key, true);
-            throw new \RuntimeException("Entity $this->entity requires the following keys: $keys, given: $printed");
+            throw new \RuntimeException("Entity $this->class requires the following keys: $keys, given: $printed");
         }
     }
 

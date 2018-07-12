@@ -67,16 +67,16 @@ class Manager
     /**
      * Create repository
      *
-     * @param string $entity
+     * @param string $class
      * @return Repository
      */
-    private function createRepository(string $entity)
+    private function createRepository(string $class)
     {
-        $properties = $this->policy->properties($entity);
-        $table      = $this->policy->table($entity);
+        $properties = $this->policy->properties($class);
+        $table      = $this->policy->table($class);
         $key        = $this->policy->key($properties);
 
-        return new Repository($this->connection, $entity, $table, $key, $properties);
+        return new Repository($this->connection, $class, $table, $key, $properties);
     }
 
     /**
