@@ -24,22 +24,23 @@ class Repository
     private $table;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $key;
 
     /**
-     * @var Property
+     * @var Property[]
      */
     private $properties;
 
     /**
-     * Repository constructor.
+     * Repository constructor
+     *
      * @param Connection $connection
-     * @param string $entity
-     * @param string|null $table
-     * @param Property[] $key
-     * @param string[] $properties
+     * @param string     $entity
+     * @param string     $table
+     * @param string[]   $key
+     * @param Property[] $properties
      */
     public function __construct(Connection $connection, string $entity, string $table, array $key, array $properties)
     {
@@ -51,6 +52,8 @@ class Repository
     }
 
     /**
+     * Entity exists?
+     *
      * @param int|string|array $id
      * @return boolean
      */
@@ -62,6 +65,8 @@ class Repository
     }
 
     /**
+     * Find by id or key(s)
+     *
      * @param int|string|array $id
      * @return mixed
      */
@@ -71,8 +76,10 @@ class Repository
     }
 
     /**
+     * Get one by conditions
+     *
      * @param Query|array|string $conditions
-     * @param string|null $orderBy
+     * @param string|null        $orderBy
      * @return mixed
      */
     public function findOne($conditions = null, string $orderBy = null)
@@ -100,8 +107,10 @@ class Repository
     }
 
     /**
+     * Get all by conditions
+     *
      * @param Query|string|array|null $conditions
-     * @param string|null $orderBy
+     * @param string|null             $orderBy
      * @return array
      */
     public function findAll($conditions = null, string $orderBy = null): array
@@ -112,6 +121,8 @@ class Repository
     }
 
     /**
+     * Get collection of entities by conditions
+     *
      * @param Query|string|array|null $conditions
      * @return Collection
      */
@@ -121,8 +132,10 @@ class Repository
     }
 
     /**
+     * Iterate entities by conditions
+     *
      * @param Query|string|array|null $conditions
-     * @param string|null $orderBy
+     * @param string|null             $orderBy
      * @return \Generator
      */
     public function iterateAll($conditions = null, string $orderBy = null)
@@ -134,8 +147,10 @@ class Repository
     }
 
     /**
+     * Find one by conditions
+     *
      * @param Query|string|array $conditions
-     * @param string|null $orderBy
+     * @param string|null        $orderBy
      * @return Result
      */
     public function find($conditions = null, string $orderBy = null): Result
@@ -157,7 +172,9 @@ class Repository
     }
 
     /**
-     * @param string|null $alias
+     * Select query
+     *
+     * @param string $alias (optional)
      * @return Query
      */
     public function query(string $alias = null)
@@ -168,6 +185,11 @@ class Repository
         return $query;
     }
 
+    /**
+     * Store entity to the database
+     *
+     * @param object $entity
+     */
     public function store($entity)
     {
         $data       = $this->toArray($entity);
@@ -183,6 +205,8 @@ class Repository
     }
 
     /**
+     * Insert entity data into database table and return inserted id
+     *
      * @param array $data
      * @return int
      */
@@ -195,8 +219,10 @@ class Repository
     }
 
     /**
+     * Update entity data in database table
+     *
      * @param int|string|array $id
-     * @param array $data
+     * @param array            $data
      * @return false|int
      */
     public function update($id, array $data)
@@ -222,10 +248,10 @@ class Repository
     }
 
     /**
-     * Converts from an associative array
+     * Convert from an associative array
      *
-     * @param $entity
-     * @param array $array
+     * @param object $entity
+     * @param array  $array
      * @return mixed
      */
     public function fromArray($entity, $array)
@@ -238,7 +264,7 @@ class Repository
     }
 
     /**
-     * Instantiates an entity with the row data
+     * Create entity from row
      *
      * @param array $array
      * @return mixed
@@ -249,6 +275,8 @@ class Repository
     }
 
     /**
+     * Create entities from rows
+     *
      * @param array $rows
      * @return array
      */
@@ -258,7 +286,9 @@ class Repository
     }
 
     /**
-     * @param $entity
+     * Get identifier for entity
+     *
+     * @param object $entity
      * @return array
      */
     private function identifier($entity)
@@ -271,7 +301,7 @@ class Repository
     }
 
     /**
-     * Validates the identifier to prevent unexpected behaviour
+     * Validate the identifier to prevent unexpected behaviour
      *
      * @param int|string|array $id
      */
@@ -288,7 +318,7 @@ class Repository
     }
 
     /**
-     * Creates the where condition for the identifier
+     * Get where condition for identifier
      *
      * @param int|string|array $id
      * @return array

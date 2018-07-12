@@ -7,6 +7,8 @@ use Neat\Database\Query;
 trait EntityTrait
 {
     /**
+     * Get repository
+     *
      * @return Repository
      */
     public static function repository(): Repository
@@ -15,7 +17,7 @@ trait EntityTrait
     }
 
     /**
-     * Finds an model by it's primary key, pass an array in case of a composed key
+     * Find by id or key(s)
      *
      * @param integer|array $id
      * @return static|null
@@ -26,6 +28,8 @@ trait EntityTrait
     }
 
     /**
+     * Get one by conditions
+     *
      * @param Query|string|array|null $conditions
      * @param string|null $orderBy
      * @return static|null
@@ -36,6 +40,8 @@ trait EntityTrait
     }
 
     /**
+     * Get all by conditions
+     *
      * @param Query|string|array|null $conditions
      * @param null|string $orderBy
      * @return static[]
@@ -46,6 +52,8 @@ trait EntityTrait
     }
 
     /**
+     * Get collection of entities by conditions
+     *
      * @param Query|string|array|null $conditions
      * @return Collection
      */
@@ -54,6 +62,9 @@ trait EntityTrait
         return static::repository()->collection($conditions);
     }
 
+    /**
+     * Store entity to the database
+     */
     public function store()
     {
         $this::repository()->store($this);

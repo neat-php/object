@@ -2,7 +2,14 @@
 
 namespace Neat\Object;
 
-class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+use JsonSerializable;
+use TypeError;
+
+class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
      * @var array
@@ -15,9 +22,10 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     protected $type;
 
     /**
-     * ArrayCollection constructor.
-     * @param mixed[] $items
-     * @param string|null $type
+     * Collection constructor
+     *
+     * @param array  $items
+     * @param string $type
      */
     public function __construct(array $items, string $type = null)
     {
@@ -30,41 +38,37 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
-     * @param mixed|object $item
+     * Validate item
+     *
+     * @param mixed  $item
      * @param string $method
-     * @throws \TypeError
+     * @throws TypeError
      */
     protected function validate($item, $method)
     {
         if ($this->type && !$item instanceof $this->type) {
             $class = get_class($item);
-            throw new \TypeError("Argument 1 passed to $method must be of the type {$this->type}, $class given");
+            throw new TypeError("Argument 1 passed to $method must be of the type {$this->type}, $class given");
         }
     }
 
     /**
-     * Retrieve an external iterator
+     * Get iterator
+     *
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     * @return \Traversable An instance of an object implementing <b>Iterator</b> or
-     * <b>Traversable</b>
-     * @since 5.0.0
+     * @return ArrayIterator
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->items);
+        return new ArrayIterator($this->items);
     }
 
     /**
-     * Whether a offset exists
+     * Item at offset exists?
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset <p>
-     * An offset to check for.
-     * </p>
-     * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
-     * @since 5.0.0
+     * @param mixed $offset
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -72,13 +76,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
-     * Offset to retrieve
+     * Get item at offset
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset <p>
-     * The offset to retrieve.
-     * </p>
-     * @return mixed Can return all value types.
-     * @since 5.0.0
+     * @param mixed $offset
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -86,16 +88,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
-     * Offset to set
+     * Set item at offset
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset <p>
-     * The offset to assign the value to.
-     * </p>
-     * @param mixed $value <p>
-     * The value to set.
-     * </p>
-     * @return void
-     * @since 5.0.0
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value)
     {
@@ -104,13 +101,10 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
-     * Offset to unset
+     * Unset item at offset
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset <p>
-     * The offset to unset.
-     * </p>
-     * @return void
-     * @since 5.0.0
+     * @param mixed $offset
      */
     public function offsetUnset($offset)
     {
@@ -118,13 +112,10 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
-     * Count elements of an object
+     * Count items
+     *
      * @link http://php.net/manual/en/countable.count.php
-     * @return int The custom count as an integer.
-     * </p>
-     * <p>
-     * The return value is cast to an integer.
-     * @since 5.1.0
+     * @return int
      */
     public function count()
     {
@@ -132,9 +123,9 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
-     * Returns the first item in the array
+     * Get first item
      *
-     * @return mixed
+     * @return mixed|false
      */
     public function first()
     {
@@ -142,19 +133,22 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
+     * Push item onto collection
+     *
      * @param mixed $item
      * @return $this
      */
     public function push($item)
     {
         $this->validate($item, __METHOD__);
-        $this[] = $item;
+        $this->items[] = $item;
 
         return $this;
     }
 
     /**
-     * Return the copies filtered by the given callback
+     * Get filtered items as new collection
+     *
      * The callback should accept an `$item` parameter
      *
      * @param callable $callback
@@ -166,44 +160,44 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonS
     }
 
     /**
-     * Maps the internal array over the given callback
+     * Get mapped item results as array (or new collection when a class is specified)
+     *
      * The callback should accept an `$item` parameter
      *
      * @param callable $callback
-     * @param null|string $arrayCollection
+     * @param string   $class (optional)
      * @return array
      */
-    public function map(callable $callback, $arrayCollection = null)
+    public function map(callable $callback, $class = null)
     {
-        if ($arrayCollection) {
-            return new $arrayCollection($this->map($callback));
+        if ($class) {
+            return new $class($this->map($callback));
         }
 
         return array_map($callback, $this->items);
     }
 
     /**
-     * Return the given column for every item
+     * Get given column for every item as array (or new collection when a class is specified)
      *
      * @param string $column
-     * @param null|string $arrayCollection
+     * @param string $class (optional)
      * @return array
      */
-    public function column($column, $arrayCollection = null)
+    public function column($column, $class = null)
     {
-        if ($arrayCollection) {
-            return new $arrayCollection($this->column($column));
+        if ($class) {
+            return new $class($this->column($column));
         }
 
         return array_column($this->items, $column);
     }
 
     /**
-     * Specify data which should be serialized to JSON
+     * Get items for JSON serialization
+     *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     * @return array
      */
     public function jsonSerialize()
     {

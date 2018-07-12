@@ -5,6 +5,8 @@ namespace Neat\Object;
 class Policy
 {
     /**
+     * Get table name for class
+     *
      * @param string $class
      * @return string
      */
@@ -16,6 +18,8 @@ class Policy
     }
 
     /**
+     * Get column name for property
+     *
      * @param Property $property
      * @return string
      */
@@ -25,6 +29,8 @@ class Policy
     }
 
     /**
+     * Skip property?
+     *
      * @param Property $property
      * @return bool
      */
@@ -34,14 +40,15 @@ class Policy
     }
 
     /**
-     * @param array $properties
+     * Get key property names for the given properties
+     *
+     * @param Property[] $properties
      * @return string[]
      */
     public function key(array $properties): array
     {
         $id  = null;
         $key = [];
-        /** @var Property $property */
         foreach ($properties as $property) {
             if (preg_match('/\\s@key\\s/', $property->docBlock())) {
                 $key[] = $this->column($property);

@@ -10,15 +10,11 @@ use ReflectionProperty;
 class Property
 {
     /**
-     * Reflection
-     *
      * @var ReflectionProperty
      */
     protected $reflection;
 
     /**
-     * Type
-     *
      * @var string
      */
     protected $type;
@@ -116,6 +112,8 @@ class Property
     }
 
     /**
+     * Is static?
+     *
      * @return bool
      */
     public function static()
@@ -124,6 +122,8 @@ class Property
     }
 
     /**
+     * Get doc block
+     *
      * @return bool|string
      */
     public function docBlock()
@@ -131,13 +131,13 @@ class Property
         return $this->reflection->getDocComment();
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Capture properties for a class
      *
      * @param string $class
      * @param Policy $policy
      * @return Property[]
-     * @throws \ReflectionException
      */
     public static function list($class, Policy $policy)
     {

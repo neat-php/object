@@ -4,10 +4,6 @@ namespace Neat\Object;
 
 use Neat\Database\Connection;
 
-/**
- * Class Manager
- * @package Neat\Object
- */
 class Manager
 {
     /**
@@ -31,9 +27,10 @@ class Manager
     private $policy;
 
     /**
-     * Manager constructor.
+     * Manager constructor
+     *
      * @param Connection $connection
-     * @param Policy $policy
+     * @param Policy     $policy
      */
     private function __construct(Connection $connection, Policy $policy)
     {
@@ -42,6 +39,8 @@ class Manager
     }
 
     /**
+     * Get connection
+     *
      * @return Connection
      */
     public function getConnection(): Connection
@@ -50,6 +49,8 @@ class Manager
     }
 
     /**
+     * Get or create repository
+     *
      * @param string $entity
      * @return Repository
      */
@@ -62,10 +63,12 @@ class Manager
         return $this->repositories[$entity];
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
+     * Create repository
+     *
      * @param string $entity
      * @return Repository
-     * @throws \ReflectionException
      */
     private function createRepository(string $entity)
     {
@@ -78,6 +81,8 @@ class Manager
     }
 
     /**
+     * Get manager instance
+     *
      * @param string $instance
      * @return Manager
      */
@@ -87,9 +92,11 @@ class Manager
     }
 
     /**
+     * Create manager instance
+     *
      * @param Connection $connection
-     * @param Policy|null $policy
-     * @param string $instance
+     * @param Policy     $policy
+     * @param string     $instance
      * @return Manager
      */
     public static function create(Connection $connection, Policy $policy = null, string $instance = 'default')
