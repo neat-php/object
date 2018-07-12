@@ -157,12 +157,12 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      *
      * The callback should accept an `$item` parameter
      *
-     * @param callable $callback
+     * @param callable $callback (optional)
      * @return static
      */
-    public function filter(callable $callback)
+    public function filter(callable $callback = null)
     {
-        return new static(array_filter($this->items, $callback));
+        return new static(array_filter($this->items, ...(array) $callback), $this->type);
     }
 
     /**

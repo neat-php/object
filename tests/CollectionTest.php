@@ -97,14 +97,33 @@ class CollectionTest extends TestCase
 
     public function testFilter()
     {
+        $collection = new Collection([null, false, true, 0, 1]);
+        $expected   = new Collection([2 => true, 4 => 1]);
+        $filtered   = $collection->filter();
+
+        $this->assertEquals($expected, $filtered);
+    }
+
+    public function testTypedFilter()
+    {
+        $collection = new Collection([], User::class);
+        $filtered   = $collection->filter();
+
+        $this->assertEquals(User::class, $filtered->type());
+    }
+
+    public function testCallbackFilter()
+    {
         $expected = [
             'jdoe'    => $this->array['jdoe'],
             'janedoe' => $this->array['janedoe'],
         ];
-
-        $this->assertEquals(new Collection($expected), $this->collection->filter(function ($data): bool {
+        $filtered = $this->collection->filter(function ($data): bool {
             return !$data['middleName'];
-        }));
+        });
+
+        $this->assertEquals(new Collection($expected), $filtered);
+        $this->assertNull($filtered->type());
     }
 
     public function testGetIterator()
