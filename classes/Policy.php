@@ -20,6 +20,21 @@ class Policy
     }
 
     /**
+     * Get junction table name for two classes
+     *
+     * @param string $classA
+     * @param string $classB
+     * @return string
+     */
+    public function junctionTable(string $classA, string $classB): string
+    {
+        $tables = array_map([$this, 'table'], [$classA, $classB]);
+        sort($tables);
+
+        return array_shift($tables) . '_' . array_shift($tables);
+    }
+
+    /**
      * Get column name for property
      *
      * @param Property $property
@@ -30,7 +45,17 @@ class Policy
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $property->name()));
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * Get column name for a foreign key
+     *
+     * @param string $class
+     * @return string
+     */
+    public function foreignKey(string $class): string
+    {
+        return $this->table($class) . '_id';
+    }
+
     /**
      * Get properties for class
      *
@@ -61,7 +86,8 @@ class Policy
      */
     public function skip(Property $property): bool
     {
-        return $property->static() || preg_match('/\\s@nostorage\\s/', $property->docBlock());
+        return $property->static()
+            || preg_match('/\\s@nostorage\\s/', $property->docBlock());
     }
 
     /**

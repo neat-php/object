@@ -4,6 +4,7 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
@@ -22,7 +23,6 @@ class PolicyTest extends TestCase
         $this->policy = new Policy;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create property
      *
@@ -64,6 +64,27 @@ class PolicyTest extends TestCase
     /**
      * @return array
      */
+    public function provideForeignKeys()
+    {
+        return [
+            [User::class, 'user_id'],
+            [Group::class, 'group_id'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideForeignKeys
+     * @param string $class
+     * @param string $foreignKey
+     */
+    public function testForeignKey(string $class, string $foreignKey)
+    {
+        $this->assertEquals($foreignKey, $this->policy->foreignKey($class));
+    }
+
+    /**
+     * @return array
+     */
     public function provideTables()
     {
         return [
@@ -85,6 +106,28 @@ class PolicyTest extends TestCase
     public function testTable(string $entity, string $table)
     {
         $this->assertSame($table, $this->policy->table($entity));
+    }
+
+    /**
+     * @return array
+     */
+    public function provideJunctionTables()
+    {
+        return [
+            [User::class, Group::class, 'group_user'],
+            [Group::class, User::class, 'group_user'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideJunctionTables
+     * @param string $owner
+     * @param string $owned
+     * @param string $junctionTable
+     */
+    public function testJunctionTable($owner, $owned, $junctionTable)
+    {
+        $this->assertEquals($junctionTable, $this->policy->junctionTable($owner, $owned));
     }
 
     /**
@@ -117,7 +160,7 @@ class PolicyTest extends TestCase
     {
         return [
             [User::class, ['id']],
-            [UserGroup::class, ['user_id', 'group_id']]
+            [UserGroup::class, ['user_id', 'group_id']],
         ];
     }
 
@@ -131,6 +174,9 @@ class PolicyTest extends TestCase
         $this->assertSame($key, $this->policy->key($this->policy->properties($entity)));
     }
 
+    /**
+     * Tests that an exception is thrown when an entity has no id property and no properties with @key
+     */
     public function testKeyFailure()
     {
         $this->expectException(RuntimeException::class);
