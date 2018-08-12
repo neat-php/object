@@ -2,7 +2,7 @@
 
 namespace Neat\Object\Relations;
 
-class BelongsToMany
+class BelongsToOne
 {
 
 }
