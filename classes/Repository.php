@@ -182,7 +182,7 @@ class Repository
         $quotedTable = $this->connection->quoteIdentifier($this->table);
 
         $query = $this->connection
-            ->select(($alias ?? $quotedTable) . '*')
+            ->select(($alias ?? $quotedTable) . '.*')
             ->from($quotedTable, $alias);
 
         return $query;
