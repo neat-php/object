@@ -39,7 +39,7 @@ class RepositoryTest extends TestCase
         $userGroupData       = ['user_id' => 1, 'group_id' => 2];
         $userGroupRepository = $this->manager->repository(UserGroup::class);
 
-        $userGroup = $userGroupRepository->findById($userGroupData);
+        $userGroup = $userGroupRepository->get($userGroupData);
         $this->assertInstanceOf(UserGroup::class, $userGroup);
         $this->assertEquals(1, $userGroup->userId);
         $this->assertEquals(2, $userGroup->groupId);
@@ -49,21 +49,21 @@ class RepositoryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $userRepository = $this->manager->repository(User::class);
-        $userRepository->findById([1, 2]);
+        $userRepository->get([1, 2]);
     }
 
     public function testFindByIdComposed()
     {
         $this->expectException(\RuntimeException::class);
         $userGroupRepository = $this->manager->repository(UserGroup::class);
-        $userGroupRepository->findById('test');
+        $userGroupRepository->get('test');
     }
 
     public function testFindByIdComposedArray()
     {
         $this->expectException(\RuntimeException::class);
         $userGroupRepository = $this->manager->repository(UserGroup::class);
-        $userGroupRepository->findById(['test']);
+        $userGroupRepository->get(['test']);
     }
 
     public function testFindOne()
@@ -132,9 +132,9 @@ class RepositoryTest extends TestCase
     {
         $userRepository = $this->manager->repository(User::class);
 
-        $this->assertCount(3, $userRepository->iterateAll());
+        $this->assertCount(3, $userRepository->iterate());
         $i = 1;
-        foreach ($userRepository->iterateAll() as $user) {
+        foreach ($userRepository->iterate() as $user) {
             $this->assertInstanceOf(User::class, $user);
             $this->assertSame($i++, $user->id);
         }
@@ -157,7 +157,7 @@ class RepositoryTest extends TestCase
         $this->assertNotNull($id);
         $data['id'] = (string)$id;
         $user       = $userRepository->fromArray(new User, $data);
-        $this->assertEquals($user, $userRepository->findById($id));
+        $this->assertEquals($user, $userRepository->get($id));
 
         $data['active'] = '0';
         $userRepository->update($data['id'], $data);

@@ -32,7 +32,7 @@ class Manager
      * @param Connection $connection
      * @param Policy     $policy
      */
-    private function __construct(Connection $connection, Policy $policy)
+    public function __construct(Connection $connection, Policy $policy)
     {
         $this->connection = $connection;
         $this->policy     = $policy;
@@ -46,6 +46,14 @@ class Manager
     public function getConnection(): Connection
     {
         return $this->connection;
+    }
+
+    /**
+     * @return Policy
+     */
+    public function getPolicy(): Policy
+    {
+        return $this->policy;
     }
 
     /**
@@ -63,7 +71,6 @@ class Manager
         return $this->repositories[$entity];
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create repository
      *

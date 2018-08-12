@@ -3,6 +3,7 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Manager;
+use Neat\Object\Policy;
 use Neat\Object\Test\Helper\Factory;
 use PHPUnit\Framework\TestCase;
 
@@ -22,12 +23,17 @@ class ManagerTest extends TestCase
 
     public function setUp()
     {
-        $this->create = new Factory($this);
+        $this->create = new Factory;
     }
 
     public function testGetConnection()
     {
         $this->assertEquals($this->create->connection(), $this->create->manager()->getConnection());
+    }
+
+    public function testGetPolicy()
+    {
+        $this->assertEquals(new Policy, $this->create->manager()->getPolicy());
     }
 
     public function testInstance()
@@ -43,5 +49,14 @@ class ManagerTest extends TestCase
         $customManager = Manager::create($connection, null, 'create-custom-test');
         $this->assertNotSame($customManager, Manager::instance());
         $this->assertSame($customManager, Manager::instance('create-custom-test'));
+    }
+
+    public function testCustomPolicy()
+    {
+        $connection    = $this->create->connection();
+        $policy = new class extends Policy {};
+        $manager = new Manager($connection, $policy);
+        $this->assertNotEquals(new Policy(), $manager->getPolicy());
+        $this->assertEquals($policy, $manager->getPolicy());
     }
 }

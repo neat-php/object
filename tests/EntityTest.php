@@ -110,8 +110,8 @@ class EntityTest extends TestCase
     public function testExists()
     {
         $userRepository = $this->create->repository(User::class);
-        $this->assertTrue($userRepository->exists(3));
-        $this->assertFalse($userRepository->exists(4));
+        $this->assertTrue($userRepository->has(3));
+        $this->assertFalse($userRepository->has(4));
     }
 
     public function testStore()

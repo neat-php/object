@@ -37,9 +37,9 @@ class Repository
      * Repository constructor
      *
      * @param Connection $connection
-     * @param string     $class
-     * @param string     $table
-     * @param string[]   $key
+     * @param string $class
+     * @param string $table
+     * @param string[] $key
      * @param Property[] $properties
      */
     public function __construct(Connection $connection, string $class, string $table, array $key, array $properties)
@@ -57,7 +57,7 @@ class Repository
      * @param int|string|array $id
      * @return boolean
      */
-    public function exists($id): bool
+    public function has($id): bool
     {
         return $this->connection
                 ->select('count(1)')->from($this->table)->where($this->where($id))->limit(1)
@@ -70,7 +70,7 @@ class Repository
      * @param int|string|array $id
      * @return mixed
      */
-    public function findById($id)
+    public function get($id)
     {
         return $this->findOne($this->where($id));
     }
@@ -79,7 +79,7 @@ class Repository
      * Get one by conditions
      *
      * @param Query|array|string $conditions
-     * @param string|null        $orderBy
+     * @param string|null $orderBy
      * @return mixed
      */
     public function findOne($conditions = null, string $orderBy = null)
@@ -110,7 +110,7 @@ class Repository
      * Get all by conditions
      *
      * @param Query|string|array|null $conditions
-     * @param string|null             $orderBy
+     * @param string|null $orderBy
      * @return array
      */
     public function findAll($conditions = null, string $orderBy = null): array
@@ -135,10 +135,10 @@ class Repository
      * Iterate entities by conditions
      *
      * @param Query|string|array|null $conditions
-     * @param string|null             $orderBy
+     * @param string|null $orderBy
      * @return \Generator
      */
-    public function iterateAll($conditions = null, string $orderBy = null)
+    public function iterate($conditions = null, string $orderBy = null)
     {
         $result = $this->find($conditions, $orderBy);
         foreach ($result as $row) {
@@ -150,7 +150,7 @@ class Repository
      * Find one by conditions
      *
      * @param Query|string|array $conditions
-     * @param string|null        $orderBy
+     * @param string|null $orderBy
      * @return Result
      */
     public function find($conditions = null, string $orderBy = null): Result
@@ -179,8 +179,11 @@ class Repository
      */
     public function query(string $alias = null)
     {
+        $quotedTable = $this->connection->quoteIdentifier($this->table);
+
         $query = $this->connection
-            ->select('*')->from($this->table, $alias);
+            ->select(($alias ?? $quotedTable) . '*')
+            ->from($quotedTable, $alias);
 
         return $query;
     }
@@ -194,7 +197,7 @@ class Repository
     {
         $data       = $this->toArray($entity);
         $identifier = $this->identifier($entity);
-        if ($identifier && array_filter($identifier) && $this->exists($identifier)) {
+        if ($identifier && array_filter($identifier) && $this->has($identifier)) {
             $this->update($identifier, $data);
         } else {
             $id = $this->create($data);
@@ -222,7 +225,7 @@ class Repository
      * Update entity data in database table
      *
      * @param int|string|array $id
-     * @param array            $data
+     * @param array $data
      * @return false|int
      */
     public function update($id, array $data)
@@ -251,7 +254,7 @@ class Repository
      * Convert from an associative array
      *
      * @param object $entity
-     * @param array  $array
+     * @param array $array
      * @return mixed
      */
     public function fromArray($entity, $array)

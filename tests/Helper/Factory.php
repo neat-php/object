@@ -54,6 +54,17 @@ class Factory
         $pdo->exec("INSERT INTO `group` (id, name, title)
                     VALUES (1, 'test_name', 'Test Title'),
                       (2, 'test_name_2', 'Test Title 2');");
+        $pdo->exec("CREATE TABLE address (
+                      id           INTEGER PRIMARY KEY,
+                      user_id      INTEGER NOT NULL,
+                      street       TEXT,
+                      house_number TEXT,
+                      zip_code     TEXT,
+                      city         TEXT,
+                      country      TEXT
+                    );");
+        $pdo->exec("INSERT INTO address (id, user_id)
+                    VALUES (1, 1);");
 
         return $pdo;
     }

@@ -24,7 +24,7 @@ trait EntityTrait
      */
     public static function findById($id)
     {
-        return static::repository()->findById($id);
+        return static::repository()->get($id);
     }
 
     /**

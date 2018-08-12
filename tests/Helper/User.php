@@ -63,6 +63,11 @@ class User extends Entity
      */
     public $deletedDate;
 
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
 //    public function type()
 //    {
 //        return $this->belongsToOne(Type::class);
