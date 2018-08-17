@@ -62,19 +62,4 @@ class User extends Entity
      * @var DateTime
      */
     public $deletedDate;
-
-    public function address()
-    {
-        return $this->hasOne(Address::class);
-    }
-
-//    public function type()
-//    {
-//        return $this->belongsToOne(Type::class);
-//    }
-//
-//    public function groups()
-//    {
-//        return $this->belongsToMany(Group::class);
-//    }
 }

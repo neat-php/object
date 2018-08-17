@@ -6,8 +6,6 @@ use Neat\Object\Entity;
 
 class Group extends Entity
 {
-    const REPOSITORY = GroupRepository::class;
-
     /**
      * @var integer
      */
@@ -22,9 +20,4 @@ class Group extends Entity
      * @var string
      */
     public $description;
-
-    public static function getRemoteIdentifier()
-    {
-        return 'groupid';
-    }
 }
