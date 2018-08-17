@@ -22,7 +22,7 @@ trait EntityTrait
      * @param integer|array $id
      * @return static|null
      */
-    public static function findById($id)
+    public static function get($id)
     {
         return static::repository()->get($id);
     }
@@ -31,24 +31,22 @@ trait EntityTrait
      * Get one by conditions
      *
      * @param Query|string|array|null $conditions
-     * @param string|null $orderBy
      * @return static|null
      */
-    public static function findOne($conditions, $orderBy = null)
+    public static function one($conditions)
     {
-        return static::repository()->findOne($conditions, $orderBy);
+        return static::repository()->one($conditions);
     }
 
     /**
      * Get all by conditions
      *
      * @param Query|string|array|null $conditions
-     * @param null|string $orderBy
      * @return static[]
      */
-    public static function findAll($conditions = null, $orderBy = null)
+    public static function all($conditions = null)
     {
-        return static::repository()->findAll($conditions, $orderBy);
+        return static::repository()->all($conditions);
     }
 
     /**

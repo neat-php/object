@@ -1,8 +1,8 @@
-<?php
+<?php /** @noinspection SqlResolve */
 
 namespace Neat\Object\Test;
 
-use Neat\Database\Result;
+use Neat\Database\Query;
 use Neat\Object\Collection;
 use Neat\Object\Manager;
 use Neat\Object\Test\Helper\Factory;
@@ -21,6 +21,39 @@ class RepositoryTest extends TestCase
      * @var Manager
      */
     private $manager;
+
+    /**
+     * Minify SQL query by removing unused whitespace
+     *
+     * @param string $query
+     * @return string
+     */
+    protected function minifySQL($query)
+    {
+        $replace = [
+            '|\s+|m'     => ' ',
+            '|\s*,\s*|m' => ',',
+            '|\s*=\s*|m' => '=',
+        ];
+
+        return preg_replace(array_keys($replace), $replace, $query);
+    }
+
+    /**
+     * Assert SQL matches expectation
+     *
+     * Normalizes whitespace to make the tests less fragile
+     *
+     * @param string $expected
+     * @param string $actual
+     */
+    protected function assertSQL($expected, $actual)
+    {
+        $this->assertEquals(
+            $this->minifySQL($expected),
+            $this->minifySQL($actual)
+        );
+    }
 
     public static function setUpBeforeClass()
     {
@@ -66,54 +99,54 @@ class RepositoryTest extends TestCase
         $userGroupRepository->get(['test']);
     }
 
-    public function testFindOne()
+    public function testSelect()
     {
-        $userRepository = $this->manager->repository(User::class);
+        $repository = $this->manager->repository(User::class);
 
-        $user = $userRepository->findOne('id < 3', 'id DESC');
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertSame(2, $user->id);
+        $select = $repository->select();
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT `user`.* FROM `user`', $select->getQuery());
+
+        $select = $repository->select('u');
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT u.* FROM `user` u', $select->getQuery());
     }
 
-    public function testFind()
+    public function testQuery()
     {
-        $userRepository = $this->manager->repository(User::class);
-        $result         = $userRepository->find(null, 'id DESC');
-        $this->assertInstanceOf(Result::class, $result);
-        $rows = $result->rows();
-        $this->assertCount(3, $rows);
-        $row = reset($rows);
-        $this->assertSame('3', $row['id']);
+        $repository = $this->manager->repository(User::class);
 
-        $result = $userRepository->find(['active' => false]);
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertCount(1, $result->rows());
+        $this->assertInstanceOf(Query::class, $repository->query());
+        $this->assertSQL('SELECT `user`.* FROM `user`', $repository->query());
 
-        $result = $userRepository->find('active = 1');
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertCount(2, $result->rows());
+        $select = $repository->query(['active' => false]);
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT `user`.* FROM `user` WHERE `active` = \'0\'', $select->getQuery());
 
-        $query = $userRepository->query('u');
-        $query->where('active = 1');
-        $result = $userRepository->find($query);
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertCount(2, $result->rows());
+        $select = $repository->query('active = 1');
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT `user`.* FROM `user` WHERE active = 1', $select->getQuery());
+    }
 
-        $result = $userRepository->find('1 = 2');
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertCount(0, $result->rows());
+    public function testFindOne()
+    {
+        $repository = $this->manager->repository(User::class);
+
+        $user = $repository->one('id = 1');
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame(1, $user->id);
     }
 
     public function testFindAll()
     {
-        $userRepository = $this->manager->repository(User::class);
-        $users          = $userRepository->findAll(null, 'id DESC');
+        $repository = $this->manager->repository(User::class);
+        $users      = $repository->all($repository->select()->orderBy('id DESC'));
         $this->assertInternalType('array', $users);
         $this->assertCount(3, $users);
         $user = reset($users);
         $this->assertSame(3, $user->id);
 
-        $users = $userRepository->findAll(['active' => false]);
+        $users = $repository->all(['active' => false]);
         $this->assertInternalType('array', $users);
         $this->assertCount(1, $users);
     }
@@ -128,7 +161,7 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
-    public function testIterateAll()
+    public function testIterate()
     {
         $userRepository = $this->manager->repository(User::class);
 
@@ -140,7 +173,7 @@ class RepositoryTest extends TestCase
         }
     }
 
-    public function testCreate()
+    public function testInsertAndUpdate()
     {
         $userRepository = $this->manager->repository(User::class);
         $data           = [
@@ -153,7 +186,7 @@ class RepositoryTest extends TestCase
             'update_date'  => '2018-05-20',
             'deleted_date' => null,
         ];
-        $id             = $userRepository->create($data);
+        $id             = $userRepository->insert($data);
         $this->assertNotNull($id);
         $data['id'] = (string)$id;
         $user       = $userRepository->fromArray(new User, $data);

@@ -2,9 +2,9 @@
 
 namespace Neat\Object;
 
+use Generator;
 use Neat\Database\Connection;
 use Neat\Database\Query;
-use Neat\Database\Result;
 
 class Repository
 {
@@ -54,7 +54,7 @@ class Repository
     /**
      * Entity exists?
      *
-     * @param int|string|array $id
+     * @param int|string|array $id Primary key value(s)
      * @return boolean
      */
     public function has($id): bool
@@ -67,117 +67,21 @@ class Repository
     /**
      * Find by id or key(s)
      *
-     * @param int|string|array $id
-     * @return mixed
+     * @param int|string|array $id Primary key value(s)
+     * @return mixed|null
      */
     public function get($id)
     {
-        return $this->findOne($this->where($id));
-    }
-
-    /**
-     * Get one by conditions
-     *
-     * @param Query|array|string $conditions
-     * @param string|null $orderBy
-     * @return mixed
-     */
-    public function findOne($conditions = null, string $orderBy = null)
-    {
-        $query = $conditions instanceof Query ? $conditions : $this->query();
-
-        if ($conditions && !$conditions instanceof Query) {
-            $query->where($conditions);
-        }
-
-        $query->limit(1);
-
-        if ($orderBy) {
-            $query->orderBy($orderBy);
-        }
-
-        $result = $query->query();
-        $row    = $result->row();
-
-        if (!$row) {
-            return null;
-        }
-
-        return $this->createFromRow($row);
-    }
-
-    /**
-     * Get all by conditions
-     *
-     * @param Query|string|array|null $conditions
-     * @param string|null $orderBy
-     * @return array
-     */
-    public function findAll($conditions = null, string $orderBy = null): array
-    {
-        $result = $this->find($conditions, $orderBy);
-
-        return $this->createFromRows($result->rows());
-    }
-
-    /**
-     * Get collection of entities by conditions
-     *
-     * @param Query|string|array|null $conditions
-     * @return Collection
-     */
-    public function collection($conditions = null): Collection
-    {
-        return new Collection($this->findAll($conditions));
-    }
-
-    /**
-     * Iterate entities by conditions
-     *
-     * @param Query|string|array|null $conditions
-     * @param string|null $orderBy
-     * @return \Generator
-     */
-    public function iterate($conditions = null, string $orderBy = null)
-    {
-        $result = $this->find($conditions, $orderBy);
-        foreach ($result as $row) {
-            yield $this->createFromRow($row);
-        }
-    }
-
-    /**
-     * Find one by conditions
-     *
-     * @param Query|string|array $conditions
-     * @param string|null $orderBy
-     * @return Result
-     */
-    public function find($conditions = null, string $orderBy = null): Result
-    {
-        if ($conditions instanceof Query) {
-            $query = $conditions;
-        } else {
-            $query = $this->query();
-        }
-        if ($conditions && !$conditions instanceof Query) {
-            $query->where($conditions);
-        }
-
-        if ($orderBy) {
-            $query->orderBy($orderBy);
-        }
-
-        return $query->query();
+        return $this->one($this->where($id));
     }
 
     /**
      * Select query
      *
-     * @param string $alias (optional)
+     * @param string $alias Table alias (optional)
      * @return Query
      */
-    public function query(string $alias = null)
+    public function select(string $alias = null): Query
     {
         $quotedTable = $this->connection->quoteIdentifier($this->table);
 
@@ -186,6 +90,82 @@ class Repository
             ->from($quotedTable, $alias);
 
         return $query;
+    }
+
+    /**
+     * Find one by conditions
+     *
+     * @param Query|string|array $conditions SQL where clause or Query instance
+     * @return Query
+     */
+    public function query($conditions = null): Query
+    {
+        if ($conditions instanceof Query) {
+            return $conditions;
+        }
+
+        $query = $this->select();
+        if ($conditions) {
+            $query->where($conditions);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get one by conditions
+     *
+     * @param Query|array|string $conditions SQL where clause or Query instance
+     * @return mixed|null
+     */
+    public function one($conditions = null)
+    {
+        $row = $this->query($conditions)->limit(1)->query()->row();
+        if (!$row) {
+            return null;
+        }
+
+        return $this->create($row);
+    }
+
+    /**
+     * Get all by conditions
+     *
+     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @return object[]
+     */
+    public function all($conditions = null): array
+    {
+        $rows = $this->query($conditions)->query()->rows();
+
+        return array_map([$this, 'create'], $rows);
+    }
+
+    /**
+     * Get collection of entities by conditions
+     *
+     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @return Collection|object[]
+     */
+    public function collection($conditions = null): Collection
+    {
+        $objects = $this->all($conditions);
+
+        return new Collection($objects);
+    }
+
+    /**
+     * Iterate entities by conditions
+     *
+     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @return Generator|object[]
+     */
+    public function iterate($conditions = null): Generator
+    {
+        $result = $this->query($conditions)->query();
+        foreach ($result as $row) {
+            yield $this->create($row);
+        }
     }
 
     /**
@@ -200,7 +180,7 @@ class Repository
         if ($identifier && array_filter($identifier) && $this->has($identifier)) {
             $this->update($identifier, $data);
         } else {
-            $id = $this->create($data);
+            $id = $this->insert($data);
             if ($id && count($this->key) === 1) {
                 $this->properties[reset($this->key)]->set($entity, $id);
             }
@@ -213,7 +193,7 @@ class Repository
      * @param array $data
      * @return int
      */
-    public function create(array $data)
+    public function insert(array $data)
     {
         $this->connection
             ->insert($this->table, $data);
@@ -242,25 +222,25 @@ class Repository
      */
     public function toArray($entity): array
     {
-        $array = [];
+        $data = [];
         foreach ($this->properties as $key => $property) {
-            $array[$key] = $property->get($entity);
+            $data[$key] = $property->get($entity);
         }
 
-        return $array;
+        return $data;
     }
 
     /**
      * Convert from an associative array
      *
      * @param object $entity
-     * @param array $array
+     * @param array  $data
      * @return mixed
      */
-    public function fromArray($entity, $array)
+    public function fromArray($entity, array $data)
     {
         foreach ($this->properties as $key => $property) {
-            $property->set($entity, $array[$key] ?? null);
+            $property->set($entity, $data[$key] ?? null);
         }
 
         return $entity;
@@ -269,23 +249,12 @@ class Repository
     /**
      * Create entity from row
      *
-     * @param array $array
+     * @param array $data
      * @return mixed
      */
-    public function createFromRow(array $array)
+    public function create(array $data)
     {
-        return $this->fromArray(new $this->class, $array);
-    }
-
-    /**
-     * Create entities from rows
-     *
-     * @param array $rows
-     * @return array
-     */
-    public function createFromRows(array $rows): array
-    {
-        return array_map([$this, 'createFromRow'], $rows);
+        return $this->fromArray(new $this->class, $data);
     }
 
     /**

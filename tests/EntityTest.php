@@ -63,37 +63,37 @@ class EntityTest extends TestCase
 
     public function testFindById()
     {
-        $user = User::findById(1);
+        $user = User::get(1);
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals('John', $user->firstName);
-        $user = User::findById(0);
+        $user = User::get(0);
         $this->assertNull($user);
     }
 
     public function testFindOne()
     {
-        $user = User::findOne(['first_name' => 'John']);
+        $user = User::one(['first_name' => 'John']);
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals('John', $user->firstName);
-        $user = User::findOne(['first_name' => 'not existing']);
+        $user = User::one(['first_name' => 'not existing']);
         $this->assertNull($user);
     }
 
     public function testFindAll()
     {
-        $users = User::findAll();
+        $users = User::all();
         $this->assertInternalType('array', $users);
         $this->assertCount(3, $users);
         $user = reset($users);
         $this->assertInstanceOf(User::class, $user);
 
-        $users = User::findAll(['id' => 1]);
+        $users = User::all(['id' => 1]);
         $this->assertInternalType('array', $users);
         $user = reset($users);
         $this->assertInstanceOf(User::class, $user);
         $this->assertCount(1, $users);
 
-        $users = User::findAll(['id' => 0]);
+        $users = User::all(['id' => 0]);
         $this->assertInternalType('array', $users);
         $this->assertCount(0, $users);
     }
@@ -127,7 +127,7 @@ class EntityTest extends TestCase
         $user->store();
         $this->assertNotNull($user->id);
 
-        $dbUser = User::findById($user->id);
+        $dbUser = User::get($user->id);
         $this->assertEquals($user, $dbUser);
         $dbUser->active   = false;
         $user->updateDate = new \DateTime('today +1hour');

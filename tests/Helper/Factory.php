@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SqlResolve */
 
 namespace Neat\Object\Test\Helper;
 
@@ -48,7 +48,7 @@ class Factory
                     (1, 3);");
         $pdo->exec("CREATE TABLE `group` (
                       id    INTEGER PRIMARY KEY,
-                      name       NOT NULL,
+                      name  VARCHAR(100) NOT NULL,
                       title TEXT NOT NULL
                     )");
         $pdo->exec("INSERT INTO `group` (id, name, title)
@@ -104,6 +104,7 @@ class Factory
 
     public function callMethod($class, $method, ...$arguments)
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $reflectionClass  = new \ReflectionClass($class);
         $reflectionMethod = $reflectionClass->getMethod($method);
         $reflectionMethod->setAccessible(true);

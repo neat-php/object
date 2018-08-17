@@ -23,6 +23,7 @@ class PolicyTest extends TestCase
         $this->policy = new Policy;
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create property
      *

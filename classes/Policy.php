@@ -56,6 +56,7 @@ class Policy
         return $this->table($class) . '_id';
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Get properties for class
      *
