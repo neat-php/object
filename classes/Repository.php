@@ -4,7 +4,6 @@ namespace Neat\Object;
 
 use Generator;
 use Neat\Database\Connection;
-use Neat\Database\Query;
 
 class Repository
 {
@@ -85,8 +84,8 @@ class Repository
     {
         $quotedTable = $this->connection->quoteIdentifier($this->table);
 
-        $query = $this->connection
-            ->select(($alias ?? $quotedTable) . '.*')
+        $query = new Query($this->connection, $this);
+        $query->select(($alias ?? $quotedTable) . '.*')
             ->from($quotedTable, $alias);
 
         return $query;
@@ -234,7 +233,7 @@ class Repository
      * Convert from an associative array
      *
      * @param object $entity
-     * @param array  $data
+     * @param array $data
      * @return mixed
      */
     public function fromArray($entity, array $data)
