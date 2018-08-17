@@ -52,10 +52,10 @@ class Repository
     }
 
     /**
-     * Entity exists?
+     * Has entity with identifier?
      *
-     * @param int|string|array $id Primary key value(s)
-     * @return boolean
+     * @param int|string|array $id Identifier value(s)
+     * @return bool
      */
     public function has($id): bool
     {
@@ -65,9 +65,9 @@ class Repository
     }
 
     /**
-     * Find by id or key(s)
+     * Get entity by identifier?
      *
-     * @param int|string|array $id Primary key value(s)
+     * @param int|string|array $id Identifier value(s)
      * @return mixed|null
      */
     public function get($id)
@@ -76,7 +76,7 @@ class Repository
     }
 
     /**
-     * Select query
+     * Create select query
      *
      * @param string $alias Table alias (optional)
      * @return Query
@@ -93,9 +93,9 @@ class Repository
     }
 
     /**
-     * Find one by conditions
+     * Create select query with conditions
      *
-     * @param Query|string|array $conditions SQL where clause or Query instance
+     * @param Query|string|array $conditions Query instance or where clause (optional)
      * @return Query
      */
     public function query($conditions = null): Query
@@ -215,7 +215,7 @@ class Repository
     }
 
     /**
-     * Converts to an associative array
+     * Convert to an associative array
      *
      * @param object $entity
      * @return array
