@@ -130,7 +130,7 @@ class EntityTest extends TestCase
         $dbUser = User::get($user->id);
         $this->assertEquals($user, $dbUser);
         $dbUser->active   = false;
-        $user->updateDate = new \DateTime('today +1hour');
+        $user->updateDate = new \DateTime('today +1 hour');
         $user->store();
         $this->assertSame($user->id, $dbUser->id);
 

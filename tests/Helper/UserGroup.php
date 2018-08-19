@@ -2,8 +2,6 @@
 
 namespace Neat\Object\Test\Helper;
 
-use Neat\Object\Entity;
-
 class UserGroup extends Entity
 {
     /**

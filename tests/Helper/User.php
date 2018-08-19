@@ -3,7 +3,6 @@
 namespace Neat\Object\Test\Helper;
 
 use DateTime;
-use Neat\Object\Entity;
 
 class User extends Entity
 {

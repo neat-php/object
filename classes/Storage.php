@@ -4,7 +4,7 @@ namespace Neat\Object;
 
 use Neat\Database\Query;
 
-trait EntityTrait
+trait Storage
 {
     /**
      * Get repository
