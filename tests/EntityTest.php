@@ -61,7 +61,13 @@ class EntityTest extends TestCase
         );
     }
 
-    public function testFindById()
+    public function testHas()
+    {
+        $this->assertTrue(User::has(1));
+        $this->assertFalse(User::has(0));
+    }
+
+    public function testGet()
     {
         $user = User::get(1);
         $this->assertInstanceOf(User::class, $user);
@@ -70,7 +76,7 @@ class EntityTest extends TestCase
         $this->assertNull($user);
     }
 
-    public function testFindOne()
+    public function testOne()
     {
         $user = User::one(['first_name' => 'John']);
         $this->assertInstanceOf(User::class, $user);
@@ -79,7 +85,7 @@ class EntityTest extends TestCase
         $this->assertNull($user);
     }
 
-    public function testFindAll()
+    public function testAll()
     {
         $users = User::all();
         $this->assertInternalType('array', $users);

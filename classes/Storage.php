@@ -17,9 +17,18 @@ trait Storage
     }
 
     /**
-     * Find by id or key(s)
-     *
-     * @param integer|array $id
+     * @see Repository::has()
+     * @param int|string|array $id
+     * @return bool
+     */
+    public static function has($id): bool
+    {
+        return static::repository()->has($id);
+    }
+
+    /**
+     * @see Repository::get()
+     * @param int|string|array $id
      * @return static|null
      */
     public static function get($id)
@@ -28,8 +37,27 @@ trait Storage
     }
 
     /**
-     * Get one by conditions
-     *
+     * @see Repository::select()
+     * @param string|null $alias
+     * @return Query
+     */
+    public static function select(string $alias = null): Query
+    {
+        return static::repository()->select($alias);
+    }
+
+    /**
+     * @see Repository::query()
+     * @param Query|string|array|null $conditions
+     * @return Query
+     */
+    public static function query($conditions = null): Query
+    {
+        return static::repository()->query($conditions);
+    }
+
+    /**
+     * @see Repository::one()
      * @param Query|string|array|null $conditions
      * @return static|null
      */
@@ -39,8 +67,7 @@ trait Storage
     }
 
     /**
-     * Get all by conditions
-     *
+     * @see Repository::all()
      * @param Query|string|array|null $conditions
      * @return static[]
      */
@@ -50,18 +77,27 @@ trait Storage
     }
 
     /**
-     * Get collection of entities by conditions
-     *
+     * @see Repository::collection()
      * @param Query|string|array|null $conditions
      * @return Collection
      */
-    public static function collection($conditions = null)
+    public static function collection($conditions = null): Collection
     {
         return static::repository()->collection($conditions);
     }
 
     /**
-     * Store entity to the database
+     * @see Repository::iterate()
+     * @param Query|string|array|null $conditions
+     * @return \Generator|object[]
+     */
+    public static function iterate($conditions = null)
+    {
+        return static::repository()->iterate($conditions);
+    }
+
+    /**
+     * @see Repository::store()
      */
     public function store()
     {
