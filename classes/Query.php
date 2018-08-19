@@ -47,11 +47,12 @@ class Query extends \Neat\Database\Query
         return $this->repository->collection($this);
     }
 
+
     /**
      * @return Generator|object[]
      */
     public function iterate()
     {
-        yield from $this->repository->iterate($this);
+        return $this->repository->iterate($this);
     }
 }

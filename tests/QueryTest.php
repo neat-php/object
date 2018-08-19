@@ -56,6 +56,31 @@ class QueryTest extends TestCase
 
         $query = new Query($this->connection, $repository);
         $query->select('*')->from('user');
-        $query->{$method}();
+        $response = $query->{$method}();
+        $this->assertSame($result, $response);
+    }
+
+    public function testIterate()
+    {
+        $generator = function () {
+            $data = [new User];
+
+            foreach ($data as $item) {
+                yield $item;
+            }
+        };
+
+        /** @var Repository|MockObject $repository */
+        $repository = $this->mock(['iterate']);
+        $repository->expects($this->once())
+            ->method('iterate')
+            ->willReturnCallback($generator);
+
+        $query = new Query($this->connection, $repository);
+        $query->select('*')->from('user');
+        $response = $query->iterate();
+
+        $this->assertInstanceOf(\Generator::class, $response);
+        $this->assertEquals($generator(), $response);
     }
 }
