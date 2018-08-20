@@ -2,7 +2,7 @@
 
 namespace Neat\Object;
 
-use Neat\Database\Query;
+use Generator;
 
 trait Storage
 {
@@ -71,7 +71,7 @@ trait Storage
      * @param Query|string|array|null $conditions
      * @return static[]
      */
-    public static function all($conditions = null)
+    public static function all($conditions = null): array
     {
         return static::repository()->all($conditions);
     }
@@ -79,7 +79,7 @@ trait Storage
     /**
      * @see Repository::collection()
      * @param Query|string|array|null $conditions
-     * @return Collection
+     * @return Collection|static[]
      */
     public static function collection($conditions = null): Collection
     {
@@ -89,9 +89,9 @@ trait Storage
     /**
      * @see Repository::iterate()
      * @param Query|string|array|null $conditions
-     * @return \Generator|object[]
+     * @return Generator|static[]
      */
-    public static function iterate($conditions = null)
+    public static function iterate($conditions = null): Generator
     {
         return static::repository()->iterate($conditions);
     }

@@ -24,6 +24,7 @@ class Query extends \Neat\Database\Query
     }
 
     /**
+     * @see Repository::one()
      * @return mixed|null
      */
     public function one()
@@ -32,26 +33,29 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @return object[]
+     * @see Repository::all()
+     * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->repository->all($this);
     }
 
     /**
-     * @return Collection|object[]
+     * @see Repository::collection()
+     * @return Collection|array
      */
-    public function collection()
+    public function collection(): Collection
     {
         return $this->repository->collection($this);
     }
 
 
     /**
-     * @return Generator|object[]
+     * @see Repository::iterate()
+     * @return Generator|array
      */
-    public function iterate()
+    public function iterate(): Generator
     {
         return $this->repository->iterate($this);
     }
