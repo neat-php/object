@@ -1,8 +1,9 @@
-<?php
+<?php /** @noinspection SqlResolve */
 
 namespace Neat\Object\Test;
 
 use Neat\Object\Collection;
+use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
@@ -67,6 +68,31 @@ class EntityTest extends TestCase
         $this->assertFalse(User::has(0));
     }
 
+    public function testSelect()
+    {
+        $select = User::select();
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT `user`.* FROM `user`', $select->getQuery());
+
+        $select = User::select('u');
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT u.* FROM `user` u', $select->getQuery());
+    }
+
+    public function testQuery()
+    {
+        $this->assertInstanceOf(Query::class, User::query());
+        $this->assertSQL('SELECT `user`.* FROM `user`', User::query());
+
+        $select = User::query(['active' => false]);
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT `user`.* FROM `user` WHERE `active` = \'0\'', $select->getQuery());
+
+        $select = User::query('active = 1');
+        $this->assertInstanceOf(Query::class, $select);
+        $this->assertSQL('SELECT `user`.* FROM `user` WHERE active = 1', $select->getQuery());
+    }
+
     public function testGet()
     {
         $user = User::get(1);
@@ -113,11 +139,15 @@ class EntityTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
-    public function testExists()
+    public function testIterate()
     {
-        $userRepository = $this->create->repository(User::class);
-        $this->assertTrue($userRepository->has(3));
-        $this->assertFalse($userRepository->has(4));
+        $this->assertCount(3, User::iterate());
+        $i = 1;
+        foreach (User::iterate() as $user) {
+            $this->assertInstanceOf(User::class, $user);
+            $this->assertSame($i++, $user->id);
+        }
+        $this->assertInstanceOf(\Generator::class, User::iterate());
     }
 
     public function testStore()

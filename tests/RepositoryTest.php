@@ -13,11 +13,6 @@ use PHPUnit\Framework\TestCase;
 class RepositoryTest extends TestCase
 {
     /**
-     * @var Factory
-     */
-    private $create;
-
-    /**
      * @var Manager
      */
     private $manager;
@@ -63,11 +58,17 @@ class RepositoryTest extends TestCase
 
     public function setUp()
     {
-        $this->create  = new Factory;
         $this->manager = Manager::instance('repository-test');
     }
 
-    public function testFindById()
+    public function testHas()
+    {
+        $userRepository = $this->manager->repository(User::class);
+        $this->assertTrue($userRepository->has(3));
+        $this->assertFalse($userRepository->has(4));
+    }
+
+    public function testGet()
     {
         $userGroupData       = ['user_id' => 1, 'group_id' => 2];
         $userGroupRepository = $this->manager->repository(UserGroup::class);
@@ -76,23 +77,29 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(UserGroup::class, $userGroup);
         $this->assertEquals(1, $userGroup->userId);
         $this->assertEquals(2, $userGroup->groupId);
+
+        $userRepository = $this->manager->repository(User::class);
+
+        $user = $userRepository->get(1);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame(1, $user->id);
     }
 
-    public function testFindByIdSingle()
+    public function testGetSingle()
     {
         $this->expectException(\RuntimeException::class);
         $userRepository = $this->manager->repository(User::class);
         $userRepository->get([1, 2]);
     }
 
-    public function testFindByIdComposed()
+    public function testGetComposed()
     {
         $this->expectException(\RuntimeException::class);
         $userGroupRepository = $this->manager->repository(UserGroup::class);
         $userGroupRepository->get('test');
     }
 
-    public function testFindByIdComposedArray()
+    public function testGetComposedArray()
     {
         $this->expectException(\RuntimeException::class);
         $userGroupRepository = $this->manager->repository(UserGroup::class);
@@ -128,7 +135,7 @@ class RepositoryTest extends TestCase
         $this->assertSQL('SELECT `user`.* FROM `user` WHERE active = 1', $select->getQuery());
     }
 
-    public function testFindOne()
+    public function testOne()
     {
         $repository = $this->manager->repository(User::class);
 
@@ -137,7 +144,7 @@ class RepositoryTest extends TestCase
         $this->assertSame(1, $user->id);
     }
 
-    public function testFindAll()
+    public function testAll()
     {
         $repository = $this->manager->repository(User::class);
         $users      = $repository->all($repository->select()->orderBy('id DESC'));
@@ -171,6 +178,7 @@ class RepositoryTest extends TestCase
             $this->assertInstanceOf(User::class, $user);
             $this->assertSame($i++, $user->id);
         }
+        $this->assertInstanceOf(\Generator::class, $userRepository->iterate());
     }
 
     public function testInsertAndUpdate()
