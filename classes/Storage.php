@@ -61,7 +61,7 @@ trait Storage
      * @param Query|string|array|null $conditions
      * @return static|null
      */
-    public static function one($conditions)
+    public static function one($conditions = null)
     {
         return static::repository()->one($conditions);
     }

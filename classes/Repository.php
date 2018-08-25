@@ -114,7 +114,7 @@ class Repository
     /**
      * Get one by conditions
      *
-     * @param Query|array|string $conditions SQL where clause or Query instance
+     * @param Query|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
      */
     public function one($conditions = null)
