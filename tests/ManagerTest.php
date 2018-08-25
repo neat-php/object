@@ -26,14 +26,14 @@ class ManagerTest extends TestCase
         $this->create = new Factory;
     }
 
-    public function testGetConnection()
+    public function testConnection()
     {
-        $this->assertEquals($this->create->connection(), $this->create->manager()->getConnection());
+        $this->assertEquals($this->create->connection(), $this->create->manager()->connection());
     }
 
-    public function testGetPolicy()
+    public function testPolicy()
     {
-        $this->assertEquals(new Policy, $this->create->manager()->getPolicy());
+        $this->assertEquals(new Policy, $this->create->manager()->policy());
     }
 
     public function testInstance()
@@ -56,7 +56,7 @@ class ManagerTest extends TestCase
         $connection    = $this->create->connection();
         $policy = new class extends Policy {};
         $manager = new Manager($connection, $policy);
-        $this->assertNotEquals(new Policy(), $manager->getPolicy());
-        $this->assertEquals($policy, $manager->getPolicy());
+        $this->assertNotEquals(new Policy(), $manager->policy());
+        $this->assertEquals($policy, $manager->policy());
     }
 }

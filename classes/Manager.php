@@ -17,14 +17,14 @@ class Manager
     private $connection;
 
     /**
-     * @var Repository[]
-     */
-    private $repositories = [];
-
-    /**
      * @var Policy
      */
     private $policy;
+
+    /**
+     * @var Repository[]
+     */
+    private $repositories = [];
 
     /**
      * Manager constructor
@@ -43,15 +43,17 @@ class Manager
      *
      * @return Connection
      */
-    public function getConnection(): Connection
+    public function connection(): Connection
     {
         return $this->connection;
     }
 
     /**
+     * Get policy
+     *
      * @return Policy
      */
-    public function getPolicy(): Policy
+    public function policy(): Policy
     {
         return $this->policy;
     }
