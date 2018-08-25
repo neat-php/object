@@ -61,16 +61,13 @@ class Manager
     /**
      * Get or create repository
      *
-     * @param string $entity
+     * @param string $class
      * @return Repository
      */
-    public function repository(string $entity)
+    public function repository(string $class): Repository
     {
-        if (!isset($this->repositories[$entity])) {
-            $this->repositories[$entity] = $this->createRepository($entity);
-        }
-
-        return $this->repositories[$entity];
+        return $this->repositories[$class]
+            ?? $this->repositories[$class] = $this->createRepository($class);
     }
 
     /**
