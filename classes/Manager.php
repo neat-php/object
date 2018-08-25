@@ -67,22 +67,7 @@ class Manager
     public function repository(string $class): Repository
     {
         return $this->repositories[$class]
-            ?? $this->repositories[$class] = $this->createRepository($class);
-    }
-
-    /**
-     * Create repository
-     *
-     * @param string $class
-     * @return Repository
-     */
-    private function createRepository(string $class)
-    {
-        $properties = $this->policy->properties($class);
-        $table      = $this->policy->table($class);
-        $key        = $this->policy->key($properties);
-
-        return new Repository($this->connection, $class, $table, $key, $properties);
+            ?? $this->repositories[$class] = $this->policy->repository($class, $this->connection);
     }
 
     /**

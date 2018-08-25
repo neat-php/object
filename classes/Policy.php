@@ -2,10 +2,27 @@
 
 namespace Neat\Object;
 
+use Neat\Database\Connection;
 use ReflectionClass;
 
 class Policy
 {
+    /**
+     * Get repository
+     *
+     * @param string     $class
+     * @param Connection $connection
+     * @return Repository
+     */
+    public function repository(string $class, Connection $connection)
+    {
+        $properties = $this->properties($class);
+        $table      = $this->table($class);
+        $key        = $this->key($properties);
+
+        return new Repository($connection, $class, $table, $key, $properties);
+    }
+
     /**
      * Get table name for class
      *
