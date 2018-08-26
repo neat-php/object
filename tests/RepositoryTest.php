@@ -2,9 +2,9 @@
 
 namespace Neat\Object\Test;
 
-use Neat\Database\Query;
 use Neat\Object\Collection;
 use Neat\Object\Manager;
+use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
