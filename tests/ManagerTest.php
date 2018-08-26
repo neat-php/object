@@ -8,11 +8,7 @@ use Neat\Object\Test\Helper\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ManagerTest
- *
  * @todo add test with custom policy
- *
- * @package Neat\Object\Test
  */
 class ManagerTest extends TestCase
 {
@@ -47,15 +43,17 @@ class ManagerTest extends TestCase
     {
         $connection    = $this->create->connection();
         $customManager = Manager::create($connection, null, 'create-custom-test');
+
         $this->assertNotSame($customManager, Manager::instance());
         $this->assertSame($customManager, Manager::instance('create-custom-test'));
     }
 
     public function testCustomPolicy()
     {
-        $connection    = $this->create->connection();
-        $policy = new class extends Policy {};
-        $manager = new Manager($connection, $policy);
+        $connection = $this->create->connection();
+        $policy     = new class extends Policy {};
+        $manager    = new Manager($connection, $policy);
+
         $this->assertNotEquals(new Policy(), $manager->policy());
         $this->assertEquals($policy, $manager->policy());
     }

@@ -145,7 +145,7 @@ class PolicyTest extends TestCase
     /**
      * @dataProvider provideSkips
      * @param string $name
-     * @param bool $skip
+     * @param bool   $skip
      */
     public function testSkip(string $name, bool $skip)
     {
@@ -168,7 +168,7 @@ class PolicyTest extends TestCase
     /**
      * @dataProvider provideKeys
      * @param string $entity
-     * @param array $key
+     * @param array  $key
      */
     public function testKey(string $entity, array $key)
     {

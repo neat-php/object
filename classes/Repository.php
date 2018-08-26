@@ -36,9 +36,9 @@ class Repository
      * Repository constructor
      *
      * @param Connection $connection
-     * @param string $class
-     * @param string $table
-     * @param string[] $key
+     * @param string     $class
+     * @param string     $table
+     * @param string[]   $key
      * @param Property[] $properties
      */
     public function __construct(Connection $connection, string $class, string $table, array $key, array $properties)
@@ -204,7 +204,7 @@ class Repository
      * Update entity data in database table
      *
      * @param int|string|array $id
-     * @param array $data
+     * @param array            $data
      * @return false|int
      */
     public function update($id, array $data)
@@ -233,7 +233,7 @@ class Repository
      * Convert from an associative array
      *
      * @param object $entity
-     * @param array $data
+     * @param array  $data
      * @return mixed
      */
     public function fromArray($entity, array $data)

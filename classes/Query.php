@@ -13,7 +13,8 @@ class Query extends \Neat\Database\Query
     private $repository;
 
     /**
-     * Query constructor.
+     * Query constructor
+     *
      * @param Connection $connection
      * @param Repository $repository
      */
