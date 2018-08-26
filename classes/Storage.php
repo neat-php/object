@@ -2,7 +2,7 @@
 
 namespace Neat\Object;
 
-use Generator;
+use Traversable;
 
 trait Storage
 {
@@ -89,9 +89,9 @@ trait Storage
     /**
      * @see Repository::iterate()
      * @param Query|string|array|null $conditions
-     * @return Generator|static[]
+     * @return Traversable|static[]
      */
-    public static function iterate($conditions = null): Generator
+    public static function iterate($conditions = null): Traversable
     {
         return static::repository()->iterate($conditions);
     }

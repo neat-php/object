@@ -2,8 +2,8 @@
 
 namespace Neat\Object;
 
-use Generator;
 use Neat\Database\Connection;
+use Traversable;
 
 class Query extends \Neat\Database\Query
 {
@@ -20,6 +20,7 @@ class Query extends \Neat\Database\Query
     public function __construct(Connection $connection, Repository $repository)
     {
         parent::__construct($connection);
+
         $this->repository = $repository;
     }
 
@@ -50,12 +51,11 @@ class Query extends \Neat\Database\Query
         return $this->repository->collection($this);
     }
 
-
     /**
      * @see Repository::iterate()
-     * @return Generator|array
+     * @return Traversable|array
      */
-    public function iterate(): Generator
+    public function iterate(): Traversable
     {
         return $this->repository->iterate($this);
     }

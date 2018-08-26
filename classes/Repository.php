@@ -2,8 +2,8 @@
 
 namespace Neat\Object;
 
-use Generator;
 use Neat\Database\Connection;
+use Traversable;
 
 class Repository
 {
@@ -157,9 +157,9 @@ class Repository
      * Iterate entities by conditions
      *
      * @param Query|string|array|null $conditions SQL where clause or Query instance
-     * @return Generator|object[]
+     * @return Traversable|object[]
      */
-    public function iterate($conditions = null): Generator
+    public function iterate($conditions = null): Traversable
     {
         $result = $this->query($conditions)->query();
         foreach ($result as $row) {
