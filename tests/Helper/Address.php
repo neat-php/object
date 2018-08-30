@@ -4,6 +4,8 @@ namespace Neat\Object\Test\Helper;
 
 class Address
 {
+    const TABLE = 'my_address_table';
+
     /**
      * @var string
      */

@@ -4,6 +4,7 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
@@ -96,6 +97,7 @@ class PolicyTest extends TestCase
             ['user', 'user'],
             ['UserGroup', 'user_group'],
             ['UserGroupTest', 'user_group_test'],
+            [Address::class, 'my_address_table'],
         ];
     }
 

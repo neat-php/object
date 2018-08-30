@@ -31,6 +31,11 @@ class Policy
      */
     public function table(string $class): string
     {
+        if (defined($class . '::TABLE')) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            return (string) $class::TABLE;
+        }
+
         $path = explode('\\', $class);
 
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', array_pop($path)));
