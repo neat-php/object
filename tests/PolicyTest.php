@@ -167,12 +167,12 @@ class PolicyTest extends TestCase
 
     /**
      * @dataProvider provideKeys
-     * @param string $entity
+     * @param string $class
      * @param array  $key
      */
-    public function testKey(string $entity, array $key)
+    public function testKey(string $class, array $key)
     {
-        $this->assertSame($key, $this->policy->key($this->policy->properties($entity)));
+        $this->assertSame($key, $this->policy->key($class));
     }
 
     /**
@@ -181,6 +181,6 @@ class PolicyTest extends TestCase
     public function testKeyFailure()
     {
         $this->expectException(RuntimeException::class);
-        $this->policy->key($this->policy->properties(NoEntity::class));
+        $this->policy->key(NoEntity::class);
     }
 }

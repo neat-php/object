@@ -18,7 +18,7 @@ class Policy
     {
         $properties = $this->properties($class);
         $table      = $this->table($class);
-        $key        = $this->key($properties);
+        $key        = $this->key($class);
 
         return new Repository($connection, $class, $table, $key, $properties);
     }
@@ -109,32 +109,20 @@ class Policy
     }
 
     /**
-     * Get key property names for the given properties
+     * Get key property names
      *
-     * @param Property[] $properties
+     * @param string $class
      * @return string[]
      */
-    public function key(array $properties): array
+    public function key(string $class): array
     {
-        $id  = null;
-        $key = [];
-        foreach ($properties as $property) {
-            if (preg_match('/\\s@key\\s/', $property->docBlock())) {
-                $key[] = $this->column($property);
-                continue;
-            }
-            if ($property->name() === 'id') {
-                $id = [$this->column($property)];
-                continue;
-            }
+        if (defined($class . '::KEY')) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            return (array) $class::KEY;
         }
 
-        if (!empty($key)) {
-            return $key;
-        }
-
-        if ($id) {
-            return $id;
+        if (property_exists($class, 'id')) {
+            return ['id'];
         }
 
         throw new \RuntimeException('Unable to determine the key');

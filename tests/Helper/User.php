@@ -3,24 +3,13 @@
 namespace Neat\Object\Test\Helper;
 
 use DateTime;
+use Neat\Object\Identifier;
 
 class User extends Entity
 {
-    /**
-     * Static no storage field
-     *
-     * @var null
-     */
-    public static $nostorage;
+    use Identifier;
 
-    /**
-     * @var int
-     */
-    public $id;
-
-    /**
-     * @var int
-     */
+    /** @var int */
     public $typeId;
 
     /**
@@ -61,4 +50,11 @@ class User extends Entity
      * @var DateTime
      */
     public $deletedDate;
+
+    /**
+     * Static no storage field
+     *
+     * @var null
+     */
+    public static $nostorage;
 }

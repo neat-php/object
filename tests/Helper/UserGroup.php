@@ -4,14 +4,14 @@ namespace Neat\Object\Test\Helper;
 
 class UserGroup extends Entity
 {
+    const KEY = ['user_id', 'group_id'];
+
     /**
-     * @key
      * @var int
      */
     public $userId;
 
     /**
-     * @key
      * @var int
      */
     public $groupId;
