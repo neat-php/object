@@ -9,6 +9,7 @@ use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use RuntimeException;
 
 class PolicyTest extends TestCase
@@ -36,7 +37,7 @@ class PolicyTest extends TestCase
     public function createProperty($name)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $reflection = new \ReflectionProperty(User::class, $name);
+        $reflection = new ReflectionProperty(User::class, $name);
         $property   = new Property($reflection);
 
         return $property;
