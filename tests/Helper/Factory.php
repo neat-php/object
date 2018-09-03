@@ -1,10 +1,11 @@
-<?php /** @noinspection SqlResolve */
+<?php
+
+/** @noinspection SqlResolve */
 
 namespace Neat\Object\Test\Helper;
 
 use Neat\Database\Connection;
 use Neat\Object\Manager;
-use Neat\Object\Repository;
 use PDO;
 
 class Factory
@@ -15,9 +16,11 @@ class Factory
     public $createdDate;
 
     /**
+     * Create PDO instance
+     *
      * @return PDO
      */
-    public function pdo()
+    public function pdo(): PDO
     {
         $pdo = new PDO('sqlite::memory:');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -70,49 +73,24 @@ class Factory
     }
 
     /**
-     * Create connection
+     * Create connection instance
      *
      * @param PDO $pdo
      * @return Connection
      */
     public function connection($pdo = null)
     {
-        if (!$pdo) {
-            $pdo = $this->pdo();
-        }
-
-        return new Connection($pdo);
+        return new Connection($pdo ?: $this->pdo());
     }
 
     /**
+     * Create manager instance
+     *
      * @param Connection|null $connection
      * @return Manager
      */
     public function manager(Connection $connection = null)
     {
         return Manager::create($connection ?: $this->connection());
-    }
-
-    /**
-     * @param string $entity
-     * @return Repository
-     */
-    public function repository(string $entity)
-    {
-        return $this->callMethod($entity, 'repository');
-    }
-
-    public function callMethod($class, $method, ...$arguments)
-    {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $reflectionClass  = new \ReflectionClass($class);
-        $reflectionMethod = $reflectionClass->getMethod($method);
-        $reflectionMethod->setAccessible(true);
-
-        if (is_object($class)) {
-            return $reflectionMethod->invoke($class, $arguments);
-        }
-
-        return $reflectionMethod->invoke(null, $arguments);
     }
 }

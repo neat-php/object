@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpMissingDocCommentInspection */
+
 namespace Neat\Object\Test\Helper;
 
 use DateTime;

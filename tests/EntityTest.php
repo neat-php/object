@@ -1,4 +1,6 @@
-<?php /** @noinspection SqlResolve */
+<?php
+
+/** @noinspection SqlResolve */
 
 namespace Neat\Object\Test;
 
@@ -12,18 +14,22 @@ use PHPUnit\Framework\TestCase;
 class EntityTest extends TestCase
 {
     /**
-     * Factory
-     *
      * @var Factory
      */
     private $create;
 
+    /**
+     * Setup once
+     */
     public static function setUpBeforeClass()
     {
         $factory = new Factory;
         $factory->manager();
     }
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $this->create = new Factory;
@@ -62,12 +68,18 @@ class EntityTest extends TestCase
         );
     }
 
+    /**
+     * Test has
+     */
     public function testHas()
     {
         $this->assertTrue(User::has(1));
         $this->assertFalse(User::has(0));
     }
 
+    /**
+     * Test select
+     */
     public function testSelect()
     {
         $select = User::select();
@@ -79,6 +91,9 @@ class EntityTest extends TestCase
         $this->assertSQL('SELECT u.* FROM `user` u', $select->getQuery());
     }
 
+    /**
+     * Test query
+     */
     public function testQuery()
     {
         $this->assertInstanceOf(Query::class, User::query());
@@ -93,6 +108,9 @@ class EntityTest extends TestCase
         $this->assertSQL('SELECT `user`.* FROM `user` WHERE active = 1', $select->getQuery());
     }
 
+    /**
+     * Test get
+     */
     public function testGet()
     {
         $user = User::get(1);
@@ -102,6 +120,9 @@ class EntityTest extends TestCase
         $this->assertNull($user);
     }
 
+    /**
+     * Test one
+     */
     public function testOne()
     {
         $user = User::one(['first_name' => 'John']);
@@ -111,6 +132,9 @@ class EntityTest extends TestCase
         $this->assertNull($user);
     }
 
+    /**
+     * Test all
+     */
     public function testAll()
     {
         $users = User::all();
@@ -130,6 +154,9 @@ class EntityTest extends TestCase
         $this->assertCount(0, $users);
     }
 
+    /**
+     * Test collection
+     */
     public function testCollection()
     {
         $usersCollection = User::collection();
@@ -139,6 +166,9 @@ class EntityTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
+    /**
+     * Test iterate
+     */
     public function testIterate()
     {
         $this->assertCount(3, User::iterate());
@@ -150,6 +180,9 @@ class EntityTest extends TestCase
         $this->assertInstanceOf(\Generator::class, User::iterate());
     }
 
+    /**
+     * Test store
+     */
     public function testStore()
     {
         $user             = new User;

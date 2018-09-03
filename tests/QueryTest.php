@@ -18,13 +18,21 @@ class QueryTest extends TestCase
      */
     private $connection;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
-        $factory          = new Factory();
-        $this->connection = $factory->connection();
+        $this->connection = (new Factory)->connection();
     }
 
-    public function mock($methods)
+    /**
+     * Get mocked repository
+     *
+     * @param string[] $methods
+     * @return MockObject|Repository
+     */
+    public function getMockedRepository($methods)
     {
         return $this->getMockBuilder(Repository::class)
             ->setMethods($methods)
@@ -32,7 +40,12 @@ class QueryTest extends TestCase
             ->getMock();
     }
 
-    public function dataProvider()
+    /**
+     * Provide facade expectations
+     *
+     * @return array
+     */
+    public function providerFacadeExpectations()
     {
         return [
             ['one', new User],
@@ -42,14 +55,15 @@ class QueryTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProvider
-     * @param $method
-     * @param $result
+     * Test facade methods
+     *
+     * @dataProvider providerFacadeExpectations
+     * @param string $method
+     * @param mixed  $result
      */
     public function testFacades(string $method, $result)
     {
-        /** @var Repository|MockObject $repository */
-        $repository = $this->mock([$method]);
+        $repository = $this->getMockedRepository([$method]);
         $repository->expects($this->once())
             ->method($method)
             ->willReturn($result);
@@ -60,6 +74,9 @@ class QueryTest extends TestCase
         $this->assertSame($result, $response);
     }
 
+    /**
+     * Test iterating object query results
+     */
     public function testIterate()
     {
         $generator = function () {
@@ -70,14 +87,14 @@ class QueryTest extends TestCase
             }
         };
 
-        /** @var Repository|MockObject $repository */
-        $repository = $this->mock(['iterate']);
+        $repository = $this->getMockedRepository(['iterate']);
         $repository->expects($this->once())
             ->method('iterate')
             ->willReturnCallback($generator);
 
         $query = new Query($this->connection, $repository);
         $query->select('*')->from('user');
+
         $response = $query->iterate();
 
         $this->assertInstanceOf(\Generator::class, $response);
