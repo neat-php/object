@@ -215,6 +215,8 @@ class CollectionTest extends TestCase
      */
     private function firstNames()
     {
-        return array_column($this->array, 'firstName');
+        return array_map(function ($data) {
+            return $data['firstName'];
+        }, $this->array);
     }
 }
