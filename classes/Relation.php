@@ -5,10 +5,6 @@ namespace Neat\Object;
 use Neat\Object\Relations\HasMany;
 use Neat\Object\Relations\HasOne;
 
-/**
- * Class Relation
- * @package Neat\Object
- */
 class Relation
 {
     /**

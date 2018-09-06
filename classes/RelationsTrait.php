@@ -8,7 +8,6 @@ namespace Neat\Object;
  *   - Make relations with an composed key possible
  *   - We should actually return an relation builder to make relations more agile
  *   - Add hasOrCreateOne for example an stockArticle should always be returned for a given article but should not be able to be set
- * @package System\Model
  */
 trait RelationsTrait
 {
