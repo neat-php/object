@@ -1,8 +1,9 @@
 <?php
 
-namespace Neat\Object\Relations;
+namespace Neat\Object\Test\Relations;
 
 use Neat\Object\Manager;
+use Neat\Object\Relations\HasOne;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
