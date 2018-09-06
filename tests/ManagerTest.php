@@ -7,9 +7,6 @@ use Neat\Object\Policy;
 use Neat\Object\Test\Helper\Factory;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @todo add test with custom policy
- */
 class ManagerTest extends TestCase
 {
     /**
@@ -17,21 +14,33 @@ class ManagerTest extends TestCase
      */
     private $create;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $this->create = new Factory;
     }
 
+    /**
+     * Test connection getter
+     */
     public function testConnection()
     {
         $this->assertEquals($this->create->connection(), $this->create->manager()->connection());
     }
 
+    /**
+     * Test policy getter
+     */
     public function testPolicy()
     {
         $this->assertEquals(new Policy, $this->create->manager()->policy());
     }
 
+    /**
+     * Test static manager getter
+     */
     public function testInstance()
     {
         $manager = Manager::instance();
@@ -39,6 +48,9 @@ class ManagerTest extends TestCase
         $this->assertInstanceOf(Manager::class, $manager);
     }
 
+    /**
+     * Test create custom
+     */
     public function testCreateCustom()
     {
         $connection    = $this->create->connection();
@@ -48,13 +60,15 @@ class ManagerTest extends TestCase
         $this->assertSame($customManager, Manager::instance('create-custom-test'));
     }
 
+    /**
+     * Test custom policy
+     */
     public function testCustomPolicy()
     {
         $connection = $this->create->connection();
-        $policy     = new class extends Policy {};
+        $policy     = new Policy;
         $manager    = new Manager($connection, $policy);
 
-        $this->assertNotEquals(new Policy(), $manager->policy());
-        $this->assertEquals($policy, $manager->policy());
+        $this->assertSame($policy, $manager->policy());
     }
 }

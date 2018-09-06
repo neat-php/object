@@ -1,4 +1,6 @@
-<?php /** @noinspection SqlResolve */
+<?php
+
+/** @noinspection SqlResolve */
 
 namespace Neat\Object\Test;
 
@@ -50,17 +52,26 @@ class RepositoryTest extends TestCase
         );
     }
 
+    /**
+     * Setup once
+     */
     public static function setUpBeforeClass()
     {
         $factory = new Factory;
         Manager::create($factory->connection(), null, 'repository-test');
     }
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $this->manager = Manager::instance('repository-test');
     }
 
+    /**
+     * Test has
+     */
     public function testHas()
     {
         $userRepository = $this->manager->repository(User::class);
@@ -68,6 +79,9 @@ class RepositoryTest extends TestCase
         $this->assertFalse($userRepository->has(4));
     }
 
+    /**
+     * Test get
+     */
     public function testGet()
     {
         $userGroupData       = ['user_id' => 1, 'group_id' => 2];
@@ -85,6 +99,9 @@ class RepositoryTest extends TestCase
         $this->assertSame(1, $user->id);
     }
 
+    /**
+     * Test get composed identifier with single key
+     */
     public function testGetSingle()
     {
         $this->expectException(\RuntimeException::class);
@@ -92,6 +109,9 @@ class RepositoryTest extends TestCase
         $userRepository->get([1, 2]);
     }
 
+    /**
+     * Test get single identifier with composed key
+     */
     public function testGetComposed()
     {
         $this->expectException(\RuntimeException::class);
@@ -99,6 +119,9 @@ class RepositoryTest extends TestCase
         $userGroupRepository->get('test');
     }
 
+    /**
+     * Test get composed identifier with mismatched element count
+     */
     public function testGetComposedArray()
     {
         $this->expectException(\RuntimeException::class);
@@ -106,6 +129,9 @@ class RepositoryTest extends TestCase
         $userGroupRepository->get(['test']);
     }
 
+    /**
+     * Test select
+     */
     public function testSelect()
     {
         $repository = $this->manager->repository(User::class);
@@ -119,6 +145,9 @@ class RepositoryTest extends TestCase
         $this->assertSQL('SELECT u.* FROM `user` u', $select->getQuery());
     }
 
+    /**
+     * Test query
+     */
     public function testQuery()
     {
         $repository = $this->manager->repository(User::class);
@@ -135,6 +164,9 @@ class RepositoryTest extends TestCase
         $this->assertSQL('SELECT `user`.* FROM `user` WHERE active = 1', $select->getQuery());
     }
 
+    /**
+     * Test one
+     */
     public function testOne()
     {
         $repository = $this->manager->repository(User::class);
@@ -144,6 +176,9 @@ class RepositoryTest extends TestCase
         $this->assertSame(1, $user->id);
     }
 
+    /**
+     * Test all
+     */
     public function testAll()
     {
         $repository = $this->manager->repository(User::class);
@@ -158,6 +193,9 @@ class RepositoryTest extends TestCase
         $this->assertCount(1, $users);
     }
 
+    /**
+     * Test collection
+     */
     public function testCollection()
     {
         $userRepository  = $this->manager->repository(User::class);
@@ -168,6 +206,9 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
+    /**
+     * Test iterate
+     */
     public function testIterate()
     {
         $userRepository = $this->manager->repository(User::class);
@@ -181,6 +222,9 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(\Generator::class, $userRepository->iterate());
     }
 
+    /**
+     * Test insert and update
+     */
     public function testInsertAndUpdate()
     {
         $userRepository = $this->manager->repository(User::class);

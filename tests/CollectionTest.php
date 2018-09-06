@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
 {
+    /**
+     * @var array
+     */
     private $array;
 
     /**
@@ -16,6 +19,9 @@ class CollectionTest extends TestCase
      */
     private $collection;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $this->array      = [
@@ -26,11 +32,17 @@ class CollectionTest extends TestCase
         $this->collection = new Collection($this->array);
     }
 
+    /**
+     * Test count
+     */
     public function testCount()
     {
         $this->assertSame(3, $this->collection->count());
     }
 
+    /**
+     * Test first
+     */
     public function testFirst()
     {
         $data = reset($this->array);
@@ -40,18 +52,27 @@ class CollectionTest extends TestCase
 
     }
 
+    /**
+     * Test array offset exists
+     */
     public function testOffsetExists()
     {
         $this->assertTrue(isset($this->collection['jdoe']));
         $this->assertFalse(isset($this->collection['notExistingKey']));
     }
 
+    /**
+     * Test array offset unset
+     */
     public function testOffsetUnset()
     {
         unset($this->collection['jdoe']);
         $this->assertFalse(isset($this->collection['jdoe']));
     }
 
+    /**
+     * Test array offset get
+     */
     public function testOffsetGet()
     {
         $data = reset($this->array);
@@ -59,6 +80,19 @@ class CollectionTest extends TestCase
 //        $this->assertNull($this->arrayCollection['notExistingKey']);
     }
 
+    /**
+     * Test array offset set
+     */
+    public function testOffsetSet()
+    {
+        $this->collection['test'] = 'test';
+        $this->assertSame('test', $this->collection['test']);
+        $this->assertCount(4, $this->collection);
+    }
+
+    /**
+     * Test push
+     */
     public function testPush()
     {
         $arrayCollection = new Collection([]);
@@ -67,19 +101,18 @@ class CollectionTest extends TestCase
         $this->assertCount(1, $arrayCollection);
     }
 
+    /**
+     * Test column
+     */
     public function testColumn()
     {
         $expected = new Collection(array_values($this->firstNames()));
         $this->assertEquals($expected, $this->collection->column('firstName'));
     }
 
-    public function testOffsetSet()
-    {
-        $this->collection['test'] = 'test';
-        $this->assertSame('test', $this->collection['test']);
-        $this->assertCount(4, $this->collection);
-    }
-
+    /**
+     * Test map
+     */
     public function testMap()
     {
         $firstNameCollection = new Collection($this->firstNames());
@@ -88,6 +121,9 @@ class CollectionTest extends TestCase
         }));
     }
 
+    /**
+     * Test filter
+     */
     public function testFilter()
     {
         $collection = new Collection([null, false, true, 0, 1]);
@@ -97,6 +133,9 @@ class CollectionTest extends TestCase
         $this->assertEquals($expected, $filtered);
     }
 
+    /**
+     * Test typed filter
+     */
     public function testTypedFilter()
     {
         $collection = new Collection([], User::class);
@@ -105,6 +144,9 @@ class CollectionTest extends TestCase
         $this->assertEquals(User::class, $filtered->type());
     }
 
+    /**
+     * Test callback filter
+     */
     public function testCallbackFilter()
     {
         $expected = [
@@ -119,6 +161,9 @@ class CollectionTest extends TestCase
         $this->assertNull($filtered->type());
     }
 
+    /**
+     * Test get iterator
+     */
     public function testGetIterator()
     {
         $arrayCollection = new Collection(['foo' => 'bar',]);
@@ -129,6 +174,9 @@ class CollectionTest extends TestCase
         }
     }
 
+    /**
+     * Test untyped collection
+     */
     public function testUntypedCollection()
     {
         $user       = new User();
@@ -139,6 +187,9 @@ class CollectionTest extends TestCase
         $collection->push(new UserGroup);
     }
 
+    /**
+     * Test typed collection
+     */
     public function testTypedCollection()
     {
         $user       = new User();
@@ -149,11 +200,19 @@ class CollectionTest extends TestCase
         $collection->push(new UserGroup);
     }
 
+    /**
+     * Test json serialize
+     */
     public function testJsonSerialize()
     {
         $this->assertEquals(json_encode($this->array), json_encode($this->collection));
     }
 
+    /**
+     * Get first names
+     *
+     * @return array
+     */
     private function firstNames()
     {
         return array_map(function ($data) {

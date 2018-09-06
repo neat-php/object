@@ -10,6 +10,7 @@ use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\UserGroup;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use RuntimeException;
 
 class PolicyTest extends TestCase
@@ -19,6 +20,9 @@ class PolicyTest extends TestCase
      */
     private $policy;
 
+    /**
+     * Setup before each test method
+     */
     protected function setUp()
     {
         $this->policy = new Policy;
@@ -34,13 +38,15 @@ class PolicyTest extends TestCase
     public function createProperty($name)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $reflection = new \ReflectionProperty(User::class, $name);
+        $reflection = new ReflectionProperty(User::class, $name);
         $property   = new Property($reflection);
 
         return $property;
     }
 
     /**
+     * Provide columns
+     *
      * @return array
      */
     public function provideColumns()
@@ -52,6 +58,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test column
+     *
      * @dataProvider provideColumns
      * @param string $name
      * @param string $column
@@ -64,6 +72,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Provide foreign keys
+     *
      * @return array
      */
     public function provideForeignKeys()
@@ -75,6 +85,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test foreign key
+     *
      * @dataProvider provideForeignKeys
      * @param string $class
      * @param string $foreignKey
@@ -85,6 +97,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Provide tables
+     *
      * @return array
      */
     public function provideTables()
@@ -102,6 +116,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test table
+     *
      * @dataProvider provideTables
      * @param string $entity
      * @param string $table
@@ -112,6 +128,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Provide junction tables
+     *
      * @return array
      */
     public function provideJunctionTables()
@@ -123,6 +141,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test junction table
+     *
      * @dataProvider provideJunctionTables
      * @param string $owner
      * @param string $owned
@@ -134,6 +154,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Provide skips
+     *
      * @return array
      */
     public function provideSkips()
@@ -145,6 +167,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test skip
+     *
      * @dataProvider provideSkips
      * @param string $name
      * @param bool   $skip
@@ -157,6 +181,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Provide keys
+     *
      * @return array
      */
     public function provideKeys()
@@ -168,6 +194,8 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test key
+     *
      * @dataProvider provideKeys
      * @param string $class
      * @param array  $key
@@ -178,9 +206,9 @@ class PolicyTest extends TestCase
     }
 
     /**
-     * Tests that an exception is thrown when an entity has no id property and no properties with @key
+     * Test without key
      */
-    public function testKeyFailure()
+    public function testWithoutKey()
     {
         $this->expectException(RuntimeException::class);
         $this->policy->key(NoEntity::class);
