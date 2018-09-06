@@ -3,14 +3,13 @@
 namespace Neat\Object\Relations;
 
 use Neat\Object\Collection;
-use Neat\Object\Entity;
 use Neat\Object\Policy;
 use Neat\Object\Repository;
 
 class HasMany extends Has
 {
     /**
-     * @var mixed[]|Entity[]|object[]
+     * @var mixed[]|object[]
      */
     protected $remotes;
 
@@ -21,7 +20,7 @@ class HasMany extends Has
 
     /**
      * HasMany constructor.
-     * @param mixed|Entity|object $local
+     * @param mixed|object $local
      * @param Policy $policy
      * @param Repository $remoteRepository
      * @param string $collection
@@ -40,7 +39,7 @@ class HasMany extends Has
     {
         if (!$this->remotes) {
             $identifier = $this->identifier->get($this->local);
-            $result     = $this->remoteRepository->findAll([$this->foreignKeyColumn => $identifier]);
+            $result     = $this->remoteRepository->all([$this->foreignKeyColumn => $identifier]);
 
             $this->remotes = $result;
         }
@@ -49,7 +48,7 @@ class HasMany extends Has
     }
 
     /**
-     * @param mixed[]|Entity[]|object[]|Collection $entities
+     * @param mixed[]|object[]|Collection $entities
      * @return HasMany
      */
     public function set($entities)
@@ -64,7 +63,7 @@ class HasMany extends Has
     }
 
     /**
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $entity
      * @return $this
      */
     public function add($entity)
@@ -77,7 +76,7 @@ class HasMany extends Has
     }
 
     /**
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $entity
      * @return $this
      */
     public function remove($entity)
@@ -103,8 +102,8 @@ class HasMany extends Has
     }
 
     /**
-     * @param mixed|Entity|object $remote
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $remote
+     * @param mixed|object $entity
      * @return bool
      */
     protected function isSameEntity($remote, $entity)
@@ -113,7 +112,7 @@ class HasMany extends Has
     }
 
     /**
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $entity
      * @return mixed
      */
     protected function getIdentifierValue($entity)

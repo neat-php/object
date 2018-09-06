@@ -2,7 +2,6 @@
 
 namespace Neat\Object\Relations;
 
-use Neat\Object\Entity;
 use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Repository;
@@ -20,7 +19,7 @@ abstract class Has
     protected $localClass;
 
     /**
-     * @var mixed|Entity|object
+     * @var mixed|object
      */
     protected $local;
 
@@ -46,7 +45,7 @@ abstract class Has
 
     /**
      * HasOne constructor.
-     * @param mixed|Entity|object $local
+     * @param mixed|object $local
      * @param Policy $policy
      * @param Repository $remoteRepository
      * @param string|null $foreignKey actually this should always be determined by the Policy
@@ -74,14 +73,14 @@ abstract class Has
     protected function identifier($class)
     {
         $properties = $this->policy->properties($class);
-        $keys       = $this->policy->key($properties);
+        $keys       = $this->policy->key($class);
         $key        = array_shift($keys);
 
         return $properties[$key];
     }
 
     /**
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $entity
      * @return Property
      */
     protected function foreignKey($entity)
@@ -95,7 +94,7 @@ abstract class Has
     }
 
     /**
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $entity
      */
     protected function setForeignKey($entity)
     {
@@ -103,7 +102,7 @@ abstract class Has
     }
 
     /**
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $entity
      */
     protected function unsetForeignKey($entity)
     {

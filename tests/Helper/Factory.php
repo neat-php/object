@@ -57,7 +57,7 @@ class Factory
         $pdo->exec("INSERT INTO `group` (id, name, title)
                     VALUES (1, 'test_name', 'Test Title'),
                       (2, 'test_name_2', 'Test Title 2');");
-        $pdo->exec("CREATE TABLE address (
+        $pdo->exec("CREATE TABLE my_address_table (
                       id           INTEGER PRIMARY KEY,
                       user_id      INTEGER NOT NULL,
                       street       TEXT,
@@ -66,7 +66,7 @@ class Factory
                       city         TEXT,
                       country      TEXT
                     );");
-        $pdo->exec("INSERT INTO address (id, user_id)
+        $pdo->exec("INSERT INTO my_address_table (id, user_id)
                     VALUES (1, 1);");
 
         return $pdo;

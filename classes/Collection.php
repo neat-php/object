@@ -118,6 +118,16 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
+     * Get all items
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->items;
+    }
+
+    /**
      * Count items
      *
      * @link http://php.net/manual/en/countable.count.php

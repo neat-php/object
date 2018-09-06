@@ -18,16 +18,16 @@ class HasOneTest extends TestCase
 
     public function test__construct()
     {
-        $user = User::findById(1);
+        $user = User::get(1);
 
-        $hasOne = new HasOne($user, Manager::instance()->getPolicy(), Manager::instance()->repository(Address::class));
+        $hasOne = new HasOne($user, Manager::instance()->policy(), Manager::instance()->repository(Address::class));
         $this->assertInstanceOf(HasOne::class, $hasOne);
     }
 
     public function testGet()
     {
-        $user = User::findById(1);
-        $hasOne = new HasOne($user, Manager::instance()->getPolicy(), Manager::instance()->repository(Address::class));
+        $user = User::get(1);
+        $hasOne = new HasOne($user, Manager::instance()->policy(), Manager::instance()->repository(Address::class));
         $group = $hasOne->get();
 
         $this->assertInstanceOf(Address::class, $group);
@@ -35,10 +35,10 @@ class HasOneTest extends TestCase
 
     public function testSet()
     {
-        $user = User::findById(2);
+        $user = User::get(2);
         $address = new Address;
 
-        $hasOne = new HasOne($user, Manager::instance()->getPolicy(), Manager::instance()->repository(Address::class));
+        $hasOne = new HasOne($user, Manager::instance()->policy(), Manager::instance()->repository(Address::class));
         $hasOne->set($address);
 
         $this->assertInstanceOf(Address::class, $hasOne->get());

@@ -37,27 +37,13 @@ trait RelationsTrait
     }
 
     /**
-     * We can only handle relations on existing classes and entities,
-     * let's check if the class exists and whether it's an entity or not
-     *
-     * @param string $class
-     * @throws \RuntimeException
-     */
-    private function expectEntity(string $class)
-    {
-        $this->expectInstance($class, Entity::class);
-    }
-
-    /**
      * @param string $class
      * @param string $property The local identifier, the foreign key
-     * @param Entity|null|false $value If null or an value overwrite the value
+     * @param object|null|false $value If null or an value overwrite the value
      * @return object|mixed|null
      */
     protected function belongsToOne(string $class, string $property = null, $value = false)
     {
-        $this->expectEntity($class);
-
         if (!$property) {
             $property = $this->guessIdProperty($class);
         }
@@ -80,7 +66,7 @@ trait RelationsTrait
         }
 
         return $this->cache($cacheKey, function () use ($class, $property) {
-            return $class::findById($this->{$property});
+            return Manager::instance()->repository($class)->get($this->{$property});
         });
     }
 
@@ -94,11 +80,10 @@ trait RelationsTrait
      */
     protected function belongsToMany(string $class, $foreignKey = null, $localKey = null, $arrayClass = null)
     {
-        $this->expectEntity($class);
         if ($arrayClass) {
-            $this->expectInstance($arrayClass, ArrayCollection::class, '');
+            $this->expectInstance($arrayClass, Collection::class, '');
         } else {
-            $arrayClass = ArrayCollection::class;
+            $arrayClass = Collection::class;
         }
 
         $foreignKey = $foreignKey ?: $this->guessForeignKey();
@@ -107,7 +92,7 @@ trait RelationsTrait
 
         $cacheKey = "belongsToMany_{$class}_{$arrayClass}";
         return $this->cache($cacheKey, function () use ($class, $foreignKey, $localKey, $arrayClass) {
-            $results = Storage::getStorage($class)->findAll([$foreignKey => $this->{$localKey}]);
+            $results = Manager::instance()->repository($class)->all([$foreignKey => $this->{$localKey}]);
 
             return new $arrayClass($results, $class, $this);
         });
@@ -116,13 +101,11 @@ trait RelationsTrait
     /**
      * @param string $class
      * @param string $foreignKey
-     * @param Entity|null|false $value
-     * @return Entity|mixed|null
+     * @param null|false $value
+     * @return mixed|object|null
      */
     protected function hasOne(string $class, string $foreignKey = null, $value = false)
     {
-        $this->expectEntity($class);
-
         $cacheKey = "hasOne_{$class}";
         if ($value || is_null($value)) {
             if (is_null($value)) {
@@ -143,7 +126,7 @@ trait RelationsTrait
         }
 
         return $this->cache($cacheKey, function () use ($class, $foreignKey) {
-            return Storage::getStorage($class)->find([$foreignKey => $this->getPrimaryKey($this)]);
+            return Manager::instance()->repository($class)->one([$foreignKey => $this->getPrimaryKey($this)]);
         });
     }
 
@@ -152,15 +135,14 @@ trait RelationsTrait
      * @param string|null $foreignKey
      * @param string|null $localKey
      * @param string|null $arrayClass
-     * @return mixed|array|ArrayCollection
+     * @return mixed|array|Collection
      */
     protected function hasMany(string $class, $foreignKey = null, $localKey = null, $arrayClass = null)
     {
-        $this->expectEntity($class);
         if ($arrayClass) {
-            $this->expectInstance($arrayClass, ArrayCollection::class, '');
+            $this->expectInstance($arrayClass, Collection::class, '');
         } else {
-            $arrayClass = ArrayCollection::class;
+            $arrayClass = Collection::class;
         }
 
         $foreignKey = $foreignKey ?: $this->guessForeignKey();
@@ -169,18 +151,18 @@ trait RelationsTrait
 
         $cacheKey = "hasMany_{$class}_{$arrayClass}";
         return $this->cache($cacheKey, function () use ($class, $foreignKey, $localKey, $arrayClass) {
-            $results = Storage::getStorage($class)->findAll([$foreignKey => $this->{$localKey}]);
+            $results = Manager::instance()->repository($class)->all([$foreignKey => $this->{$localKey}]);
 
             return new $arrayClass($results, $class, $this);
         });
     }
 
     /**
-     * @param string|null $key
+     * @param string $key
      * @param callable $callback
      * @return mixed
      */
-    private function cache(string $key = null, callable $callback)
+    private function cache(string $key, callable $callback)
     {
         if (is_null($key)) {
             return $callback();
@@ -194,7 +176,7 @@ trait RelationsTrait
     }
 
     /**
-     * @param Entity|object $entity
+     * @param object $entity
      * @return mixed
      */
     protected function getIdentifier($entity)
@@ -205,7 +187,7 @@ trait RelationsTrait
     }
 
     /**
-     * @param Entity|object|string $entity
+     * @param object|string $entity
      * @return string
      */
     protected function getIdentifierProperty($entity)
@@ -233,7 +215,7 @@ trait RelationsTrait
     }
 
     /**
-     * @param Entity|string $entity An entity instance or a class name of an entity
+     * @param object|string $entity An entity instance or a class name of an entity
      * @return string
      */
     protected function getPrimaryKey($entity): string

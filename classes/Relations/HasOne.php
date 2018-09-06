@@ -2,23 +2,21 @@
 
 namespace Neat\Object\Relations;
 
-use Neat\Object\Entity;
-
 class HasOne extends Has
 {
     /**
-     * @var mixed|Entity|object
+     * @var mixed|object
      */
     protected $remote;
 
     /**
-     * @return mixed|Entity|object
+     * @return mixed|object
      */
     public function get()
     {
         if (!$this->remote) {
             $identifier = $this->identifier->get($this->local);
-            $result     = $this->remoteRepository->findOne([$this->foreignKeyColumn => $identifier]);
+            $result     = $this->remoteRepository->one([$this->foreignKeyColumn => $identifier]);
 
             $this->remote = $result;
         }
@@ -27,7 +25,7 @@ class HasOne extends Has
     }
 
     /**
-     * @param mixed|Entity|object $entity
+     * @param mixed|object $entity
      * @return $this
      */
     public function set($entity)
