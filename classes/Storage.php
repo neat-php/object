@@ -103,4 +103,12 @@ trait Storage
     {
         $this::repository()->store($this);
     }
+
+    /**
+     * @see Repository::delete()
+     */
+    public function delete()
+    {
+        $this::repository()->delete($this);
+    }
 }

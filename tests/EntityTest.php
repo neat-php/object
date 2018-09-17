@@ -210,4 +210,24 @@ class EntityTest extends TestCase
         $this->assertEquals($user->id, $userGroup->userId);
         $this->assertEquals(3, $userGroup->groupId);
     }
+
+    /**
+     * Test delete
+     */
+    public function testDelete()
+    {
+        $user             = new User;
+        $user->username   = 'edejong';
+        $user->typeId     = 1;
+        $user->firstName  = 'Emma';
+        $user->middleName = 'de';
+        $user->lastName   = 'Jong';
+        $user->active = true;
+        $user->updateDate = new \DateTime('yesterday');
+
+        $user->store();
+        $user->delete();
+
+        $this->assertNull(User::get($user->id));
+    }
 }

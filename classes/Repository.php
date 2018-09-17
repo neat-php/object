@@ -214,6 +214,18 @@ class Repository
     }
 
     /**
+     * @param object $entity
+     * @return false|int
+     */
+    public function delete($entity)
+    {
+        $identifier = $this->identifier($entity);
+
+        return $this->connection
+            ->delete($this->table, $this->where($identifier));
+    }
+
+    /**
      * Convert to an associative array
      *
      * @param object $entity
