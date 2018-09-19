@@ -7,7 +7,7 @@ class Address
     const TABLE = 'my_address_table';
 
     /**
-     * @var string
+     * @var int
      */
     public $id;
 

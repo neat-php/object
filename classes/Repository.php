@@ -274,7 +274,7 @@ class Repository
      * @param object $entity
      * @return array
      */
-    private function identifier($entity)
+    public function identifier($entity)
     {
         $keys = array_combine($this->key, $this->key);
 
