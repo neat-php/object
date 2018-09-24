@@ -47,8 +47,7 @@ class Factory
                     );");
         $pdo->exec("INSERT INTO `user_group` (user_id, group_id) 
                     VALUES (1, 1), 
-                    (1, 2),
-                    (1, 3);");
+                    (1, 2);");
         $pdo->exec("CREATE TABLE `group` (
                       id    INTEGER PRIMARY KEY,
                       name  VARCHAR(100) NOT NULL,
