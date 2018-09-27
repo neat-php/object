@@ -7,13 +7,21 @@ use Traversable;
 trait Storage
 {
     /**
+     * @return Manager
+     */
+    public static function manager(): Manager
+    {
+        return Manager::instance();
+    }
+
+    /**
      * Get repository
      *
      * @return Repository
      */
     public static function repository(): Repository
     {
-        return Manager::instance()->repository(static::class);
+        return self::manager()->repository(static::class);
     }
 
     /**

@@ -67,6 +67,10 @@ class Factory
                     );");
         $pdo->exec("INSERT INTO my_address_table (id, user_id)
                     VALUES (1, 1);");
+        $pdo->exec("CREATE TABLE `type` (
+                      id           INTEGER PRIMARY KEY,
+                      name  VARCHAR(100) NOT NULL
+                    )");
 
         return $pdo;
     }

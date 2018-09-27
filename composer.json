@@ -1,38 +1,40 @@
 {
-    "name": "neat/object",
-    "description": "Neat Object components",
-    "type": "library",
-    "keywords": [
-        "Object",
-        "ORM"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Bauke van der Woude",
-            "email": "baukevanderwoude@hotmail.nl"
-        },
-        {
-            "name": "Guido van Biemen",
-            "email": "guidovanbiemen@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Neat\\Object\\": "classes/"
-        }
+  "name": "neat/object",
+  "description": "Neat Object components",
+  "type": "library",
+  "keywords": [
+    "Object",
+    "ORM"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Bauke van der Woude",
+      "email": "baukevanderwoude@hotmail.nl"
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Neat\\Object\\Test\\": "tests/"
-        }
-    },
-    "require": {
-        "php": ">=7.0",
-        "neat/database": "^1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "ext-sqlite3": "*"
+    {
+      "name": "Guido van Biemen",
+      "email": "guidovanbiemen@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Neat\\Object\\": "classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Neat\\Object\\Test\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "ext-json": "*",
+    "neat/database": "^1.0"
+  },
+  "require-dev": {
+    "ext-pdo": "*",
+    "ext-sqlite3": "*",
+    "phpunit/phpunit": "^6.0"
+  }
 }

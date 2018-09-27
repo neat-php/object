@@ -59,4 +59,24 @@ class User extends Entity
      * @var null
      */
     public static $nostorage;
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsToOne(Type::class);
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class);
+    }
 }
