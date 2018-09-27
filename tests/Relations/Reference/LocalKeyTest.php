@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object\Test;
+namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Policy;
 use Neat\Object\Property;
