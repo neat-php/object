@@ -41,12 +41,12 @@ abstract class Relation
     }
 
     /**
-     * @param object $local
      * @return $this
      */
-    public function load($local): self
+    public function load(): self
     {
-        $this->objects = $this->reference->load($local);
+        $this->objects = $this->reference->load($this->local);
+        $this->loaded  = true;
 
         return $this;
     }

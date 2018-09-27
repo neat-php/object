@@ -10,7 +10,7 @@ class One extends Relation
     public function get()
     {
         if (!$this->loaded()) {
-            $this->load($this->local);
+            $this->load();
         }
 
         return reset($this->objects) ?: null;
@@ -22,8 +22,12 @@ class One extends Relation
      */
     public function set($remote): self
     {
-        $this->loaded  = true;
-        $this->objects = [$remote];
+        $this->loaded = true;
+        if ($remote) {
+            $this->objects = [$remote];
+        } else {
+            $this->objects = [];
+        }
 
         return $this;
     }
