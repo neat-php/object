@@ -11,7 +11,8 @@ use Neat\Object\Relations\Reference\RemoteKey;
 trait Relations
 {
     /**
-     * @var Relation[]
+     * @nostorage
+     * @var Cache
      */
     private $relations;
 
@@ -20,7 +21,7 @@ trait Relations
      */
     public function relations(): array
     {
-        return $this->relations;
+        return $this->relations->all();
     }
 
     protected function remoteKey($remote): RemoteKey
@@ -42,12 +43,22 @@ trait Relations
 
     public function hasOne(string $class): One
     {
-        return new One($this->remoteKey($class), $this);
+        /** @var One $relation */
+        $relation = $this->relations->get(__METHOD__ . $class, function () use ($class) {
+            return new One($this->remoteKey($class), $this);
+        });
+
+        return $relation;
     }
 
     public function hasMany(string $class): Many
     {
-        return new Many($this->remoteKey($class), $this);
+        /** @var Many $relation */
+        $relation = $this->relations->get(__METHOD__ . $class, function () use ($class) {
+            new Many($this->remoteKey($class), $this);
+        });
+
+        return $relation;
     }
 
     protected function localKey(string $remote): LocalKey
@@ -69,7 +80,12 @@ trait Relations
 
     public function belongsToOne(string $class): One
     {
-        return new One($this->localKey($class), $this);
+        /** @var One $relation */
+        $relation = $this->relations->get("belongsToOne$class", function () use ($class) {
+            return new One($this->localKey($class), $this);
+        });
+
+        return $relation;
     }
 
     protected function junctionTable(string $remote): JunctionTable
@@ -95,9 +111,14 @@ trait Relations
         );
     }
 
-    public function belongsToMany(string $remote): Many
+    public function belongsToMany(string $class): Many
     {
-        return new Many($this->junctionTable($remote), $this);
+        /** @var Many $relation */
+        $relation = $this->relations->get(__METHOD__ . $class, function () use ($class) {
+            return new Many($this->junctionTable($class), $this);
+        });
+
+        return $relation;
     }
 
     public abstract function manager(): Manager;
