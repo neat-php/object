@@ -106,10 +106,10 @@ trait ReferenceFactory
     {
         $localKey         = $policy->key($local);
         $remoteKey        = $policy->key($remote);
-        $localForeignKey  = $policy->foreignKey($remote);
-        $remoteForeignKey = $policy->foreignKey($local);
         $localProperties  = $policy->properties($local);
         $remoteProperties = $policy->properties($remote);
+        $localForeignKey  = $policy->foreignKey($local);
+        $remoteForeignKey = $policy->foreignKey($remote);
 
         return new JunctionTable(
             $localProperties[reset($localKey)],
