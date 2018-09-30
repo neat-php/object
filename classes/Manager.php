@@ -6,6 +6,8 @@ use Neat\Database\Connection;
 
 class Manager
 {
+    use ReferenceFactory;
+
     /**
      * @var self[]
      */
@@ -37,6 +39,7 @@ class Manager
         $this->connection   = $connection;
         $this->policy       = $policy;
         $this->repositories = new Cache;
+        $this->references   = new Cache;
     }
 
     /**

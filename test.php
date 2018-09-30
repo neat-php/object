@@ -17,4 +17,4 @@ $type->id     = 1;
 $type->name   = 'test';
 $user->typeId = 1;
 \Neat\Object\Manager::instance()->repository(\Neat\Object\Test\Helper\Type::class)->store($type);
-dump($user->type()->get());
+dump($user->type()->load()->get());

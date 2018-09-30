@@ -4,9 +4,6 @@ namespace Neat\Object;
 
 use Neat\Object\Relations\Many;
 use Neat\Object\Relations\One;
-use Neat\Object\Relations\Reference\JunctionTable;
-use Neat\Object\Relations\Reference\LocalKey;
-use Neat\Object\Relations\Reference\RemoteKey;
 
 trait Relations
 {
@@ -17,106 +14,73 @@ trait Relations
     private $relations;
 
     /**
-     * @return Relation[]
+     * @return Cache
      */
-    public function relations(): array
+    public function relations(): Cache
     {
-        return $this->relations->all();
+        if (!$this->relations) {
+            $this->relations = new Cache;
+        }
+
+        return $this->relations;
     }
 
-    protected function remoteKey($remote): RemoteKey
-    {
-        $local            = get_class($this);
-        $policy           = $this->manager()->policy();
-        $localKey         = $policy->key($local);
-        $foreignKey       = $policy->foreignKey($local);
-        $localProperties  = $policy->properties($local);
-        $remoteProperties = $policy->properties($remote);
-
-        return new RemoteKey(
-            $localProperties[reset($localKey)],
-            $remoteProperties[$foreignKey],
-            $foreignKey,
-            $this->manager()->repository($remote)
-        );
-    }
-
+    /**
+     * @param string $class
+     * @return One
+     */
     public function hasOne(string $class): One
     {
         /** @var One $relation */
-        $relation = $this->relations->get(__METHOD__ . $class, function () use ($class) {
-            return new One($this->remoteKey($class), $this);
-        });
+        $relation = $this->relations()
+            ->get(__METHOD__ . $class, function () use ($class) {
+                return new One($this->manager()->remoteKey(get_class($this), $class), $this);
+            });
 
         return $relation;
     }
 
+    /**
+     * @param string $class
+     * @return Many
+     */
     public function hasMany(string $class): Many
     {
         /** @var Many $relation */
-        $relation = $this->relations->get(__METHOD__ . $class, function () use ($class) {
-            new Many($this->remoteKey($class), $this);
-        });
+        $relation = $this->relations()
+            ->get(__METHOD__ . $class, function () use ($class) {
+                return new Many($this->manager()->remoteKey(get_class($this), $class), $this);
+            });
 
         return $relation;
     }
 
-    protected function localKey(string $remote): LocalKey
-    {
-        $local            = get_class($this);
-        $policy           = $this->manager()->policy();
-        $localForeignKey  = $policy->foreignKey($remote);
-        $remoteKey        = $policy->key($remote);
-        $localProperties  = $policy->properties($local);
-        $remoteProperties = $policy->properties($remote);
-
-        return new LocalKey(
-            $localProperties[$localForeignKey],
-            $remoteProperties[reset($remoteKey)],
-            reset($remoteKey),
-            $this->manager()->repository($remote)
-        );
-    }
-
+    /**
+     * @param string $class
+     * @return One
+     */
     public function belongsToOne(string $class): One
     {
         /** @var One $relation */
-        $relation = $this->relations->get("belongsToOne$class", function () use ($class) {
-            return new One($this->localKey($class), $this);
-        });
+        $relation = $this->relations()
+            ->get(__METHOD__ . $class, function () use ($class) {
+                return new One($this->manager()->localKey(get_class($this), $class), $this);
+            });
 
         return $relation;
     }
 
-    protected function junctionTable(string $remote): JunctionTable
-    {
-        $local            = get_class($this);
-        $policy           = $this->manager()->policy();
-        $localKey         = $policy->key($local);
-        $remoteKey        = $policy->key($remote);
-        $localForeignKey  = $policy->foreignKey($remote);
-        $remoteForeignKey = $policy->foreignKey($local);
-        $localProperties  = $policy->properties($local);
-        $remoteProperties = $policy->properties($remote);
-
-        return new JunctionTable(
-            $localProperties[reset($localKey)],
-            $remoteProperties[reset($remoteKey)],
-            reset($remoteKey),
-            $this->manager()->repository($remote),
-            $this->manager()->connection(),
-            $policy->junctionTable($local, $remote),
-            $localForeignKey,
-            $remoteForeignKey
-        );
-    }
-
+    /**
+     * @param string $class
+     * @return Many
+     */
     public function belongsToMany(string $class): Many
     {
         /** @var Many $relation */
-        $relation = $this->relations->get(__METHOD__ . $class, function () use ($class) {
-            return new Many($this->junctionTable($class), $this);
-        });
+        $relation = $this->relations()
+            ->get(__METHOD__ . $class, function () use ($class) {
+                return new Many($this->manager()->junctionTable(get_class($this), $class), $this);
+            });
 
         return $relation;
     }
