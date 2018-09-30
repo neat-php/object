@@ -22,9 +22,9 @@ class Manager
     private $policy;
 
     /**
-     * @var Repository[]
+     * @var Cache
      */
-    private $repositories = [];
+    private $repositories;
 
     /**
      * Manager constructor
@@ -34,8 +34,9 @@ class Manager
      */
     public function __construct(Connection $connection, Policy $policy)
     {
-        $this->connection = $connection;
-        $this->policy     = $policy;
+        $this->connection   = $connection;
+        $this->policy       = $policy;
+        $this->repositories = new Cache;
     }
 
     /**
@@ -66,8 +67,12 @@ class Manager
      */
     public function repository(string $class): Repository
     {
-        return $this->repositories[$class]
-            ?? $this->repositories[$class] = $this->policy->repository($class, $this->connection);
+        /** @var Repository $repository */
+        $repository = $this->repositories->get($class, function () use ($class) {
+            return $this->policy->repository($class, $this->connection);
+        });
+
+        return $repository;
     }
 
     /**
