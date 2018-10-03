@@ -32,6 +32,11 @@ class LocalKeyTest extends TestCase
 
     public function testLoad()
     {
+        $address = new Address;
+        $load    = $this->key->load($address);
+        $this->assertInternalType('array', $load);
+        $this->assertCount(0, $load);
+
         $address         = new Address;
         $address->userId = 1;
 
