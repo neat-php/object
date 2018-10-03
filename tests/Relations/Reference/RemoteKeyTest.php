@@ -59,6 +59,11 @@ class RemoteKeyTest extends TestCase
 
     public function testLoad()
     {
+        $user = new User;
+        /** @var Address[] $load */
+        $load = $this->key->load($user);
+        $this->assertInternalType('array', $load);
+
         $user     = new User;
         $user->id = 1;
         /** @var Address[] $load */

@@ -49,6 +49,11 @@ class JunctionTableTest extends TestCase
 
     public function testLoad()
     {
+        $user = new User;
+        $load = $this->key->load($user);
+        $this->assertInternalType('array', $load);
+        $this->assertCount(0, $load);
+
         $user     = new User;
         $user->id = 1;
 
