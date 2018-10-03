@@ -33,6 +33,14 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test all
+     */
+    public function testAll()
+    {
+        $this->assertSame($this->array, $this->collection->all());
+    }
+
+    /**
      * Test count
      */
     public function testCount()
