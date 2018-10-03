@@ -7,7 +7,7 @@ class Many extends Relation
     /**
      * @return object[]
      */
-    public function get(): array
+    public function all(): array
     {
         if (!$this->loaded()) {
             $this->load();
@@ -34,7 +34,7 @@ class Many extends Relation
      */
     public function add($remote): self
     {
-        $this->get();
+        $this->all();
         $this->objects[] = $remote;
 
         return $this;

@@ -47,7 +47,7 @@ class ManyTest extends TestCase
             ->method('load')
             ->willReturn([$address]);
 
-        $get = $this->relation->get();
+        $get = $this->relation->all();
         $this->assertInternalType('array', $get);
         $this->assertSame([$address], $get);
     }
@@ -58,7 +58,7 @@ class ManyTest extends TestCase
             ->method('load')
             ->willReturn([]);
 
-        $get = $this->relation->get();
+        $get = $this->relation->all();
         $this->assertInternalType('array', $get);
         $this->assertSame([], $get);
     }

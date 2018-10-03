@@ -10,7 +10,7 @@ $factory->manager();
 $user = User::get(1);
 
 dump($user->address()->get());
-dump($user->addresses()->get());
+dump($user->addresses()->all());
 dump($user->type()->get());
 $type         = new \Neat\Object\Test\Helper\Type;
 $type->id     = 1;
