@@ -19,6 +19,9 @@ class RemoteKeyTest extends TestCase
      */
     private $key;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $factory          = new Factory;
@@ -32,6 +35,9 @@ class RemoteKeyTest extends TestCase
         );
     }
 
+    /**
+     * Test store
+     */
     public function testStore()
     {
         // Insert test
@@ -57,6 +63,9 @@ class RemoteKeyTest extends TestCase
         $this->assertEquals([$address1], $this->key->load($user));
     }
 
+    /**
+     * Test load
+     */
     public function testLoad()
     {
         $user = new User;

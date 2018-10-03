@@ -27,6 +27,9 @@ class ManyTest extends TestCase
      */
     private $relation;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $this->reference = $this->getMockBuilder(RemoteKey::class)
@@ -38,6 +41,9 @@ class ManyTest extends TestCase
         $this->relation  = new Many($this->reference, $this->user);
     }
 
+    /**
+     * Test get
+     */
     public function testGet()
     {
         $address         = new Address;
@@ -52,6 +58,9 @@ class ManyTest extends TestCase
         $this->assertSame([$address], $get);
     }
 
+    /**
+     * Test getEmpty
+     */
     public function testGetEmpty()
     {
         $this->reference->expects($this->once())
@@ -63,6 +72,9 @@ class ManyTest extends TestCase
         $this->assertSame([], $get);
     }
 
+    /**
+     * Test set
+     */
     public function testSet()
     {
 
@@ -87,6 +99,9 @@ class ManyTest extends TestCase
         $this->relation->set(null);
     }
 
+    /**
+     * Test add
+     */
     public function testAdd()
     {
         $address1         = new Address;

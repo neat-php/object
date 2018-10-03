@@ -27,6 +27,9 @@ class OneTest extends TestCase
      */
     private $relation;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $this->reference = $this->getMockBuilder(RemoteKey::class)
@@ -38,6 +41,9 @@ class OneTest extends TestCase
         $this->relation  = new One($this->reference, $this->user);
     }
 
+    /**
+     * Test get
+     */
     public function testGet()
     {
         $address         = new Address;
@@ -51,6 +57,9 @@ class OneTest extends TestCase
         $this->assertSame($address, $get);
     }
 
+    /**
+     * Test getNull
+     */
     public function testGetNull()
     {
         $this->reference->expects($this->once())
@@ -61,6 +70,9 @@ class OneTest extends TestCase
         $this->assertNull($get);
     }
 
+    /**
+     * Test set
+     */
     public function testSet()
     {
         $address         = new Address;

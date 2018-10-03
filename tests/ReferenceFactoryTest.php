@@ -29,6 +29,9 @@ class ReferenceFactoryTest extends TestCase
      */
     private $factory;
 
+    /**
+     * Setup before each test method
+     */
     protected function setUp()
     {
         $factory       = new Factory;
@@ -36,6 +39,9 @@ class ReferenceFactoryTest extends TestCase
         $this->factory = new ReferenceFactoryMock($this->manager);
     }
 
+    /**
+     * Test junctionTable factory
+     */
     public function testJunctionTable()
     {
         $reference = $this->factory->junctionTable(User::class, Group::class);
@@ -52,6 +58,9 @@ class ReferenceFactoryTest extends TestCase
         $this->assertAttributeSame('group_id', 'remoteForeignKey', $reference);
     }
 
+    /**
+     * Test localKey factory
+     */
     public function testLocalKey()
     {
         $reference = $this->factory->localKey(Address::class, User::class);
@@ -64,6 +73,9 @@ class ReferenceFactoryTest extends TestCase
         $this->assertAttributeSame($this->manager->repository(User::class), 'remoteRepository', $reference);
     }
 
+    /**
+     * Test remoteKey factory
+     */
     public function testRemoteKey()
     {
         $reference = $this->factory->remoteKey(User::class, Address::class);

@@ -18,6 +18,9 @@ class LocalKeyTest extends TestCase
      */
     private $key;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $factory         = new Factory;
@@ -30,6 +33,9 @@ class LocalKeyTest extends TestCase
         );
     }
 
+    /**
+     * Test load
+     */
     public function testLoad()
     {
         $address = new Address;

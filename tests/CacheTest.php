@@ -12,11 +12,17 @@ class CacheTest extends TestCase
      */
     private $cache;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $this->cache = new Cache;
     }
 
+    /**
+     * Test has
+     */
     public function testHas()
     {
         $this->cache->set('test1', new \stdClass);
@@ -24,6 +30,9 @@ class CacheTest extends TestCase
         $this->assertTrue($this->cache->has('test1'));
     }
 
+    /**
+     * Test get
+     */
     public function testGet()
     {
         $factory = function () {
@@ -39,6 +48,9 @@ class CacheTest extends TestCase
         $this->assertEquals($object1, $object2);
     }
 
+    /**
+     * Test all
+     */
     public function testAll()
     {
         $objects = [
@@ -57,6 +69,9 @@ class CacheTest extends TestCase
         $this->assertSame($objects, $this->cache->all());
     }
 
+    /**
+     * Test set
+     */
     public function testSet()
     {
         $factory = function () {

@@ -19,6 +19,9 @@ class JunctionTableTest extends TestCase
      */
     private $key;
 
+    /**
+     * Setup before each test method
+     */
     public function setUp()
     {
         $factory    = new Factory;
@@ -47,6 +50,9 @@ class JunctionTableTest extends TestCase
         );
     }
 
+    /**
+     * Test load
+     */
     public function testLoad()
     {
         $user = new User;
@@ -63,6 +69,9 @@ class JunctionTableTest extends TestCase
         $this->assertInstanceOf(Group::class, array_shift($load));
     }
 
+    /**
+     * Test store
+     */
     public function testStore()
     {
         $user       = new User;
