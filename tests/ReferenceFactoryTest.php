@@ -3,13 +3,19 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Manager;
+use Neat\Object\Property;
 use Neat\Object\ReferenceFactory;
+use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\Reference\JunctionTable;
+use Neat\Object\Relations\Reference\LocalKey;
+use Neat\Object\Relations\Reference\RemoteKey;
+use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\ReferenceFactoryMock;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 class ReferenceFactoryTest extends TestCase
 {
@@ -32,28 +38,46 @@ class ReferenceFactoryTest extends TestCase
 
     public function testJunctionTable()
     {
-        $junctionTable = $this->factory->junctionTable(User::class, Group::class);
-        $this->assertInstanceOf(JunctionTable::class, $junctionTable);
+        $reference = $this->factory->junctionTable(User::class, Group::class);
+        $this->assertInstanceOf(Reference::class, $reference);
+        $this->assertInstanceOf(JunctionTable::class, $reference);
 
-        // @TODO $this->assertAttributeEquals(, 'localKey', $junctionTable);
-        // @TODO $this->assertAttributeEquals(, 'remoteKey', $junctionTable);
-        $this->assertAttributeSame('id', 'remoteKeyString', $junctionTable);
-        $this->assertAttributeSame($this->manager->repository(Group::class), 'remoteRepository', $junctionTable);
-        $this->assertAttributeSame($this->manager->connection(), 'connection', $junctionTable);
-        $this->assertAttributeSame('group_user', 'table', $junctionTable);
-        $this->assertAttributeSame('user_id', 'localForeignKey', $junctionTable);
-        $this->assertAttributeSame('group_id', 'remoteForeignKey', $junctionTable);
+        $this->assertAttributeEquals($this->property(User::class, 'id'), 'localKey', $reference);
+        $this->assertAttributeEquals($this->property(Group::class, 'id'), 'remoteKey', $reference);
+        $this->assertAttributeSame('id', 'remoteKeyString', $reference);
+        $this->assertAttributeSame($this->manager->repository(Group::class), 'remoteRepository', $reference);
+        $this->assertAttributeSame($this->manager->connection(), 'connection', $reference);
+        $this->assertAttributeSame('group_user', 'table', $reference);
+        $this->assertAttributeSame('user_id', 'localForeignKey', $reference);
+        $this->assertAttributeSame('group_id', 'remoteForeignKey', $reference);
     }
 
     public function testLocalKey()
     {
-        // @todo
-        $this->addToAssertionCount(1);
+        $reference = $this->factory->localKey(Address::class, User::class);
+        $this->assertInstanceOf(Reference::class, $reference);
+        $this->assertInstanceOf(LocalKey::class, $reference);
+
+        $this->assertAttributeEquals($this->property(Address::class, 'userId'), 'localForeignKey', $reference);
+        $this->assertAttributeEquals($this->property(User::class, 'id'), 'remoteKey', $reference);
+        $this->assertAttributeSame('id', 'remoteKeyString', $reference);
+        $this->assertAttributeSame($this->manager->repository(User::class), 'remoteRepository', $reference);
     }
 
     public function testRemoteKey()
     {
-        // @todo
-        $this->addToAssertionCount(1);
+        $reference = $this->factory->remoteKey(User::class, Address::class);
+        $this->assertInstanceOf(Reference::class, $reference);
+        $this->assertInstanceOf(RemoteKey::class, $reference);
+
+        $this->assertAttributeEquals($this->property(User::class, 'id'), 'localKey', $reference);
+        $this->assertAttributeEquals($this->property(Address::class, 'userId'), 'remoteForeignKey', $reference);
+        $this->assertAttributeSame('user_id', 'remoteKey', $reference);
+        $this->assertAttributeSame($this->manager->repository(Address::class), 'remoteRepository', $reference);
+    }
+
+    private function property(string $class, string $property): Property
+    {
+        return new Property(new ReflectionProperty($class, $property));
     }
 }
