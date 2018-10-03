@@ -75,7 +75,7 @@ class Property
             case 'bool':
                 return $value ? 1 : 0;
             case 'int':
-                return (int) $value;
+                return (int)$value;
             case 'DateTime':
                 if (!$value instanceof DateTimeInterface) {
                     $value = new DateTime($value);

@@ -172,8 +172,8 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      */
     public function filter(callable $callback = null)
     {
-        $new = clone $this;
-        $new->items = array_filter($this->items, ...(array) $callback);
+        $new        = clone $this;
+        $new->items = array_filter($this->items, ...(array)$callback);
 
         return $new;
     }

@@ -222,7 +222,7 @@ class EntityTest extends TestCase
         $user->firstName  = 'Emma';
         $user->middleName = 'de';
         $user->lastName   = 'Jong';
-        $user->active = true;
+        $user->active     = true;
         $user->updateDate = new \DateTime('yesterday');
 
         $user->store();

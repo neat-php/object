@@ -152,7 +152,7 @@ class PropertyTest extends TestCase
      */
     public function testGet($name, $in, $out)
     {
-        $user = new User;
+        $user        = new User;
         $user->$name = $in;
 
         $property = $this->createProperty($name);

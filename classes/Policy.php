@@ -33,7 +33,7 @@ class Policy
     {
         if (defined($class . '::TABLE')) {
             /** @noinspection PhpUndefinedFieldInspection */
-            return (string) $class::TABLE;
+            return (string)$class::TABLE;
         }
 
         $path = explode('\\', $class);
@@ -123,7 +123,7 @@ class Policy
     {
         if (defined($class . '::KEY')) {
             /** @noinspection PhpUndefinedFieldInspection */
-            return (array) $class::KEY;
+            return (array)$class::KEY;
         }
 
         if (property_exists($class, 'id')) {

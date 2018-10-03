@@ -60,8 +60,7 @@ class RemoteKey extends Reference
          * @param object $entityB
          * @return bool
          */
-        $compare = function ($entityA, $entityB): bool
-        {
+        $compare = function ($entityA, $entityB): bool {
             return $this->remoteRepository->identifier($entityA) == $this->remoteRepository->identifier($entityB);
         };
 
