@@ -48,8 +48,7 @@ class LocalKey extends Reference
     {
         $identifier = $this->localForeignKey->get($local);
 
-        // We could assume it is the primary key and use get instead
-        return $this->remoteRepository->all([$this->remoteKeyString => $identifier]);
+        return is_null($identifier) ? [] : $this->remoteRepository->all([$this->remoteKeyString => $identifier]);
     }
 
     /**
@@ -59,6 +58,8 @@ class LocalKey extends Reference
      */
     public function store($local, array $remotes)
     {
-        // void implementation
+        $remote = reset($remotes);
+
+        $this->localForeignKey->set($local, $this->remoteKey->get($remote));
     }
 }

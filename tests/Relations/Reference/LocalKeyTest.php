@@ -51,4 +51,16 @@ class LocalKeyTest extends TestCase
         $user = array_shift($load);
         $this->assertInstanceOf(User::class, $user);
     }
+
+    /**
+     * Test store
+     */
+    public function testStore()
+    {
+        $address  = new Address;
+        $user     = new User;
+        $user->id = 1;
+        $this->key->store($address, [$user]);
+        $this->assertSame(1, $address->userId);
+    }
 }
