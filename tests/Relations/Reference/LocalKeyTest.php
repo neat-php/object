@@ -58,6 +58,9 @@ class LocalKeyTest extends TestCase
     public function testStore()
     {
         $address  = new Address;
+        $this->key->store($address, []);
+        $this->assertSame(null, $address->userId);
+
         $user     = new User;
         $user->id = 1;
         $this->key->store($address, [$user]);
