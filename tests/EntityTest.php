@@ -197,6 +197,7 @@ class EntityTest extends TestCase
         $this->assertNotNull($user->id);
 
         $dbUser = User::get($user->id);
+        $dbUser->relations();
         $this->assertEquals($user, $dbUser);
         $dbUser->active   = false;
         $user->updateDate = new \DateTime('today +1 hour');
