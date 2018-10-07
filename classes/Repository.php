@@ -3,6 +3,7 @@
 namespace Neat\Object;
 
 use Neat\Database\Connection;
+use Neat\Object\Relations\Relation;
 use Traversable;
 
 class Repository
@@ -174,6 +175,9 @@ class Repository
      */
     public function store($entity)
     {
+        if (method_exists($entity, 'relations')) {
+            $this->setRelations($entity->relations()->all());
+        }
         $data       = $this->toArray($entity);
         $identifier = $this->identifier($entity);
         if ($identifier && array_filter($identifier) && $this->has($identifier)) {
@@ -182,6 +186,30 @@ class Repository
             $id = $this->insert($data);
             if ($id && count($this->key) === 1) {
                 $this->properties[reset($this->key)]->set($entity, $id);
+            }
+        }
+        if (method_exists($entity, 'relations')) {
+            $this->storeRelations($entity->relations()->all());
+        }
+    }
+
+    /**
+     * @param Relation[] $relations
+     */
+    private function setRelations(array $relations)
+    {
+        foreach ($relations as $key => $relation) {
+            if (strpos($key, 'belongsToOne') !== false) {
+                $relation->store();
+            }
+        }
+    }
+
+    private function storeRelations(array $relations)
+    {
+        foreach ($relations as $key => $relation) {
+            if (strpos($key, 'belongsToOne') === false) {
+                $relation->store();
             }
         }
     }
