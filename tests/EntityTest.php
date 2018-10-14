@@ -8,7 +8,7 @@ use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
-use Neat\Object\Test\Helper\UserGroup;
+use Neat\Object\Test\Helper\GroupUser;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
@@ -204,12 +204,12 @@ class EntityTest extends TestCase
         $user->store();
         $this->assertSame($user->id, $dbUser->id);
 
-        $userGroup          = new UserGroup;
-        $userGroup->userId  = $user->id;
-        $userGroup->groupId = 3;
-        $userGroup->store();
-        $this->assertEquals($user->id, $userGroup->userId);
-        $this->assertEquals(3, $userGroup->groupId);
+        $groupUser          = new GroupUser;
+        $groupUser->userId  = $user->id;
+        $groupUser->groupId = 3;
+        $groupUser->store();
+        $this->assertEquals($user->id, $groupUser->userId);
+        $this->assertEquals(3, $groupUser->groupId);
     }
 
     /**

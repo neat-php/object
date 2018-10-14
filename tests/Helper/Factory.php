@@ -40,12 +40,12 @@ class Factory
                     VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, '{$this->createdDate->format('Y-m-d H:i:s')}', NULL),
                       (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, '{$this->createdDate->format('Y-m-d H:i:s')}', '{$this->createdDate->format('Y-m-d H:i:s')}'),
                       (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, '{$this->createdDate->format('Y-m-d H:i:s')}', NULL)");
-        $pdo->exec("CREATE TABLE `user_group` (
+        $pdo->exec("CREATE TABLE `group_user` (
                       user_id  INTEGER NOT NULL,
                       group_id INTEGER NOT NULL,
-                      CONSTRAINT user_group_user_id_group_id_pk PRIMARY KEY (user_id, group_id)
+                      CONSTRAINT group_user_user_id_group_id_pk PRIMARY KEY (user_id, group_id)
                     );");
-        $pdo->exec("INSERT INTO `user_group` (user_id, group_id) 
+        $pdo->exec("INSERT INTO `group_user` (user_id, group_id) 
                     VALUES (1, 1), 
                     (1, 2);");
         $pdo->exec("CREATE TABLE `group` (

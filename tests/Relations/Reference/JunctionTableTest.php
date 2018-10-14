@@ -44,7 +44,7 @@ class JunctionTableTest extends TestCase
             'id',
             $repository,
             $connection,
-            'user_group',
+            'group_user',
             'user_id',
             'group_id'
         );

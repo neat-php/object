@@ -9,7 +9,7 @@ use Neat\Object\Manager;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
-use Neat\Object\Test\Helper\UserGroup;
+use Neat\Object\Test\Helper\GroupUser;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
@@ -85,10 +85,10 @@ class RepositoryTest extends TestCase
     public function testGet()
     {
         $userGroupData       = ['user_id' => 1, 'group_id' => 2];
-        $userGroupRepository = $this->manager->repository(UserGroup::class);
+        $userGroupRepository = $this->manager->repository(GroupUser::class);
 
         $userGroup = $userGroupRepository->get($userGroupData);
-        $this->assertInstanceOf(UserGroup::class, $userGroup);
+        $this->assertInstanceOf(GroupUser::class, $userGroup);
         $this->assertEquals(1, $userGroup->userId);
         $this->assertEquals(2, $userGroup->groupId);
 
@@ -115,7 +115,7 @@ class RepositoryTest extends TestCase
     public function testGetComposed()
     {
         $this->expectException(\RuntimeException::class);
-        $userGroupRepository = $this->manager->repository(UserGroup::class);
+        $userGroupRepository = $this->manager->repository(GroupUser::class);
         $userGroupRepository->get('test');
     }
 
@@ -125,7 +125,7 @@ class RepositoryTest extends TestCase
     public function testGetComposedArray()
     {
         $this->expectException(\RuntimeException::class);
-        $userGroupRepository = $this->manager->repository(UserGroup::class);
+        $userGroupRepository = $this->manager->repository(GroupUser::class);
         $userGroupRepository->get(['test']);
     }
 

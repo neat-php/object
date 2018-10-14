@@ -2,19 +2,11 @@
 
 namespace Neat\Object\Relations;
 
+use Neat\Object\Collectible;
+
 class Many extends Relation
 {
-    /**
-     * @return object[]
-     */
-    public function all(): array
-    {
-        if (!$this->loaded()) {
-            $this->load();
-        }
-
-        return $this->objects;
-    }
+    use Collectible;
 
     /**
      * @param object[] $remotes
@@ -38,5 +30,17 @@ class Many extends Relation
         $this->objects[] = $remote;
 
         return $this;
+    }
+
+    /**
+     * @return object[]
+     */
+    public function &items(): array
+    {
+        if (!$this->loaded()) {
+            $this->load();
+        }
+
+        return $this->objects;
     }
 }

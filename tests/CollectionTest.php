@@ -4,7 +4,7 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Collection;
 use Neat\Object\Test\Helper\User;
-use Neat\Object\Test\Helper\UserGroup;
+use Neat\Object\Test\Helper\GroupUser;
 use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
@@ -142,17 +142,6 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * Test typed filter
-     */
-    public function testTypedFilter()
-    {
-        $collection = new Collection([], User::class);
-        $filtered   = $collection->filter();
-
-        $this->assertEquals(User::class, $filtered->type());
-    }
-
-    /**
      * Test callback filter
      */
     public function testCallbackFilter()
@@ -166,7 +155,6 @@ class CollectionTest extends TestCase
         });
 
         $this->assertEquals(new Collection($expected), $filtered);
-        $this->assertNull($filtered->type());
     }
 
     /**
@@ -189,23 +177,9 @@ class CollectionTest extends TestCase
     {
         $user       = new User();
         $collection = new Collection([$user]);
-        $this->assertNull($collection->type());
         $this->assertSame($user, $collection->first());
 
-        $collection->push(new UserGroup);
-    }
-
-    /**
-     * Test typed collection
-     */
-    public function testTypedCollection()
-    {
-        $user       = new User();
-        $collection = new Collection([$user], User::class);
-        $this->assertSame(User::class, $collection->type());
-
-        $this->expectException(\TypeError::class);
-        $collection->push(new UserGroup);
+        $collection->push(new GroupUser);
     }
 
     /**

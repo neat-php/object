@@ -8,7 +8,7 @@ use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
-use Neat\Object\Test\Helper\UserGroup;
+use Neat\Object\Test\Helper\GroupUser;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use RuntimeException;
@@ -189,7 +189,7 @@ class PolicyTest extends TestCase
     {
         return [
             [User::class, ['id']],
-            [UserGroup::class, ['user_id', 'group_id']],
+            [GroupUser::class, ['user_id', 'group_id']],
         ];
     }
 

@@ -2,7 +2,7 @@
 
 namespace Neat\Object\Test\Helper;
 
-class UserGroup extends Entity
+class GroupUser extends Entity
 {
     const KEY = ['user_id', 'group_id'];
 
