@@ -126,7 +126,7 @@ class User
     use Storage;
     use Relations;
 
-    publice function address(): One
+    public function address(): One
     {
         return $this->hasOne(Address::class);
     }
