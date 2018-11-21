@@ -51,7 +51,7 @@ echo $user->id; // 1
 
 ## Find by identifier
 If you know the identifier for your entity, you can access it using the
-```has``` and ```get``` methods.
+`has` and `get` methods.
 ```php
 // Get the user at once
 $user = $repository->get(1); // Returns user with id 1 or null if not found
@@ -66,13 +66,13 @@ the identifiers as an array.
 
 ## Find using a query 
 The repository allows you to query for entities in many ways:
-* ```one``` returns one entity (or null if none matched the query)
-* ```all``` returns all entities matched by the query as an array
-* ```collection``` returns a collection instance containing the matched
+* `one` returns one entity (or null if none matched the query)
+* `all` returns all entities matched by the query as an array
+* `collection` returns a collection instance containing the matched
   entities
-* ```iterate``` returns a generator allowing you to iterate over the matched
+* `iterate` returns a generator allowing you to iterate over the matched
   entities
-* ```select``` returns a query builder that allows chaining any of the methods
+* `select` returns a query builder that allows chaining any of the methods
   above
 
 Each of these methods can be passed a query in several ways:
@@ -95,7 +95,7 @@ $administrators = $repository
 
 ## Find using static access
 To prevent littering your code with manager and repository instances, you can
-use the ```Storage``` trait to allow for static repository access:
+use the `Storage` trait to allow for static repository access:
 ```php
 class User
 {
@@ -116,3 +116,49 @@ foreach (User::iterate() as $user) {
     // Do something with every user
 }
 ```
+
+## Relations
+If you need relations just use the `Relations` trait which supplies factory functions
+for hasOne/Many and belongsToOne/Many relations.
+```php
+class User
+{
+    use Storage;
+    use Relations;
+
+    publice function address(): One
+    {
+        return $this->hasOne(Address::class);
+    }
+}
+
+// Returns the address object for the user or null
+$address = $user->address()->get();
+```
+Relations are automatically stored when the parent model is stored:
+```php
+$address = new Address();
+$user->address()->set($address);
+$user->store();
+// Stores the user
+// Sets the Address::$userId
+// Stores the address
+```
+Many(hasMany & belongsToMany) relations implement use `Collectible`:
+```php
+$user->roles()->map(function (Role $role) {
+    return $role->name;
+});
+```
+You can extend the relation classes to add commonly needed functionality:
+```php
+class ManyOrderArticles extends Many {
+    public function filterByType(string $type)
+    {
+        return $this->filter(function (Article $article) use ($type) {
+            return $article->type === $type;
+        });
+    }
+}
+```
+But you will have to instantiate the relation yourself, copy over the content of the factory method for the appropriate relation and change the relation type and cache key.
