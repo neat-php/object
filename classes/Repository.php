@@ -34,6 +34,11 @@ class Repository
     private $properties;
 
     /**
+     * @var string|null
+     */
+    private $softdelete;
+
+    /**
      * Repository constructor
      *
      * @param Connection $connection
@@ -49,6 +54,15 @@ class Repository
         $this->table      = $table;
         $this->key        = $key;
         $this->properties = $properties;
+    }
+
+    /**
+     * Set soft delete column
+     * @param string $column
+     */
+    public function setSoftdelete(string $column)
+    {
+        $this->softdelete = $column;
     }
 
     /**
@@ -249,8 +263,14 @@ class Repository
     {
         $identifier = $this->identifier($entity);
 
-        return $this->connection
-            ->delete($this->table, $this->where($identifier));
+        if ($this->softdelete) {
+            $this->properties[$this->softdelete]->set($entity, "now");
+            $this->store($entity);
+            return 1;
+        } else {
+            return $this->connection
+                ->delete($this->table, $this->where($identifier));
+        }
     }
 
     /**

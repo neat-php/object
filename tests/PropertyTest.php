@@ -38,8 +38,7 @@ class PropertyTest extends TestCase
             ['lastName', null],
             ['active', 'bool'],
             ['ignored', 'int'],
-            ['updateDate', 'DateTime'],
-            ['deletedDate', 'DateTime'],
+            ['updateDate', 'DateTime']
         ];
     }
 

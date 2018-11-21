@@ -20,7 +20,14 @@ class Policy
         $table      = $this->table($class);
         $key        = $this->key($class);
 
-        return new Repository($connection, $class, $table, $key, $properties);
+        $repository = new Repository($connection, $class, $table, $key, $properties);
+
+        $softdelete = $this->softdelete($class);
+        if ($softdelete) {
+            $repository->setSoftdelete($softdelete);
+        }
+
+        return $repository;
     }
 
     /**
@@ -59,12 +66,12 @@ class Policy
     /**
      * Get column name for property
      *
-     * @param Property $property
+     * @param string $property
      * @return string
      */
-    public function column(Property $property): string
+    public function column(string $property): string
     {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $property->name()));
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $property));
     }
 
     /**
@@ -95,7 +102,7 @@ class Policy
                 continue;
             }
 
-            $properties[$this->column($property)] = $property;
+            $properties[$this->column($property->name())] = $property;
         }
 
         return $properties;
@@ -111,6 +118,20 @@ class Policy
     {
         return $property->static()
             || preg_match('/\\s@nostorage\\s/', $property->docBlock());
+    }
+
+    /**
+     * Get soft delete property
+     * @param string $class
+     * @return string|null
+     */
+    public function softdelete(string $class)
+    {
+        if (property_exists($class, 'deletedDate')) {
+            return $this->column('deletedDate');
+        }
+
+        return null;
     }
 
     /**

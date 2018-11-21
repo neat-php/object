@@ -10,6 +10,7 @@ use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\GroupUser;
+use Neat\Object\Test\Helper\SoftDelete;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
@@ -246,5 +247,14 @@ class RepositoryTest extends TestCase
 
         $data['active'] = '0';
         $userRepository->update($data['id'], $data);
+    }
+
+    public function testSoftDelete()
+    {
+        $delete = new SoftDelete();
+        $delete->store();
+        $delete->delete();
+
+        $this->assertNotNull($delete->deletedDate, "deletedDate is null");
     }
 }

@@ -9,6 +9,8 @@ use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\GroupUser;
+use Neat\Object\Test\Helper\SoftDelete;
+use Neat\Object\Test\Helper\HardDelete;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use RuntimeException;
@@ -68,7 +70,7 @@ class PolicyTest extends TestCase
     {
         $property = $this->createProperty($name);
 
-        $this->assertSame($column, $this->policy->column($property));
+        $this->assertSame($column, $this->policy->column($property->name()));
     }
 
     /**
@@ -178,6 +180,15 @@ class PolicyTest extends TestCase
         $property = $this->createProperty($name);
 
         $this->assertSame($skip, $this->policy->skip($property));
+    }
+
+    /**
+     * Test soft delete
+     */
+    public function testSoftdelete()
+    {
+        $this->assertSame("deleted_date", $this->policy->softdelete(SoftDelete::class));
+        $this->assertNull($this->policy->softdelete(HardDelete::class));
     }
 
     /**

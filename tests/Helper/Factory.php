@@ -71,6 +71,10 @@ class Factory
                       id           INTEGER PRIMARY KEY,
                       name  VARCHAR(100) NOT NULL
                     )");
+        $pdo->exec("CREATE TABLE `soft_delete` (
+                      id           INTEGER PRIMARY KEY,
+                      deleted_date DATETIME DEFAULT NULL
+                    )");
 
         return $pdo;
     }
