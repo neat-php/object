@@ -127,8 +127,8 @@ class Policy
      */
     public function softdelete(string $class)
     {
-        if (property_exists($class, 'deletedDate')) {
-            return $this->column('deletedDate');
+        if (property_exists($class, 'deletedAt')) {
+            return $this->column('deletedAt');
         }
 
         return null;

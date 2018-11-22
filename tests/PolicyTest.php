@@ -187,7 +187,7 @@ class PolicyTest extends TestCase
      */
     public function testSoftdelete()
     {
-        $this->assertSame("deleted_date", $this->policy->softdelete(SoftDelete::class));
+        $this->assertSame("deleted_at", $this->policy->softdelete(SoftDelete::class));
         $this->assertNull($this->policy->softdelete(HardDelete::class));
     }
 

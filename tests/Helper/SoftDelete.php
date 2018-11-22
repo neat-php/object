@@ -14,6 +14,6 @@ class SoftDelete extends Entity
     /**
      * @var DateTime
      */
-    public $deletedDate;
+    public $deletedAt;
 
 }

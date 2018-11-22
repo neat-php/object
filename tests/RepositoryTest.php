@@ -249,12 +249,12 @@ class RepositoryTest extends TestCase
         $userRepository->update($data['id'], $data);
     }
 
-    public function testSoftDelete()
+    public function testSoftdelete()
     {
         $delete = new SoftDelete();
         $delete->store();
         $delete->delete();
 
-        $this->assertNotNull($delete->deletedDate, "deletedDate is null");
+        $this->assertNotNull($delete->deletedAt, "deleted_at is null");
     }
 }
