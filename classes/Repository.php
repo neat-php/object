@@ -36,7 +36,7 @@ class Repository
     /**
      * @var string|null
      */
-    private $softdelete;
+    private $softDelete;
 
     /**
      * Repository constructor
@@ -60,9 +60,9 @@ class Repository
      * Set soft delete column
      * @param string $column
      */
-    public function setSoftdelete(string $column)
+    public function setSoftDelete(string $column)
     {
-        $this->softdelete = $column;
+        $this->softDelete = $column;
     }
 
     /**
@@ -263,8 +263,8 @@ class Repository
     {
         $identifier = $this->identifier($entity);
 
-        if ($this->softdelete) {
-            $this->properties[$this->softdelete]->set($entity, "now");
+        if ($this->softDelete) {
+            $this->properties[$this->softDelete]->set($entity, "now");
             $this->store($entity);
             return 1;
         } else {
