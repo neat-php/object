@@ -49,6 +49,11 @@ class User extends Entity
     public $updateDate;
 
     /**
+     * @var DateTime
+     */
+    public $deletedDate;
+
+    /**
      * Static no storage field
      *
      * @var null
