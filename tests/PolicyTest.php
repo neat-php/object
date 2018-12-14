@@ -4,13 +4,12 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Policy;
 use Neat\Object\Property;
-use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Group;
-use Neat\Object\Test\Helper\NoEntity;
-use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\GroupUser;
-use Neat\Object\Test\Helper\TimeStamps;
 use Neat\Object\Test\Helper\HardDelete;
+use Neat\Object\Test\Helper\NoEntity;
+use Neat\Object\Test\Helper\TimeStamps;
+use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use RuntimeException;
@@ -179,6 +178,24 @@ class PolicyTest extends TestCase
         $property = $this->createProperty($name);
 
         $this->assertSame($skip, $this->policy->skip($property));
+    }
+
+    /**
+     * Test created stamp
+     */
+    public function testCreatedStamp()
+    {
+        $this->assertSame('created_at', $this->policy->createdStamp(TimeStamps::class));
+        $this->assertNull($this->policy->createdStamp(User::class));
+    }
+
+    /**
+     * Test updated stamp
+     */
+    public function testUpdatedStamp()
+    {
+        $this->assertSame('updated_at', $this->policy->updatedStamp(TimeStamps::class));
+        $this->assertNull($this->policy->updatedStamp(User::class));
     }
 
     /**
