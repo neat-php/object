@@ -153,4 +153,13 @@ class JunctionTable extends Reference
 
         return true;
     }
+
+    /**
+     * @param $remote
+     * @return mixed
+     */
+    public function getRemoteKeyValue($remote)
+    {
+        return $this->remoteKey->get($remote);
+    }
 }

@@ -16,4 +16,10 @@ abstract class Reference
      * @return void
      */
     abstract public function store($local, array $remotes);
+
+    /**
+     * @param $remote
+     * @return mixed
+     */
+    abstract public function getRemoteKeyValue($remote);
 }

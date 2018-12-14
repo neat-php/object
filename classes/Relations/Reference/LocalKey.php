@@ -62,4 +62,13 @@ class LocalKey extends Reference
             $this->localForeignKey->set($local, $this->remoteKey->get($remote));
         }
     }
+
+    /**
+     * @param $remote
+     * @return mixed
+     */
+    public function getRemoteKeyValue($remote)
+    {
+        return $this->remoteKey->get($remote);
+    }
 }
