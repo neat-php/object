@@ -68,7 +68,7 @@ class Manager
      * @param string $class
      * @return Repository
      */
-    public function repository(string $class): Repository
+    public function repository(string $class): RepositoryInterface
     {
         /** @var Repository $repository */
         $repository = $this->repositories->get($class, function () use ($class) {

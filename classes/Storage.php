@@ -17,15 +17,15 @@ trait Storage
     /**
      * Get repository
      *
-     * @return Repository
+     * @return RepositoryInterface
      */
-    public static function repository(): Repository
+    public static function repository(): RepositoryInterface
     {
         return self::manager()->repository(static::class);
     }
 
     /**
-     * @see Repository::has()
+     * @see RepositoryInterface::has()
      * @param int|string|array $id
      * @return bool
      */
@@ -35,7 +35,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::get()
+     * @see RepositoryInterface::get()
      * @param int|string|array $id
      * @return static|null
      */
@@ -45,7 +45,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::select()
+     * @see RepositoryInterface::select()
      * @param string|null $alias
      * @return Query
      */
@@ -55,7 +55,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::query()
+     * @see RepositoryInterface::query()
      * @param Query|string|array|null $conditions
      * @return Query
      */
@@ -65,7 +65,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::one()
+     * @see RepositoryInterface::one()
      * @param Query|string|array|null $conditions
      * @return static|null
      */
@@ -75,7 +75,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::all()
+     * @see RepositoryInterface::all()
      * @param Query|string|array|null $conditions
      * @return static[]
      */
@@ -85,7 +85,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::collection()
+     * @see RepositoryInterface::collection()
      * @param Query|string|array|null $conditions
      * @return Collection|static[]
      */
@@ -95,7 +95,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::iterate()
+     * @see RepositoryInterface::iterate()
      * @param Query|string|array|null $conditions
      * @return Traversable|static[]
      */
@@ -105,7 +105,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::store()
+     * @see RepositoryInterface::store()
      */
     public function store()
     {
@@ -113,7 +113,7 @@ trait Storage
     }
 
     /**
-     * @see Repository::delete()
+     * @see RepositoryInterface::delete()
      */
     public function delete()
     {

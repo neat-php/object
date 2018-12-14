@@ -6,7 +6,7 @@ use Neat\Database\Connection;
 use Neat\Object\Relations\Relation;
 use Traversable;
 
-class Repository
+class Repository implements RepositoryInterface
 {
     /**
      * @var Connection

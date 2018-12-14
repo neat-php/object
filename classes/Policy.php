@@ -3,6 +3,9 @@
 namespace Neat\Object;
 
 use Neat\Database\Connection;
+use Neat\Object\Decorator\CreatedAt;
+use Neat\Object\Decorator\SoftDelete;
+use Neat\Object\Decorator\UpdateAt;
 use ReflectionClass;
 
 class Policy
@@ -12,7 +15,7 @@ class Policy
      *
      * @param string     $class
      * @param Connection $connection
-     * @return Repository
+     * @return RepositoryInterface
      */
     public function repository(string $class, Connection $connection)
     {
@@ -21,10 +24,14 @@ class Policy
         $key        = $this->key($class);
 
         $repository = new Repository($connection, $class, $table, $key, $properties);
-
-        $softdelete = $this->softdelete($class);
-        if ($softdelete) {
-            $repository->setSoftdelete($softdelete);
+        if ($softDelete = $this->softDelete($class)) {
+            $repository = new SoftDelete($repository, $softDelete, $properties[$softDelete]);
+        }
+        if ($createdStamp = $this->createdStamp($class)) {
+            $repository = new CreatedAt($repository, $createdStamp, $properties[$createdStamp]);
+        }
+        if ($updatedStamp = $this->updatedStamp($class)) {
+            $repository = new UpdateAt($repository, $updatedStamp, $properties[$updatedStamp]);
         }
 
         return $repository;
@@ -38,11 +45,6 @@ class Policy
      */
     public function table(string $class): string
     {
-        if (defined($class . '::TABLE')) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            return (string)$class::TABLE;
-        }
-
         $path = explode('\\', $class);
 
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', array_pop($path)));
@@ -121,17 +123,36 @@ class Policy
     }
 
     /**
-     * Get soft delete property
+     * Get delete stamp property
+     *
      * @param string $class
      * @return string|null
      */
-    public function softdelete(string $class)
+    public function softDelete(string $class)
     {
-        if (property_exists($class, 'deletedAt')) {
-            return $this->column('deletedAt');
-        }
+        return property_exists($class, 'deletedAt') ? $this->column('deletedAt') : null;
+    }
 
-        return null;
+    /**
+     * Get create stamp property
+     *
+     * @param string $class
+     * @return string|null
+     */
+    public function createdStamp(string $class)
+    {
+        return property_exists($class, 'createdAt') ? $this->column('createdAt') : null;
+    }
+
+    /**
+     * Get create stamp property
+     *
+     * @param string $class
+     * @return string|null
+     */
+    public function updatedStamp(string $class)
+    {
+        return property_exists($class, 'updatedAt') ? $this->column('updatedAt') : null;
     }
 
     /**

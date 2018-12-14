@@ -56,7 +56,7 @@ class Factory
         $pdo->exec("INSERT INTO `group` (id, name, title)
                     VALUES (1, 'test_name', 'Test Title'),
                       (2, 'test_name_2', 'Test Title 2');");
-        $pdo->exec("CREATE TABLE my_address_table (
+        $pdo->exec("CREATE TABLE address (
                       id           INTEGER PRIMARY KEY,
                       user_id      INTEGER NOT NULL,
                       street       TEXT,
@@ -65,14 +65,16 @@ class Factory
                       city         TEXT,
                       country      TEXT
                     );");
-        $pdo->exec("INSERT INTO my_address_table (id, user_id)
+        $pdo->exec("INSERT INTO address (id, user_id)
                     VALUES (1, 1);");
         $pdo->exec("CREATE TABLE `type` (
                       id           INTEGER PRIMARY KEY,
                       name  VARCHAR(100) NOT NULL
                     )");
-        $pdo->exec("CREATE TABLE `soft_delete` (
-                      id           INTEGER PRIMARY KEY,
+        $pdo->exec("CREATE TABLE `time_stamps` (
+                      id INTEGER PRIMARY KEY ,
+                      created_at DATETIME NOT NULL,
+                      updated_at DATETIME NOT NULL,
                       deleted_at DATETIME DEFAULT NULL
                     )");
 

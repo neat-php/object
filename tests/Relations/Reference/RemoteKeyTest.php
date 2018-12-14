@@ -31,7 +31,7 @@ class RemoteKeyTest extends TestCase
         $properties       = $policy->properties(Address::class);
 
         $this->key = new RemoteKey($localKey, $remoteForeignKey, 'user_id',
-            new Repository($factory->connection(), Address::class, Address::TABLE, ['id'], $properties)
+            new Repository($factory->connection(), Address::class, $policy->table(Address::class), ['id'], $properties)
         );
     }
 

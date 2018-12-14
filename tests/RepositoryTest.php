@@ -8,9 +8,9 @@ use Neat\Object\Collection;
 use Neat\Object\Manager;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
-use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\GroupUser;
-use Neat\Object\Test\Helper\SoftDelete;
+use Neat\Object\Test\Helper\TimeStamps;
+use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
@@ -249,12 +249,34 @@ class RepositoryTest extends TestCase
         $userRepository->update($data['id'], $data);
     }
 
-    public function testSoftdelete()
+    public function testCreatedAt()
     {
-        $delete = new SoftDelete();
-        $delete->store();
-        $delete->delete();
+        $createdAt = new TimeStamps();
+        $createdAt->store();
+        $this->assertNotNull($createdAt->createdAt);
+        $this->assertInstanceOf(\DateTime::class, $createdAt->createdAt);
 
-        $this->assertNotNull($delete->deletedAt, "deleted_at is null");
+        $date                 = new \DateTime;
+        $createdAt            = new TimeStamps();
+        $createdAt->createdAt = $date;
+        $createdAt->store();
+        $this->assertSame($date, $createdAt->createdAt);
+    }
+
+    public function testUpdatedAt()
+    {
+        $updatedAt = new TimeStamps();
+        $updatedAt->store();
+        $this->assertNotNull($updatedAt->updatedAt);
+        $this->assertNotNull($updatedAt->updatedAt);
+    }
+
+    public function testSoftDelete()
+    {
+        $deletedAt = new TimeStamps();
+        $deletedAt->store();
+        $deletedAt->delete();
+
+        $this->assertNotNull($deletedAt->deletedAt, "deleted_at is null");
     }
 }

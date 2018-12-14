@@ -9,7 +9,7 @@ use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\GroupUser;
-use Neat\Object\Test\Helper\SoftDelete;
+use Neat\Object\Test\Helper\TimeStamps;
 use Neat\Object\Test\Helper\HardDelete;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -113,7 +113,6 @@ class PolicyTest extends TestCase
             ['user', 'user'],
             ['UserGroup', 'user_group'],
             ['UserGroupTest', 'user_group_test'],
-            [Address::class, 'my_address_table'],
         ];
     }
 
@@ -187,7 +186,7 @@ class PolicyTest extends TestCase
      */
     public function testSoftDelete()
     {
-        $this->assertSame("deleted_at", $this->policy->softDelete(SoftDelete::class));
+        $this->assertSame("deleted_at", $this->policy->softDelete(TimeStamps::class));
         $this->assertNull($this->policy->softDelete(HardDelete::class));
     }
 
