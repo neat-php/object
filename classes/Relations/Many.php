@@ -33,6 +33,29 @@ class Many extends Relation
     }
 
     /**
+     * @param $remote
+     * @return bool
+     */
+    public function has($remote): bool
+    {
+        foreach ($this->all() as $obj) {
+            if ($this->reference->getRemoteKeyValue($obj) == $this->reference->getRemoteKeyValue($remote)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return \Neat\Object\Query
+     */
+    public function select()
+    {
+        return $this->reference->select($this->local);
+    }
+
+
+    /**
      * @return object[]
      */
     public function &items(): array

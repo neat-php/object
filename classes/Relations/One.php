@@ -31,4 +31,12 @@ class One extends Relation
 
         return $this;
     }
+
+    /**
+     * @return \Neat\Object\Query
+     */
+    public function select()
+    {
+        return $this->reference->select($this->local);
+    }
 }

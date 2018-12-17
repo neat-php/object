@@ -75,11 +75,20 @@ class JunctionTable extends Reference
      */
     public function load($local): array
     {
+        return $this->select($local)->all();
+    }
+
+    /**
+     *
+     * @param $local
+     * @return \Neat\Object\Query
+     */
+    public function select($local): \Neat\Object\Query
+    {
         return $this->remoteRepository
             ->select('rt')
             ->innerJoin($this->table, 'jt', "rt.$this->remoteKeyString = jt.$this->remoteForeignKey")
-            ->where([$this->localForeignKey => $this->localKey->get($local)])
-            ->all();
+            ->where([$this->localForeignKey => $this->localKey->get($local)]);
     }
 
     /**
@@ -152,5 +161,14 @@ class JunctionTable extends Reference
         }
 
         return true;
+    }
+
+    /**
+     * @param $remote
+     * @return mixed
+     */
+    public function getRemoteKeyValue($remote)
+    {
+        return $this->remoteKey->get($remote);
     }
 }

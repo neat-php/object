@@ -47,10 +47,19 @@ class RemoteKey extends Reference
      */
     public function load($local): array
     {
+        return $this->select($local)->all();
+    }
+
+    /**
+     *
+     * @param $local
+     * @return \Neat\Object\Query
+     */
+    public function select($local): \Neat\Object\Query
+    {
         return $this->remoteRepository
             ->select()
-            ->where([$this->remoteKey => $this->localKey->get($local)])
-            ->all();
+            ->where([$this->remoteKey => $this->localKey->get($local)]);
     }
 
     public function store($local, array $remotes)
@@ -81,5 +90,14 @@ class RemoteKey extends Reference
         foreach ($update as $remote) {
             $this->remoteRepository->store($remote);
         }
+    }
+
+    /**
+     * @param $remote
+     * @return mixed
+     */
+    public function getRemoteKeyValue($remote)
+    {
+        return $this->remoteForeignKey->get($remote);
     }
 }

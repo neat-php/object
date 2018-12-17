@@ -144,7 +144,7 @@ $user->store();
 // Sets the Address::$userId
 // Stores the address
 ```
-Many(hasMany & belongsToMany) relations use `Collectible`:
+Many(hasMany & belongsToMany) relations implement use `Collectible`:
 ```php
 $user->roles()->map(function (Role $role) {
     return $role->name;
@@ -161,4 +161,4 @@ class ManyOrderArticles extends Many {
     }
 }
 ```
-But you will have to instantiate the relation yourself, copy over the content of the factory method for the appropriate relation and change the relation class and cache key.
+But you will have to instantiate the relation yourself, copy over the content of the factory method for the appropriate relation and change the relation type and cache key.

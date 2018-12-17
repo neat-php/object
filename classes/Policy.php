@@ -21,8 +21,10 @@ class Policy
         $key        = $this->key($class);
 
         $repository = new Repository($connection, $class, $table, $key, $properties);
-        if ($softDelete = $this->softDelete($class)) {
-            $repository->setSoftDelete($softDelete);
+
+        $softdelete = $this->softdelete($class);
+        if ($softdelete) {
+            $repository->setSoftdelete($softdelete);
         }
 
         return $repository;
@@ -123,9 +125,13 @@ class Policy
      * @param string $class
      * @return string|null
      */
-    public function softDelete(string $class)
+    public function softdelete(string $class)
     {
-        return property_exists($class, 'deletedAt') ? $this->column('deletedAt') : null;
+        if (property_exists($class, 'deletedAt')) {
+            return $this->column('deletedAt');
+        }
+
+        return null;
     }
 
     /**

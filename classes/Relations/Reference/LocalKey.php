@@ -52,6 +52,17 @@ class LocalKey extends Reference
     }
 
     /**
+     *
+     * @param $local
+     * @return \Neat\Object\Query
+     */
+    public function select($local): \Neat\Object\Query
+    {
+        $identifier = $this->localForeignKey->get($local);
+        return $this->remoteRepository->select()->where([$this->remoteKeyString => $identifier]);
+    }
+
+    /**
      * @param object   $local
      * @param object[] $remotes
      * @return void
@@ -61,5 +72,14 @@ class LocalKey extends Reference
         if (($remote = reset($remotes))) {
             $this->localForeignKey->set($local, $this->remoteKey->get($remote));
         }
+    }
+
+    /**
+     * @param $remote
+     * @return mixed
+     */
+    public function getRemoteKeyValue($remote)
+    {
+        return $this->remoteKey->get($remote);
     }
 }
