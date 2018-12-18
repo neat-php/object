@@ -3,6 +3,9 @@
 namespace Neat\Object;
 
 use Neat\Database\Connection;
+use Neat\Database\Query as QueryBuilder;
+use Neat\Database\QueryInterface;
+use Neat\Database\SQLQuery;
 use Neat\Object\Relations\Relation;
 use Traversable;
 
@@ -87,7 +90,7 @@ class Repository implements RepositoryInterface
 
         $query = new Query($this->connection, $this);
         $query->select(($alias ?? $quotedTable) . '.*')
-            ->from($quotedTable, $alias);
+            ->from($this->table, $alias);
 
         return $query;
     }
@@ -95,12 +98,12 @@ class Repository implements RepositoryInterface
     /**
      * Create select query with conditions
      *
-     * @param Query|string|array $conditions Query instance or where clause (optional)
-     * @return Query
+     * @param QueryBuilder|string|array $conditions Query instance or where clause (optional)
+     * @return QueryBuilder
      */
-    public function query($conditions = null): Query
+    public function query($conditions = null): QueryBuilder
     {
-        if ($conditions instanceof Query) {
+        if ($conditions instanceof QueryBuilder) {
             return $conditions;
         }
 
@@ -115,12 +118,16 @@ class Repository implements RepositoryInterface
     /**
      * Get one by conditions
      *
-     * @param Query|array|string|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
      */
     public function one($conditions = null)
     {
-        $row = $this->query($conditions)->limit(1)->query()->row();
+        if ($conditions instanceof SQLQuery) {
+            $row = $conditions->query()->row();
+        } else {
+            $row = $this->query($conditions)->limit(1)->query()->row();
+        }
         if (!$row) {
             return null;
         }
@@ -131,12 +138,16 @@ class Repository implements RepositoryInterface
     /**
      * Get all by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return object[]
      */
     public function all($conditions = null): array
     {
-        $rows = $this->query($conditions)->query()->rows();
+        if ($conditions instanceof SQLQuery) {
+            $rows = $conditions->query()->rows();
+        } else {
+            $rows = $this->query($conditions)->query()->rows();
+        }
 
         return array_map([$this, 'create'], $rows);
     }
@@ -144,7 +155,7 @@ class Repository implements RepositoryInterface
     /**
      * Get collection of entities by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return Collection|object[]
      */
     public function collection($conditions = null): Collection
@@ -157,12 +168,16 @@ class Repository implements RepositoryInterface
     /**
      * Iterate entities by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return Traversable|object[]
      */
     public function iterate($conditions = null): Traversable
     {
-        $result = $this->query($conditions)->query();
+        if ($conditions instanceof SQLQuery) {
+            $result = $conditions->query();
+        } else {
+            $result = $this->query($conditions)->query();
+        }
         foreach ($result as $row) {
             yield $this->create($row);
         }

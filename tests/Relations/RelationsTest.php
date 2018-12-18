@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object\Test;
+namespace Neat\Object\Test\Relations;
 
 use Neat\Object\Manager;
 use Neat\Object\Relations\Many;

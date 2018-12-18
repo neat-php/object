@@ -2,11 +2,12 @@
 
 namespace Neat\Object\Decorator;
 
-class UpdateAt extends TimeStamp
+class UpdatedAt extends TimeStamp
 {
     public function store($entity)
     {
         $this->property->set($entity, 'now');
+
         parent::store($entity);
     }
 }

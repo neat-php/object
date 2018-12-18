@@ -2,6 +2,7 @@
 
 namespace Neat\Object\Decorator;
 
+use Neat\Database\SQLQuery;
 use Neat\Object\Collection;
 use Traversable;
 
@@ -9,17 +10,30 @@ class SoftDelete extends TimeStamp
 {
     public function all($conditions = null): array
     {
-        return parent::all($this->query($conditions)->where([$this->column, new \DateTime]));
+        if ($conditions instanceof SQLQuery) {
+            return parent::all($conditions);
+        }
+
+        return parent::all($this->query($conditions)->where([$this->column => null]));
     }
 
     public function collection($conditions = null): Collection
     {
-        return parent::collection($this->query($conditions)->where([$this->column, new \DateTime]));
+        if ($conditions instanceof SQLQuery) {
+            return parent::collection($conditions);
+        }
+
+
+        return parent::collection($this->query($conditions)->where([$this->column => null]));
     }
 
     public function iterate($conditions = null): Traversable
     {
-        return parent::iterate($this->query($conditions)->where([$this->column, new \DateTime]));
+        if ($conditions instanceof SQLQuery) {
+            return parent::iterate($conditions);
+        }
+
+        return parent::iterate($this->query($conditions)->where([$this->column => null]));
     }
 
     /**
@@ -28,8 +42,10 @@ class SoftDelete extends TimeStamp
      */
     public function delete($entity)
     {
-        $this->property->set($entity, 'now');
-        $this->store($entity);
+        if (!$this->property->get($entity)) {
+            $this->property->set($entity, 'now');
+            $this->store($entity);
+        }
 
         return 1;
     }

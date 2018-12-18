@@ -8,17 +8,17 @@ use Traversable;
 class Query extends \Neat\Database\Query
 {
     /**
-     * @var Repository
+     * @var RepositoryInterface
      */
     private $repository;
 
     /**
      * Query constructor
      *
-     * @param Connection $connection
-     * @param Repository $repository
+     * @param Connection          $connection
+     * @param RepositoryInterface $repository
      */
-    public function __construct(Connection $connection, Repository $repository)
+    public function __construct(Connection $connection, RepositoryInterface $repository)
     {
         parent::__construct($connection);
 

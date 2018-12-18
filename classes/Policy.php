@@ -5,7 +5,7 @@ namespace Neat\Object;
 use Neat\Database\Connection;
 use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\SoftDelete;
-use Neat\Object\Decorator\UpdateAt;
+use Neat\Object\Decorator\UpdatedAt;
 use ReflectionClass;
 
 class Policy
@@ -31,7 +31,7 @@ class Policy
             $repository = new CreatedAt($repository, $createdStamp, $properties[$createdStamp]);
         }
         if ($updatedStamp = $this->updatedStamp($class)) {
-            $repository = new UpdateAt($repository, $updatedStamp, $properties[$updatedStamp]);
+            $repository = new UpdatedAt($repository, $updatedStamp, $properties[$updatedStamp]);
         }
 
         return $repository;

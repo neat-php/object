@@ -2,7 +2,9 @@
 
 namespace Neat\Object;
 
+use Neat\Database\QueryInterface;
 use Traversable;
+use Neat\Database\Query as QueryBuilder;
 
 trait RepositoryDecorator
 {
@@ -44,10 +46,10 @@ trait RepositoryDecorator
     /**
      * Create select query with conditions
      *
-     * @param Query|string|array $conditions Query instance or where clause (optional)
-     * @return Query
+     * @param QueryBuilder|string|array $conditions Query instance or where clause (optional)
+     * @return QueryBuilder
      */
-    public function query($conditions = null): Query
+    public function query($conditions = null): QueryBuilder
     {
         return $this->repository()->query($conditions);
     }
@@ -55,7 +57,7 @@ trait RepositoryDecorator
     /**
      * Get one by conditions
      *
-     * @param Query|array|string|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
      */
     public function one($conditions = null)
@@ -66,7 +68,7 @@ trait RepositoryDecorator
     /**
      * Get all by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return object[]
      */
     public function all($conditions = null): array
@@ -77,7 +79,7 @@ trait RepositoryDecorator
     /**
      * Get collection of entities by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return Collection|object[]
      */
     public function collection($conditions = null): Collection
@@ -88,7 +90,7 @@ trait RepositoryDecorator
     /**
      * Iterate entities by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return Traversable|object[]
      */
     public function iterate($conditions = null): Traversable

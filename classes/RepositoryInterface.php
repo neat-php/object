@@ -2,6 +2,7 @@
 
 namespace Neat\Object;
 
+use Neat\Database\QueryInterface;
 use Traversable;
 
 interface RepositoryInterface
@@ -36,12 +37,12 @@ interface RepositoryInterface
      * @param Query|string|array $conditions Query instance or where clause (optional)
      * @return Query
      */
-    public function query($conditions = null): Query;
+    public function query($conditions = null): \Neat\Database\Query;
 
     /**
      * Get one by conditions
      *
-     * @param Query|array|string|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
      */
     public function one($conditions = null);
@@ -49,7 +50,7 @@ interface RepositoryInterface
     /**
      * Get all by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return object[]
      */
     public function all($conditions = null): array;
@@ -57,7 +58,7 @@ interface RepositoryInterface
     /**
      * Get collection of entities by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return Collection|object[]
      */
     public function collection($conditions = null): Collection;
@@ -65,7 +66,7 @@ interface RepositoryInterface
     /**
      * Iterate entities by conditions
      *
-     * @param Query|string|array|null $conditions SQL where clause or Query instance
+     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return Traversable|object[]
      */
     public function iterate($conditions = null): Traversable;

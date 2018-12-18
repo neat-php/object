@@ -7,12 +7,15 @@ namespace Neat\Object\Test;
 use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\GroupUser;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
 {
+    use SQLHelper;
+
     /**
      * @var Factory
      */
@@ -33,39 +36,6 @@ class EntityTest extends TestCase
     public function setUp()
     {
         $this->create = new Factory;
-    }
-
-    /**
-     * Minify SQL query by removing unused whitespace
-     *
-     * @param string $query
-     * @return string
-     */
-    protected function minifySQL($query)
-    {
-        $replace = [
-            '|\s+|m'     => ' ',
-            '|\s*,\s*|m' => ',',
-            '|\s*=\s*|m' => '=',
-        ];
-
-        return preg_replace(array_keys($replace), $replace, $query);
-    }
-
-    /**
-     * Assert SQL matches expectation
-     *
-     * Normalizes whitespace to make the tests less fragile
-     *
-     * @param string $expected
-     * @param string $actual
-     */
-    protected function assertSQL($expected, $actual)
-    {
-        $this->assertEquals(
-            $this->minifySQL($expected),
-            $this->minifySQL($actual)
-        );
     }
 
     /**

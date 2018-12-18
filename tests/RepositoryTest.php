@@ -6,68 +6,30 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Collection;
 use Neat\Object\Manager;
+use Neat\Object\Policy;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
-use Neat\Object\Test\Helper\TimeStamps;
+use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
 {
+    use SQLHelper;
+
     /**
      * @var Manager
      */
     private $manager;
 
     /**
-     * Minify SQL query by removing unused whitespace
-     *
-     * @param string $query
-     * @return string
-     */
-    protected function minifySQL($query)
-    {
-        $replace = [
-            '|\s+|m'     => ' ',
-            '|\s*,\s*|m' => ',',
-            '|\s*=\s*|m' => '=',
-        ];
-
-        return preg_replace(array_keys($replace), $replace, $query);
-    }
-
-    /**
-     * Assert SQL matches expectation
-     *
-     * Normalizes whitespace to make the tests less fragile
-     *
-     * @param string $expected
-     * @param string $actual
-     */
-    protected function assertSQL($expected, $actual)
-    {
-        $this->assertEquals(
-            $this->minifySQL($expected),
-            $this->minifySQL($actual)
-        );
-    }
-
-    /**
-     * Setup once
-     */
-    public static function setUpBeforeClass()
-    {
-        $factory = new Factory;
-        Manager::create($factory->connection(), null, 'repository-test');
-    }
-
-    /**
      * Setup before each test method
      */
     public function setUp()
     {
-        $this->manager = Manager::instance('repository-test');
+        $factory       = new Factory;
+        $this->manager = new Manager($factory->connection(), new Policy);
     }
 
     /**
@@ -247,36 +209,5 @@ class RepositoryTest extends TestCase
 
         $data['active'] = '0';
         $userRepository->update($data['id'], $data);
-    }
-
-    public function testCreatedAt()
-    {
-        $createdAt = new TimeStamps();
-        $createdAt->store();
-        $this->assertNotNull($createdAt->createdAt);
-        $this->assertInstanceOf(\DateTime::class, $createdAt->createdAt);
-
-        $date                 = new \DateTime;
-        $createdAt            = new TimeStamps();
-        $createdAt->createdAt = $date;
-        $createdAt->store();
-        $this->assertSame($date, $createdAt->createdAt);
-    }
-
-    public function testUpdatedAt()
-    {
-        $updatedAt = new TimeStamps();
-        $updatedAt->store();
-        $this->assertNotNull($updatedAt->updatedAt);
-        $this->assertNotNull($updatedAt->updatedAt);
-    }
-
-    public function testSoftDelete()
-    {
-        $deletedAt = new TimeStamps();
-        $deletedAt->store();
-        $deletedAt->delete();
-
-        $this->assertNotNull($deletedAt->deletedAt, "deleted_at is null");
     }
 }
