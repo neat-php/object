@@ -27,7 +27,7 @@ class UpdatedAtTest extends TestCase
             ->with($this->callback(function ($user) use (&$date) {
                 if (is_null($date)) {
                     $date = $user->updateDate;
-                } elseif ($user->updateDate <= $date) {
+                } elseif ($user->updateDate === $date) {
                     return false;
                 }
                 if (is_null($user->updateDate)) {
