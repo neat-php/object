@@ -133,6 +133,15 @@ trait RepositoryDecorator
 
     /**
      * @param object $entity
+     * @return object
+     */
+    public function load($entity)
+    {
+        return $this->repository()->load($entity);
+    }
+
+    /**
+     * @param object $entity
      * @return false|int
      */
     public function delete($entity)

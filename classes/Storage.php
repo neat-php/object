@@ -113,6 +113,14 @@ trait Storage
     }
 
     /**
+     * @see RepositoryInterface::load()
+     */
+    public function load()
+    {
+        return $this::repository()->load($this);
+    }
+
+    /**
      * @see RepositoryInterface::delete()
      */
     public function delete()

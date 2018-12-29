@@ -269,6 +269,25 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @param object $entity
+     * @return object
+     */
+    public function load($entity)
+    {
+        $identifier = array_filter($this->identifier($entity));
+        if (!$identifier) {
+            return $entity;
+        }
+        $row = $this->select()->where($this->where($identifier))->query()->row();
+        if (!$row) {
+            return $entity;
+        }
+        $this->fromArray($entity, $row);
+
+        return $entity;
+    }
+
+    /**
      * Convert to an associative array
      *
      * @param object $entity

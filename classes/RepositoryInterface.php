@@ -97,6 +97,12 @@ interface RepositoryInterface
 
     /**
      * @param object $entity
+     * @return object
+     */
+    public function load($entity);
+
+    /**
+     * @param object $entity
      * @return false|int
      */
     public function delete($entity);

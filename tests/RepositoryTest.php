@@ -210,4 +210,17 @@ class RepositoryTest extends TestCase
         $data['active'] = '0';
         $userRepository->update($data['id'], $data);
     }
+
+    public function testLoad()
+    {
+        $repository = $this->manager->repository(User::class);
+        /** @var User $user */
+        $user            = $repository->get(1);
+        $user1           = clone $user;
+        $user1->lastName = 'changed';
+        $repository->load($user1);
+        $this->assertEquals($user, $user1);
+        $user = $repository->get(1);
+        $this->assertSame($user, $repository->load($user));
+    }
 }
