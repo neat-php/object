@@ -26,7 +26,7 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see Repository::one()
+     * @see RepositoryInterface::one()
      * @return mixed|null
      */
     public function one()
@@ -35,7 +35,7 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see Repository::all()
+     * @see RepositoryInterface::all()
      * @return array
      */
     public function all(): array
@@ -44,7 +44,7 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see Repository::collection()
+     * @see RepositoryInterface::collection()
      * @return Collection|array
      */
     public function collection(): Collection
@@ -53,7 +53,7 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see Repository::iterate()
+     * @see RepositoryInterface::iterate()
      * @return Traversable|array
      */
     public function iterate(): Traversable
