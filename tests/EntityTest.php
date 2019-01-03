@@ -201,4 +201,26 @@ class EntityTest extends TestCase
 
         $this->assertNull(User::get($user->id));
     }
+
+    /**
+     * Test array conversion
+     */
+    public function testArrayConversion()
+    {
+        $data = [
+            "username"      => 'tdevries',
+            "type_id"       => 1,
+            "first_name"    => "Thijs",
+            "middle_name"   => "de",
+            "last_name"     => "Vries",
+            "active"        => 1,
+            "update_date"   => date("Y-m-d H:i:s")
+        ];
+
+        $user = new User();
+        $user->fromArray($data);
+
+        $this->assertEquals("Thijs", $user->firstName);
+        $this->assertEquals(true, $user->active);
+    }
 }
