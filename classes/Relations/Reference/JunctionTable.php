@@ -4,8 +4,9 @@ namespace Neat\Object\Relations\Reference;
 
 use Neat\Database\Connection;
 use Neat\Object\Property;
+use Neat\Object\Query;
 use Neat\Object\Relations\Reference;
-use Neat\Object\Repository;
+use Neat\Object\RepositoryInterface;
 
 class JunctionTable extends Reference
 {
@@ -25,7 +26,7 @@ class JunctionTable extends Reference
     private $remoteKeyString;
 
     /**
-     * @var Repository
+     * @var RepositoryInterface
      */
     private $remoteRepository;
 
@@ -53,7 +54,7 @@ class JunctionTable extends Reference
         Property $localKey,
         Property $remoteKey,
         string $remoteKeyString,
-        Repository $remoteRepository,
+        RepositoryInterface $remoteRepository,
         Connection $connection,
         string $junctionTable,
         string $localForeignKey,
@@ -80,10 +81,10 @@ class JunctionTable extends Reference
 
     /**
      *
-     * @param $local
-     * @return \Neat\Object\Query
+     * @param object $local
+     * @return Query
      */
-    public function select($local): \Neat\Object\Query
+    public function select($local): Query
     {
         return $this->remoteRepository
             ->select('rt')

@@ -66,11 +66,11 @@ class Manager
      * Get or create repository
      *
      * @param string $class
-     * @return Repository
+     * @return RepositoryInterface
      */
     public function repository(string $class): RepositoryInterface
     {
-        /** @var Repository $repository */
+        /** @var RepositoryInterface $repository */
         $repository = $this->repositories->get($class, function () use ($class) {
             return $this->policy->repository($class, $this->connection);
         });

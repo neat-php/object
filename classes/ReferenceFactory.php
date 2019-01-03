@@ -127,5 +127,5 @@ trait ReferenceFactory
 
     public abstract function policy(): Policy;
 
-    public abstract function repository(string $class): Repository;
+    public abstract function repository(string $class): RepositoryInterface;
 }

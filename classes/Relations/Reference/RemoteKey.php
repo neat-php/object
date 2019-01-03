@@ -3,8 +3,9 @@
 namespace Neat\Object\Relations\Reference;
 
 use Neat\Object\Property;
+use Neat\Object\Query;
 use Neat\Object\Relations\Reference;
-use Neat\Object\Repository;
+use Neat\Object\RepositoryInterface;
 
 class RemoteKey extends Reference
 {
@@ -24,7 +25,7 @@ class RemoteKey extends Reference
     private $remoteKey;
 
     /**
-     * @var Repository
+     * @var RepositoryInterface
      */
     private $remoteRepository;
 
@@ -32,7 +33,7 @@ class RemoteKey extends Reference
         Property $localKey,
         Property $remoteForeignKey,
         string $remoteKey,
-        Repository $remoteRepository
+        RepositoryInterface $remoteRepository
     ) {
 
         $this->localKey         = $localKey;
@@ -52,10 +53,10 @@ class RemoteKey extends Reference
 
     /**
      *
-     * @param $local
-     * @return \Neat\Object\Query
+     * @param object $local
+     * @return Query
      */
-    public function select($local): \Neat\Object\Query
+    public function select($local): Query
     {
         return $this->remoteRepository
             ->select()
