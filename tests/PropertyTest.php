@@ -3,6 +3,7 @@
 namespace Neat\Object\Test;
 
 use DateTime;
+use DateTimeImmutable;
 use Neat\Object\Property;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,7 @@ class PropertyTest extends TestCase
             ['lastName', null],
             ['active', 'bool'],
             ['ignored', 'int'],
+            ['registerDate', 'DateTimeImmutable'],
             ['updateDate', 'DateTime'],
             ['deletedDate', 'DateTime'],
         ];
@@ -84,6 +86,9 @@ class PropertyTest extends TestCase
             ['ignored', '1', 1],
             ['ignored', 0, 0],
             ['ignored', 1, 1],
+            ['registerDate', null, null],
+            ['registerDate', '2001-02-03', new DateTimeImmutable('2001-02-03 00:00:00')],
+            ['registerDate', '2001-02-03 04:05:06', new DateTimeImmutable('2001-02-03 04:05:06')],
             ['updateDate', null, null],
             ['updateDate', '2001-02-03', new DateTime('2001-02-03 00:00:00')],
             ['updateDate', '2001-02-03 04:05:06', new DateTime('2001-02-03 04:05:06')],
@@ -105,7 +110,7 @@ class PropertyTest extends TestCase
         $property = $this->createProperty($name);
         $property->set($user, $in);
 
-        if ($out instanceof DateTime) {
+        if ($out instanceof DateTime || $out instanceof DateTimeImmutable) {
             $this->assertEquals($out, $user->$name);
         } else {
             $this->assertSame($out, $user->$name);
@@ -136,6 +141,9 @@ class PropertyTest extends TestCase
             ['ignored', '1', 1],
             ['ignored', 0, 0],
             ['ignored', 1, 1],
+            ['registerDate', null, null],
+            ['registerDate', '2001-02-03', '2001-02-03 00:00:00'],
+            ['registerDate', new DateTimeImmutable('2001-02-03 04:05:06'), '2001-02-03 04:05:06'],
             ['updateDate', null, null],
             ['updateDate', '2001-02-03', '2001-02-03 00:00:00'],
             ['updateDate', new DateTime('2001-02-03 04:05:06'), '2001-02-03 04:05:06'],

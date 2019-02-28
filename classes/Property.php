@@ -77,6 +77,7 @@ class Property
             case 'int':
                 return (int)$value;
             case 'DateTime':
+            case 'DateTimeImmutable':
                 if (!$value instanceof DateTimeInterface) {
                     $value = new DateTime($value);
                 }
@@ -103,6 +104,9 @@ class Property
                     break;
                 case 'DateTime':
                     $value = new DateTime($value);
+                    break;
+                case 'DateTimeImmutable':
+                    $value = new \DateTimeImmutable($value);
                     break;
             }
         }

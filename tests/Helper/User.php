@@ -43,6 +43,11 @@ class User extends Entity
     public $ignored;
 
     /**
+     * @var \DateTimeImmutable
+     */
+    public $registerDate;
+
+    /**
      * @var \DateTime
      * @note intentional fully qualified class name
      */

@@ -155,13 +155,14 @@ class EntityTest extends TestCase
      */
     public function testStore()
     {
-        $user             = new User;
-        $user->username   = 'ffox';
-        $user->typeId     = 1;
-        $user->firstName  = 'Frank';
-        $user->lastName   = 'Fox';
-        $user->active     = true;
-        $user->updateDate = new \DateTime('today');
+        $user               = new User;
+        $user->username     = 'ffox';
+        $user->typeId       = 1;
+        $user->firstName    = 'Frank';
+        $user->lastName     = 'Fox';
+        $user->active       = true;
+        $user->registerDate = new \DateTimeImmutable('2019-01-02 12:30:00');
+        $user->updateDate   = new \DateTime('today');
 
         $user->store();
         $this->assertNotNull($user->id);
@@ -187,14 +188,15 @@ class EntityTest extends TestCase
      */
     public function testDelete()
     {
-        $user             = new User;
-        $user->username   = 'edejong';
-        $user->typeId     = 1;
-        $user->firstName  = 'Emma';
-        $user->middleName = 'de';
-        $user->lastName   = 'Jong';
-        $user->active     = true;
-        $user->updateDate = new \DateTime('yesterday');
+        $user               = new User;
+        $user->username     = 'edejong';
+        $user->typeId       = 1;
+        $user->firstName    = 'Emma';
+        $user->middleName   = 'de';
+        $user->lastName     = 'Jong';
+        $user->active       = true;
+        $user->registerDate = new \DateTimeImmutable('2019-01-02 12:30:00');
+        $user->updateDate   = new \DateTime('yesterday');
 
         $user->store();
         $user->delete();

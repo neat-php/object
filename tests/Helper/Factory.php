@@ -25,21 +25,22 @@ class Factory
         $pdo = new PDO('sqlite::memory:');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->exec('CREATE TABLE user (
-                      id           INTEGER PRIMARY KEY,
-                      type_id      INTEGER  NOT NULL,
-                      username     TEXT     NOT NULL,
-                      first_name   TEXT     NOT NULL,
-                      middle_name  TEXT     NULL,
-                      last_name    TEXT     NOT NULL,
-                      active       INTEGER  NOT NULL DEFAULT 1,
-                      update_date  DATETIME NOT NULL,
-                      deleted_date DATETIME NULL
+                      id            INTEGER PRIMARY KEY,
+                      type_id       INTEGER  NOT NULL,
+                      username      TEXT     NOT NULL,
+                      first_name    TEXT     NOT NULL,
+                      middle_name   TEXT     NULL,
+                      last_name     TEXT     NOT NULL,
+                      active        INTEGER  NOT NULL DEFAULT 1,
+                      register_date DATETIME NOT NULL,
+                      update_date   DATETIME NOT NULL,
+                      deleted_date  DATETIME NULL
                     )');
         $this->createdDate = new \DateTime();
-        $pdo->exec("INSERT INTO `user` (id, type_id, username, first_name, middle_name, last_name, active, update_date, deleted_date)
-                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, '{$this->createdDate->format('Y-m-d H:i:s')}', NULL),
-                      (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, '{$this->createdDate->format('Y-m-d H:i:s')}', '{$this->createdDate->format('Y-m-d H:i:s')}'),
-                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, '{$this->createdDate->format('Y-m-d H:i:s')}', NULL)");
+        $pdo->exec("INSERT INTO `user` (id, type_id, username, first_name, middle_name, last_name, active, register_date, update_date, deleted_date)
+                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', NULL),
+                      (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', '{$this->createdDate->format('Y-m-d H:i:s')}'),
+                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', NULL)");
         $pdo->exec("CREATE TABLE `group_user` (
                       user_id  INTEGER NOT NULL,
                       group_id INTEGER NOT NULL,

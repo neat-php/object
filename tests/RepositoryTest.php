@@ -192,14 +192,15 @@ class RepositoryTest extends TestCase
     {
         $userRepository = $this->manager->repository(User::class);
         $data           = [
-            'username'     => 'ttest',
-            'type_id'      => '1',
-            'first_name'   => 'test_first',
-            'middle_name'  => null,
-            'last_name'    => 'test_last',
-            'active'       => '1',
-            'update_date'  => '2018-05-20',
-            'deleted_date' => null,
+            'username'      => 'ttest',
+            'type_id'       => '1',
+            'first_name'    => 'test_first',
+            'middle_name'   => null,
+            'last_name'     => 'test_last',
+            'active'        => '1',
+            'register_date' => '2019-01-05',
+            'update_date'   => '2018-05-20',
+            'deleted_date'  => null,
         ];
         $id             = $userRepository->insert($data);
         $this->assertNotNull($id);
