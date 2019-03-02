@@ -3,7 +3,7 @@
 [![Stable Version](https://poser.pugx.org/neat/object/version)](https://packagist.org/packages/neat/object)
 [![Build Status](https://travis-ci.org/neat-php/object.svg?branch=master)](https://travis-ci.org/neat-php/object)
 
-Neat object components adds a simple yet intuitive ORM layer on top of the Neat database components.
+Neat object component adds a simple yet intuitive ORM layer on top of the Neat database component.
 
 ## Getting started
 
@@ -119,7 +119,7 @@ foreach (User::iterate() as $user) {
 
 ## Relations
 If you need relations just use the `Relations` trait which supplies factory functions
-for hasOne/Many and belongsToOne/Many relations.
+for hasOne/-Many and belongsToOne/-Many relations.
 ```php
 class User
 {
@@ -144,7 +144,7 @@ $user->store();
 // Sets the Address::$userId
 // Stores the address
 ```
-Many(hasMany & belongsToMany) relations implement use `Collectible`:
+Many(hasMany & belongsToMany) relations use `Collectible`:
 ```php
 $user->roles()->map(function (Role $role) {
     return $role->name;
