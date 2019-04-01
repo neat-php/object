@@ -101,6 +101,18 @@ trait Collectible
     }
 
     /**
+     * Get last item
+     *
+     * @return mixed|false
+     */
+    public function last()
+    {
+        $items = $this->items();
+
+        return end($items);
+    }
+
+    /**
      * Push item onto collection
      *
      * @param mixed $item
