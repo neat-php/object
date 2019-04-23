@@ -85,5 +85,5 @@ trait Relations
         return $relation;
     }
 
-    public abstract function manager(): Manager;
+    public abstract static function manager(): Manager;
 }
