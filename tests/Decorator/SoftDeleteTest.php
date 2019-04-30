@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Test\Decorator;
 
+use DateTime;
+use Generator;
 use Neat\Object\Collection;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Property;
@@ -13,6 +15,7 @@ use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 class SoftDeleteTest extends TestCase
 {
@@ -24,7 +27,7 @@ class SoftDeleteTest extends TestCase
         $softDelete = new SoftDelete(
             $repository,
             'deletedDate',
-            new Property(new \ReflectionProperty(User::class, 'deletedDate'))
+            new Property(new ReflectionProperty(User::class, 'deletedDate'))
         );
         $query      = new Query((new Factory)->connection(), $repository);
         $query->select('*')->from('user');
@@ -40,7 +43,7 @@ class SoftDeleteTest extends TestCase
                 yield from ['test'];
             });
         $generator = $softDelete->iterate();
-        $this->assertInstanceOf(\Generator::class, $generator);
+        $this->assertInstanceOf(Generator::class, $generator);
         foreach ($generator as $item) {
             $this->assertSame('test', $item);
         }
@@ -53,7 +56,7 @@ class SoftDeleteTest extends TestCase
         $softDelete = new SoftDelete(
             $repository,
             'deletedDate',
-            new Property(new \ReflectionProperty(User::class, 'deletedDate'))
+            new Property(new ReflectionProperty(User::class, 'deletedDate'))
         );
         $query      = new Query((new Factory)->connection(), $repository);
         $query->select('*')->from('user');
@@ -75,7 +78,7 @@ class SoftDeleteTest extends TestCase
         $softDelete = new SoftDelete(
             $repository,
             'deletedDate',
-            new Property(new \ReflectionProperty(User::class, 'deletedDate'))
+            new Property(new ReflectionProperty(User::class, 'deletedDate'))
         );
         $query      = new Query((new Factory)->connection(), $repository);
         $query->select('*')->from('user');
@@ -98,7 +101,7 @@ class SoftDeleteTest extends TestCase
         $softDelete = new SoftDelete(
             $repository,
             'deletedDate',
-            new Property(new \ReflectionProperty(User::class, 'deletedDate'))
+            new Property(new ReflectionProperty(User::class, 'deletedDate'))
         );
         $date       = null;
         $repository->expects($this->once())
@@ -108,7 +111,7 @@ class SoftDeleteTest extends TestCase
                 if (is_null($user->deletedDate)) {
                     return false;
                 }
-                if (!$user->deletedDate instanceof \DateTime) {
+                if (!$user->deletedDate instanceof DateTime) {
                     return false;
                 }
 

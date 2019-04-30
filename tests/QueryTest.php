@@ -2,6 +2,7 @@
 
 namespace Neat\Object\Test;
 
+use Generator;
 use Neat\Database\Connection;
 use Neat\Object\Collection;
 use Neat\Object\Query;
@@ -97,7 +98,7 @@ class QueryTest extends TestCase
 
         $response = $query->iterate();
 
-        $this->assertInstanceOf(\Generator::class, $response);
+        $this->assertInstanceOf(Generator::class, $response);
         $this->assertEquals($generator(), $response);
     }
 }

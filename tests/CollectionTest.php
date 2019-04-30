@@ -57,7 +57,13 @@ class CollectionTest extends TestCase
         $this->assertSame($data, $this->collection->first());
         // Assert that it didn't change
         $this->assertSame($data, $this->collection->first());
+    }
 
+    public function testLast()
+    {
+        $data = end($this->array);
+        $this->assertSame($data, $this->collection->last());
+        $this->assertSame($data, $this->collection->last());
     }
 
     /**

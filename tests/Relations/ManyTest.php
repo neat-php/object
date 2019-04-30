@@ -9,6 +9,7 @@ use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 class ManyTest extends TestCase
 {
@@ -34,7 +35,7 @@ class ManyTest extends TestCase
     {
         $this->reference = $this->getMockBuilder(RemoteKey::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'store'])
+            ->setMethods(['load', 'store', 'getRemoteKeyValue'])
             ->getMock();
         $this->user      = new User;
         $this->user->id  = 1;
@@ -44,7 +45,7 @@ class ManyTest extends TestCase
     /**
      * Test get
      */
-    public function testGet()
+    public function testAll()
     {
         $address         = new Address;
         $address->id     = 1;
@@ -61,7 +62,7 @@ class ManyTest extends TestCase
     /**
      * Test getEmpty
      */
-    public function testGetEmpty()
+    public function testAllEmpty()
     {
         $this->reference->expects($this->once())
             ->method('load')
@@ -77,7 +78,6 @@ class ManyTest extends TestCase
      */
     public function testSet()
     {
-
         $address         = new Address;
         $address->id     = 1;
         $address->userId = 1;
@@ -95,7 +95,7 @@ class ManyTest extends TestCase
         $this->relation->set([]);
         $this->relation->store();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->relation->set(null);
     }
 
@@ -114,10 +114,43 @@ class ManyTest extends TestCase
             ->method('load')
             ->willReturn([$address1]);
         $this->reference->expects($this->at(1))
+            ->method('getRemoteKeyValue')
+            ->willReturn($address1->id);
+        $this->reference->expects($this->at(2))
+            ->method('getRemoteKeyValue')
+            ->willReturn($address2->id);
+        $this->reference->expects($this->at(3))
             ->method('store')
             ->with($this->equalTo($this->user), $this->equalTo([$address1, $address2]));
 
         $this->relation->add($address2);
+        $this->relation->store();
+    }
+
+    public function testRemove()
+    {
+        $address1         = new Address;
+        $address1->id     = 1;
+        $address1->userId = 1;
+        $address2         = new Address;
+        $address2->id     = 2;
+        $address2->userId = 1;
+        $this->reference->expects($this->at(0))
+            ->method('load')
+            ->willReturn([$address1, $address2]);
+        $this->reference->expects($this->at(1))
+            ->method('getRemoteKeyValue')
+            ->with($address1)
+            ->willReturn($address1->id);
+        $this->reference->expects($this->at(2))
+            ->method('getRemoteKeyValue')
+            ->with($address1)
+            ->willReturn($address1->id);
+        $this->reference->expects($this->at(3))
+            ->method('store')
+            ->with($this->equalTo($this->user), $this->equalTo([$address2]));
+
+        $this->relation->remove($address1);
         $this->relation->store();
     }
 }

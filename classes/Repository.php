@@ -7,6 +7,7 @@ use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
 use Neat\Database\SQLQuery;
 use Neat\Object\Relations\Relation;
+use RuntimeException;
 use Traversable;
 
 class Repository implements RepositoryInterface
@@ -354,11 +355,11 @@ class Repository implements RepositoryInterface
     {
         $printed = print_r($id, true);
         if (count($this->key) > 1 && !is_array($id)) {
-            throw new \RuntimeException("Entity $this->class has a composed key, finding by id requires an array, given: $printed");
+            throw new RuntimeException("Entity $this->class has a composed key, finding by id requires an array, given: $printed");
         }
         if (is_array($id) && count($this->key) !== count($id)) {
             $keys = print_r($this->key, true);
-            throw new \RuntimeException("Entity $this->class requires the following keys: $keys, given: $printed");
+            throw new RuntimeException("Entity $this->class requires the following keys: $keys, given: $printed");
         }
     }
 

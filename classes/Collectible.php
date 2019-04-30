@@ -64,7 +64,6 @@ trait Collectible
     {
         $items = &$this->items();
         unset($items[$offset]);
-        $this->items($items);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Relations;
 
+use Neat\Object\Query;
+
 abstract class Reference
 {
     /**
@@ -25,7 +27,7 @@ abstract class Reference
 
     /**
      * @param $local
-     * @return \Neat\Object\Query
+     * @return Query
      */
-    abstract public function select($local): \Neat\Object\Query;
+    abstract public function select($local): Query;
 }

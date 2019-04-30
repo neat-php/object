@@ -4,12 +4,15 @@
 
 namespace Neat\Object\Test;
 
+use DateTime;
+use DateTimeImmutable;
+use Generator;
 use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
-use Neat\Object\Test\Helper\GroupUser;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
@@ -147,7 +150,7 @@ class EntityTest extends TestCase
             $this->assertInstanceOf(User::class, $user);
             $this->assertSame($i++, $user->id);
         }
-        $this->assertInstanceOf(\Generator::class, User::iterate());
+        $this->assertInstanceOf(Generator::class, User::iterate());
     }
 
     /**
@@ -161,8 +164,8 @@ class EntityTest extends TestCase
         $user->firstName    = 'Frank';
         $user->lastName     = 'Fox';
         $user->active       = true;
-        $user->registerDate = new \DateTimeImmutable('2019-01-02 12:30:00');
-        $user->updateDate   = new \DateTime('today');
+        $user->registerDate = new DateTimeImmutable('2019-01-02 12:30:00');
+        $user->updateDate   = new DateTime('today');
 
         $user->store();
         $this->assertNotNull($user->id);
@@ -171,7 +174,7 @@ class EntityTest extends TestCase
         $dbUser->relations();
         $this->assertEquals($user, $dbUser);
         $dbUser->active   = false;
-        $user->updateDate = new \DateTime('today +1 hour');
+        $user->updateDate = new DateTime('today +1 hour');
         $user->store();
         $this->assertSame($user->id, $dbUser->id);
 
@@ -195,8 +198,8 @@ class EntityTest extends TestCase
         $user->middleName   = 'de';
         $user->lastName     = 'Jong';
         $user->active       = true;
-        $user->registerDate = new \DateTimeImmutable('2019-01-02 12:30:00');
-        $user->updateDate   = new \DateTime('yesterday');
+        $user->registerDate = new DateTimeImmutable('2019-01-02 12:30:00');
+        $user->updateDate   = new DateTime('yesterday');
 
         $user->store();
         $user->delete();
@@ -216,7 +219,10 @@ class EntityTest extends TestCase
             "middle_name"   => "de",
             "last_name"     => "Vries",
             "active"        => 1,
-            "update_date"   => date("Y-m-d H:i:s")
+            "update_date"   => date("Y-m-d H:i:s"),
+            'register_date' => null,
+            'deleted_date'  => null,
+            'id'            => null,
         ];
 
         $user = new User();
@@ -224,5 +230,6 @@ class EntityTest extends TestCase
 
         $this->assertEquals("Thijs", $user->firstName);
         $this->assertEquals(true, $user->active);
+        $this->assertEquals($data, $user->toArray());
     }
 }

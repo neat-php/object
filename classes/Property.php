@@ -3,6 +3,7 @@
 namespace Neat\Object;
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use ReflectionProperty;
 
@@ -106,7 +107,7 @@ class Property
                     $value = new DateTime($value);
                     break;
                 case 'DateTimeImmutable':
-                    $value = new \DateTimeImmutable($value);
+                    $value = new DateTimeImmutable($value);
                     break;
             }
         }

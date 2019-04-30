@@ -7,7 +7,7 @@ use Neat\Object\Cache;
 use Neat\Object\Manager;
 use Neat\Object\Policy;
 use Neat\Object\ReferenceFactory;
-use Neat\Object\Repository;
+use Neat\Object\RepositoryInterface;
 
 class ReferenceFactoryMock
 {
@@ -34,7 +34,7 @@ class ReferenceFactoryMock
         return $this->manager->policy();
     }
 
-    public function repository(string $class): Repository
+    public function repository(string $class): RepositoryInterface
     {
         return $this->manager->repository($class);
     }

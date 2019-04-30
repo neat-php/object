@@ -4,6 +4,7 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Cache;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class CacheTest extends TestCase
 {
@@ -25,7 +26,7 @@ class CacheTest extends TestCase
      */
     public function testHas()
     {
-        $this->cache->set('test1', new \stdClass);
+        $this->cache->set('test1', new stdClass);
         $this->assertFalse($this->cache->has('test'));
         $this->assertTrue($this->cache->has('test1'));
     }
@@ -36,7 +37,7 @@ class CacheTest extends TestCase
     public function testGet()
     {
         $factory = function () {
-            return new \stdClass;
+            return new stdClass;
         };
 
         $object1 = $this->cache->get('get', $factory);
@@ -54,8 +55,8 @@ class CacheTest extends TestCase
     public function testAll()
     {
         $objects = [
-            'test1' => new \stdClass,
-            'test2' => new \stdClass,
+            'test1' => new stdClass,
+            'test2' => new stdClass,
         ];
 
         $this->assertSame([], $this->cache->all());
@@ -63,7 +64,7 @@ class CacheTest extends TestCase
             $this->cache->set($key, $object);
         }
         $this->assertSame($objects, $this->cache->all());
-        $object3 = new \stdClass;
+        $object3 = new stdClass;
         $this->cache->set('test3', $object3);
         $objects['test3'] = $object3;
         $this->assertSame($objects, $this->cache->all());
@@ -75,10 +76,10 @@ class CacheTest extends TestCase
     public function testSet()
     {
         $factory = function () {
-            return new \stdClass;
+            return new stdClass;
         };
 
-        $object = new \stdClass;
+        $object = new stdClass;
         $this->assertSame($object, $this->cache->set('set', $object));
         $this->assertSame($object, $this->cache->get('set', $factory));
     }

@@ -57,7 +57,7 @@ abstract class Relation
     public function store(): self
     {
         if ($this->loaded) {
-            $this->reference->store($this->local, $this->objects);
+            $this->reference->store($this->local, array_values($this->objects));
         }
 
         return $this;

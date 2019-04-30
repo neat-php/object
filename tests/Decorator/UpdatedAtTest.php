@@ -2,6 +2,7 @@
 
 namespace Neat\Object\Test\Decorator;
 
+use DateTime;
 use Neat\Object\Decorator\UpdatedAt;
 use Neat\Object\Property;
 use Neat\Object\Repository;
@@ -9,6 +10,7 @@ use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 class UpdatedAtTest extends TestCase
 {
@@ -19,7 +21,7 @@ class UpdatedAtTest extends TestCase
         $updatedAt  = new UpdatedAt(
             $repository,
             'updateDate',
-            new Property(new \ReflectionProperty(User::class, 'updateDate'))
+            new Property(new ReflectionProperty(User::class, 'updateDate'))
         );
         $date       = null;
         $repository->expects($this->exactly(2))
@@ -33,7 +35,7 @@ class UpdatedAtTest extends TestCase
                 if (is_null($user->updateDate)) {
                     return false;
                 }
-                if (!$user->updateDate instanceof \DateTime) {
+                if (!$user->updateDate instanceof DateTime) {
                     return false;
                 }
 

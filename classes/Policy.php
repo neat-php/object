@@ -7,6 +7,7 @@ use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use ReflectionClass;
+use RuntimeException;
 
 class Policy
 {
@@ -172,6 +173,6 @@ class Policy
             return ['id'];
         }
 
-        throw new \RuntimeException('Unable to determine the key');
+        throw new RuntimeException('Unable to determine the key');
     }
 }

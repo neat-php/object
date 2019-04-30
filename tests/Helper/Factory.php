@@ -4,6 +4,7 @@
 
 namespace Neat\Object\Test\Helper;
 
+use DateTime;
 use Neat\Database\Connection;
 use Neat\Object\Manager;
 use PDO;
@@ -11,7 +12,7 @@ use PDO;
 class Factory
 {
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $createdDate;
 
@@ -36,7 +37,7 @@ class Factory
                       update_date   DATETIME NOT NULL,
                       deleted_date  DATETIME NULL
                     )');
-        $this->createdDate = new \DateTime();
+        $this->createdDate = new DateTime();
         $pdo->exec("INSERT INTO `user` (id, type_id, username, first_name, middle_name, last_name, active, register_date, update_date, deleted_date)
                     VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', NULL),
                       (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', '{$this->createdDate->format('Y-m-d H:i:s')}'),

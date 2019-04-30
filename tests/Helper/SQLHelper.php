@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Test\Helper;
 
+use PHPUnit\Framework\Constraint\Callback;
+
 trait SQLHelper
 {
     /**
@@ -69,7 +71,7 @@ trait SQLHelper
      * SQL expectation constraint
      *
      * @param string $expected
-     * @return callable|\PHPUnit\Framework\Constraint\Callback
+     * @return callable|Callback
      */
     protected function sql($expected)
     {

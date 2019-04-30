@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Relations;
 
+use Neat\Object\Query;
+
 class One extends Relation
 {
     /**
@@ -33,7 +35,7 @@ class One extends Relation
     }
 
     /**
-     * @return \Neat\Object\Query
+     * @return Query
      */
     public function select()
     {

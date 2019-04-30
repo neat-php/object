@@ -3,6 +3,7 @@
 namespace Neat\Object\Relations;
 
 use Neat\Object\Collectible;
+use Neat\Object\Query;
 
 class Many extends Relation
 {
@@ -27,7 +28,27 @@ class Many extends Relation
     public function add($remote): self
     {
         $this->all();
-        $this->objects[] = $remote;
+        if (!$this->has($remote)) {
+            $this->objects[] = $remote;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param object $remote
+     * @return Many
+     */
+    public function remove($remote): self
+    {
+        $this->all();
+        foreach ($this->objects as $index => $object) {
+            if ($this->reference->getRemoteKeyValue($object) == $this->reference->getRemoteKeyValue($remote)) {
+                unset($this->objects[$index]);
+
+                return $this;
+            }
+        }
 
         return $this;
     }
@@ -38,22 +59,22 @@ class Many extends Relation
      */
     public function has($remote): bool
     {
-        foreach ($this->all() as $obj) {
-            if ($this->reference->getRemoteKeyValue($obj) == $this->reference->getRemoteKeyValue($remote)) {
+        foreach ($this->all() as $object) {
+            if ($this->reference->getRemoteKeyValue($object) == $this->reference->getRemoteKeyValue($remote)) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * @return \Neat\Object\Query
+     * @return Query
      */
     public function select()
     {
         return $this->reference->select($this->local);
     }
-
 
     /**
      * @return object[]

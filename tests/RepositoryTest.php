@@ -4,6 +4,7 @@
 
 namespace Neat\Object\Test;
 
+use Generator;
 use Neat\Object\Collection;
 use Neat\Object\Manager;
 use Neat\Object\Policy;
@@ -13,6 +14,7 @@ use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class RepositoryTest extends TestCase
 {
@@ -67,7 +69,7 @@ class RepositoryTest extends TestCase
      */
     public function testGetSingle()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $userRepository = $this->manager->repository(User::class);
         $userRepository->get([1, 2]);
     }
@@ -77,7 +79,7 @@ class RepositoryTest extends TestCase
      */
     public function testGetComposed()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $userGroupRepository = $this->manager->repository(GroupUser::class);
         $userGroupRepository->get('test');
     }
@@ -87,7 +89,7 @@ class RepositoryTest extends TestCase
      */
     public function testGetComposedArray()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $userGroupRepository = $this->manager->repository(GroupUser::class);
         $userGroupRepository->get(['test']);
     }
@@ -182,7 +184,7 @@ class RepositoryTest extends TestCase
             $this->assertInstanceOf(User::class, $user);
             $this->assertSame($i++, $user->id);
         }
-        $this->assertInstanceOf(\Generator::class, $userRepository->iterate());
+        $this->assertInstanceOf(Generator::class, $userRepository->iterate());
     }
 
     /**
