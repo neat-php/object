@@ -77,13 +77,15 @@ class RemoteKeyTest extends TestCase
 
     public function testDiff()
     {
-        $address1     = new Address;
-        $address1->id = 1;
-        $address2     = new Address;
-        $address2->id = 2;
-        $address3     = new Address;
-        $address3->id = 3;
-        $diff         = new Diff($this->remoteRepository, [$address1, $address2], [$address1, $address3]);
+        $address1      = new Address;
+        $address1->id  = 1;
+        $address1B     = new Address;
+        $address1B->id = '1';
+        $address2      = new Address;
+        $address2->id  = 2;
+        $address3      = new Address;
+        $address3->id  = 3;
+        $diff          = new Diff($this->remoteRepository, [$address1, $address3], [$address1B, $address2]);
         $this->assertEquals([$address3], $diff->getDelete());
         $this->assertEquals([$address2], $diff->getInsert());
         $this->assertEquals([$address1], $diff->getUpdate());

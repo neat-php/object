@@ -65,10 +65,10 @@ class RemoteKey extends Reference
 
     public function store($local, array $remotes)
     {
-        $id      = $this->localKey->get($local);
-        $current = $this->load($local);
-        $new     = $remotes;
-        $diff = new Diff($this->remoteRepository, $new, $current);
+        $id     = $this->localKey->get($local);
+        $before = $this->load($local);
+        $after  = $remotes;
+        $diff   = new Diff($this->remoteRepository, $before, $after);
         foreach ($diff->getInsert() as $remote) {
             $this->remoteForeignKey->set($remote, $id);
             $this->remoteRepository->store($remote);

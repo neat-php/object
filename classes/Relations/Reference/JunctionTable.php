@@ -101,22 +101,22 @@ class JunctionTable extends Reference
     {
         $localIdentifier = $this->localKey->get($local);
 
-        $new = array_map(function ($remote) use ($localIdentifier) {
+        $after = array_map(function ($remote) use ($localIdentifier) {
             return [
                 $this->localForeignKey  => (string)$localIdentifier,
                 $this->remoteForeignKey => (string)$this->remoteKey->get($remote),
             ];
         }, $remotes);
 
-        $current = $this->connection
+        $before = $this->connection
             ->select('*')
             ->from($this->table)
             ->where([$this->localForeignKey => $localIdentifier])
             ->query()
             ->rows();
 
-        $delete = $this->diff($current, $new, [$this, 'compare']);
-        $insert = $this->diff($new, $current, [$this, 'compare']);
+        $delete = $this->diff($before, $after, [$this, 'compare']);
+        $insert = $this->diff($after, $before, [$this, 'compare']);
         foreach ($delete as $row) {
             $this->connection->delete($this->table, $row);
         }
