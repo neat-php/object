@@ -19,7 +19,7 @@ Then initialize the object manager using the static create factory:
 <?php
 
 // Connecting is easy, just pass a PDO instance
-$pdo        = new PDO('mysql:host=localhost;dbname=test', 'username', 'password');
+$pdo        = new PDO('mysql:host=localhost;charset=utf8mb4;dbname=test', 'username', 'password');
 $connection = new Neat\Database\Connection($pdo);
 $manager    = Neat\Object\Manager::create($connection);
 ```
