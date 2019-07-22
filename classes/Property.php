@@ -31,7 +31,7 @@ class Property
 
         $this->reflection = $reflection;
 
-        if (preg_match('/\\s@var\\s([\\w\\\\]+)\\s/', $reflection->getDocComment(), $matches)) {
+        if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
             $this->type = strtr(ltrim($matches[1], '\\'), [
                 'integer' => 'int',
                 'boolean' => 'bool',
