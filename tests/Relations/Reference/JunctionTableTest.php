@@ -26,8 +26,8 @@ class JunctionTableTest extends TestCase
     {
         $policy     = new Policy();
         $connection = $this->connection();
-        $localKey   = new Property(new ReflectionProperty(User::class, 'id'));
-        $remoteKey  = new Property(new ReflectionProperty(Group::class, 'id'));
+        $localKey   = new Property\Integer(new ReflectionProperty(User::class, 'id'));
+        $remoteKey  = new Property\Integer((new ReflectionProperty(Group::class, 'id')));
         $properties = $policy->properties(Group::class);
         $repository = new Repository(
             $connection,

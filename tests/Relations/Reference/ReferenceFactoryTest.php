@@ -33,18 +33,9 @@ class ReferenceFactoryTest extends TestCase
         return new ReferenceFactoryMock(Manager::get());
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
-    /**
-     * Get property access
-     *
-     * @param string $class
-     * @param string $property
-     * @return Property
-     */
-    private function property(string $class, string $property): Property
+    private function property(string $class, string $property, string $type = 'int'): Property
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return new Property(new ReflectionProperty($class, $property));
+        return new Property\Integer(new ReflectionProperty($class, $property), $type);
     }
 
     /**
@@ -57,7 +48,7 @@ class ReferenceFactoryTest extends TestCase
         $this->assertInstanceOf(JunctionTable::class, $reference);
 
         $this->assertAttributeEquals($this->property(User::class, 'id'), 'localKey', $reference);
-        $this->assertAttributeEquals($this->property(Group::class, 'id'), 'remoteKey', $reference);
+        $this->assertAttributeEquals($this->property(Group::class, 'id', 'integer'), 'remoteKey', $reference);
         $this->assertAttributeSame('id', 'remoteKeyString', $reference);
         $this->assertAttributeSame(Manager::get()->repository(Group::class), 'remoteRepository', $reference);
         $this->assertAttributeSame(Manager::get()->connection(), 'connection', $reference);

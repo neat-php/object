@@ -30,13 +30,13 @@ class SoftDeleteTest extends TestCase
         $repository = $this->repository(['query', 'iterate']);
         $softDelete = new SoftDelete(
             $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
+            'deleted_date',
+            new Property(new ReflectionProperty(User::class, 'deletedDate'), 'DateTime')
         );
         $query      = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $expectedQuery = clone $query;
-        $expectedQuery->where(['deletedDate' => null]);
+        $expectedQuery->where(['deleted_date' => null]);
         $repository->expects($this->once())
             ->method('query')
             ->willReturn($query);
@@ -62,13 +62,13 @@ class SoftDeleteTest extends TestCase
         $repository = $this->repository(['query', 'all']);
         $softDelete = new SoftDelete(
             $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
+            'deleted_date',
+            new Property(new ReflectionProperty(User::class, 'deletedDate'), 'DateTime')
         );
         $query      = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $expectedQuery = clone $query;
-        $expectedQuery->where(['deletedDate' => null]);
+        $expectedQuery->where(['deleted_date' => null]);
         $repository->expects($this->once())
             ->method('query')
             ->willReturn($query);
@@ -87,13 +87,13 @@ class SoftDeleteTest extends TestCase
         $repository = $this->repository(['query', 'collection']);
         $softDelete = new SoftDelete(
             $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
+            'deleted_date',
+            new Property(new ReflectionProperty(User::class, 'deletedDate'), 'DateTime')
         );
         $query      = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $expectedQuery = clone $query;
-        $expectedQuery->where(['deletedDate' => null]);
+        $expectedQuery->where(['deleted_date' => null]);
         $repository->expects($this->once())
             ->method('query')
             ->willReturn($query);
@@ -113,8 +113,8 @@ class SoftDeleteTest extends TestCase
         $repository = $this->repository(['store']);
         $softDelete = new SoftDelete(
             $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
+            'deleted_date',
+            new Property\DateTime(new ReflectionProperty(User::class, 'deletedDate'))
         );
         $date       = null;
         $repository->expects($this->once())

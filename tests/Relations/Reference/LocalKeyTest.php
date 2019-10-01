@@ -24,8 +24,8 @@ class LocalKeyTest extends TestCase
     public function localKey(): LocalKey
     {
         $policy          = new Policy();
-        $remoteKey       = new Property(new ReflectionProperty(User::class, 'id'));
-        $localForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
+        $remoteKey       = new Property\Integer(new ReflectionProperty(User::class, 'id'));
+        $localForeignKey = new Property\Integer(new ReflectionProperty(Address::class, 'userId'));
 
         return new LocalKey($localForeignKey, $remoteKey, 'id',
             $policy->repository(User::class, $this->connection())

@@ -41,8 +41,8 @@ class RemoteKeyTest extends TestCase
      */
     public function remoteKey(): RemoteKey
     {
-        $localKey = new Property(new ReflectionProperty(User::class, 'id'));
-        $remoteForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
+        $localKey = new Property\Integer(new ReflectionProperty(User::class, 'id'));
+        $remoteForeignKey = new Property\Integer(new ReflectionProperty(Address::class, 'userId'));
 
         return new RemoteKey($localKey, $remoteForeignKey, 'user_id', $this->remoteRepository());
     }

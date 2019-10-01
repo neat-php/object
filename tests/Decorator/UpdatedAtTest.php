@@ -22,8 +22,8 @@ class UpdatedAtTest extends TestCase
         $repository = $this->repository(['store']);
         $updatedAt  = new UpdatedAt(
             $repository,
-            'updateDate',
-            new Property(new ReflectionProperty(User::class, 'updateDate'))
+            'update_date',
+            new Property\DateTime(new ReflectionProperty(User::class, 'updateDate'))
         );
         $date       = null;
         $repository->expects($this->exactly(2))
