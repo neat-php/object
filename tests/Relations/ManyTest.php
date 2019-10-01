@@ -127,6 +127,27 @@ class ManyTest extends TestCase
         $this->relation->store();
     }
 
+    public function testAddMultiple()
+    {
+
+        $address1         = new Address;
+        $address1->userId = 1;
+        $address2         = new Address;
+        $address2->userId = 2;
+        $this->reference->expects($this->at(0))
+            ->method('load')
+            ->willReturn([$address1]);
+        $this->reference->expects($this->at(1))
+            ->method('getRemoteKeyValue')
+            ->willReturn($address2->id);
+        $this->reference->expects($this->at(2))
+            ->method('store')
+            ->with($this->equalTo($this->user), $this->equalTo([$address1, $address2]));
+
+        $this->relation->add($address2);
+        $this->relation->store();
+    }
+
     public function testRemove()
     {
         $address1         = new Address;

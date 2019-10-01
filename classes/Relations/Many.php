@@ -59,8 +59,13 @@ class Many extends Relation
      */
     public function has($remote): bool
     {
+        $remoteKeyValue = $this->reference->getRemoteKeyValue($remote);
+        if ($remoteKeyValue === null) {
+            return false;
+        }
+
         foreach ($this->all() as $object) {
-            if ($this->reference->getRemoteKeyValue($object) == $this->reference->getRemoteKeyValue($remote)) {
+            if ($this->reference->getRemoteKeyValue($object) == $remoteKeyValue) {
                 return true;
             }
         }
