@@ -54,7 +54,7 @@ class User extends Entity
     public $updateDate;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      */
     public $deletedDate;
 
