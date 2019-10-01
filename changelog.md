@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.3] - 2019-10-01
+### Fixed
+- #15 Multiple unpersisted objects can't be added to a many relation
+
 ## [0.9.2] - 2019-07-22
 ### Fixed
 - #13 Allow properties to be nullable (e.g. string|null)
