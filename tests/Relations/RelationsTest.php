@@ -31,7 +31,7 @@ class RelationsTest extends TestCase
         $this->assertSame($relation, $user->hasOne(Address::class));
     }
 
-    public function testHaMany()
+    public function testHasMany()
     {
         $user     = new User;
         $relation = $user->hasMany(Address::class);
@@ -63,8 +63,10 @@ class RelationsTest extends TestCase
         $this->assertInstanceOf(Many::class, $relation);
 
         $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::instance()->junctionTable(User::class, Address::class), 'reference',
-            $relation);
+        $this->assertAttributeSame(Manager::instance()->junctionTable(
+            User::class,
+            Address::class
+        ), 'reference', $relation);
         $this->assertSame($relation, $user->belongsToMany(Address::class));
     }
 }

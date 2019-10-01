@@ -1,6 +1,6 @@
 {
     "name": "neat/object",
-    "description": "Neat Object components",
+    "description": "Neat Object component",
     "type": "library",
     "keywords": [
         "Object",
