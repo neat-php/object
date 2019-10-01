@@ -147,6 +147,16 @@ SQL;
         return $this->policy()->repository($class, $this->connection());
     }
 
+    public function propertyInteger(string $class, string $property): Property\Integer
+    {
+        return new Property\Integer(new ReflectionProperty($class, $property));
+    }
+
+    public function propertyDateTime(string $class, $property): Property\DateTime
+    {
+        return new Property\DateTime(new ReflectionProperty($class, $property));
+    }
+
     public function property(string $class, $property): Property
     {
         return new Property(new ReflectionProperty($class, $property));

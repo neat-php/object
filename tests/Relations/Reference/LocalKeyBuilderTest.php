@@ -6,7 +6,6 @@ use Neat\Object\Relations\Reference\LocalKey;
 use Neat\Object\Relations\Reference\LocalKeyBuilder;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
-use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 

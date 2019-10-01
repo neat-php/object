@@ -7,6 +7,7 @@ use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use ReflectionClass;
+use ReflectionProperty;
 use RuntimeException;
 
 class Policy
@@ -100,7 +101,7 @@ class Policy
         $properties = [];
         /** @noinspection PhpUnhandledExceptionInspection */
         foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
-            $property = new Property($reflection);
+            $property = $this->property($reflection);
             if ($this->skip($property)) {
                 continue;
             }
@@ -112,6 +113,31 @@ class Policy
     }
 
     /**
+     * @param ReflectionProperty $reflection
+     * @return Property
+     */
+    public function property(ReflectionProperty $reflection): Property
+    {
+        if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
+            $type = ltrim($matches[1], '\\');
+            switch ($type) {
+                case 'bool':
+                case 'boolean':
+                    return new Property\Boolean($reflection);
+                case 'int':
+                case 'integer':
+                    return new Property\Integer($reflection);
+                case 'DateTime':
+                    return new Property\DateTime($reflection);
+                case 'DateTimeImmutable':
+                    return new Property\DateTimeImmutable($reflection);
+            }
+        }
+
+        return new Property($reflection);
+    }
+
+    /**
      * Skip property?
      *
      * @param Property $property
@@ -119,7 +145,7 @@ class Policy
      */
     public function skip(Property $property): bool
     {
-        return $property->static() || preg_match('/\\s@nostorage\\s/', $property->docBlock());
+        return $property->static() || preg_match('/\\s@nostorage\\s/', $property->comment());
     }
 
     /**

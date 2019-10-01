@@ -3,7 +3,6 @@
 namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Policy;
-use Neat\Object\Property;
 use Neat\Object\Relations\Reference\Diff;
 use Neat\Object\Relations\Reference\RemoteKey;
 use Neat\Object\Repository;
@@ -12,7 +11,6 @@ use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 class RemoteKeyTest extends TestCase
 {
@@ -42,8 +40,8 @@ class RemoteKeyTest extends TestCase
      */
     public function remoteKey(): RemoteKey
     {
-        $localKey = new Property(new ReflectionProperty(User::class, 'id'));
-        $remoteForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
+        $localKey = $this->propertyInteger(User::class, 'id');
+        $remoteForeignKey = $this->propertyInteger(Address::class, 'userId');
 
         return new RemoteKey($localKey, $remoteForeignKey, 'user_id', $this->remoteRepository());
     }

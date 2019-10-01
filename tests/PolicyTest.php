@@ -257,9 +257,9 @@ class PolicyTest extends TestCase
         $connection      = $this->connection();
         $repositoryStack = $policy->repository(TimeStamps::class, $connection);
         $repository      = new Repository($connection, TimeStamps::class, 'time_stamps', ['id'], $policy->properties(TimeStamps::class));
-        $softDelete      = new SoftDelete($repository, 'deleted_at', $this->property(TimeStamps::class, 'deletedAt'));
-        $createdAt       = new CreatedAt($softDelete, 'created_at', $this->property(TimeStamps::class, 'createdAt'));
-        $updatedAt       = new UpdatedAt($createdAt, 'updated_at', $this->property(TimeStamps::class, 'updatedAt'));
+        $softDelete      = new SoftDelete($repository, 'deleted_at', $this->propertyDateTime(TimeStamps::class, 'deletedAt'));
+        $createdAt       = new CreatedAt($softDelete, 'created_at', $this->propertyDateTime(TimeStamps::class, 'createdAt'));
+        $updatedAt       = new UpdatedAt($createdAt, 'updated_at', $this->propertyDateTime(TimeStamps::class, 'updatedAt'));
         $this->assertEquals($updatedAt, $repositoryStack);
     }
 }

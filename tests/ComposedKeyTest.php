@@ -22,8 +22,8 @@ class ComposedKeyTest extends TestCase
      */
     public function localKey(): LocalKey
     {
-        $localForeignKey = $this->property(User::class, 'id');
-        $remoteKey       = $this->property(GroupUser::class, 'userId');
+        $localForeignKey = $this->propertyInteger(User::class, 'id');
+        $remoteKey       = $this->propertyInteger(GroupUser::class, 'userId');
 
         return new LocalKey($localForeignKey, $remoteKey, 'user_id', $this->repository(GroupUser::class));
     }
@@ -37,7 +37,7 @@ class ComposedKeyTest extends TestCase
         $userGroups = $localKey->load($user);
         $userGroup  = array_shift($userGroups);
         $this->assertSame($user->id, $userGroup->userId);
-        $this->assertSame(['user_id' => 1, 'group_id' => 1], $localKey->getRemoteKeyValue($userGroup));
+        $this->assertSame(['user_id' => '1', 'group_id' => '1'], $localKey->getRemoteKeyValue($userGroup));
     }
 
     /**
@@ -64,8 +64,8 @@ class ComposedKeyTest extends TestCase
      */
     public function remoteKey(): RemoteKey
     {
-        $localKey         = $this->property(User::class, 'id');
-        $remoteForeignKey = $this->property(GroupUser::class, 'userId');
+        $localKey         = $this->propertyInteger(User::class, 'id');
+        $remoteForeignKey = $this->propertyInteger(GroupUser::class, 'userId');
 
         return new RemoteKey($localKey, $remoteForeignKey, 'user_id', $this->remoteRepository());
     }
@@ -79,7 +79,7 @@ class ComposedKeyTest extends TestCase
         $userGroups = $remoteKey->load($user);
         $userGroup  = array_shift($userGroups);
         $this->assertSame($user->id, $userGroup->userId);
-        $this->assertSame(['user_id' => 1, 'group_id' => 1], $remoteKey->getRemoteKeyValue($userGroup));
+        $this->assertSame(['user_id' => '1', 'group_id' => '1'], $remoteKey->getRemoteKeyValue($userGroup));
         $remoteKey->store($user, []);
         $this->assertSame([], $remoteKey->load($user));
         $remoteKey->store($user, $this->groups($user, [1, 2]));

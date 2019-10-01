@@ -8,7 +8,6 @@ use Neat\Database\QueryInterface;
 use Neat\Database\SQLQuery;
 use Neat\Object\Collection;
 use Neat\Object\Decorator\SoftDelete;
-use Neat\Object\Property;
 use Neat\Object\Query;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Assertions;
@@ -16,7 +15,6 @@ use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 class SoftDeleteTest extends TestCase
 {
@@ -153,7 +151,7 @@ class SoftDeleteTest extends TestCase
         string $class,
         string $property
     ): SoftDelete {
-        return new SoftDelete($repository, $column, new Property(new ReflectionProperty($class, $property)));
+        return new SoftDelete($repository, $column, $this->propertyDateTime($class, $property));
     }
 
     /**
@@ -176,8 +174,8 @@ class SoftDeleteTest extends TestCase
         $repository = $this->repository();
         $softDelete = new SoftDelete(
             $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
+            'deleted_date',
+            $this->propertyDateTime(User::class, 'deletedDate')
         );
         $date       = null;
         $repository->expects($this->once())

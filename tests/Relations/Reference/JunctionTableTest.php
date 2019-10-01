@@ -3,7 +3,6 @@
 namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Policy;
-use Neat\Object\Property;
 use Neat\Object\Relations\Reference\JunctionTable;
 use Neat\Object\Relations\Reference\JunctionTableBuilder;
 use Neat\Object\Repository;
@@ -14,13 +13,11 @@ use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 class JunctionTableTest extends TestCase
 {
     use Factory;
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create JunctionTable reference
      *
@@ -30,8 +27,8 @@ class JunctionTableTest extends TestCase
     {
         $policy     = new Policy();
         $connection = $this->connection();
-        $localKey   = new Property(new ReflectionProperty(User::class, 'id'));
-        $remoteKey  = new Property(new ReflectionProperty(Group::class, 'id'));
+        $localKey   = $this->propertyInteger(User::class, 'id');
+        $remoteKey  = $this->propertyInteger(Group::class, 'id');
         $properties = $policy->properties(Group::class);
         $repository = new Repository(
             $connection,

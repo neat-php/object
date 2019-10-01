@@ -4,16 +4,17 @@ namespace Neat\Object\Test\Decorator;
 
 use DateTime;
 use Neat\Object\Decorator\UpdatedAt;
-use Neat\Object\Property;
 use Neat\Object\Repository;
 use Neat\Object\RepositoryInterface;
+use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 class UpdatedAtTest extends TestCase
 {
+    use Factory;
+
     /**
      * Test store
      */
@@ -22,27 +23,31 @@ class UpdatedAtTest extends TestCase
         $repository = $this->repository(['store']);
         $updatedAt  = new UpdatedAt(
             $repository,
-            'updateDate',
-            new Property(new ReflectionProperty(User::class, 'updateDate'))
+            'update_date',
+            $this->propertyDateTime(User::class, 'updateDate')
         );
         $date       = null;
         $repository->expects($this->exactly(2))
             ->method('store')
-            ->with($this->callback(function ($user) use (&$date) {
-                if (is_null($date)) {
-                    $date = $user->updateDate;
-                } elseif ($user->updateDate === $date) {
-                    return false;
-                }
-                if (is_null($user->updateDate)) {
-                    return false;
-                }
-                if (!$user->updateDate instanceof DateTime) {
-                    return false;
-                }
+            ->with(
+                $this->callback(
+                    function ($user) use (&$date) {
+                        if (is_null($date)) {
+                            $date = $user->updateDate;
+                        } elseif ($user->updateDate === $date) {
+                            return false;
+                        }
+                        if (is_null($user->updateDate)) {
+                            return false;
+                        }
+                        if (!$user->updateDate instanceof DateTime) {
+                            return false;
+                        }
 
-                return true;
-            }));
+                        return true;
+                    }
+                )
+            );
 
         $user = new User();
         $updatedAt->store($user);

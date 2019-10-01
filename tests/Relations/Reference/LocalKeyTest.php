@@ -3,7 +3,6 @@
 namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Policy;
-use Neat\Object\Property;
 use Neat\Object\Query;
 use Neat\Object\Relations\Reference\LocalKey;
 use Neat\Object\Relations\Reference\LocalKeyBuilder;
@@ -13,13 +12,11 @@ use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 class LocalKeyTest extends TestCase
 {
     use Factory;
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create LocalKey reference
      *
@@ -28,8 +25,8 @@ class LocalKeyTest extends TestCase
     public function localKey(): LocalKey
     {
         $policy          = new Policy();
-        $remoteKey       = new Property(new ReflectionProperty(User::class, 'id'));
-        $localForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
+        $remoteKey       = $this->propertyInteger(User::class, 'id');
+        $localForeignKey = $this->propertyInteger(Address::class, 'userId');
 
         return new LocalKey($localForeignKey, $remoteKey, 'id', $policy->repository(User::class, $this->connection()));
     }
