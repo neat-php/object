@@ -11,6 +11,7 @@ use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
+use Neat\Object\Test\Helper\Phone;
 use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
@@ -163,6 +164,7 @@ class EntityTest extends TestCase
         $user->typeId       = 1;
         $user->firstName    = 'Frank';
         $user->lastName     = 'Fox';
+        $user->phone        = new Phone('555-12345');
         $user->active       = true;
         $user->registerDate = new DateTimeImmutable('2019-01-02 12:30:00');
         $user->updateDate   = new DateTime('today');
@@ -218,6 +220,7 @@ class EntityTest extends TestCase
             "first_name"    => "Thijs",
             "middle_name"   => "de",
             "last_name"     => "Vries",
+            "phone"         => null,
             "active"        => 1,
             "update_date"   => date("Y-m-d H:i:s"),
             'register_date' => null,

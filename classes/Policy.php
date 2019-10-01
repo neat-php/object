@@ -7,7 +7,9 @@ use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use ReflectionClass;
+use ReflectionProperty;
 use RuntimeException;
+use Serializable;
 
 class Policy
 {
@@ -100,7 +102,7 @@ class Policy
         $properties = [];
         /** @noinspection PhpUnhandledExceptionInspection */
         foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
-            $property = new Property($reflection);
+            $property = $this->property($reflection);
             if ($this->skip($property)) {
                 continue;
             }
@@ -109,6 +111,32 @@ class Policy
         }
 
         return $properties;
+    }
+
+    public function property(ReflectionProperty $reflection)
+    {
+        if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
+            $type = ltrim($matches[1], '\\');
+            switch ($type) {
+                case 'bool':
+                case 'boolean':
+                    return new Property\Boolean($reflection, $type);
+                case 'int':
+                case 'integer':
+                    return new Property\Integer($reflection, $type);
+                case 'DateTime':
+                    return new Property\DateTime($reflection, $type);
+                case 'DateTimeImmutable':
+                    return new Property\DateTimeImmutable($reflection, $type);
+            }
+            if (is_a($type, Serializable::class, true)) {
+                return new Property\Serializable($reflection, $type);
+            }
+
+            return new Property($reflection, $type);
+        }
+
+        return new Property($reflection);
     }
 
     /**
@@ -120,7 +148,7 @@ class Policy
     public function skip(Property $property): bool
     {
         return $property->static()
-            || preg_match('/\\s@nostorage\\s/', $property->docBlock());
+            || preg_match('/\\s@nostorage\\s/', $property->comment());
     }
 
     /**

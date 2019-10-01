@@ -4,7 +4,9 @@ namespace Neat\Object\Test;
 
 use DateTime;
 use DateTimeImmutable;
+use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Test\Helper\Phone;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -22,9 +24,8 @@ class PropertyTest extends TestCase
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $reflection = new ReflectionProperty(User::class, $name);
-        $property   = new Property($reflection);
 
-        return $property;
+        return (new Policy())->property($reflection);
     }
 
     /**
@@ -60,6 +61,7 @@ class PropertyTest extends TestCase
         $this->assertSame($type, $property->type());
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Provide set values
      *
@@ -75,7 +77,10 @@ class PropertyTest extends TestCase
             ['username', 'john', 'john'],
             ['lastName', null, null],
             ['lastName', 'Doe', 'Doe'],
-            ['lastName', 3, 3],
+            ['lastName', 3, '3'],
+            ['phone', null, null],
+            ['phone', '0', new Phone('0')],
+            ['phone', '123', new Phone('123')],
             ['active', null, null],
             ['active', '0', false],
             ['active', '1', true],
@@ -110,13 +115,14 @@ class PropertyTest extends TestCase
         $property = $this->createProperty($name);
         $property->set($user, $in);
 
-        if ($out instanceof DateTime || $out instanceof DateTimeImmutable) {
+        if (is_object($out)) {
             $this->assertEquals($out, $user->$name);
         } else {
             $this->assertSame($out, $user->$name);
         }
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Provide get values
      *
@@ -126,21 +132,21 @@ class PropertyTest extends TestCase
     {
         return [
             ['id', null, null],
-            ['id', 1, 1],
-            ['id', '1', 1],
+            ['id', 1, '1'],
+            ['id', '1', '1'],
             ['username', null, null],
             ['username', 'john', 'john'],
             ['lastName', null, null],
             ['lastName', 'Doe', 'Doe'],
-            ['lastName', 3, 3],
+            ['lastName', 3, '3'],
             ['active', null, null],
-            ['active', false, 0],
-            ['active', true, 1],
+            ['active', false, '0'],
+            ['active', true, '1'],
             ['ignored', null, null],
-            ['ignored', '0', 0],
-            ['ignored', '1', 1],
-            ['ignored', 0, 0],
-            ['ignored', 1, 1],
+            ['ignored', '0', '0'],
+            ['ignored', '1', '1'],
+            ['ignored', 0, '0'],
+            ['ignored', 1, '1'],
             ['registerDate', null, null],
             ['registerDate', '2001-02-03', '2001-02-03 00:00:00'],
             ['registerDate', new DateTimeImmutable('2001-02-03 04:05:06'), '2001-02-03 04:05:06'],
@@ -165,7 +171,8 @@ class PropertyTest extends TestCase
 
         $property = $this->createProperty($name);
 
-        if ($out instanceof DateTime) {
+
+        if (is_object($out)) {
             $this->assertEquals($out, $property->get($user));
         } else {
             $this->assertSame($out, $property->get($user));

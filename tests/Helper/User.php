@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnused */
+/** @noinspection PhpFullyQualifiedNameUsageInspection */
 /** @noinspection PhpMissingDocCommentInspection */
 
 namespace Neat\Object\Test\Helper;
@@ -30,6 +32,11 @@ class User extends Entity
     public $middleName;
 
     public $lastName;
+
+    /**
+     * @var \Neat\Object\Test\Helper\Phone
+     */
+    public $phone;
 
     /**
      * @var bool

@@ -32,6 +32,7 @@ class Factory
                       first_name    TEXT     NOT NULL,
                       middle_name   TEXT     NULL,
                       last_name     TEXT     NOT NULL,
+                      phone         TEXT     NULL,
                       active        INTEGER  NOT NULL DEFAULT 1,
                       register_date DATETIME NOT NULL,
                       update_date   DATETIME NOT NULL,
