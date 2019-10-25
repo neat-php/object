@@ -145,6 +145,7 @@ class EntityTest extends TestCase
     public function testIterate()
     {
         $this->assertCount(3, User::iterate());
+        /** @var User $user */
         $i = 1;
         foreach (User::iterate() as $user) {
             $this->assertInstanceOf(User::class, $user);

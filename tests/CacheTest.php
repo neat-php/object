@@ -9,26 +9,15 @@ use stdClass;
 class CacheTest extends TestCase
 {
     /**
-     * @var Cache
-     */
-    private $cache;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
-    {
-        $this->cache = new Cache;
-    }
-
-    /**
      * Test has
      */
     public function testHas()
     {
-        $this->cache->set('test1', new stdClass);
-        $this->assertFalse($this->cache->has('test'));
-        $this->assertTrue($this->cache->has('test1'));
+        $cache = new Cache();
+
+        $cache->set('test1', new stdClass());
+        $this->assertFalse($cache->has('test'));
+        $this->assertTrue($cache->has('test1'));
     }
 
     /**
@@ -37,14 +26,16 @@ class CacheTest extends TestCase
     public function testGet()
     {
         $factory = function () {
-            return new stdClass;
+            return new stdClass();
         };
 
-        $object1 = $this->cache->get('get', $factory);
+        $cache = new Cache();
+
+        $object1 = $cache->get('get', $factory);
         // Should reference the same object
-        $this->assertSame($object1, $this->cache->get('get', $factory));
+        $this->assertSame($object1, $cache->get('get', $factory));
         $this->assertEquals($factory(), $object1);
-        $object2 = $this->cache->get('get2', $factory);
+        $object2 = $cache->get('get2', $factory);
         $this->assertNotSame($object1, $object2);
         $this->assertEquals($object1, $object2);
     }
@@ -55,19 +46,21 @@ class CacheTest extends TestCase
     public function testAll()
     {
         $objects = [
-            'test1' => new stdClass,
-            'test2' => new stdClass,
+            'test1' => new stdClass(),
+            'test2' => new stdClass(),
         ];
 
-        $this->assertSame([], $this->cache->all());
+        $cache = new Cache();
+
+        $this->assertSame([], $cache->all());
         foreach ($objects as $key => $object) {
-            $this->cache->set($key, $object);
+            $cache->set($key, $object);
         }
-        $this->assertSame($objects, $this->cache->all());
-        $object3 = new stdClass;
-        $this->cache->set('test3', $object3);
+        $this->assertSame($objects, $cache->all());
+        $object3 = new stdClass();
+        $cache->set('test3', $object3);
         $objects['test3'] = $object3;
-        $this->assertSame($objects, $this->cache->all());
+        $this->assertSame($objects, $cache->all());
     }
 
     /**
@@ -76,11 +69,13 @@ class CacheTest extends TestCase
     public function testSet()
     {
         $factory = function () {
-            return new stdClass;
+            return new stdClass();
         };
 
-        $object = new stdClass;
-        $this->assertSame($object, $this->cache->set('set', $object));
-        $this->assertSame($object, $this->cache->get('set', $factory));
+        $cache = new Cache();
+
+        $object = new stdClass();
+        $this->assertSame($object, $cache->set('set', $object));
+        $this->assertSame($object, $cache->get('set', $factory));
     }
 }

@@ -16,19 +16,6 @@ use RuntimeException;
 
 class PolicyTest extends TestCase
 {
-    /**
-     * @var Policy
-     */
-    private $policy;
-
-    /**
-     * Setup before each test method
-     */
-    protected function setUp()
-    {
-        $this->policy = new Policy;
-    }
-
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create property
@@ -67,9 +54,10 @@ class PolicyTest extends TestCase
      */
     public function testColumn(string $name, string $column)
     {
+        $policy   = new Policy();
         $property = $this->createProperty($name);
 
-        $this->assertSame($column, $this->policy->column($property->name()));
+        $this->assertSame($column, $policy->column($property->name()));
     }
 
     /**
@@ -94,7 +82,9 @@ class PolicyTest extends TestCase
      */
     public function testForeignKey(string $class, string $foreignKey)
     {
-        $this->assertEquals($foreignKey, $this->policy->foreignKey($class));
+        $policy = new Policy();
+
+        $this->assertEquals($foreignKey, $policy->foreignKey($class));
     }
 
     /**
@@ -124,7 +114,9 @@ class PolicyTest extends TestCase
      */
     public function testTable(string $entity, string $table)
     {
-        $this->assertSame($table, $this->policy->table($entity));
+        $policy = new Policy();
+
+        $this->assertSame($table, $policy->table($entity));
     }
 
     /**
@@ -150,7 +142,9 @@ class PolicyTest extends TestCase
      */
     public function testJunctionTable($owner, $owned, $junctionTable)
     {
-        $this->assertEquals($junctionTable, $this->policy->junctionTable($owner, $owned));
+        $policy = new Policy();
+
+        $this->assertEquals($junctionTable, $policy->junctionTable($owner, $owned));
     }
 
     /**
@@ -176,8 +170,9 @@ class PolicyTest extends TestCase
     public function testSkip(string $name, bool $skip)
     {
         $property = $this->createProperty($name);
+        $policy   = new Policy();
 
-        $this->assertSame($skip, $this->policy->skip($property));
+        $this->assertSame($skip, $policy->skip($property));
     }
 
     /**
@@ -185,8 +180,10 @@ class PolicyTest extends TestCase
      */
     public function testCreatedStamp()
     {
-        $this->assertSame('created_at', $this->policy->createdStamp(TimeStamps::class));
-        $this->assertNull($this->policy->createdStamp(User::class));
+        $policy = new Policy();
+
+        $this->assertSame('created_at', $policy->createdStamp(TimeStamps::class));
+        $this->assertNull($policy->createdStamp(User::class));
     }
 
     /**
@@ -194,8 +191,10 @@ class PolicyTest extends TestCase
      */
     public function testUpdatedStamp()
     {
-        $this->assertSame('updated_at', $this->policy->updatedStamp(TimeStamps::class));
-        $this->assertNull($this->policy->updatedStamp(User::class));
+        $policy = new Policy();
+
+        $this->assertSame('updated_at', $policy->updatedStamp(TimeStamps::class));
+        $this->assertNull($policy->updatedStamp(User::class));
     }
 
     /**
@@ -203,8 +202,10 @@ class PolicyTest extends TestCase
      */
     public function testSoftDelete()
     {
-        $this->assertSame("deleted_at", $this->policy->softDelete(TimeStamps::class));
-        $this->assertNull($this->policy->softDelete(HardDelete::class));
+        $policy = new Policy();
+
+        $this->assertSame("deleted_at", $policy->softDelete(TimeStamps::class));
+        $this->assertNull($policy->softDelete(HardDelete::class));
     }
 
     /**
@@ -229,7 +230,9 @@ class PolicyTest extends TestCase
      */
     public function testKey(string $class, array $key)
     {
-        $this->assertSame($key, $this->policy->key($class));
+        $policy = new Policy();
+
+        $this->assertSame($key, $policy->key($class));
     }
 
     /**
@@ -238,6 +241,8 @@ class PolicyTest extends TestCase
     public function testWithoutKey()
     {
         $this->expectException(RuntimeException::class);
-        $this->policy->key(NoEntity::class);
+
+        $policy = new Policy();
+        $policy->key(NoEntity::class);
     }
 }

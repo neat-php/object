@@ -1,5 +1,6 @@
 <?php
 
+/** @noinspection PhpDocMissingThrowsInspection */
 /** @noinspection SqlResolve */
 
 namespace Neat\Object\Test\Helper;
@@ -11,11 +12,6 @@ use PDO;
 
 class Factory
 {
-    /**
-     * @var DateTime
-     */
-    public $createdDate;
-
     /**
      * Create PDO instance
      *
@@ -37,11 +33,11 @@ class Factory
                       update_date   DATETIME NOT NULL,
                       deleted_date  DATETIME NULL
                     )');
-        $this->createdDate = new DateTime();
+        $createdDate = new DateTime();
         $pdo->exec("INSERT INTO `user` (id, type_id, username, first_name, middle_name, last_name, active, register_date, update_date, deleted_date)
-                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', NULL),
-                      (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', '{$this->createdDate->format('Y-m-d H:i:s')}'),
-                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, '2019-01-01 12:00:00', '{$this->createdDate->format('Y-m-d H:i:s')}', NULL)");
+                    VALUES (1, 1, 'jdoe', 'John', NULL, 'Doe', 1, '2019-01-01 12:00:00', '{$createdDate->format('Y-m-d H:i:s')}', NULL),
+                      (2, 1, 'janedoe', 'Jane', NULL, 'Doe', 0, '2019-01-01 12:00:00', '{$createdDate->format('Y-m-d H:i:s')}', '{$createdDate->format('Y-m-d H:i:s')}'),
+                      (3, 1, 'bobthecow', 'Bob', 'the', 'Cow', 1, '2019-01-01 12:00:00', '{$createdDate->format('Y-m-d H:i:s')}', NULL)");
         $pdo->exec("CREATE TABLE `group_user` (
                       user_id  INTEGER NOT NULL,
                       group_id INTEGER NOT NULL,

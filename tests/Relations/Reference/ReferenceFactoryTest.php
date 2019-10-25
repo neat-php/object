@@ -39,6 +39,20 @@ class ReferenceFactoryTest extends TestCase
         $this->factory = new ReferenceFactoryMock($this->manager);
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * Get property access
+     *
+     * @param string $class
+     * @param string $property
+     * @return Property
+     */
+    private function property(string $class, string $property): Property
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        return new Property(new ReflectionProperty($class, $property));
+    }
+
     /**
      * Test junctionTable factory
      */
@@ -86,10 +100,5 @@ class ReferenceFactoryTest extends TestCase
         $this->assertAttributeEquals($this->property(Address::class, 'userId'), 'remoteForeignKey', $reference);
         $this->assertAttributeSame('user_id', 'remoteKey', $reference);
         $this->assertAttributeSame($this->manager->repository(Address::class), 'remoteRepository', $reference);
-    }
-
-    private function property(string $class, string $property): Property
-    {
-        return new Property(new ReflectionProperty($class, $property));
     }
 }

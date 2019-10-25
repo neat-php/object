@@ -13,22 +13,20 @@ use ReflectionProperty;
 
 class LocalKeyTest extends TestCase
 {
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @var LocalKey
+     * Create LocalKey reference
+     *
+     * @return LocalKey
      */
-    private $key;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
+    public function localKey(): LocalKey
     {
         $factory         = new Factory;
         $policy          = new Policy;
         $remoteKey       = new Property(new ReflectionProperty(User::class, 'id'));
         $localForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
 
-        $this->key = new LocalKey($localForeignKey, $remoteKey, 'id',
+        return new LocalKey($localForeignKey, $remoteKey, 'id',
             $policy->repository(User::class, $factory->connection())
         );
     }
@@ -38,15 +36,17 @@ class LocalKeyTest extends TestCase
      */
     public function testLoad()
     {
+        $localKey = $this->localKey();
+
         $address = new Address;
-        $load    = $this->key->load($address);
+        $load    = $localKey->load($address);
         $this->assertInternalType('array', $load);
         $this->assertCount(0, $load);
 
         $address         = new Address;
         $address->userId = 1;
 
-        $load = $this->key->load($address);
+        $load = $localKey->load($address);
         $this->assertCount(1, $load);
         $user = array_shift($load);
         $this->assertInstanceOf(User::class, $user);
@@ -57,13 +57,15 @@ class LocalKeyTest extends TestCase
      */
     public function testStore()
     {
+        $localKey = $this->localKey();
+
         $address  = new Address;
-        $this->key->store($address, []);
+        $localKey->store($address, []);
         $this->assertSame(null, $address->userId);
 
         $user     = new User;
         $user->id = 1;
-        $this->key->store($address, [$user]);
+        $localKey->store($address, [$user]);
         $this->assertSame(1, $address->userId);
     }
 }

@@ -10,26 +10,27 @@ use PHPUnit\Framework\TestCase;
 class CollectionTest extends TestCase
 {
     /**
-     * @var array
+     * Get items
+     *
+     * @return array
      */
-    private $array;
-
-    /**
-     * @var Collection
-     */
-    private $collection;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
+    private function items(): array
     {
-        $this->array      = [
+        return [
             'jdoe'    => ['firstName' => 'John', 'middleName' => null, 'lastName' => 'Doe'],
             'janedoe' => ['firstName' => 'Jane', 'middleName' => null, 'lastName' => 'Doe'],
             'bthecow' => ['firstName' => 'Bob', 'middleName' => 'the', 'lastName' => 'Cow'],
         ];
-        $this->collection = new Collection($this->array);
+    }
+
+    /**
+     * Get collection
+     *
+     * @return Collection
+     */
+    private function collection(): Collection
+    {
+        return new Collection($this->items());
     }
 
     /**
@@ -37,7 +38,7 @@ class CollectionTest extends TestCase
      */
     public function testAll()
     {
-        $this->assertSame($this->array, $this->collection->all());
+        $this->assertSame($this->items(), $this->collection()->all());
     }
 
     /**
@@ -45,7 +46,7 @@ class CollectionTest extends TestCase
      */
     public function testCount()
     {
-        $this->assertSame(3, $this->collection->count());
+        $this->assertSame(3, $this->collection()->count());
     }
 
     /**
@@ -53,17 +54,24 @@ class CollectionTest extends TestCase
      */
     public function testFirst()
     {
-        $data = reset($this->array);
-        $this->assertSame($data, $this->collection->first());
+        $items = $this->items();
+        $first = reset($items);
+
+        $this->assertSame($first, $this->collection()->first());
         // Assert that it didn't change
-        $this->assertSame($data, $this->collection->first());
+        $this->assertSame($first, $this->collection()->first());
     }
 
+    /**
+     * Test last
+     */
     public function testLast()
     {
-        $data = end($this->array);
-        $this->assertSame($data, $this->collection->last());
-        $this->assertSame($data, $this->collection->last());
+        $items = $this->items();
+        $last  = end($items);
+
+        $this->assertSame($last, $this->collection()->last());
+        $this->assertSame($last, $this->collection()->last());
     }
 
     /**
@@ -71,8 +79,10 @@ class CollectionTest extends TestCase
      */
     public function testOffsetExists()
     {
-        $this->assertTrue(isset($this->collection['jdoe']));
-        $this->assertFalse(isset($this->collection['notExistingKey']));
+        $collection = $this->collection();
+
+        $this->assertTrue(isset($collection['jdoe']));
+        $this->assertFalse(isset($collection['notExistingKey']));
     }
 
     /**
@@ -80,8 +90,10 @@ class CollectionTest extends TestCase
      */
     public function testOffsetUnset()
     {
-        unset($this->collection['jdoe']);
-        $this->assertFalse(isset($this->collection['jdoe']));
+        $collection = $this->collection();
+
+        unset($collection['jdoe']);
+        $this->assertFalse(isset($collection['jdoe']));
     }
 
     /**
@@ -89,9 +101,9 @@ class CollectionTest extends TestCase
      */
     public function testOffsetGet()
     {
-        $data = reset($this->array);
-        $this->assertSame($data, $this->collection['jdoe']);
-//        $this->assertNull($this->arrayCollection['notExistingKey']);
+        $items = $this->items();
+        $first = reset($items);
+        $this->assertSame($first, $this->collection()['jdoe']);
     }
 
     /**
@@ -99,9 +111,11 @@ class CollectionTest extends TestCase
      */
     public function testOffsetSet()
     {
-        $this->collection['test'] = 'test';
-        $this->assertSame('test', $this->collection['test']);
-        $this->assertCount(4, $this->collection);
+        $collection = $this->collection();
+
+        $collection['test'] = 'test';
+        $this->assertSame('test', $collection['test']);
+        $this->assertCount(4, $collection);
     }
 
     /**
@@ -121,7 +135,7 @@ class CollectionTest extends TestCase
     public function testColumn()
     {
         $expected = new Collection(array_values($this->firstNames()));
-        $this->assertEquals($expected, $this->collection->column('firstName'));
+        $this->assertEquals($expected, $this->collection()->column('firstName'));
     }
 
     /**
@@ -130,7 +144,7 @@ class CollectionTest extends TestCase
     public function testMap()
     {
         $firstNameCollection = new Collection($this->firstNames());
-        $this->assertEquals($firstNameCollection, $this->collection->map(function ($data) {
+        $this->assertEquals($firstNameCollection, $this->collection()->map(function ($data) {
             return $data['firstName'];
         }));
     }
@@ -153,10 +167,10 @@ class CollectionTest extends TestCase
     public function testCallbackFilter()
     {
         $expected = [
-            'jdoe'    => $this->array['jdoe'],
-            'janedoe' => $this->array['janedoe'],
+            'jdoe'    => $this->items()['jdoe'],
+            'janedoe' => $this->items()['janedoe'],
         ];
-        $filtered = $this->collection->filter(function ($data): bool {
+        $filtered = $this->collection()->filter(function ($data): bool {
             return !$data['middleName'];
         });
 
@@ -193,7 +207,7 @@ class CollectionTest extends TestCase
      */
     public function testJsonSerialize()
     {
-        $this->assertEquals(json_encode($this->array), json_encode($this->collection));
+        $this->assertEquals(json_encode($this->items()), json_encode($this->collection()));
     }
 
     /**
@@ -205,6 +219,6 @@ class CollectionTest extends TestCase
     {
         return array_map(function ($data) {
             return $data['firstName'];
-        }, $this->array);
+        }, $this->items());
     }
 }

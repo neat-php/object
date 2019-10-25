@@ -14,15 +14,13 @@ use ReflectionProperty;
 
 class JunctionTableTest extends TestCase
 {
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @var JunctionTable
+     * Create JunctionTable reference
+     *
+     * @return JunctionTable
      */
-    private $key;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
+    public function junctionTable(): JunctionTable
     {
         $factory    = new Factory;
         $policy     = new Policy;
@@ -38,7 +36,7 @@ class JunctionTableTest extends TestCase
             $properties
         );
 
-        $this->key = new JunctionTable(
+        return new JunctionTable(
             $localKey,
             $remoteKey,
             'id',
@@ -55,15 +53,17 @@ class JunctionTableTest extends TestCase
      */
     public function testLoad()
     {
+        $junctionTable = $this->junctionTable();
+
         $user = new User;
-        $load = $this->key->load($user);
+        $load = $junctionTable->load($user);
         $this->assertInternalType('array', $load);
         $this->assertCount(0, $load);
 
         $user     = new User;
         $user->id = 1;
 
-        $load = $this->key->load($user);
+        $load = $junctionTable->load($user);
         $this->assertInternalType('array', $load);
         $this->assertCount(2, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
@@ -74,6 +74,8 @@ class JunctionTableTest extends TestCase
      */
     public function testStore()
     {
+        $junctionTable = $this->junctionTable();
+
         $user       = new User;
         $user->id   = 4;
         $groupA     = new Group;
@@ -81,20 +83,20 @@ class JunctionTableTest extends TestCase
         $groupB     = new Group;
         $groupB->id = 2;
 
-        $this->key->store($user, [$groupA]);
-        $load = $this->key->load($user);
+        $junctionTable->store($user, [$groupA]);
+        $load = $junctionTable->load($user);
         $this->assertInternalType('array', $load);
         $this->assertCount(1, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
 
-        $this->key->store($user, [$groupA, $groupB]);
-        $load = $this->key->load($user);
+        $junctionTable->store($user, [$groupA, $groupB]);
+        $load = $junctionTable->load($user);
         $this->assertInternalType('array', $load);
         $this->assertCount(2, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
 
-        $this->key->store($user, [$groupA]);
-        $load = $this->key->load($user);
+        $junctionTable->store($user, [$groupA]);
+        $load = $junctionTable->load($user);
         $this->assertInternalType('array', $load);
         $this->assertCount(1, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));

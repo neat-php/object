@@ -15,16 +15,13 @@ use PHPUnit\Framework\TestCase;
 class QueryTest extends TestCase
 {
     /**
-     * @var Connection
+     * Create connection
+     *
+     * @return Connection
      */
-    private $connection;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
+    private function connection(): Connection
     {
-        $this->connection = (new Factory)->connection();
+        return (new Factory)->connection();
     }
 
     /**
@@ -37,7 +34,7 @@ class QueryTest extends TestCase
     {
         return $this->getMockBuilder(Repository::class)
             ->setMethods($methods)
-            ->setConstructorArgs([$this->connection, User::class, 'user', ['id'], []])
+            ->setConstructorArgs([$this->connection(), User::class, 'user', ['id'], []])
             ->getMock();
     }
 
@@ -69,7 +66,7 @@ class QueryTest extends TestCase
             ->method($method)
             ->willReturn($result);
 
-        $query = new Query($this->connection, $repository);
+        $query = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $response = $query->{$method}();
         $this->assertSame($result, $response);
@@ -93,7 +90,7 @@ class QueryTest extends TestCase
             ->method('iterate')
             ->willReturnCallback($generator);
 
-        $query = new Query($this->connection, $repository);
+        $query = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
 
         $response = $query->iterate();
