@@ -4,36 +4,12 @@ namespace Neat\Object\Test\Helper;
 
 use PHPUnit\Framework\Constraint\Callback;
 
+/**
+ * @method void assertEquals($expected, $actual)
+ * @method Callback callback(callable $callback)
+ */
 trait SQLHelper
 {
-    /**
-     * Asserts that two variables are equal.
-     *
-     * @param mixed  $expected
-     * @param mixed  $actual
-     * @param string $message
-     * @param float  $delta
-     * @param int    $maxDepth
-     * @param bool   $canonicalize
-     * @param bool   $ignoreCase
-     */
-    abstract public static function assertEquals(
-        $expected,
-        $actual,
-        $message = '',
-        $delta = 0.0,
-        $maxDepth = 10,
-        $canonicalize = false,
-        $ignoreCase = false
-    );
-
-    /**
-     * @param callable $callback
-     *
-     * @return Callback
-     */
-    abstract public static function callback($callback);
-
     /**
      * Minify SQL query by removing unused whitespace
      *
