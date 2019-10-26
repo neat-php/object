@@ -14,11 +14,17 @@ use PHPUnit\Framework\TestCase;
 
 class RelationsTest extends TestCase
 {
+    /**
+     * Setup before class
+     */
     public static function setUpBeforeClass()
     {
         (new Factory)->manager();
     }
 
+    /**
+     * Test has one
+     */
     public function testHasOne()
     {
         $user     = new User;
@@ -31,6 +37,9 @@ class RelationsTest extends TestCase
         $this->assertSame($relation, $user->hasOne(Address::class));
     }
 
+    /**
+     * Test has many
+     */
     public function testHasMany()
     {
         $user     = new User;
@@ -43,6 +52,9 @@ class RelationsTest extends TestCase
         $this->assertSame($relation, $user->hasMany(Address::class));
     }
 
+    /**
+     * Test belongs to one
+     */
     public function testBelongsToOne()
     {
         $user     = new User;
@@ -55,6 +67,9 @@ class RelationsTest extends TestCase
         $this->assertSame($relation, $user->belongsToOne(Type::class));
     }
 
+    /**
+     * Test belongs to many
+     */
     public function testBelongsToMany()
     {
         $user     = new User;

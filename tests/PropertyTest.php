@@ -60,6 +60,7 @@ class PropertyTest extends TestCase
         $this->assertSame($type, $property->type());
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Provide set values
      *
@@ -117,6 +118,7 @@ class PropertyTest extends TestCase
         }
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Provide get values
      *

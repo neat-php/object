@@ -18,22 +18,43 @@ class ReferenceFactoryMock
      */
     private $manager;
 
+    /**
+     * Constructor
+     *
+     * @param Manager $manager
+     */
     public function __construct(Manager $manager)
     {
         $this->manager    = $manager;
         $this->references = new Cache;
     }
 
+    /**
+     * Get connection
+     *
+     * @return Connection
+     */
     public function connection(): Connection
     {
         return $this->manager->connection();
     }
 
+    /**
+     * Get policy
+     *
+     * @return Policy
+     */
     public function policy(): Policy
     {
         return $this->manager->policy();
     }
 
+    /**
+     * Get repository
+     *
+     * @param string $class
+     * @return RepositoryInterface
+     */
     public function repository(string $class): RepositoryInterface
     {
         return $this->manager->repository($class);

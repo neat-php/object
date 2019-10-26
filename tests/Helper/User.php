@@ -42,11 +42,13 @@ class User extends Entity
      */
     public $ignored;
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @var \DateTimeImmutable
      */
     public $registerDate;
 
+    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
      * @var \DateTime
      * @note intentional fully qualified class name

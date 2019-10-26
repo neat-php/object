@@ -127,9 +127,11 @@ class ManyTest extends TestCase
         $this->relation->store();
     }
 
+    /**
+     * Test add multiple
+     */
     public function testAddMultiple()
     {
-
         $address1         = new Address;
         $address1->userId = 1;
         $address2         = new Address;
@@ -148,6 +150,9 @@ class ManyTest extends TestCase
         $this->relation->store();
     }
 
+    /**
+     * Test remove
+     */
     public function testRemove()
     {
         $address1         = new Address;

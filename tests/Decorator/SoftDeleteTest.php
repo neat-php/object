@@ -21,6 +21,9 @@ class SoftDeleteTest extends TestCase
 {
     use SQLHelper;
 
+    /**
+     * Test iterate
+     */
     public function testIterate()
     {
         $repository = $this->repository(['query', 'iterate']);
@@ -50,6 +53,9 @@ class SoftDeleteTest extends TestCase
 
     }
 
+    /**
+     * Test all
+     */
     public function testAll()
     {
         $repository = $this->repository(['query', 'all']);
@@ -72,6 +78,9 @@ class SoftDeleteTest extends TestCase
         $this->assertSame(['test'], $softDelete->all());
     }
 
+    /**
+     * Test collection
+     */
     public function testCollection()
     {
         $repository = $this->repository(['query', 'collection']);
@@ -95,6 +104,9 @@ class SoftDeleteTest extends TestCase
         $this->assertSame($collection, $softDelete->collection());
     }
 
+    /**
+     * Test delete
+     */
     public function testDelete()
     {
         $repository = $this->repository(['store']);

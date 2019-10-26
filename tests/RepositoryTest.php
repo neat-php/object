@@ -214,6 +214,9 @@ class RepositoryTest extends TestCase
         $userRepository->update($data['id'], $data);
     }
 
+    /**
+     * Test load
+     */
     public function testLoad()
     {
         $repository = $this->manager->repository(User::class);

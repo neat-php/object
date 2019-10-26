@@ -75,6 +75,9 @@ class RemoteKeyTest extends TestCase
         $this->assertEquals([$address1], $this->key->load($user));
     }
 
+    /**
+     * Test diff
+     */
     public function testDiff()
     {
         $address1      = new Address;

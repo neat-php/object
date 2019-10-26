@@ -14,6 +14,9 @@ use ReflectionProperty;
 
 class CreatedAtTest extends TestCase
 {
+    /**
+     * Test store
+     */
     public function testStore()
     {
         $repository = $this->repository(['store']);
