@@ -2,13 +2,10 @@
 
 namespace Neat\Object\Test\Helper;
 
-use PHPUnit\Framework\Constraint\Callback;
-
 /**
  * @method void assertEquals($expected, $actual)
- * @method Callback callback(callable $callback)
  */
-trait SQLHelper
+trait Assertions
 {
     /**
      * Minify SQL query by removing unused whitespace
@@ -41,18 +38,5 @@ trait SQLHelper
             $this->minifySQL($expected),
             $this->minifySQL($actual)
         );
-    }
-
-    /**
-     * SQL expectation constraint
-     *
-     * @param string $expected
-     * @return callable|Callback
-     */
-    protected function sql($expected)
-    {
-        return $this->callback(function ($query) use ($expected) {
-            return $this->minifySQL($query) == $this->minifySQL($expected);
-        });
     }
 }

@@ -8,44 +8,26 @@ use DateTime;
 use DateTimeImmutable;
 use Generator;
 use Neat\Object\Collection;
+use Neat\Object\Manager;
 use Neat\Object\Query;
+use Neat\Object\Test\Helper\Assertions;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
-use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
 {
-    use SQLHelper;
-
-    /**
-     * @var Factory
-     */
-    private $create;
-
-    /**
-     * Setup once
-     */
-    public static function setUpBeforeClass()
-    {
-        $factory = new Factory;
-        $factory->manager();
-    }
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
-    {
-        $this->create = new Factory;
-    }
+    use Assertions;
+    use Factory;
 
     /**
      * Test has
      */
     public function testHas()
     {
+        Manager::set($this->manager());
+
         $this->assertTrue(User::has(1));
         $this->assertFalse(User::has(0));
     }
@@ -55,6 +37,8 @@ class EntityTest extends TestCase
      */
     public function testSelect()
     {
+        Manager::set($this->manager());
+
         $select = User::select();
         $this->assertInstanceOf(Query::class, $select);
         $this->assertSQL('SELECT `user`.* FROM `user`', $select->getQuery());
@@ -69,6 +53,8 @@ class EntityTest extends TestCase
      */
     public function testQuery()
     {
+        Manager::set($this->manager());
+
         $this->assertInstanceOf(Query::class, User::query());
         $this->assertSQL('SELECT `user`.* FROM `user`', User::query());
 
@@ -86,6 +72,8 @@ class EntityTest extends TestCase
      */
     public function testGet()
     {
+        Manager::set($this->manager());
+
         $user = User::get(1);
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals('John', $user->firstName);
@@ -98,6 +86,8 @@ class EntityTest extends TestCase
      */
     public function testOne()
     {
+        Manager::set($this->manager());
+
         $user = User::one(['first_name' => 'John']);
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals('John', $user->firstName);
@@ -110,6 +100,8 @@ class EntityTest extends TestCase
      */
     public function testAll()
     {
+        Manager::set($this->manager());
+
         $users = User::all();
         $this->assertInternalType('array', $users);
         $this->assertCount(3, $users);
@@ -132,6 +124,8 @@ class EntityTest extends TestCase
      */
     public function testCollection()
     {
+        Manager::set($this->manager());
+
         $usersCollection = User::collection();
         $this->assertInstanceOf(Collection::class, $usersCollection);
         $this->assertCount(3, $usersCollection);
@@ -144,6 +138,8 @@ class EntityTest extends TestCase
      */
     public function testIterate()
     {
+        Manager::set($this->manager());
+
         $this->assertCount(3, User::iterate());
         /** @var User $user */
         $i = 1;
@@ -159,6 +155,8 @@ class EntityTest extends TestCase
      */
     public function testStore()
     {
+        Manager::set($this->manager());
+
         $user               = new User;
         $user->username     = 'ffox';
         $user->typeId       = 1;
@@ -192,6 +190,8 @@ class EntityTest extends TestCase
      */
     public function testDelete()
     {
+        Manager::set($this->manager());
+
         $user               = new User;
         $user->username     = 'edejong';
         $user->typeId       = 1;
@@ -213,6 +213,8 @@ class EntityTest extends TestCase
      */
     public function testArrayConversion()
     {
+        Manager::set($this->manager());
+
         $data = [
             "username"      => 'tdevries',
             "type_id"       => 1,

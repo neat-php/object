@@ -14,19 +14,15 @@ use PHPUnit\Framework\TestCase;
 
 class RelationsTest extends TestCase
 {
-    /**
-     * Setup before class
-     */
-    public static function setUpBeforeClass()
-    {
-        (new Factory)->manager();
-    }
+    use Factory;
 
     /**
      * Test has one
      */
     public function testHasOne()
     {
+        Manager::set($this->manager());
+
         $user     = new User;
         $relation = $user->hasOne(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
@@ -42,6 +38,8 @@ class RelationsTest extends TestCase
      */
     public function testHasMany()
     {
+        Manager::set($this->manager());
+
         $user     = new User;
         $relation = $user->hasMany(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
@@ -57,6 +55,8 @@ class RelationsTest extends TestCase
      */
     public function testBelongsToOne()
     {
+        Manager::set($this->manager());
+
         $user     = new User;
         $relation = $user->belongsToOne(Type::class);
         $this->assertInstanceOf(Relation::class, $relation);
@@ -72,6 +72,8 @@ class RelationsTest extends TestCase
      */
     public function testBelongsToMany()
     {
+        Manager::set($this->manager());
+
         $user     = new User;
         $relation = $user->belongsToMany(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);

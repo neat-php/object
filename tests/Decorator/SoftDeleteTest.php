@@ -10,8 +10,8 @@ use Neat\Object\Property;
 use Neat\Object\Query;
 use Neat\Object\Repository;
 use Neat\Object\RepositoryInterface;
+use Neat\Object\Test\Helper\Assertions;
 use Neat\Object\Test\Helper\Factory;
-use Neat\Object\Test\Helper\SQLHelper;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,8 @@ use ReflectionProperty;
 
 class SoftDeleteTest extends TestCase
 {
-    use SQLHelper;
+    use Assertions;
+    use Factory;
 
     /**
      * Test iterate
@@ -32,7 +33,7 @@ class SoftDeleteTest extends TestCase
             'deletedDate',
             new Property(new ReflectionProperty(User::class, 'deletedDate'))
         );
-        $query      = new Query((new Factory)->connection(), $repository);
+        $query      = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $expectedQuery = clone $query;
         $expectedQuery->where(['deletedDate' => null]);
@@ -64,7 +65,7 @@ class SoftDeleteTest extends TestCase
             'deletedDate',
             new Property(new ReflectionProperty(User::class, 'deletedDate'))
         );
-        $query      = new Query((new Factory)->connection(), $repository);
+        $query      = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $expectedQuery = clone $query;
         $expectedQuery->where(['deletedDate' => null]);
@@ -89,7 +90,7 @@ class SoftDeleteTest extends TestCase
             'deletedDate',
             new Property(new ReflectionProperty(User::class, 'deletedDate'))
         );
-        $query      = new Query((new Factory)->connection(), $repository);
+        $query      = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $expectedQuery = clone $query;
         $expectedQuery->where(['deletedDate' => null]);

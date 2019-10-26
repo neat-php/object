@@ -13,6 +13,8 @@ use ReflectionProperty;
 
 class LocalKeyTest extends TestCase
 {
+    use Factory;
+
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create LocalKey reference
@@ -21,13 +23,12 @@ class LocalKeyTest extends TestCase
      */
     public function localKey(): LocalKey
     {
-        $factory         = new Factory;
         $policy          = new Policy;
         $remoteKey       = new Property(new ReflectionProperty(User::class, 'id'));
         $localForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
 
         return new LocalKey($localForeignKey, $remoteKey, 'id',
-            $policy->repository(User::class, $factory->connection())
+            $policy->repository(User::class, $this->connection())
         );
     }
 

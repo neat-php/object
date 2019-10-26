@@ -3,31 +3,19 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Manager;
-use Neat\Object\Policy;
 use Neat\Object\Test\Helper\Factory;
 use PHPUnit\Framework\TestCase;
 
 class ManagerTest extends TestCase
 {
-    /**
-     * @var Factory
-     */
-    private $create;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
-    {
-        $this->create = new Factory;
-    }
+    use Factory;
 
     /**
      * Test connection getter
      */
     public function testConnection()
     {
-        $this->assertEquals($this->create->connection(), $this->create->manager()->connection());
+        $this->assertEquals($this->connection(), $this->manager()->connection());
     }
 
     /**
@@ -35,29 +23,30 @@ class ManagerTest extends TestCase
      */
     public function testPolicy()
     {
-        $this->assertEquals(new Policy, $this->create->manager()->policy());
+        $this->assertEquals($this->policy(), $this->manager()->policy());
     }
 
     /**
-     * Test static manager getter
+     * Test deprecated instance method
      */
     public function testInstance()
     {
-        $manager = Manager::instance();
+        Manager::set($manager = $this->manager());
 
-        $this->assertInstanceOf(Manager::class, $manager);
+        $this->assertSame($manager, Manager::instance());
     }
 
     /**
-     * Test create custom
+     * Test deprecated create method
      */
-    public function testCreateCustom()
+    public function testCreate()
     {
-        $connection    = $this->create->connection();
-        $customManager = Manager::create($connection, null, 'create-custom-test');
+        $defaultManager = Manager::create($this->connection(), null);
+        $customManager  = Manager::create($this->connection(), null, 'create-custom-test');
 
-        $this->assertNotSame($customManager, Manager::instance());
-        $this->assertSame($customManager, Manager::instance('create-custom-test'));
+        $this->assertNotSame($customManager, $defaultManager);
+        $this->assertSame($defaultManager, Manager::get());
+        $this->assertSame($customManager, Manager::get('create-custom-test'));
     }
 
     /**
@@ -65,8 +54,8 @@ class ManagerTest extends TestCase
      */
     public function testCustomPolicy()
     {
-        $connection = $this->create->connection();
-        $policy     = new Policy;
+        $connection = $this->connection();
+        $policy     = $this->policy();
         $manager    = new Manager($connection, $policy);
 
         $this->assertSame($policy, $manager->policy());

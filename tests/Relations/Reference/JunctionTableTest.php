@@ -14,6 +14,8 @@ use ReflectionProperty;
 
 class JunctionTableTest extends TestCase
 {
+    use Factory;
+
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create JunctionTable reference
@@ -22,9 +24,8 @@ class JunctionTableTest extends TestCase
      */
     public function junctionTable(): JunctionTable
     {
-        $factory    = new Factory;
         $policy     = new Policy;
-        $connection = $factory->connection();
+        $connection = $this->connection();
         $localKey   = new Property(new ReflectionProperty(User::class, 'id'));
         $remoteKey  = new Property(new ReflectionProperty(Group::class, 'id'));
         $properties = $policy->properties(Group::class);

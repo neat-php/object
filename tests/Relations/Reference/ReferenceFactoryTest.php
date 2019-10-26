@@ -4,7 +4,6 @@ namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Manager;
 use Neat\Object\Property;
-use Neat\Object\ReferenceFactory;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\Reference\JunctionTable;
 use Neat\Object\Relations\Reference\LocalKey;
@@ -19,24 +18,16 @@ use ReflectionProperty;
 
 class ReferenceFactoryTest extends TestCase
 {
-    /**
-     * @var Manager
-     */
-    private $manager;
-
-    /**
-     * @var ReferenceFactory
-     */
-    private $factory;
+    use Factory;
 
     /**
      * Setup before each test method
      */
-    protected function setUp()
+    protected function referenceFactoryMock(): ReferenceFactoryMock
     {
-        $factory       = new Factory;
-        $this->manager = $factory->manager();
-        $this->factory = new ReferenceFactoryMock($this->manager);
+        Manager::set($this->manager());
+
+        return new ReferenceFactoryMock(Manager::get());
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
@@ -58,15 +49,15 @@ class ReferenceFactoryTest extends TestCase
      */
     public function testJunctionTable()
     {
-        $reference = $this->factory->junctionTable(User::class, Group::class);
+        $reference = $this->referenceFactoryMock()->junctionTable(User::class, Group::class);
         $this->assertInstanceOf(Reference::class, $reference);
         $this->assertInstanceOf(JunctionTable::class, $reference);
 
         $this->assertAttributeEquals($this->property(User::class, 'id'), 'localKey', $reference);
         $this->assertAttributeEquals($this->property(Group::class, 'id'), 'remoteKey', $reference);
         $this->assertAttributeSame('id', 'remoteKeyString', $reference);
-        $this->assertAttributeSame($this->manager->repository(Group::class), 'remoteRepository', $reference);
-        $this->assertAttributeSame($this->manager->connection(), 'connection', $reference);
+        $this->assertAttributeSame(Manager::get()->repository(Group::class), 'remoteRepository', $reference);
+        $this->assertAttributeSame(Manager::get()->connection(), 'connection', $reference);
         $this->assertAttributeSame('group_user', 'table', $reference);
         $this->assertAttributeSame('user_id', 'localForeignKey', $reference);
         $this->assertAttributeSame('group_id', 'remoteForeignKey', $reference);
@@ -77,14 +68,14 @@ class ReferenceFactoryTest extends TestCase
      */
     public function testLocalKey()
     {
-        $reference = $this->factory->localKey(Address::class, User::class);
+        $reference = $this->referenceFactoryMock()->localKey(Address::class, User::class);
         $this->assertInstanceOf(Reference::class, $reference);
         $this->assertInstanceOf(LocalKey::class, $reference);
 
         $this->assertAttributeEquals($this->property(Address::class, 'userId'), 'localForeignKey', $reference);
         $this->assertAttributeEquals($this->property(User::class, 'id'), 'remoteKey', $reference);
         $this->assertAttributeSame('id', 'remoteKeyString', $reference);
-        $this->assertAttributeSame($this->manager->repository(User::class), 'remoteRepository', $reference);
+        $this->assertAttributeSame(Manager::get()->repository(User::class), 'remoteRepository', $reference);
     }
 
     /**
@@ -92,13 +83,13 @@ class ReferenceFactoryTest extends TestCase
      */
     public function testRemoteKey()
     {
-        $reference = $this->factory->remoteKey(User::class, Address::class);
+        $reference = $this->referenceFactoryMock()->remoteKey(User::class, Address::class);
         $this->assertInstanceOf(Reference::class, $reference);
         $this->assertInstanceOf(RemoteKey::class, $reference);
 
         $this->assertAttributeEquals($this->property(User::class, 'id'), 'localKey', $reference);
         $this->assertAttributeEquals($this->property(Address::class, 'userId'), 'remoteForeignKey', $reference);
         $this->assertAttributeSame('user_id', 'remoteKey', $reference);
-        $this->assertAttributeSame($this->manager->repository(Address::class), 'remoteRepository', $reference);
+        $this->assertAttributeSame(Manager::get()->repository(Address::class), 'remoteRepository', $reference);
     }
 }

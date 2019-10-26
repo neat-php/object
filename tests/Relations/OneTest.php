@@ -13,32 +13,30 @@ use PHPUnit\Framework\TestCase;
 class OneTest extends TestCase
 {
     /**
-     * @var Reference|MockObject
+     * Create reference
+     *
+     * @return RemoteKey|MockObject
      */
-    private $reference;
-
-    /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var One
-     */
-    private $relation;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
+    public function mockedRemoteKey()
     {
-        $this->reference = $this->getMockBuilder(RemoteKey::class)
+        return $this->getMockBuilder(RemoteKey::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'store'])
             ->getMock();
-        $this->user      = new User;
-        $this->user->id  = 1;
-        $this->relation  = new One($this->reference, $this->user);
+    }
+
+    /**
+     * Create one relation
+     *
+     * @param Reference|null $reference
+     * @return One
+     */
+    public function one(Reference $reference = null): One
+    {
+        $user = new User;
+        $user->id = 1;
+
+        return new One($reference ?? $this->mockedRemoteKey(), $user);
     }
 
     /**
@@ -46,15 +44,19 @@ class OneTest extends TestCase
      */
     public function testGet()
     {
-        $address         = new Address;
-        $address->id     = 1;
+        $address = new Address;
+        $address->id = 1;
         $address->userId = 1;
-        $this->reference->expects($this->once())
+
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->once())
             ->method('load')
             ->willReturn([$address]);
 
-        $get = $this->relation->get();
-        $this->assertSame($address, $get);
+        $one = $this->one($reference);
+
+        $this->assertSame($address, $one->get());
     }
 
     /**
@@ -62,12 +64,15 @@ class OneTest extends TestCase
      */
     public function testGetNull()
     {
-        $this->reference->expects($this->once())
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->once())
             ->method('load')
             ->willReturn([]);
 
-        $get = $this->relation->get();
-        $this->assertNull($get);
+        $one = $this->one($reference);
+
+        $this->assertNull($one->get());
     }
 
     /**
@@ -75,21 +80,29 @@ class OneTest extends TestCase
      */
     public function testSet()
     {
-        $address         = new Address;
-        $address->id     = 1;
+        $address = new Address;
+        $address->id = 1;
         $address->userId = 1;
 
-        $this->reference->expects($this->at(0))
-            ->method('store')
-            ->with($this->equalTo($this->user), $this->equalTo([$address]));
-        $this->reference->expects($this->at(1))
-            ->method('store')
-            ->with($this->equalTo($this->user), $this->equalTo([]));
+        $user = new User;
+        $user->id = 1;
 
-        $this->relation->set($address);
-        $this->relation->store();
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->at(0))
+            ->method('store')
+            ->with($this->equalTo($user), $this->equalTo([$address]));
+        $reference
+            ->expects($this->at(1))
+            ->method('store')
+            ->with($this->equalTo($user), $this->equalTo([]));
 
-        $this->relation->set(null);
-        $this->relation->store();
+        $one = $this->one($reference);
+
+        $one->set($address);
+        $one->store();
+
+        $one->set(null);
+        $one->store();
     }
 }

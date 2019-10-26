@@ -8,9 +8,11 @@ namespace Neat\Object\Test\Helper;
 use DateTime;
 use Neat\Database\Connection;
 use Neat\Object\Manager;
+use Neat\Object\Policy;
+use Neat\Object\RepositoryInterface;
 use PDO;
 
-class Factory
+trait Factory
 {
     /**
      * Create PDO instance
@@ -82,22 +84,41 @@ class Factory
     /**
      * Create connection instance
      *
-     * @param PDO $pdo
      * @return Connection
      */
-    public function connection($pdo = null)
+    public function connection(): Connection
     {
-        return new Connection($pdo ?: $this->pdo());
+        return new Connection($this->pdo());
+    }
+
+    /**
+     * Create policy instance
+     *
+     * @return Policy
+     */
+    public function policy(): Policy
+    {
+        return new Policy();
     }
 
     /**
      * Create manager instance
      *
-     * @param Connection|null $connection
      * @return Manager
      */
-    public function manager(Connection $connection = null)
+    public function manager(): Manager
     {
-        return Manager::create($connection ?: $this->connection());
+        return new Manager($this->connection(), $this->policy());
+    }
+
+    /**
+     * Create repository instance
+     *
+     * @param string $class
+     * @return RepositoryInterface
+     */
+    public function repository(string $class)
+    {
+        return $this->policy()->repository($class, $this->connection());
     }
 }

@@ -3,7 +3,6 @@
 namespace Neat\Object\Test;
 
 use Generator;
-use Neat\Database\Connection;
 use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Repository;
@@ -14,15 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class QueryTest extends TestCase
 {
-    /**
-     * Create connection
-     *
-     * @return Connection
-     */
-    private function connection(): Connection
-    {
-        return (new Factory)->connection();
-    }
+    use Factory;
 
     /**
      * Get mocked repository

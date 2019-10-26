@@ -14,32 +14,30 @@ use TypeError;
 class ManyTest extends TestCase
 {
     /**
-     * @var Reference|MockObject
+     * Create reference
+     *
+     * @return RemoteKey|MockObject
      */
-    private $reference;
-
-    /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var Many
-     */
-    private $relation;
-
-    /**
-     * Setup before each test method
-     */
-    public function setUp()
+    public function mockedRemoteKey()
     {
-        $this->reference = $this->getMockBuilder(RemoteKey::class)
+        return $this->getMockBuilder(RemoteKey::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'store', 'getRemoteKeyValue'])
             ->getMock();
-        $this->user      = new User;
-        $this->user->id  = 1;
-        $this->relation  = new Many($this->reference, $this->user);
+    }
+
+    /**
+     * Create many relation
+     *
+     * @param Reference|null $reference
+     * @return Many
+     */
+    public function many(Reference $reference = null): Many
+    {
+        $user = new User;
+        $user->id = 1;
+
+        return new Many($reference ?? $this->mockedRemoteKey(), $user);
     }
 
     /**
@@ -47,16 +45,19 @@ class ManyTest extends TestCase
      */
     public function testAll()
     {
-        $address         = new Address;
-        $address->id     = 1;
+        $address = new Address;
+        $address->id = 1;
         $address->userId = 1;
-        $this->reference->expects($this->once())
+
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->once())
             ->method('load')
             ->willReturn([$address]);
 
-        $get = $this->relation->all();
-        $this->assertInternalType('array', $get);
-        $this->assertSame([$address], $get);
+        $many = $this->many($reference);
+
+        $this->assertSame([$address], $many->all());
     }
 
     /**
@@ -64,13 +65,15 @@ class ManyTest extends TestCase
      */
     public function testAllEmpty()
     {
-        $this->reference->expects($this->once())
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->once())
             ->method('load')
             ->willReturn([]);
 
-        $get = $this->relation->all();
-        $this->assertInternalType('array', $get);
-        $this->assertSame([], $get);
+        $many = $this->many($reference);
+
+        $this->assertSame([], $many->all());
     }
 
     /**
@@ -78,25 +81,32 @@ class ManyTest extends TestCase
      */
     public function testSet()
     {
-        $address         = new Address;
-        $address->id     = 1;
+        $address = new Address;
+        $address->id = 1;
         $address->userId = 1;
 
-        $this->reference->expects($this->at(0))
-            ->method('store')
-            ->with($this->equalTo($this->user), $this->equalTo([$address]));
-        $this->reference->expects($this->at(1))
-            ->method('store')
-            ->with($this->equalTo($this->user), $this->equalTo([]));
+        $user = new User;
+        $user->id = 1;
 
-        $this->relation->set([$address]);
-        $this->relation->store();
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->at(0))
+            ->method('store')
+            ->with($this->equalTo($user), $this->equalTo([$address]));
+        $reference
+            ->expects($this->at(1))
+            ->method('store')
+            ->with($this->equalTo($user), $this->equalTo([]));
 
-        $this->relation->set([]);
-        $this->relation->store();
+        $many = $this->many($reference);
+        $many->set([$address]);
+        $many->store();
+
+        $many->set([]);
+        $many->store();
 
         $this->expectException(TypeError::class);
-        $this->relation->set(null);
+        $many->set(null);
     }
 
     /**
@@ -104,27 +114,38 @@ class ManyTest extends TestCase
      */
     public function testAdd()
     {
-        $address1         = new Address;
-        $address1->id     = 1;
+        $address1 = new Address;
+        $address1->id = 1;
         $address1->userId = 1;
-        $address2         = new Address;
-        $address2->id     = 2;
+
+        $address2 = new Address;
+        $address2->id = 2;
         $address2->userId = 1;
-        $this->reference->expects($this->at(0))
+
+        $user = new User;
+        $user->id = 1;
+
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->at(0))
             ->method('load')
             ->willReturn([$address1]);
-        $this->reference->expects($this->at(1))
+        $reference
+            ->expects($this->at(1))
             ->method('getRemoteKeyValue')
             ->willReturn($address1->id);
-        $this->reference->expects($this->at(2))
+        $reference
+            ->expects($this->at(2))
             ->method('getRemoteKeyValue')
             ->willReturn($address2->id);
-        $this->reference->expects($this->at(3))
+        $reference
+            ->expects($this->at(3))
             ->method('store')
-            ->with($this->equalTo($this->user), $this->equalTo([$address1, $address2]));
+            ->with($this->equalTo($user), $this->equalTo([$address1, $address2]));
 
-        $this->relation->add($address2);
-        $this->relation->store();
+        $many = $this->many($reference);
+        $many->add($address2);
+        $many->store();
     }
 
     /**
@@ -132,22 +153,32 @@ class ManyTest extends TestCase
      */
     public function testAddMultiple()
     {
-        $address1         = new Address;
+        $address1 = new Address;
         $address1->userId = 1;
-        $address2         = new Address;
+
+        $address2 = new Address;
         $address2->userId = 2;
-        $this->reference->expects($this->at(0))
+
+        $user = new User;
+        $user->id = 1;
+
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->at(0))
             ->method('load')
             ->willReturn([$address1]);
-        $this->reference->expects($this->at(1))
+        $reference
+            ->expects($this->at(1))
             ->method('getRemoteKeyValue')
             ->willReturn($address2->id);
-        $this->reference->expects($this->at(2))
+        $reference
+            ->expects($this->at(2))
             ->method('store')
-            ->with($this->equalTo($this->user), $this->equalTo([$address1, $address2]));
+            ->with($this->equalTo($user), $this->equalTo([$address1, $address2]));
 
-        $this->relation->add($address2);
-        $this->relation->store();
+        $many = $this->many($reference);
+        $many->add($address2);
+        $many->store();
     }
 
     /**
@@ -155,28 +186,39 @@ class ManyTest extends TestCase
      */
     public function testRemove()
     {
-        $address1         = new Address;
-        $address1->id     = 1;
+        $address1 = new Address;
+        $address1->id = 1;
         $address1->userId = 1;
-        $address2         = new Address;
-        $address2->id     = 2;
+
+        $address2 = new Address;
+        $address2->id = 2;
         $address2->userId = 1;
-        $this->reference->expects($this->at(0))
+
+        $user = new User;
+        $user->id = 1;
+
+        $reference = $this->mockedRemoteKey();
+        $reference
+            ->expects($this->at(0))
             ->method('load')
             ->willReturn([$address1, $address2]);
-        $this->reference->expects($this->at(1))
+        $reference
+            ->expects($this->at(1))
             ->method('getRemoteKeyValue')
             ->with($address1)
             ->willReturn($address1->id);
-        $this->reference->expects($this->at(2))
+        $reference
+            ->expects($this->at(2))
             ->method('getRemoteKeyValue')
             ->with($address1)
             ->willReturn($address1->id);
-        $this->reference->expects($this->at(3))
+        $reference
+            ->expects($this->at(3))
             ->method('store')
-            ->with($this->equalTo($this->user), $this->equalTo([$address2]));
+            ->with($this->equalTo($user), $this->equalTo([$address2]));
 
-        $this->relation->remove($address1);
-        $this->relation->store();
+        $many = $this->many($reference);
+        $many->remove($address1);
+        $many->store();
     }
 }
