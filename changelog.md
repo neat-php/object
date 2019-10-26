@@ -6,12 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Manager::get($manager = 'default')
-- Manager::set(Manager $instance, $manager = 'default')
+- Manager get, set, setFactory and unset methods.
 
 ### Deprecated
-- Manager::instance()
-- Manager::create()
+- Manager instance and create methods.
 
 ## [0.9.3] - 2019-10-01
 ### Fixed

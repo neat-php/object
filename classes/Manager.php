@@ -2,6 +2,7 @@
 
 namespace Neat\Object;
 
+use RuntimeException;
 use Neat\Database\Connection;
 
 class Manager
@@ -12,6 +13,11 @@ class Manager
      * @var self[]
      */
     private static $instances = [];
+
+    /**
+     * @var callable[]
+     */
+    private static $factories = [];
 
     /**
      * @var Connection
@@ -86,6 +92,25 @@ class Manager
      */
     public static function get(string $manager = 'default'): Manager
     {
+        return self::$instances[$manager]
+            ?? self::getFactory($manager);
+    }
+
+    /**
+     * Create manager using factory
+     *
+     * @param string $manager
+     * @return Manager
+     */
+    private static function getFactory(string $manager = 'default'): Manager
+    {
+        if (!isset(self::$factories[$manager])) {
+            throw new RuntimeException('Object manager not set: ' . $manager);
+        }
+
+        self::$instances[$manager] = (self::$factories[$manager])();
+        self::$factories[$manager] = null;
+
         return self::$instances[$manager];
     }
 
@@ -98,6 +123,30 @@ class Manager
     public static function set(Manager $instance, string $manager = 'default')
     {
         self::$instances[$manager] = $instance;
+        self::$factories[$manager] = null;
+    }
+
+    /**
+     * Set manager factory
+     *
+     * @param callable $factory
+     * @param string   $manager
+     */
+    public static function setFactory(callable $factory, string $manager = 'default')
+    {
+        self::$instances[$manager] = null;
+        self::$factories[$manager] = $factory;
+    }
+
+    /**
+     * Unset manager instance
+     *
+     * @param string $manager
+     */
+    public static function unset(string $manager = 'default')
+    {
+        unset(self::$instances[$manager]);
+        unset(self::$factories[$manager]);
     }
 
     /**

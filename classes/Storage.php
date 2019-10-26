@@ -11,7 +11,7 @@ trait Storage
      */
     public static function manager(): Manager
     {
-        return Manager::instance();
+        return Manager::get();
     }
 
     /**
@@ -21,7 +21,7 @@ trait Storage
      */
     public static function repository(): RepositoryInterface
     {
-        return self::manager()->repository(static::class);
+        return static::manager()->repository(static::class);
     }
 
     /**
