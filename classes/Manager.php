@@ -81,12 +81,35 @@ class Manager
     /**
      * Get manager instance
      *
+     * @param string $manager
+     * @return Manager
+     */
+    public static function get(string $manager = 'default'): Manager
+    {
+        return self::$instances[$manager];
+    }
+
+    /**
+     * Set manager instance
+     *
+     * @param Manager $instance
+     * @param string  $manager
+     */
+    public static function set(Manager $instance, string $manager = 'default')
+    {
+        self::$instances[$manager] = $instance;
+    }
+
+    /**
+     * Get manager instance
+     *
      * @param string $instance
      * @return Manager
+     * @deprecated Use get() instead
      */
     public static function instance(string $instance = 'default')
     {
-        return self::$instances[$instance];
+        return self::get($instance);
     }
 
     /**
@@ -96,11 +119,12 @@ class Manager
      * @param Policy     $policy
      * @param string     $instance
      * @return Manager
+     * @deprecated Use set() instead
      */
     public static function create(Connection $connection, Policy $policy = null, string $instance = 'default')
     {
         if (!isset(self::$instances[$instance])) {
-            self::$instances[$instance] = new self($connection, $policy ?: new Policy);
+            self::set(new self($connection, $policy ?: new Policy), $instance);
         }
 
         return self::$instances[$instance];
