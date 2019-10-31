@@ -18,10 +18,23 @@ Then initialize the object manager using the static create factory:
 ```php
 <?php
 
-// Connecting is easy, just pass a PDO instance
+// Initialize the manager using a database connection and an object policy
 $pdo        = new PDO('mysql:host=localhost;charset=utf8mb4;dbname=test', 'username', 'password');
 $connection = new Neat\Database\Connection($pdo);
-$manager    = Neat\Object\Manager::create($connection);
+$policy     = new Neat\Object\Policy();
+$manager    = new Neat\Object\Manager($connection, $policy);
+
+// If you want easy access to static methods, set the Manager instance
+Neat\Object\Manager::set($manager);
+
+// Or set a factory that connects to the database only when needed
+Neat\Object\Manager::setFactory(function () {
+    $pdo        = new PDO('dsn', 'username', 'password');
+    $connection = new Neat\Database\Connection($pdo);
+    $policy     = new Neat\Object\Policy();
+
+    return new Neat\Object\Manager($connection, $policy);
+});
 ```
 
 ## Creating an entity
