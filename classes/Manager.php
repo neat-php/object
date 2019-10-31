@@ -160,34 +160,4 @@ class Manager
         unset(self::$instances[$manager]);
         unset(self::$factories[$manager]);
     }
-
-    /**
-     * Get manager instance
-     *
-     * @param string $instance
-     * @return Manager
-     * @deprecated Use get() instead
-     */
-    public static function instance(string $instance = 'default')
-    {
-        return self::get($instance);
-    }
-
-    /**
-     * Create manager instance
-     *
-     * @param Connection $connection
-     * @param Policy     $policy
-     * @param string     $instance
-     * @return Manager
-     * @deprecated Use set() instead
-     */
-    public static function create(Connection $connection, Policy $policy = null, string $instance = 'default')
-    {
-        if (!isset(self::$instances[$instance])) {
-            self::set(new self($connection, $policy ?: new Policy), $instance);
-        }
-
-        return self::$instances[$instance];
-    }
 }

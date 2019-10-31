@@ -29,7 +29,7 @@ class RelationsTest extends TestCase
         $this->assertInstanceOf(One::class, $relation);
 
         $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::instance()->remoteKey(User::class, Address::class), 'reference', $relation);
+        $this->assertAttributeSame(Manager::get()->remoteKey(User::class, Address::class), 'reference', $relation);
         $this->assertSame($relation, $user->hasOne(Address::class));
     }
 
@@ -46,7 +46,7 @@ class RelationsTest extends TestCase
         $this->assertInstanceOf(Many::class, $relation);
 
         $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::instance()->remoteKey(User::class, Address::class), 'reference', $relation);
+        $this->assertAttributeSame(Manager::get()->remoteKey(User::class, Address::class), 'reference', $relation);
         $this->assertSame($relation, $user->hasMany(Address::class));
     }
 
@@ -63,7 +63,7 @@ class RelationsTest extends TestCase
         $this->assertInstanceOf(One::class, $relation);
 
         $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::instance()->localKey(User::class, Type::class), 'reference', $relation);
+        $this->assertAttributeSame(Manager::get()->localKey(User::class, Type::class), 'reference', $relation);
         $this->assertSame($relation, $user->belongsToOne(Type::class));
     }
 
@@ -80,7 +80,7 @@ class RelationsTest extends TestCase
         $this->assertInstanceOf(Many::class, $relation);
 
         $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::instance()->junctionTable(
+        $this->assertAttributeSame(Manager::get()->junctionTable(
             User::class,
             Address::class
         ), 'reference', $relation);

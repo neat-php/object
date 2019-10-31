@@ -3,7 +3,6 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Manager;
-use Neat\Object\Policy;
 use Neat\Object\Test\Helper\Factory;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -59,8 +58,6 @@ class ManagerTest extends TestCase
         $this->assertTrue(Manager::isset());
         $this->assertSame($manager, Manager::get());
         $this->assertSame($manager, Manager::get('default'));
-        $this->assertSame($manager, Manager::instance());
-        $this->assertSame($manager, Manager::instance('default'));
     }
 
     /**
@@ -74,31 +71,5 @@ class ManagerTest extends TestCase
 
         $this->assertTrue(Manager::isset());
         $this->assertInstanceOf(Manager::class, Manager::get());
-    }
-
-    /**
-     * Test deprecated create method
-     */
-    public function testCreate()
-    {
-        Manager::unset();
-
-        $defaultConnection = $this->connection();
-        $defaultManager    = Manager::create($defaultConnection, null);
-
-        $customConnection = $this->connection();
-        $customPolicy     = $this->policy();
-        $customManager    = Manager::create($customConnection, $customPolicy, 'create-custom-test');
-
-        $this->assertNotSame($customManager, $defaultManager);
-
-        $this->assertTrue(Manager::isset());
-        $this->assertSame($defaultManager, Manager::get());
-        $this->assertSame($defaultConnection, Manager::get()->connection());
-        $this->assertInstanceOf(Policy::class, Manager::get()->policy());
-
-        $this->assertSame($customManager, Manager::get('create-custom-test'));
-        $this->assertSame($customConnection, Manager::get('create-custom-test')->connection());
-        $this->assertSame($customPolicy, Manager::get('create-custom-test')->policy());
     }
 }
