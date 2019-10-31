@@ -45,6 +45,7 @@ class ManagerTest extends TestCase
         $this->expectExceptionMessage('Object manager not set: default');
 
         Manager::unset();
+        $this->assertFalse(Manager::isset());
         Manager::get();
     }
 
@@ -55,6 +56,7 @@ class ManagerTest extends TestCase
     {
         Manager::set($manager = $this->manager());
 
+        $this->assertTrue(Manager::isset());
         $this->assertSame($manager, Manager::get());
         $this->assertSame($manager, Manager::get('default'));
         $this->assertSame($manager, Manager::instance());
@@ -70,6 +72,7 @@ class ManagerTest extends TestCase
             return $this->manager();
         });
 
+        $this->assertTrue(Manager::isset());
         $this->assertInstanceOf(Manager::class, Manager::get());
     }
 
@@ -89,6 +92,7 @@ class ManagerTest extends TestCase
 
         $this->assertNotSame($customManager, $defaultManager);
 
+        $this->assertTrue(Manager::isset());
         $this->assertSame($defaultManager, Manager::get());
         $this->assertSame($defaultConnection, Manager::get()->connection());
         $this->assertInstanceOf(Policy::class, Manager::get()->policy());

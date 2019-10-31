@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.5] - 2019-10-31
+### Added
+- Manager isset method.
+
 ## [0.9.4] - 2019-10-30
 ### Added
 - Manager get, set, setFactory and unset methods.

@@ -139,7 +139,19 @@ class Manager
     }
 
     /**
-     * Unset manager instance
+     * Is manager set?
+     *
+     * @param string $manager
+     * @return bool
+     */
+    public static function isset(string $manager = 'default'): bool
+    {
+        return isset(self::$instances[$manager])
+            || isset(self::$factories[$manager]);
+    }
+
+    /**
+     * Unset manager
      *
      * @param string $manager
      */
