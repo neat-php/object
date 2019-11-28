@@ -2,13 +2,12 @@
 
 namespace Neat\Object\Relations\Reference;
 
-use Neat\Object\Repository;
 use Neat\Object\RepositoryInterface;
 
 class Diff
 {
     /**
-     * @var Repository
+     * @var RepositoryInterface
      */
     private $remoteRepository;
 
