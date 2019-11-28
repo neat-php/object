@@ -44,7 +44,7 @@ class UpdatedAtTest extends TestCase
                 return true;
             }));
 
-        $user = new User;
+        $user = new User();
         $updatedAt->store($user);
         $this->assertSame($date, $user->updateDate);
         $updatedAt->store($user);

@@ -26,7 +26,7 @@ class ReferenceFactoryMock
     public function __construct(Manager $manager)
     {
         $this->manager    = $manager;
-        $this->references = new Cache;
+        $this->references = new Cache();
     }
 
     /**

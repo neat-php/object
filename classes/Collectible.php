@@ -186,5 +186,5 @@ trait Collectible
         return $this->items();
     }
 
-    protected abstract function &items(): array;
+    abstract protected function &items(): array;
 }

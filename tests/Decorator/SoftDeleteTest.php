@@ -130,7 +130,7 @@ class SoftDeleteTest extends TestCase
 
                 return true;
             }));
-        $user = new User;
+        $user = new User();
         $softDelete->delete($user);
         $this->assertSame($date, $user->deletedDate);
         $softDelete->delete($user);

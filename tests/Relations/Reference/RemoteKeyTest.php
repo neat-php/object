@@ -22,7 +22,7 @@ class RemoteKeyTest extends TestCase
      */
     public function remoteRepository(): Repository
     {
-        $policy = new Policy;
+        $policy = new Policy();
         $properties = $policy->properties(Address::class);
 
         return new Repository(
@@ -55,16 +55,16 @@ class RemoteKeyTest extends TestCase
         $key = $this->remoteKey();
 
         // Insert test
-        $user = new User;
+        $user = new User();
         $user->id = 4;
-        $address1 = new Address;
+        $address1 = new Address();
         $key->store($user, [$address1]);
         $this->assertNotNull($address1->id);
         $this->assertSame($user->id, $address1->userId);
         $address1->city = 'test';
 
         // Insert/add and update test
-        $address2 = new Address;
+        $address2 = new Address();
         $key->store($user, [$address1, $address2]);
         $this->assertNotNull($address2->id);
         $this->assertSame($user->id, $address1->userId);
@@ -82,13 +82,13 @@ class RemoteKeyTest extends TestCase
      */
     public function testDiff()
     {
-        $address1      = new Address;
+        $address1      = new Address();
         $address1->id  = 1;
-        $address1B     = new Address;
+        $address1B     = new Address();
         $address1B->id = '1';
-        $address2      = new Address;
+        $address2      = new Address();
         $address2->id  = 2;
-        $address3      = new Address;
+        $address3      = new Address();
         $address3->id  = 3;
         $diff          = new Diff($this->remoteRepository(), [$address1, $address3], [$address1B, $address2]);
         $this->assertEquals([$address3], $diff->getDelete());
@@ -103,12 +103,12 @@ class RemoteKeyTest extends TestCase
     {
         $key = $this->remoteKey();
 
-        $user = new User;
+        $user = new User();
         /** @var Address[] $load */
         $load = $key->load($user);
         $this->assertInternalType('array', $load);
 
-        $user = new User;
+        $user = new User();
         $user->id = 1;
         /** @var Address[] $load */
         $load = $key->load($user);

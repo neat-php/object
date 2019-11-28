@@ -43,7 +43,7 @@ class CreatedAtTest extends TestCase
 
                 return true;
             }));
-        $user = new User;
+        $user = new User();
         $createdAt->store($user);
         $this->assertSame($date, $user->updateDate);
         $createdAt->store($user);

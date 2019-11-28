@@ -123,9 +123,9 @@ trait ReferenceFactory
         );
     }
 
-    public abstract function connection(): Connection;
+    abstract public function connection(): Connection;
 
-    public abstract function policy(): Policy;
+    abstract public function policy(): Policy;
 
-    public abstract function repository(string $class): RepositoryInterface;
+    abstract public function repository(string $class): RepositoryInterface;
 }

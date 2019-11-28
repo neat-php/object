@@ -19,7 +19,7 @@ trait Relations
     public function relations(): Cache
     {
         if (!$this->relations) {
-            $this->relations = new Cache;
+            $this->relations = new Cache();
         }
 
         return $this->relations;
@@ -85,5 +85,5 @@ trait Relations
         return $relation;
     }
 
-    public abstract static function manager(): Manager;
+    abstract public static function manager(): Manager;
 }

@@ -196,7 +196,7 @@ class RepositoryTest extends TestCase
         $id             = $userRepository->insert($data);
         $this->assertNotNull($id);
         $data['id'] = (string)$id;
-        $user       = $userRepository->fromArray(new User, $data);
+        $user       = $userRepository->fromArray(new User(), $data);
         $this->assertEquals($user, $userRepository->get($id));
 
         $data['active'] = '0';

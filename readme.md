@@ -54,7 +54,7 @@ To persist these entities into the database, we can use a repository:
 ```php
 $respository = $manager->repository(User::class);
 
-$user = new User;
+$user = new User();
 $user->name = 'John';
 
 $repository->store($user);

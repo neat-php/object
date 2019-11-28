@@ -199,7 +199,7 @@ class CollectionTest extends TestCase
         $collection = new Collection([$user]);
         $this->assertSame($user, $collection->first());
 
-        $collection->push(new GroupUser);
+        $collection->push(new GroupUser());
     }
 
     /**

@@ -44,8 +44,8 @@ class Manager
     {
         $this->connection   = $connection;
         $this->policy       = $policy;
-        $this->repositories = new Cache;
-        $this->references   = new Cache;
+        $this->repositories = new Cache();
+        $this->references   = new Cache();
     }
 
     /**

@@ -22,9 +22,8 @@ class PropertyTest extends TestCase
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $reflection = new ReflectionProperty(User::class, $name);
-        $property   = new Property($reflection);
 
-        return $property;
+        return new Property($reflection);
     }
 
     /**
@@ -106,7 +105,7 @@ class PropertyTest extends TestCase
      */
     public function testSet($name, $in, $out)
     {
-        $user = new User;
+        $user = new User();
 
         $property = $this->createProperty($name);
         $property->set($user, $in);
@@ -162,7 +161,7 @@ class PropertyTest extends TestCase
      */
     public function testGet($name, $in, $out)
     {
-        $user        = new User;
+        $user        = new User();
         $user->$name = $in;
 
         $property = $this->createProperty($name);

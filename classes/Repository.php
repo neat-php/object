@@ -328,7 +328,7 @@ class Repository implements RepositoryInterface
      */
     public function create(array $data)
     {
-        return $this->fromArray(new $this->class, $data);
+        return $this->fromArray(new $this->class(), $data);
     }
 
     /**

@@ -23,7 +23,7 @@ class RelationsTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $user     = new User;
+        $user     = new User();
         $relation = $user->hasOne(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
         $this->assertInstanceOf(One::class, $relation);
@@ -40,7 +40,7 @@ class RelationsTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $user     = new User;
+        $user     = new User();
         $relation = $user->hasMany(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
         $this->assertInstanceOf(Many::class, $relation);
@@ -57,7 +57,7 @@ class RelationsTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $user     = new User;
+        $user     = new User();
         $relation = $user->belongsToOne(Type::class);
         $this->assertInstanceOf(Relation::class, $relation);
         $this->assertInstanceOf(One::class, $relation);
@@ -74,7 +74,7 @@ class RelationsTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $user     = new User;
+        $user     = new User();
         $relation = $user->belongsToMany(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
         $this->assertInstanceOf(Many::class, $relation);

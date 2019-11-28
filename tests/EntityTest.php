@@ -157,7 +157,7 @@ class EntityTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $user               = new User;
+        $user               = new User();
         $user->username     = 'ffox';
         $user->typeId       = 1;
         $user->firstName    = 'Frank';
@@ -177,7 +177,7 @@ class EntityTest extends TestCase
         $user->store();
         $this->assertSame($user->id, $dbUser->id);
 
-        $groupUser          = new GroupUser;
+        $groupUser          = new GroupUser();
         $groupUser->userId  = $user->id;
         $groupUser->groupId = 3;
         $groupUser->store();
@@ -192,7 +192,7 @@ class EntityTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $user               = new User;
+        $user               = new User();
         $user->username     = 'edejong';
         $user->typeId       = 1;
         $user->firstName    = 'Emma';

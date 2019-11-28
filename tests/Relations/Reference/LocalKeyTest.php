@@ -23,7 +23,7 @@ class LocalKeyTest extends TestCase
      */
     public function localKey(): LocalKey
     {
-        $policy          = new Policy;
+        $policy          = new Policy();
         $remoteKey       = new Property(new ReflectionProperty(User::class, 'id'));
         $localForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
 
@@ -39,12 +39,12 @@ class LocalKeyTest extends TestCase
     {
         $localKey = $this->localKey();
 
-        $address = new Address;
+        $address = new Address();
         $load    = $localKey->load($address);
         $this->assertInternalType('array', $load);
         $this->assertCount(0, $load);
 
-        $address         = new Address;
+        $address         = new Address();
         $address->userId = 1;
 
         $load = $localKey->load($address);
@@ -60,11 +60,11 @@ class LocalKeyTest extends TestCase
     {
         $localKey = $this->localKey();
 
-        $address  = new Address;
+        $address  = new Address();
         $localKey->store($address, []);
         $this->assertSame(null, $address->userId);
 
-        $user     = new User;
+        $user     = new User();
         $user->id = 1;
         $localKey->store($address, [$user]);
         $this->assertSame(1, $address->userId);

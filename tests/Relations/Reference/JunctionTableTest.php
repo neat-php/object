@@ -24,7 +24,7 @@ class JunctionTableTest extends TestCase
      */
     public function junctionTable(): JunctionTable
     {
-        $policy     = new Policy;
+        $policy     = new Policy();
         $connection = $this->connection();
         $localKey   = new Property(new ReflectionProperty(User::class, 'id'));
         $remoteKey  = new Property(new ReflectionProperty(Group::class, 'id'));
@@ -56,12 +56,12 @@ class JunctionTableTest extends TestCase
     {
         $junctionTable = $this->junctionTable();
 
-        $user = new User;
+        $user = new User();
         $load = $junctionTable->load($user);
         $this->assertInternalType('array', $load);
         $this->assertCount(0, $load);
 
-        $user     = new User;
+        $user     = new User();
         $user->id = 1;
 
         $load = $junctionTable->load($user);
@@ -77,11 +77,11 @@ class JunctionTableTest extends TestCase
     {
         $junctionTable = $this->junctionTable();
 
-        $user       = new User;
+        $user       = new User();
         $user->id   = 4;
-        $groupA     = new Group;
+        $groupA     = new Group();
         $groupA->id = 1;
-        $groupB     = new Group;
+        $groupB     = new Group();
         $groupB->id = 2;
 
         $junctionTable->store($user, [$groupA]);

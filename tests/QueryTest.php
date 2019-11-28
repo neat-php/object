@@ -37,9 +37,9 @@ class QueryTest extends TestCase
     public function providerFacadeExpectations()
     {
         return [
-            ['one', new User],
-            ['all', [new User]],
-            ['collection', new Collection([new User])],
+            ['one', new User()],
+            ['all', [new User()]],
+            ['collection', new Collection([new User()])],
         ];
     }
 
@@ -69,7 +69,7 @@ class QueryTest extends TestCase
     public function testIterate()
     {
         $generator = function () {
-            $data = [new User];
+            $data = [new User()];
 
             foreach ($data as $item) {
                 yield $item;

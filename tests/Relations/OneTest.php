@@ -33,7 +33,7 @@ class OneTest extends TestCase
      */
     public function one(Reference $reference = null): One
     {
-        $user = new User;
+        $user = new User();
         $user->id = 1;
 
         return new One($reference ?? $this->mockedRemoteKey(), $user);
@@ -44,7 +44,7 @@ class OneTest extends TestCase
      */
     public function testGet()
     {
-        $address = new Address;
+        $address = new Address();
         $address->id = 1;
         $address->userId = 1;
 
@@ -80,11 +80,11 @@ class OneTest extends TestCase
      */
     public function testSet()
     {
-        $address = new Address;
+        $address = new Address();
         $address->id = 1;
         $address->userId = 1;
 
-        $user = new User;
+        $user = new User();
         $user->id = 1;
 
         $reference = $this->mockedRemoteKey();

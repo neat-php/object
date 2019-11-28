@@ -34,7 +34,7 @@ class ManyTest extends TestCase
      */
     public function many(Reference $reference = null): Many
     {
-        $user = new User;
+        $user = new User();
         $user->id = 1;
 
         return new Many($reference ?? $this->mockedRemoteKey(), $user);
@@ -45,7 +45,7 @@ class ManyTest extends TestCase
      */
     public function testAll()
     {
-        $address = new Address;
+        $address = new Address();
         $address->id = 1;
         $address->userId = 1;
 
@@ -81,11 +81,11 @@ class ManyTest extends TestCase
      */
     public function testSet()
     {
-        $address = new Address;
+        $address = new Address();
         $address->id = 1;
         $address->userId = 1;
 
-        $user = new User;
+        $user = new User();
         $user->id = 1;
 
         $reference = $this->mockedRemoteKey();
@@ -114,15 +114,15 @@ class ManyTest extends TestCase
      */
     public function testAdd()
     {
-        $address1 = new Address;
+        $address1 = new Address();
         $address1->id = 1;
         $address1->userId = 1;
 
-        $address2 = new Address;
+        $address2 = new Address();
         $address2->id = 2;
         $address2->userId = 1;
 
-        $user = new User;
+        $user = new User();
         $user->id = 1;
 
         $reference = $this->mockedRemoteKey();
@@ -153,13 +153,13 @@ class ManyTest extends TestCase
      */
     public function testAddMultiple()
     {
-        $address1 = new Address;
+        $address1 = new Address();
         $address1->userId = 1;
 
-        $address2 = new Address;
+        $address2 = new Address();
         $address2->userId = 2;
 
-        $user = new User;
+        $user = new User();
         $user->id = 1;
 
         $reference = $this->mockedRemoteKey();
@@ -186,15 +186,15 @@ class ManyTest extends TestCase
      */
     public function testRemove()
     {
-        $address1 = new Address;
+        $address1 = new Address();
         $address1->id = 1;
         $address1->userId = 1;
 
-        $address2 = new Address;
+        $address2 = new Address();
         $address2->id = 2;
         $address2->userId = 1;
 
-        $user = new User;
+        $user = new User();
         $user->id = 1;
 
         $reference = $this->mockedRemoteKey();

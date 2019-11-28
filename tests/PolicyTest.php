@@ -27,9 +27,8 @@ class PolicyTest extends TestCase
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $reflection = new ReflectionProperty(User::class, $name);
-        $property   = new Property($reflection);
 
-        return $property;
+        return new Property($reflection);
     }
 
     /**
