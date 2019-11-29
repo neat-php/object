@@ -21,7 +21,7 @@ class Phone implements Serializable
      */
     public function serialize()
     {
-        return $this->phoneNumber;
+        return (string)$this->phoneNumber;
     }
 
     /**
