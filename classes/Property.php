@@ -79,7 +79,7 @@ class Property
      */
     public function toString($value): string
     {
-        return (string) $value;
+        return (string)$value;
     }
 
     /**
@@ -101,6 +101,9 @@ class Property
      */
     public function get($object)
     {
+        if (!$this->reflection->isInitialized($object)) {
+            return null;
+        }
         $value = $this->reflection->getValue($object);
         if ($value === null) {
             return null;

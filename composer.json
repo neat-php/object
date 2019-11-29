@@ -28,8 +28,7 @@
         }
     },
     "require": {
-        "php": ">=7.0",
-        "ext-json": "*",
+        "php": ">=7.4",
         "neat/database": "^1.2"
     },
     "require-dev": {

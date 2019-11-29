@@ -58,14 +58,14 @@ class JunctionTableTest extends TestCase
 
         $user = new User();
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
         $this->assertCount(0, $load);
 
         $user     = new User();
         $user->id = 1;
 
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
         $this->assertCount(2, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
     }
@@ -86,19 +86,19 @@ class JunctionTableTest extends TestCase
 
         $junctionTable->store($user, [$groupA]);
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
         $this->assertCount(1, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
 
         $junctionTable->store($user, [$groupA, $groupB]);
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
         $this->assertCount(2, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
 
         $junctionTable->store($user, [$groupA]);
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
         $this->assertCount(1, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
     }

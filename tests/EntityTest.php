@@ -115,19 +115,19 @@ class EntityTest extends TestCase
         Manager::set($this->manager());
 
         $users = User::all();
-        $this->assertInternalType('array', $users);
+        $this->assertIsArray($users);
         $this->assertCount(3, $users);
         $user = reset($users);
         $this->assertInstanceOf(User::class, $user);
 
         $users = User::all(['id' => 1]);
-        $this->assertInternalType('array', $users);
+        $this->assertIsArray($users);
         $user = reset($users);
         $this->assertInstanceOf(User::class, $user);
         $this->assertCount(1, $users);
 
         $users = User::all(['id' => 0]);
-        $this->assertInternalType('array', $users);
+        $this->assertIsArray($users);
         $this->assertCount(0, $users);
     }
 
@@ -180,9 +180,11 @@ class EntityTest extends TestCase
         $user->typeId       = 1;
         $user->firstName    = 'Frank';
         $user->lastName     = 'Fox';
+        $user->phone        = null;
         $user->active       = true;
         $user->registerDate = new DateTimeImmutable('2019-01-02 12:30:00');
         $user->updateDate   = new DateTime('today');
+        $user->deletedDate  = null;
 
         $user->store();
         $this->assertNotNull($user->id);
@@ -243,9 +245,10 @@ class EntityTest extends TestCase
             "first_name"    => "Thijs",
             "middle_name"   => "de",
             "last_name"     => "Vries",
+            "phone"         => null,
             "active"        => 1,
             "update_date"   => date("Y-m-d H:i:s"),
-            'register_date' => null,
+            'register_date' => date("Y-m-d H:i:s"),
             'deleted_date'  => null,
             'id'            => null,
         ];

@@ -21,7 +21,7 @@ class OneTest extends TestCase
     {
         return $this->getMockBuilder(RemoteKey::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'store'])
+            ->onlyMethods(['load', 'store'])
             ->getMock();
     }
 

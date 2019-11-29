@@ -22,7 +22,7 @@ class ManyTest extends TestCase
     {
         return $this->getMockBuilder(RemoteKey::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'store', 'getRemoteKeyValue'])
+            ->onlyMethods(['load', 'store', 'getRemoteKeyValue'])
             ->getMock();
     }
 

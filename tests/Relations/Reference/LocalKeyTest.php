@@ -41,7 +41,7 @@ class LocalKeyTest extends TestCase
 
         $address = new Address();
         $load    = $localKey->load($address);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
         $this->assertCount(0, $load);
 
         $address         = new Address();

@@ -106,13 +106,13 @@ class RemoteKeyTest extends TestCase
         $user = new User();
         /** @var Address[] $load */
         $load = $key->load($user);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
 
         $user = new User();
         $user->id = 1;
         /** @var Address[] $load */
         $load = $key->load($user);
-        $this->assertInternalType('array', $load);
+        $this->assertIsArray($load);
         $address = array_shift($load);
         $this->assertInstanceOf(Address::class, $address);
         $this->assertSame(1, $address->userId);

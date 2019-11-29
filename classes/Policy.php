@@ -7,8 +7,10 @@ use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionProperty;
 use RuntimeException;
+use Serializable;
 
 class Policy
 {
@@ -130,6 +132,26 @@ class Policy
             }
 
             return new Property($reflection, $type);
+        } elseif ($reflection->getType()) {
+            $type = $reflection->getType();
+            if ($type instanceof ReflectionNamedType) {
+                switch ($type->getName()) {
+                    case 'string':
+                        return new Property($reflection, $type);
+                    case 'bool':
+                        return new Property\Boolean($reflection, $type);
+                    case 'int':
+                        return new Property\Integer($reflection, $type);
+                    case 'DateTime':
+                        return new Property\DateTime($reflection, $type);
+                    case 'DateTimeImmutable':
+                        return new Property\DateTimeImmutable($reflection, $type);
+                }
+
+                if (is_a($type->getName(), Serializable::class, true)) {
+                    return new Property\Serializable($reflection, $type);
+                }
+            }
         }
 
         return new Property($reflection);
@@ -143,8 +165,7 @@ class Policy
      */
     public function skip(Property $property): bool
     {
-        return $property->static()
-            || preg_match('/\\s@nostorage\\s/', $property->comment());
+        return $property->static() || preg_match('/\\s@nostorage\\s/', $property->comment());
     }
 
     /**

@@ -137,13 +137,13 @@ class RepositoryTest extends TestCase
     {
         $repository = $this->repository(User::class);
         $users      = $repository->all($repository->select()->orderBy('id DESC'));
-        $this->assertInternalType('array', $users);
+        $this->assertIsArray($users);
         $this->assertCount(3, $users);
         $user = reset($users);
         $this->assertSame(3, $user->id);
 
         $users = $repository->all(['active' => false]);
-        $this->assertInternalType('array', $users);
+        $this->assertIsArray($users);
         $this->assertCount(1, $users);
     }
 

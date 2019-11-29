@@ -11,54 +11,34 @@ class User extends Entity
 {
     use Identifier;
 
-    /** @var int */
-    public $typeId;
+    public int $typeId;
 
-    /**
-     * @var string
-     */
-    public $username;
+    public string $username;
 
-    /**
-     * @var string
-     */
-    public $firstName;
+    public string $firstName;
 
-    /**
-     * @var
-     */
     public $middleName;
 
     public $lastName;
 
-    /**
-     * @var bool
-     */
-    public $active;
+    public ?Phone $phone;
+
+    public ?bool $active;
 
     /**
-     * @var int
      * @nostorage
      */
-    public $ignored;
+    public ?int $ignored;
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @var \DateTimeImmutable
-     */
-    public $registerDate;
-
-    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-    /**
-     * @var \DateTime
+     * @noinspection PhpFullyQualifiedNameUsageInspection
      * @note intentional fully qualified class name
      */
-    public $updateDate;
+    public ?\DateTimeImmutable $registerDate;
 
-    /**
-     * @var DateTime|null
-     */
-    public $deletedDate;
+    public ?DateTime $updateDate;
+
+    public ?DateTime $deletedDate;
 
     /**
      * Static no storage field

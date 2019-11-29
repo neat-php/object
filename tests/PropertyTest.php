@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Test\Helper\Phone;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -72,11 +73,12 @@ class PropertyTest extends TestCase
             ['id', null, null],
             ['id', 1, 1],
             ['id', '1', 1],
-            ['username', null, null],
             ['username', 'john', 'john'],
             ['lastName', null, null],
             ['lastName', 'Doe', 'Doe'],
             ['lastName', 3, '3'],
+            ['phone', null, null],
+            ['phone', '31612345678', new Phone(31612345678)],
             ['active', null, null],
             ['active', '0', false],
             ['active', '1', true],
@@ -130,11 +132,12 @@ class PropertyTest extends TestCase
             ['id', null, null],
             ['id', 1, '1'],
             ['id', '1', '1'],
-            ['username', null, null],
             ['username', 'john', 'john'],
             ['lastName', null, null],
             ['lastName', 'Doe', 'Doe'],
             ['lastName', 3, '3'],
+            ['phone', null, null],
+            ['phone', new Phone(31612345678), '31612345678'],
             ['active', null, null],
             ['active', false, '0'],
             ['active', true, '1'],
@@ -144,10 +147,8 @@ class PropertyTest extends TestCase
             ['ignored', 0, '0'],
             ['ignored', 1, '1'],
             ['registerDate', null, null],
-            ['registerDate', '2001-02-03', '2001-02-03 00:00:00'],
             ['registerDate', new DateTimeImmutable('2001-02-03 04:05:06'), '2001-02-03 04:05:06'],
             ['updateDate', null, null],
-            ['updateDate', '2001-02-03', '2001-02-03 00:00:00'],
             ['updateDate', new DateTime('2001-02-03 04:05:06'), '2001-02-03 04:05:06'],
         ];
     }
