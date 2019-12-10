@@ -16,6 +16,9 @@ use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 
+/**
+ * @runTestsInSeparateProcesses enabled
+ */
 class ReferenceFactoryTest extends TestCase
 {
     use Factory;

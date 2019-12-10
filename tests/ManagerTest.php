@@ -37,19 +37,22 @@ class ManagerTest extends TestCase
 
     /**
      * Test get after unset
+     *
+     * @runInSeparateProcess enabled
      */
     public function testGetAfterUnset()
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Object manager not set: default');
 
-        Manager::unset();
         $this->assertFalse(Manager::isset());
         Manager::get();
     }
 
     /**
      * Test get, set and deprecated instance method
+     *
+     * @runInSeparateProcess enabled
      */
     public function testGetAndSet()
     {
@@ -62,6 +65,8 @@ class ManagerTest extends TestCase
 
     /**
      * Test get, set and deprecated instance method
+     *
+     * @runInSeparateProcess enabled
      */
     public function testGetAndSetFactory()
     {

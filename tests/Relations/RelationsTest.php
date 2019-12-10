@@ -18,6 +18,8 @@ class RelationsTest extends TestCase
 
     /**
      * Test has one
+     *
+     * @runInSeparateProcess enabled
      */
     public function testHasOne()
     {
@@ -35,6 +37,8 @@ class RelationsTest extends TestCase
 
     /**
      * Test has many
+     *
+     * @runInSeparateProcess enabled
      */
     public function testHasMany()
     {
@@ -52,6 +56,8 @@ class RelationsTest extends TestCase
 
     /**
      * Test belongs to one
+     *
+     * @runInSeparateProcess enabled
      */
     public function testBelongsToOne()
     {
@@ -69,6 +75,8 @@ class RelationsTest extends TestCase
 
     /**
      * Test belongs to many
+     *
+     * @runInSeparateProcess enabled
      */
     public function testBelongsToMany()
     {

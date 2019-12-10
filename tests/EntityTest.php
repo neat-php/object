@@ -23,6 +23,8 @@ class EntityTest extends TestCase
 
     /**
      * Test has
+     *
+     * @runInSeparateProcess enabled
      */
     public function testHas()
     {
@@ -34,6 +36,8 @@ class EntityTest extends TestCase
 
     /**
      * Test select
+     *
+     * @runInSeparateProcess enabled
      */
     public function testSelect()
     {
@@ -50,6 +54,8 @@ class EntityTest extends TestCase
 
     /**
      * Test query
+     *
+     * @runInSeparateProcess enabled
      */
     public function testQuery()
     {
@@ -69,6 +75,8 @@ class EntityTest extends TestCase
 
     /**
      * Test get
+     *
+     * @runInSeparateProcess enabled
      */
     public function testGet()
     {
@@ -83,6 +91,8 @@ class EntityTest extends TestCase
 
     /**
      * Test one
+     *
+     * @runInSeparateProcess enabled
      */
     public function testOne()
     {
@@ -97,6 +107,8 @@ class EntityTest extends TestCase
 
     /**
      * Test all
+     *
+     * @runInSeparateProcess enabled
      */
     public function testAll()
     {
@@ -121,6 +133,8 @@ class EntityTest extends TestCase
 
     /**
      * Test collection
+     *
+     * @runInSeparateProcess enabled
      */
     public function testCollection()
     {
@@ -135,6 +149,8 @@ class EntityTest extends TestCase
 
     /**
      * Test iterate
+     *
+     * @runInSeparateProcess enabled
      */
     public function testIterate()
     {
@@ -152,6 +168,8 @@ class EntityTest extends TestCase
 
     /**
      * Test store
+     *
+     * @runInSeparateProcess enabled
      */
     public function testStore()
     {
@@ -187,6 +205,8 @@ class EntityTest extends TestCase
 
     /**
      * Test delete
+     *
+     * @runInSeparateProcess enabled
      */
     public function testDelete()
     {
@@ -210,6 +230,8 @@ class EntityTest extends TestCase
 
     /**
      * Test array conversion
+     *
+     * @runInSeparateProcess enabled
      */
     public function testArrayConversion()
     {
