@@ -12,7 +12,7 @@ class Property
     protected $reflection;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $type;
 
