@@ -135,21 +135,22 @@ class Policy
         } elseif ($reflection->getType()) {
             $type = $reflection->getType();
             if ($type instanceof ReflectionNamedType) {
-                switch ($type->getName()) {
+                $typeName = $type->getName();
+                switch ($typeName) {
                     case 'string':
-                        return new Property($reflection, $type);
+                        return new Property($reflection, $typeName);
                     case 'bool':
-                        return new Property\Boolean($reflection, $type);
+                        return new Property\Boolean($reflection, $typeName);
                     case 'int':
-                        return new Property\Integer($reflection, $type);
+                        return new Property\Integer($reflection, $typeName);
                     case 'DateTime':
-                        return new Property\DateTime($reflection, $type);
+                        return new Property\DateTime($reflection, $typeName);
                     case 'DateTimeImmutable':
-                        return new Property\DateTimeImmutable($reflection, $type);
+                        return new Property\DateTimeImmutable($reflection, $typeName);
                 }
 
-                if (is_a($type->getName(), Serializable::class, true)) {
-                    return new Property\Serializable($reflection, $type);
+                if (is_a($typeName, Serializable::class, true)) {
+                    return new Property\Serializable($reflection, $typeName);
                 }
             }
         }
