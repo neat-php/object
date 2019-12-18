@@ -9,6 +9,7 @@ use Neat\Object\Repository;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\User;
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 
@@ -58,14 +59,14 @@ class JunctionTableTest extends TestCase
 
         $user = new User();
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
         $this->assertCount(0, $load);
 
         $user     = new User();
         $user->id = 1;
 
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
         $this->assertCount(2, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
     }
@@ -86,19 +87,19 @@ class JunctionTableTest extends TestCase
 
         $junctionTable->store($user, [$groupA]);
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
         $this->assertCount(1, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
 
         $junctionTable->store($user, [$groupA, $groupB]);
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
         $this->assertCount(2, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
 
         $junctionTable->store($user, [$groupA]);
         $load = $junctionTable->load($user);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
         $this->assertCount(1, $load);
         $this->assertInstanceOf(Group::class, array_shift($load));
     }

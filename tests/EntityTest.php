@@ -14,6 +14,7 @@ use Neat\Object\Test\Helper\Assertions;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\User;
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
@@ -115,19 +116,19 @@ class EntityTest extends TestCase
         Manager::set($this->manager());
 
         $users = User::all();
-        $this->assertInternalType('array', $users);
+        self::assertThat($users, new IsType('array'));
         $this->assertCount(3, $users);
         $user = reset($users);
         $this->assertInstanceOf(User::class, $user);
 
         $users = User::all(['id' => 1]);
-        $this->assertInternalType('array', $users);
+        self::assertThat($users, new IsType('array'));
         $user = reset($users);
         $this->assertInstanceOf(User::class, $user);
         $this->assertCount(1, $users);
 
         $users = User::all(['id' => 0]);
-        $this->assertInternalType('array', $users);
+        self::assertThat($users, new IsType('array'));
         $this->assertCount(0, $users);
     }
 

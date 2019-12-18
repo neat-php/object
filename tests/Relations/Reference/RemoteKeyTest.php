@@ -10,6 +10,7 @@ use Neat\Object\Repository;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 
@@ -106,13 +107,13 @@ class RemoteKeyTest extends TestCase
         $user = new User();
         /** @var Address[] $load */
         $load = $key->load($user);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
 
         $user = new User();
         $user->id = 1;
         /** @var Address[] $load */
         $load = $key->load($user);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
         $address = array_shift($load);
         $this->assertInstanceOf(Address::class, $address);
         $this->assertSame(1, $address->userId);

@@ -8,6 +8,7 @@ use Neat\Object\Relations\Reference\LocalKey;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 
@@ -41,7 +42,7 @@ class LocalKeyTest extends TestCase
 
         $address = new Address();
         $load    = $localKey->load($address);
-        $this->assertInternalType('array', $load);
+        self::assertThat($load, new IsType('array'));
         $this->assertCount(0, $load);
 
         $address         = new Address();

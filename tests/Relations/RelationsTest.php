@@ -28,10 +28,9 @@ class RelationsTest extends TestCase
         $user     = new User();
         $relation = $user->hasOne(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
-        $this->assertInstanceOf(One::class, $relation);
 
-        $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::get()->remoteKey(User::class, Address::class), 'reference', $relation);
+        $expected = new One(Manager::get()->remoteKey(User::class, Address::class), $user);
+        $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->hasOne(Address::class));
     }
 
@@ -47,10 +46,9 @@ class RelationsTest extends TestCase
         $user     = new User();
         $relation = $user->hasMany(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
-        $this->assertInstanceOf(Many::class, $relation);
 
-        $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::get()->remoteKey(User::class, Address::class), 'reference', $relation);
+        $expected = new Many(Manager::get()->remoteKey(User::class, Address::class), $user);
+        $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->hasMany(Address::class));
     }
 
@@ -66,10 +64,9 @@ class RelationsTest extends TestCase
         $user     = new User();
         $relation = $user->belongsToOne(Type::class);
         $this->assertInstanceOf(Relation::class, $relation);
-        $this->assertInstanceOf(One::class, $relation);
 
-        $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::get()->localKey(User::class, Type::class), 'reference', $relation);
+        $expected = new One(Manager::get()->localKey(User::class, Type::class), $user);
+        $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->belongsToOne(Type::class));
     }
 
@@ -87,11 +84,8 @@ class RelationsTest extends TestCase
         $this->assertInstanceOf(Relation::class, $relation);
         $this->assertInstanceOf(Many::class, $relation);
 
-        $this->assertAttributeSame($user, 'local', $relation);
-        $this->assertAttributeSame(Manager::get()->junctionTable(
-            User::class,
-            Address::class
-        ), 'reference', $relation);
+        $expected = new Many(Manager::get()->junctionTable(User::class, Address::class), $user);
+        $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->belongsToMany(Address::class));
     }
 }

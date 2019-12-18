@@ -5,12 +5,8 @@ php:
   - '7.1'
   - '7.2'
   - '7.3'
-  - '7.4snapshot'
+  - '7.4'
 
-matrix:
-  allow_failures:
-    - php: '7.4snapshot'
+install: composer install --no-ansi --no-interaction --no-progress --prefer-dist
 
-install: composer install --no-interaction
-
-script: vendor/bin/phpunit
+script: vendor/bin/phpunit --coverage-text
