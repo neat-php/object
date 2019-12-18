@@ -3,6 +3,6 @@ language: php
 php:
   - '7.4'
 
-install: composer install --no-interaction
+install: composer install --no-ansi --no-interaction --no-progress --prefer-dist
 
 script: vendor/bin/phpunit --coverage-text
