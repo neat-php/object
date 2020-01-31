@@ -9,4 +9,7 @@ php:
 
 install: composer install --no-ansi --no-interaction --no-progress --prefer-dist
 
-script: vendor/bin/phpunit --coverage-text
+script: vendor/bin/phpunit --coverage-clover=coverage/clover.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

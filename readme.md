@@ -2,6 +2,7 @@
 
 [![Stable Version](https://poser.pugx.org/neat/object/version)](https://packagist.org/packages/neat/object)
 [![Build Status](https://travis-ci.org/neat-php/object.svg?branch=master)](https://travis-ci.org/neat-php/object)
+[![codecov](https://codecov.io/gh/neat-php/object/branch/master/graph/badge.svg)](https://codecov.io/gh/neat-php/object)
 
 Neat object component adds a simple yet intuitive ORM layer on top of the Neat database component.
 
