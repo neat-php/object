@@ -9,25 +9,13 @@ use Neat\Object\RepositoryInterface;
 
 class LocalKey extends Reference
 {
-    /**
-     * @var Property
-     */
-    private $localForeignKey;
+    private Property $localForeignKey;
 
-    /**
-     * @var Property
-     */
-    private $remoteKey;
+    private Property $remoteKey;
 
-    /**
-     * @var string
-     */
-    private $remoteKeyString;
+    private string $remoteKeyString;
 
-    /**
-     * @var RepositoryInterface
-     */
-    private $remoteRepository;
+    private RepositoryInterface $remoteRepository;
 
     public function __construct(
         Property $localForeignKey,
@@ -49,7 +37,11 @@ class LocalKey extends Reference
     {
         $identifier = $this->localForeignKey->get($local);
 
-        return is_null($identifier) ? [] : $this->remoteRepository->all([$this->remoteKeyString => $identifier]);
+        if (is_null($identifier)) {
+            return [];
+        }
+
+        return $this->remoteRepository->all([$this->remoteKeyString => $identifier]);
     }
 
     /**
@@ -69,18 +61,19 @@ class LocalKey extends Reference
      * @param object[] $remotes
      * @return void
      */
-    public function store($local, array $remotes)
+    public function store($local, array $remotes): void
     {
-        if (($remote = reset($remotes))) {
+        $remote = reset($remotes);
+        if ($remote) {
             $this->localForeignKey->set($local, $this->remoteKey->get($remote));
         }
     }
 
     /**
-     * @param $remote
-     * @return mixed
+     * @param object $remote
+     * @return string|null
      */
-    public function getRemoteKeyValue($remote)
+    public function getRemoteKeyValue(object $remote): ?string
     {
         return $this->remoteKey->get($remote);
     }

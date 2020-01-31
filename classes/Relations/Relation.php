@@ -4,32 +4,23 @@ namespace Neat\Object\Relations;
 
 abstract class Relation
 {
-    /**
-     * @var Reference
-     */
-    protected $reference;
+    protected Reference $reference;
 
-    /**
-     * @var object
-     */
-    protected $local;
+    protected object $local;
 
-    /**
-     * @var bool
-     */
-    protected $loaded = false;
+    protected bool $loaded = false;
 
     /**
      * @var object[]
      */
-    protected $objects;
+    protected array $objects;
 
     /**
      * Relation constructor.
      * @param Reference $reference
      * @param object    $local
      */
-    public function __construct(Reference $reference, $local)
+    public function __construct(Reference $reference, object $local)
     {
         $this->reference = $reference;
         $this->local     = $local;

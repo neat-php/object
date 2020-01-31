@@ -21,20 +21,23 @@ class Policy
      * @param Connection $connection
      * @return RepositoryInterface
      */
-    public function repository(string $class, Connection $connection)
+    public function repository(string $class, Connection $connection): RepositoryInterface
     {
         $properties = $this->properties($class);
         $table      = $this->table($class);
         $key        = $this->key($class);
 
         $repository = new Repository($connection, $class, $table, $key, $properties);
-        if ($softDelete = $this->softDelete($class)) {
+        $softDelete = $this->softDelete($class);
+        if ($softDelete) {
             $repository = new SoftDelete($repository, $softDelete, $properties[$softDelete]);
         }
-        if ($createdStamp = $this->createdStamp($class)) {
+        $createdStamp = $this->createdStamp($class);
+        if ($createdStamp) {
             $repository = new CreatedAt($repository, $createdStamp, $properties[$createdStamp]);
         }
-        if ($updatedStamp = $this->updatedStamp($class)) {
+        $updatedStamp = $this->updatedStamp($class);
+        if ($updatedStamp) {
             $repository = new UpdatedAt($repository, $updatedStamp, $properties[$updatedStamp]);
         }
 
@@ -98,7 +101,7 @@ class Policy
      * @param string $class
      * @return Property[]
      */
-    public function properties(string $class)
+    public function properties(string $class): array
     {
         $properties = [];
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -114,44 +117,47 @@ class Policy
         return $properties;
     }
 
-    public function property(ReflectionProperty $reflection)
+    public function property(ReflectionProperty $reflection): Property
     {
         if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
             $type = ltrim($matches[1], '\\');
             switch ($type) {
                 case 'bool':
                 case 'boolean':
-                    return new Property\Boolean($reflection, $type);
+                    return new Property\Boolean($reflection);
                 case 'int':
                 case 'integer':
-                    return new Property\Integer($reflection, $type);
+                    return new Property\Integer($reflection);
                 case 'DateTime':
-                    return new Property\DateTime($reflection, $type);
+                    return new Property\DateTime($reflection);
                 case 'DateTimeImmutable':
-                    return new Property\DateTimeImmutable($reflection, $type);
+                    return new Property\DateTimeImmutable($reflection);
             }
 
-            return new Property($reflection, $type);
-        } elseif ($reflection->getType()) {
-            $type = $reflection->getType();
-            if ($type instanceof ReflectionNamedType) {
-                $typeName = $type->getName();
-                switch ($typeName) {
-                    case 'string':
-                        return new Property($reflection, $typeName);
-                    case 'bool':
-                        return new Property\Boolean($reflection, $typeName);
-                    case 'int':
-                        return new Property\Integer($reflection, $typeName);
-                    case 'DateTime':
-                        return new Property\DateTime($reflection, $typeName);
-                    case 'DateTimeImmutable':
-                        return new Property\DateTimeImmutable($reflection, $typeName);
-                }
+            return new Property($reflection);
+        }
 
-                if (is_a($typeName, Serializable::class, true)) {
-                    return new Property\Serializable($reflection, $typeName);
-                }
+        if (!$reflection->getType()) {
+            return new Property($reflection);
+        }
+        $type = $reflection->getType();
+        if ($type instanceof ReflectionNamedType) {
+            $typeName = $type->getName();
+            switch ($typeName) {
+                case 'string':
+                    return new Property($reflection);
+                case 'bool':
+                    return new Property\Boolean($reflection);
+                case 'int':
+                    return new Property\Integer($reflection);
+                case 'DateTime':
+                    return new Property\DateTime($reflection);
+                case 'DateTimeImmutable':
+                    return new Property\DateTimeImmutable($reflection);
+            }
+
+            if (is_a($typeName, Serializable::class, true)) {
+                return new Property\Serializable($reflection);
             }
         }
 
@@ -175,7 +181,7 @@ class Policy
      * @param string $class
      * @return string|null
      */
-    public function softDelete(string $class)
+    public function softDelete(string $class): ?string
     {
         return property_exists($class, 'deletedAt') ? $this->column('deletedAt') : null;
     }
@@ -186,7 +192,7 @@ class Policy
      * @param string $class
      * @return string|null
      */
-    public function createdStamp(string $class)
+    public function createdStamp(string $class): ?string
     {
         return property_exists($class, 'createdAt') ? $this->column('createdAt') : null;
     }
@@ -197,7 +203,7 @@ class Policy
      * @param string $class
      * @return string|null
      */
-    public function updatedStamp(string $class)
+    public function updatedStamp(string $class): ?string
     {
         return property_exists($class, 'updatedAt') ? $this->column('updatedAt') : null;
     }
@@ -219,6 +225,6 @@ class Policy
             return ['id'];
         }
 
-        throw new RuntimeException('Unable to determine the key');
+        throw new RuntimeException("Unable to determine the key for class: '{$class}'");
     }
 }

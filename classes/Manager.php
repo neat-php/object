@@ -2,8 +2,8 @@
 
 namespace Neat\Object;
 
-use RuntimeException;
 use Neat\Database\Connection;
+use RuntimeException;
 
 class Manager
 {
@@ -12,27 +12,18 @@ class Manager
     /**
      * @var self[]
      */
-    private static $instances = [];
+    private static array $instances = [];
 
     /**
      * @var callable[]
      */
-    private static $factories = [];
+    private static array $factories = [];
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var Policy
-     */
-    private $policy;
+    private Policy $policy;
 
-    /**
-     * @var Cache
-     */
-    private $repositories;
+    private Cache $repositories;
 
     /**
      * Manager constructor
@@ -77,9 +68,12 @@ class Manager
     public function repository(string $class): RepositoryInterface
     {
         /** @var RepositoryInterface $repository */
-        $repository = $this->repositories->get($class, function () use ($class) {
-            return $this->policy->repository($class, $this->connection);
-        });
+        $repository = $this->repositories->get(
+            $class,
+            function () use ($class) {
+                return $this->policy->repository($class, $this->connection);
+            }
+        );
 
         return $repository;
     }
@@ -120,7 +114,7 @@ class Manager
      * @param Manager $instance
      * @param string  $manager
      */
-    public static function set(Manager $instance, string $manager = 'default')
+    public static function set(Manager $instance, string $manager = 'default'): void
     {
         self::$instances[$manager] = $instance;
         self::$factories[$manager] = null;
@@ -132,7 +126,7 @@ class Manager
      * @param callable $factory
      * @param string   $manager
      */
-    public static function setFactory(callable $factory, string $manager = 'default')
+    public static function setFactory(callable $factory, string $manager = 'default'): void
     {
         self::$instances[$manager] = null;
         self::$factories[$manager] = $factory;
@@ -155,7 +149,7 @@ class Manager
      *
      * @param string $manager
      */
-    public static function unset(string $manager = 'default')
+    public static function unset(string $manager = 'default'): void
     {
         unset(self::$instances[$manager]);
         unset(self::$factories[$manager]);

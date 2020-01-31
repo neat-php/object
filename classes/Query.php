@@ -7,10 +7,7 @@ use Traversable;
 
 class Query extends \Neat\Database\Query
 {
-    /**
-     * @var RepositoryInterface
-     */
-    private $repository;
+    private RepositoryInterface $repository;
 
     /**
      * Query constructor

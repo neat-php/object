@@ -9,16 +9,8 @@ use Neat\Object\Relations\Reference\RemoteKey;
 
 trait ReferenceFactory
 {
-    /**
-     * @var Cache
-     */
-    private $references;
+    private Cache $references;
 
-    /**
-     * @param string $local
-     * @param string $remote
-     * @return RemoteKey
-     */
     public function remoteKey(string $local, string $remote): RemoteKey
     {
         /** @var RemoteKey $reference */
@@ -29,12 +21,6 @@ trait ReferenceFactory
         return $reference;
     }
 
-    /**
-     * @param Policy $policy
-     * @param string $local
-     * @param string $remote
-     * @return RemoteKey
-     */
     private function remoteKeyFactory(Policy $policy, string $local, string $remote): RemoteKey
     {
         $localKey         = $policy->key($local);
@@ -50,11 +36,6 @@ trait ReferenceFactory
         );
     }
 
-    /**
-     * @param string $local
-     * @param string $remote
-     * @return LocalKey
-     */
     public function localKey(string $local, string $remote): LocalKey
     {
         /** @var LocalKey $reference */
@@ -65,12 +46,6 @@ trait ReferenceFactory
         return $reference;
     }
 
-    /**
-     * @param Policy $policy
-     * @param string $local
-     * @param string $remote
-     * @return LocalKey
-     */
     private function localKeyFactory(Policy $policy, string $local, string $remote): LocalKey
     {
         $localForeignKey  = $policy->foreignKey($remote);
@@ -96,12 +71,6 @@ trait ReferenceFactory
         return $reference;
     }
 
-    /**
-     * @param Policy $policy
-     * @param string $local
-     * @param string $remote
-     * @return JunctionTable
-     */
     private function junctionTableFactory(Policy $policy, string $local, string $remote): JunctionTable
     {
         $localKey         = $policy->key($local);

@@ -34,15 +34,16 @@ class PropertyTest extends TestCase
     public function provideTypes()
     {
         return [
-            ['id', 'int'],
-            ['username', 'string'],
+            ['id', Property\Integer::class],
+            ['username', Property::class],
             ['middleName', null],
             ['lastName', null],
-            ['active', 'bool'],
-            ['ignored', 'int'],
-            ['registerDate', 'DateTimeImmutable'],
-            ['updateDate', 'DateTime'],
-            ['deletedDate', 'DateTime'],
+            ['phone', Property\Serializable::class],
+            ['active', Property\Boolean::class],
+            ['ignored', Property\Integer::class],
+            ['registerDate', Property\DateTimeImmutable::class],
+            ['updateDate', Property\DateTime::class],
+            ['deletedDate', Property\DateTime::class],
         ];
     }
 
@@ -58,7 +59,9 @@ class PropertyTest extends TestCase
         $property = $this->createProperty($name);
 
         $this->assertSame($name, $property->name());
-        $this->assertSame($type, $property->type());
+        if ($type !== null) {
+            $this->assertInstanceOf($type, $property);
+        }
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
@@ -70,7 +73,6 @@ class PropertyTest extends TestCase
     public function provideSetData()
     {
         return [
-            ['id', null, null],
             ['id', 1, 1],
             ['id', '1', 1],
             ['username', 'john', 'john'],
@@ -129,7 +131,6 @@ class PropertyTest extends TestCase
     public function provideGetData()
     {
         return [
-            ['id', null, null],
             ['id', 1, '1'],
             ['id', '1', '1'],
             ['username', 'john', 'john'],

@@ -17,7 +17,7 @@ trait ArrayConversion
      * @param $array
      * @return mixed
      */
-    public function fromArray($array)
+    public function fromArray(array $array): object
     {
         return $this::repository()->fromArray($this, $array);
     }
@@ -27,7 +27,7 @@ trait ArrayConversion
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this::repository()->toArray($this);
     }

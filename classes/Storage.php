@@ -25,9 +25,9 @@ trait Storage
     }
 
     /**
-     * @see RepositoryInterface::has()
      * @param int|string|array $id
      * @return bool
+     * @see RepositoryInterface::has()
      */
     public static function has($id): bool
     {
@@ -35,29 +35,29 @@ trait Storage
     }
 
     /**
-     * @see RepositoryInterface::get()
      * @param int|string|array $id
      * @return static|null
+     * @see RepositoryInterface::get()
      */
-    public static function get($id)
+    public static function get($id): ?self
     {
         return static::repository()->get($id);
     }
 
     /**
-     * @see RepositoryInterface::select()
      * @param string|null $alias
      * @return Query
+     * @see RepositoryInterface::select()
      */
-    public static function select(string $alias = null): Query
+    public static function select(?string $alias = null): Query
     {
         return static::repository()->select($alias);
     }
 
     /**
-     * @see RepositoryInterface::query()
      * @param Query|string|array|null $conditions
      * @return Query
+     * @see RepositoryInterface::query()
      */
     public static function query($conditions = null): Query
     {
@@ -65,19 +65,19 @@ trait Storage
     }
 
     /**
-     * @see RepositoryInterface::one()
      * @param Query|string|array|null $conditions
      * @return static|null
+     * @see RepositoryInterface::one()
      */
-    public static function one($conditions = null)
+    public static function one($conditions = null): ?self
     {
         return static::repository()->one($conditions);
     }
 
     /**
-     * @see RepositoryInterface::all()
      * @param Query|string|array|null $conditions
      * @return static[]
+     * @see RepositoryInterface::all()
      */
     public static function all($conditions = null): array
     {
@@ -85,9 +85,9 @@ trait Storage
     }
 
     /**
-     * @see RepositoryInterface::collection()
      * @param Query|string|array|null $conditions
      * @return Collection|static[]
+     * @see RepositoryInterface::collection()
      */
     public static function collection($conditions = null): Collection
     {
@@ -95,9 +95,9 @@ trait Storage
     }
 
     /**
-     * @see RepositoryInterface::iterate()
      * @param Query|string|array|null $conditions
      * @return Traversable|static[]
+     * @see RepositoryInterface::iterate()
      */
     public static function iterate($conditions = null): Traversable
     {
@@ -107,15 +107,16 @@ trait Storage
     /**
      * @see RepositoryInterface::store()
      */
-    public function store()
+    public function store(): void
     {
         $this::repository()->store($this);
     }
 
     /**
+     * @return $this
      * @see RepositoryInterface::load()
      */
-    public function load()
+    public function load(): self
     {
         return $this::repository()->load($this);
     }
@@ -123,7 +124,7 @@ trait Storage
     /**
      * @see RepositoryInterface::delete()
      */
-    public function delete()
+    public function delete(): void
     {
         $this::repository()->delete($this);
     }

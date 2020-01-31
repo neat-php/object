@@ -24,7 +24,7 @@ trait Collectible
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->items()[$offset]);
     }
@@ -48,7 +48,7 @@ trait Collectible
      * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $items          = &$this->items();
         $items[$offset] = $value;
@@ -60,7 +60,7 @@ trait Collectible
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
      * @param mixed $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $items = &$this->items();
         unset($items[$offset]);
@@ -71,7 +71,7 @@ trait Collectible
      *
      * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->items();
     }
@@ -82,7 +82,7 @@ trait Collectible
      * @link http://php.net/manual/en/countable.count.php
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->items());
     }
@@ -117,7 +117,7 @@ trait Collectible
      * @param mixed $item
      * @return $this
      */
-    public function push($item)
+    public function push($item): self
     {
         $items   = &$this->items();
         $items[] = $item;
@@ -130,14 +130,14 @@ trait Collectible
      *
      * The callback should accept an `$item` parameter
      *
-     * @param callable $callback (optional)
+     * @param callable|null $callback
      * @return static
      */
-    public function filter(callable $callback = null)
+    public function filter(?callable $callback = null): self
     {
         if (!$callback) {
-            $callback = function ($item) {
-                return !!$item;
+            $callback = static function ($item): bool {
+                return (bool)$item;
             };
         }
         $new   = clone $this;
@@ -157,9 +157,9 @@ trait Collectible
      * The callback should accept an `$item` parameter
      *
      * @param callable $callback
-     * @return Collection|array
+     * @return Collection
      */
-    public function map(callable $callback)
+    public function map(callable $callback): Collection
     {
         return new Collection(array_map($callback, $this->items()));
     }
@@ -168,9 +168,9 @@ trait Collectible
      * Get given column for every item as new collection
      *
      * @param string $column
-     * @return Collection|array
+     * @return Collection
      */
-    public function column($column)
+    public function column($column): Collection
     {
         return new Collection(array_column($this->items(), $column));
     }
@@ -181,7 +181,7 @@ trait Collectible
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->items();
     }

@@ -9,25 +9,13 @@ use Neat\Object\RepositoryInterface;
 
 class RemoteKey extends Reference
 {
-    /**
-     * @var Property
-     */
-    private $localKey;
+    private Property $localKey;
 
-    /**
-     * @var Property
-     */
-    private $remoteForeignKey;
+    private Property $remoteForeignKey;
 
-    /**
-     * @var string
-     */
-    private $remoteKey;
+    private string $remoteKey;
 
-    /**
-     * @var RepositoryInterface
-     */
-    private $remoteRepository;
+    private RepositoryInterface $remoteRepository;
 
     public function __construct(
         Property $localKey,
@@ -63,7 +51,7 @@ class RemoteKey extends Reference
             ->where([$this->remoteKey => $this->localKey->get($local)]);
     }
 
-    public function store($local, array $remotes)
+    public function store($local, array $remotes): void
     {
         $id     = $this->localKey->get($local);
         $before = $this->load($local);
@@ -83,10 +71,10 @@ class RemoteKey extends Reference
     }
 
     /**
-     * @param $remote
+     * @param object $remote
      * @return mixed
      */
-    public function getRemoteKeyValue($remote)
+    public function getRemoteKeyValue(object $remote)
     {
         return $this->remoteForeignKey->get($remote);
     }

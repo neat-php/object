@@ -6,35 +6,13 @@ use Neat\Object\RepositoryInterface;
 
 class Diff
 {
-    /**
-     * @var RepositoryInterface
-     */
-    private $remoteRepository;
+    private RepositoryInterface $remoteRepository;
 
-    /**
-     * @var array
-     */
-    private $after;
-
-    /**
-     * @var array
-     */
-    private $before;
-
-    /**
-     * @var array
-     */
-    private $insert = [];
-
-    /**
-     * @var array
-     */
-    private $update = [];
-
-    /**
-     * @var array
-     */
-    private $delete = [];
+    private array $after;
+    private array $before;
+    private array $insert = [];
+    private array $update = [];
+    private array $delete = [];
 
     /**
      * Diff constructor.
@@ -74,21 +52,24 @@ class Diff
         return array_values($this->delete);
     }
 
-    protected function diff()
+    protected function diff(): void
     {
-        $this->insert = array_filter($this->after, function ($newObject) {
-            foreach ($this->before as $key => $currentObject) {
-                if (!$this->compare($newObject, $currentObject)) {
-                    continue;
+        $this->insert = array_filter(
+            $this->after,
+            function ($newObject) {
+                foreach ($this->before as $key => $currentObject) {
+                    if (!$this->compare($newObject, $currentObject)) {
+                        continue;
+                    }
+                    unset($this->before[$key]);
+                    $this->update[] = $newObject;
+
+                    return false;
                 }
-                unset($this->before[$key]);
-                $this->update[] = $newObject;
 
-                return false;
+                return true;
             }
-
-            return true;
-        });
+        );
 
         $this->delete = $this->before;
     }

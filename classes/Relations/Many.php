@@ -21,11 +21,7 @@ class Many extends Relation
         return $this;
     }
 
-    /**
-     * @param object $remote
-     * @return $this
-     */
-    public function add($remote): self
+    public function add(object $remote): self
     {
         $this->all();
         if (!$this->has($remote)) {
@@ -35,15 +31,11 @@ class Many extends Relation
         return $this;
     }
 
-    /**
-     * @param object $remote
-     * @return Many
-     */
-    public function remove($remote): self
+    public function remove(object $remote): self
     {
         $this->all();
         foreach ($this->objects as $index => $object) {
-            if ($this->reference->getRemoteKeyValue($object) == $this->reference->getRemoteKeyValue($remote)) {
+            if ($this->reference->getRemoteKeyValue($object) === $this->reference->getRemoteKeyValue($remote)) {
                 unset($this->objects[$index]);
 
                 return $this;
@@ -53,11 +45,7 @@ class Many extends Relation
         return $this;
     }
 
-    /**
-     * @param $remote
-     * @return bool
-     */
-    public function has($remote): bool
+    public function has(object $remote): bool
     {
         $remoteKeyValue = $this->reference->getRemoteKeyValue($remote);
         if ($remoteKeyValue === null) {
@@ -65,7 +53,7 @@ class Many extends Relation
         }
 
         foreach ($this->all() as $object) {
-            if ($this->reference->getRemoteKeyValue($object) == $remoteKeyValue) {
+            if ($this->reference->getRemoteKeyValue($object) === $remoteKeyValue) {
                 return true;
             }
         }
@@ -73,10 +61,7 @@ class Many extends Relation
         return false;
     }
 
-    /**
-     * @return Query
-     */
-    public function select()
+    public function select(): Query
     {
         return $this->reference->select($this->local);
     }

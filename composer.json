@@ -29,7 +29,8 @@
     },
     "require": {
         "php": ">=7.4",
-        "neat/database": "^1.2"
+        "neat/database": "^1.2",
+        "nunomaduro/phpinsights": "^1.11"
     },
     "require-dev": {
         "ext-pdo": "*",

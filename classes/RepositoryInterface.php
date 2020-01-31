@@ -21,15 +21,15 @@ interface RepositoryInterface
      * @param int|string|array $id Identifier value(s)
      * @return mixed|null
      */
-    public function get($id);
+    public function get($id): ?object;
 
     /**
      * Create select query
      *
-     * @param string $alias Table alias (optional)
+     * @param string $alias Table alias
      * @return Query
      */
-    public function select(string $alias = null): Query;
+    public function select(?string $alias = null): Query;
 
     /**
      * Create select query with conditions
@@ -45,7 +45,7 @@ interface RepositoryInterface
      * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
      */
-    public function one($conditions = null);
+    public function one($conditions = null): ?object;
 
     /**
      * Get all by conditions
@@ -76,7 +76,7 @@ interface RepositoryInterface
      *
      * @param object $entity
      */
-    public function store($entity);
+    public function store(object $entity): void;
 
     /**
      * Insert entity data into database table and return inserted id
@@ -84,7 +84,7 @@ interface RepositoryInterface
      * @param array $data
      * @return int
      */
-    public function insert(array $data);
+    public function insert(array $data): int;
 
     /**
      * Update entity data in database table
@@ -99,13 +99,13 @@ interface RepositoryInterface
      * @param object $entity
      * @return object
      */
-    public function load($entity);
+    public function load(object $entity): object;
 
     /**
      * @param object $entity
      * @return false|int
      */
-    public function delete($entity);
+    public function delete(object $entity);
 
     /**
      * Convert to an associative array
@@ -113,24 +113,24 @@ interface RepositoryInterface
      * @param object $entity
      * @return array
      */
-    public function toArray($entity): array;
+    public function toArray(object $entity): array;
 
     /**
      * Convert from an associative array
      *
      * @param object $entity
      * @param array  $data
-     * @return mixed
+     * @return object
      */
-    public function fromArray($entity, array $data);
+    public function fromArray(object $entity, array $data): object;
 
     /**
      * Create entity from row
      *
      * @param array $data
-     * @return mixed
+     * @return object
      */
-    public function create(array $data);
+    public function create(array $data): object;
 
     /**
      * Get identifier for entity
@@ -138,5 +138,5 @@ interface RepositoryInterface
      * @param object $entity
      * @return array
      */
-    public function identifier($entity);
+    public function identifier(object $entity): array;
 }

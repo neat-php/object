@@ -2,9 +2,9 @@
 
 namespace Neat\Object;
 
+use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
 use Traversable;
-use Neat\Database\Query as QueryBuilder;
 
 trait RepositoryDecorator
 {
@@ -27,7 +27,7 @@ trait RepositoryDecorator
      * @param int|string|array $id Identifier value(s)
      * @return mixed|null
      */
-    public function get($id)
+    public function get($id): ?object
     {
         return $this->repository()->get($id);
     }
@@ -35,10 +35,10 @@ trait RepositoryDecorator
     /**
      * Create select query
      *
-     * @param string $alias Table alias (optional)
+     * @param string|null $alias Table alias (optional)
      * @return Query
      */
-    public function select(string $alias = null): Query
+    public function select(?string $alias = null): Query
     {
         return $this->repository()->select($alias);
     }
@@ -60,7 +60,7 @@ trait RepositoryDecorator
      * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
      */
-    public function one($conditions = null)
+    public function one($conditions = null): ?object
     {
         return $this->repository()->one($conditions);
     }
@@ -103,7 +103,7 @@ trait RepositoryDecorator
      *
      * @param object $entity
      */
-    public function store($entity)
+    public function store(object $entity): void
     {
         $this->repository()->store($entity);
     }
@@ -114,7 +114,7 @@ trait RepositoryDecorator
      * @param array $data
      * @return int
      */
-    public function insert(array $data)
+    public function insert(array $data): int
     {
         return $this->repository()->insert($data);
     }
@@ -135,7 +135,7 @@ trait RepositoryDecorator
      * @param object $entity
      * @return object
      */
-    public function load($entity)
+    public function load(object $entity): object
     {
         return $this->repository()->load($entity);
     }
@@ -144,7 +144,7 @@ trait RepositoryDecorator
      * @param object $entity
      * @return false|int
      */
-    public function delete($entity)
+    public function delete(object $entity)
     {
         return $this->repository()->delete($entity);
     }
@@ -155,7 +155,7 @@ trait RepositoryDecorator
      * @param object $entity
      * @return array
      */
-    public function toArray($entity): array
+    public function toArray(object $entity): array
     {
         return $this->repository()->toArray($entity);
     }
@@ -167,7 +167,7 @@ trait RepositoryDecorator
      * @param array  $data
      * @return mixed
      */
-    public function fromArray($entity, array $data)
+    public function fromArray(object $entity, array $data): object
     {
         return $this->repository()->fromArray($entity, $data);
     }
@@ -178,7 +178,7 @@ trait RepositoryDecorator
      * @param array $data
      * @return mixed
      */
-    public function create(array $data)
+    public function create(array $data): object
     {
         return $this->repository()->create($data);
     }
@@ -189,7 +189,7 @@ trait RepositoryDecorator
      * @param object $entity
      * @return array
      */
-    public function identifier($entity)
+    public function identifier(object $entity): array
     {
         return $this->repository()->identifier($entity);
     }

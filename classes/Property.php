@@ -6,29 +6,19 @@ use ReflectionProperty;
 
 class Property
 {
-    /**
-     * @var ReflectionProperty
-     */
-    protected $reflection;
-
-    /**
-     * @var string|null
-     */
-    protected $type;
+    protected ReflectionProperty $reflection;
 
     /**
      * Property constructor
      *
      * @param ReflectionProperty $reflection
-     * @param string             $type
      * @note Activates the reflection's accessible flag
      */
-    public function __construct(ReflectionProperty $reflection, string $type = null)
+    public function __construct(ReflectionProperty $reflection)
     {
         $reflection->setAccessible(true);
 
         $this->reflection = $reflection;
-        $this->type       = $type;
     }
 
     /**
@@ -58,17 +48,11 @@ class Property
      */
     public function comment(): string
     {
-        return $this->reflection->getDocComment() ?: '';
-    }
+        if ($this->reflection->getDocComment()) {
+            return $this->reflection->getDocComment();
+        }
 
-    /**
-     * Get type
-     *
-     * @return string|null
-     */
-    public function type()
-    {
-        return $this->type;
+        return '';
     }
 
     /**
@@ -97,9 +81,9 @@ class Property
      * Get Value
      *
      * @param object $object
-     * @return mixed
+     * @return string|null
      */
-    public function get($object)
+    public function get(object $object): ?string
     {
         if (!$this->reflection->isInitialized($object)) {
             return null;
@@ -118,7 +102,7 @@ class Property
      * @param object $object
      * @param mixed  $value
      */
-    public function set($object, $value)
+    public function set(object $object, $value): void
     {
         if ($value !== null) {
             $value = $this->fromString($value);

@@ -14,20 +14,24 @@ class Serializable extends Property
      * Property constructor
      *
      * @param ReflectionProperty $reflection
-     * @param string             $type
      */
-    public function __construct(ReflectionProperty $reflection, string $type = null)
+    public function __construct(ReflectionProperty $reflection)
     {
-        parent::__construct($reflection, $type);
+        parent::__construct($reflection);
+        $type = $reflection->getType();
+        if ($type instanceof \ReflectionNamedType) {
+            $this->factory = new ReflectionClass($type->getName());
 
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->factory = new ReflectionClass($type);
+            return;
+        }
+
+        throw new \TypeError();
     }
 
     /**
      * Cast Serializable to string
      *
-     * @param Serializable|object $value
+     * @param \Serializable $value
      * @return string
      */
     public function toString($value): string
@@ -36,7 +40,7 @@ class Serializable extends Property
             return $value->serialize();
         }
 
-        return $value;
+        throw new \TypeError();
     }
 
     /**
@@ -52,4 +56,5 @@ class Serializable extends Property
         $object->unserialize($value);
 
         return $object;
-    }}
+    }
+}

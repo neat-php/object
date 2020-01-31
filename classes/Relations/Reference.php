@@ -10,24 +10,24 @@ abstract class Reference
      * @param object $local
      * @return object[]
      */
-    abstract public function load($local): array;
+    abstract public function load(object $local): array;
 
     /**
      * @param object   $local
      * @param object[] $remotes
      * @return void
      */
-    abstract public function store($local, array $remotes);
+    abstract public function store(object $local, array $remotes): void;
 
     /**
-     * @param $remote
+     * @param object $remote
      * @return mixed
      */
-    abstract public function getRemoteKeyValue($remote);
+    abstract public function getRemoteKeyValue(object $remote);
 
     /**
      * @param $local
      * @return Query
      */
-    abstract public function select($local): Query;
+    abstract public function select(object $local): Query;
 }

@@ -12,30 +12,21 @@ use Traversable;
 
 class Repository implements RepositoryInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var string
-     */
-    private $class;
+    private string $class;
 
-    /**
-     * @var string
-     */
-    private $table;
+    private string $table;
 
     /**
      * @var string[]
      */
-    private $key;
+    private array $key;
 
     /**
      * @var Property[]
      */
-    private $properties;
+    private array $properties;
 
     /**
      * Repository constructor
@@ -74,7 +65,7 @@ class Repository implements RepositoryInterface
      * @param int|string|array $id Identifier value(s)
      * @return mixed|null
      */
-    public function get($id)
+    public function get($id): ?object
     {
         return $this->one($this->where($id));
     }
@@ -82,10 +73,10 @@ class Repository implements RepositoryInterface
     /**
      * Create select query
      *
-     * @param string $alias Table alias (optional)
+     * @param string $alias Table alias
      * @return Query
      */
-    public function select(string $alias = null): Query
+    public function select(?string $alias = null): Query
     {
         $quotedTable = $this->connection->quoteIdentifier($this->table);
 
@@ -122,7 +113,7 @@ class Repository implements RepositoryInterface
      * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
      */
-    public function one($conditions = null)
+    public function one($conditions = null): ?object
     {
         if ($conditions instanceof SQLQuery) {
             $row = $conditions->query()->row();
@@ -189,7 +180,7 @@ class Repository implements RepositoryInterface
      *
      * @param object $entity
      */
-    public function store($entity)
+    public function store(object $entity): void
     {
         if (method_exists($entity, 'relations')) {
             $this->setRelations($entity->relations()->all());
@@ -212,7 +203,7 @@ class Repository implements RepositoryInterface
     /**
      * @param Relation[] $relations
      */
-    private function setRelations(array $relations)
+    private function setRelations(array $relations): void
     {
         foreach ($relations as $key => $relation) {
             if (strpos($key, 'belongsToOne') !== false) {
@@ -221,7 +212,10 @@ class Repository implements RepositoryInterface
         }
     }
 
-    private function storeRelations(array $relations)
+    /**
+     * @param Relation[] $relations
+     */
+    private function storeRelations(array $relations): void
     {
         foreach ($relations as $key => $relation) {
             if (strpos($key, 'belongsToOne') === false) {
@@ -236,7 +230,7 @@ class Repository implements RepositoryInterface
      * @param array $data
      * @return int
      */
-    public function insert(array $data)
+    public function insert(array $data): int
     {
         $this->connection
             ->insert($this->table, $data);
@@ -261,7 +255,7 @@ class Repository implements RepositoryInterface
      * @param object $entity
      * @return false|int
      */
-    public function delete($entity)
+    public function delete(object $entity)
     {
         $identifier = $this->identifier($entity);
 
@@ -273,7 +267,7 @@ class Repository implements RepositoryInterface
      * @param object $entity
      * @return object
      */
-    public function load($entity)
+    public function load(object $entity): object
     {
         $identifier = array_filter($this->identifier($entity));
         if (!$identifier) {
@@ -294,7 +288,7 @@ class Repository implements RepositoryInterface
      * @param object $entity
      * @return array
      */
-    public function toArray($entity): array
+    public function toArray(object $entity): array
     {
         $data = [];
         foreach ($this->properties as $key => $property) {
@@ -311,7 +305,7 @@ class Repository implements RepositoryInterface
      * @param array  $data
      * @return mixed
      */
-    public function fromArray($entity, array $data)
+    public function fromArray(object $entity, array $data): object
     {
         foreach ($this->properties as $key => $property) {
             $property->set($entity, $data[$key] ?? null);
@@ -326,7 +320,7 @@ class Repository implements RepositoryInterface
      * @param array $data
      * @return mixed
      */
-    public function create(array $data)
+    public function create(array $data): object
     {
         return $this->fromArray(new $this->class(), $data);
     }
@@ -337,13 +331,16 @@ class Repository implements RepositoryInterface
      * @param object $entity
      * @return array
      */
-    public function identifier($entity)
+    public function identifier(object $entity): array
     {
         $keys = array_combine($this->key, $this->key);
 
-        return array_map(function (string $key) use ($entity) {
-            return $this->properties[$key]->get($entity);
-        }, $keys);
+        return array_map(
+            function (string $key) use ($entity) {
+                return $this->properties[$key]->get($entity);
+            },
+            $keys
+        );
     }
 
     /**
@@ -351,15 +348,19 @@ class Repository implements RepositoryInterface
      *
      * @param int|string|array $id
      */
-    private function validateIdentifier($id)
+    private function validateIdentifier($id): void
     {
         $printed = print_r($id, true);
         if (count($this->key) > 1 && !is_array($id)) {
-            throw new RuntimeException("Entity $this->class has a composed key, finding by id requires an array, given: $printed");
+            throw new RuntimeException(
+                "Entity {$this->class} has a composed key, finding by id requires an array, given: {$printed}"
+            );
         }
         if (is_array($id) && count($this->key) !== count($id)) {
             $keys = print_r($this->key, true);
-            throw new RuntimeException("Entity $this->class requires the following keys: $keys, given: $printed");
+            throw new RuntimeException(
+                "Entity {$this->class} requires the following keys: {$keys}, given: {$printed}"
+            );
         }
     }
 
@@ -369,15 +370,15 @@ class Repository implements RepositoryInterface
      * @param int|string|array $id
      * @return array
      */
-    private function where($id)
+    private function where($id): array
     {
         $this->validateIdentifier($id);
         $key = reset($this->key);
 
         if (!is_array($id)) {
             return [$key => $id];
-        } else {
-            return $id;
         }
+
+        return $id;
     }
 }
