@@ -45,7 +45,7 @@ class User
 {
     /** @var int */
     public $id;
-    
+
     /** @var string */
     public $name;
 }
@@ -78,7 +78,7 @@ if (!$respository->has(1)) {
 To find and entity from a table using a composed primary key, you should pass
 the identifiers as an array.
 
-## Find using a query 
+## Find using a query
 The repository allows you to query for entities in many ways:
 * `one` returns one entity (or null if none matched the query)
 * `all` returns all entities matched by the query as an array
@@ -114,10 +114,10 @@ use the `Storage` trait to allow for static repository access:
 class User
 {
     use Storage;
-    
+
     /** @var int */
     public $id;
-    
+
     /** @var string */
     public $name;
 }

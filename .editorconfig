@@ -1,0 +1,20 @@
+root = true
+
+[*]
+end_of_line = lf
+trim_trailing_whitespace = true
+
+[*.{php,js,css,scss,sql,md,txt}]
+charset = utf-8
+indent_style = space
+insert_final_newline = true
+
+[*.{php,js}]
+indent_size = 4
+
+[*.{css,scss}]
+indent_size = 2
+
+[*.php]
+ij_php_comma_after_last_array_element = true
+ij_php_force_short_declaration_array_style = true
