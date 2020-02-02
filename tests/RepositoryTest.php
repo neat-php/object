@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection SqlResolve */
-
 namespace Neat\Object\Test;
 
 use Generator;
