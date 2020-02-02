@@ -10,45 +10,29 @@ use Neat\Object\RepositoryInterface;
 
 class JunctionTable extends Reference
 {
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $localKey;
 
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $remoteKey;
 
-    /**
-     * @var string
-     */
-    private $remoteKeyString;
+    /** @var string */
+    private $remoteKeyColumn;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $remoteRepository;
 
-    /**
-     * @var Connection
-     */
+    /** @var Connection */
     private $connection;
 
-    /**
-     * @var string
-     */
-    private $table;
+    /** @var string */
+    private $junctionTable;
 
-    /**
-     * @var string
-     */
-    private $localForeignKey;
+    /** @var string */
+    private $junctionTableLocalForeignKey;
 
-    /**
-     * @var string
-     */
-    private $remoteForeignKey;
+    /** @var string */
+    private $junctionTableRemoteForeignKey;
 
     public function __construct(
         Property $localKey,
@@ -60,14 +44,14 @@ class JunctionTable extends Reference
         string $localForeignKey,
         string $remoteForeignKey
     ) {
-        $this->localKey         = $localKey;
-        $this->remoteKey        = $remoteKey;
-        $this->remoteKeyString  = $remoteKeyString;
-        $this->remoteRepository = $remoteRepository;
-        $this->connection       = $connection;
-        $this->table            = $junctionTable;
-        $this->localForeignKey  = $localForeignKey;
-        $this->remoteForeignKey = $remoteForeignKey;
+        $this->localKey                      = $localKey;
+        $this->remoteKey                     = $remoteKey;
+        $this->remoteKeyColumn               = $remoteKeyString;
+        $this->remoteRepository              = $remoteRepository;
+        $this->connection                    = $connection;
+        $this->junctionTable                 = $junctionTable;
+        $this->junctionTableLocalForeignKey  = $localForeignKey;
+        $this->junctionTableRemoteForeignKey = $remoteForeignKey;
     }
 
     /**
@@ -88,8 +72,9 @@ class JunctionTable extends Reference
     {
         return $this->remoteRepository
             ->select('rt')
-            ->innerJoin($this->table, 'jt', "rt.$this->remoteKeyString = jt.$this->remoteForeignKey")
-            ->where([$this->localForeignKey => $this->localKey->get($local)]);
+            ->innerJoin($this->junctionTable, 'jt',
+                "rt.$this->remoteKeyColumn = jt.$this->junctionTableRemoteForeignKey")
+            ->where([$this->junctionTableLocalForeignKey => $this->localKey->get($local)]);
     }
 
     /**
@@ -103,25 +88,25 @@ class JunctionTable extends Reference
 
         $after = array_map(function ($remote) use ($localIdentifier) {
             return [
-                $this->localForeignKey  => (string)$localIdentifier,
-                $this->remoteForeignKey => (string)$this->remoteKey->get($remote),
+                $this->junctionTableLocalForeignKey  => (string)$localIdentifier,
+                $this->junctionTableRemoteForeignKey => (string)$this->remoteKey->get($remote),
             ];
         }, $remotes);
 
         $before = $this->connection
             ->select('*')
-            ->from($this->table)
-            ->where([$this->localForeignKey => $localIdentifier])
+            ->from($this->junctionTable)
+            ->where([$this->junctionTableLocalForeignKey => $localIdentifier])
             ->query()
             ->rows();
 
         $delete = $this->diff($before, $after, [$this, 'compare']);
         $insert = $this->diff($after, $before, [$this, 'compare']);
         foreach ($delete as $row) {
-            $this->connection->delete($this->table, $row);
+            $this->connection->delete($this->junctionTable, $row);
         }
         foreach ($insert as $row) {
-            $this->connection->insert($this->table, $row);
+            $this->connection->insert($this->junctionTable, $row);
         }
     }
 

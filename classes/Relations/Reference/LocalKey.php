@@ -9,24 +9,16 @@ use Neat\Object\RepositoryInterface;
 
 class LocalKey extends Reference
 {
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $localForeignKey;
 
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $remoteKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $remoteKeyString;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $remoteRepository;
 
     public function __construct(

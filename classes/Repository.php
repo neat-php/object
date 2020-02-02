@@ -236,10 +236,9 @@ class Repository implements RepositoryInterface
      * @param array $data
      * @return int
      */
-    public function insert(array $data)
+    public function insert(array $data): int
     {
-        $this->connection
-            ->insert($this->table, $data);
+        $this->connection->insert($this->table, $data);
 
         return $this->connection->insertedId();
     }
@@ -253,8 +252,9 @@ class Repository implements RepositoryInterface
      */
     public function update($id, array $data)
     {
-        return $this->connection
-            ->update($this->table, $data, $this->where($id));
+        $where = $this->where($id);
+
+        return $this->connection->update($this->table, $data, $where);
     }
 
     /**
@@ -264,9 +264,9 @@ class Repository implements RepositoryInterface
     public function delete($entity)
     {
         $identifier = $this->identifier($entity);
+        $where      = $this->where($identifier);
 
-        return $this->connection
-            ->delete($this->table, $this->where($identifier));
+        return $this->connection->delete($this->table, $where);
     }
 
     /**
@@ -279,7 +279,8 @@ class Repository implements RepositoryInterface
         if (!$identifier) {
             return $entity;
         }
-        $row = $this->select()->where($this->where($identifier))->query()->row();
+        $where = $this->where($identifier);
+        $row   = $this->select()->where($where)->query()->row();
         if (!$row) {
             return $entity;
         }
@@ -341,9 +342,12 @@ class Repository implements RepositoryInterface
     {
         $keys = array_combine($this->key, $this->key);
 
-        return array_map(function (string $key) use ($entity) {
-            return $this->properties[$key]->get($entity);
-        }, $keys);
+        return array_map(
+            function (string $key) use ($entity) {
+                return $this->properties[$key]->get($entity);
+            },
+            $keys
+        );
     }
 
     /**
@@ -355,7 +359,9 @@ class Repository implements RepositoryInterface
     {
         $printed = print_r($id, true);
         if (count($this->key) > 1 && !is_array($id)) {
-            throw new RuntimeException("Entity $this->class has a composed key, finding by id requires an array, given: $printed");
+            throw new RuntimeException(
+                "Entity $this->class has a composed key, finding by id requires an array, given: $printed"
+            );
         }
         if (is_array($id) && count($this->key) !== count($id)) {
             $keys = print_r($this->key, true);

@@ -92,10 +92,10 @@ class Policy
     /**
      * Get properties for class
      *
-     * @param string $class
+     * @param string|object $class
      * @return Property[]
      */
-    public function properties(string $class)
+    public function properties($class)
     {
         $properties = [];
         /** @noinspection PhpUnhandledExceptionInspection */

@@ -48,6 +48,11 @@ class Manager
         $this->references   = new Cache();
     }
 
+    public function manager(): Manager
+    {
+        return $this;
+    }
+
     /**
      * Get connection
      *
