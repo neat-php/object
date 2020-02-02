@@ -88,6 +88,6 @@ class RemoteKey extends Reference
      */
     public function getRemoteKeyValue($remote)
     {
-        return $this->remoteForeignKey->get($remote);
+        return $this->remoteRepository->identifier($remote);
     }
 }
