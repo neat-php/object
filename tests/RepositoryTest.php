@@ -217,4 +217,25 @@ class RepositoryTest extends TestCase
         $user = $repository->get(1);
         $this->assertSame($user, $repository->load($user));
     }
+
+    public function testLoadWithoutIdentifier()
+    {
+        $repository = $this->repository(User::class);
+
+        $notPersistedUser           = new User();
+        $notPersistedUser->lastName = 'test';
+        $user2                      = clone $notPersistedUser;
+        $this->assertEquals($user2, $repository->load($notPersistedUser));
+    }
+
+    public function testLoadWithNonExistingEntity()
+    {
+        $repository = $this->repository(User::class);
+
+        $notPersistedUser           = new User();
+        $notPersistedUser->id       = 1234567890;
+        $notPersistedUser->lastName = 'test';
+        $user2                      = clone $notPersistedUser;
+        $this->assertEquals($user2, $repository->load($notPersistedUser));
+    }
 }

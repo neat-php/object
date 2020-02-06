@@ -4,11 +4,12 @@ namespace Neat\Object\Test\Decorator;
 
 use DateTime;
 use Generator;
+use Neat\Database\QueryInterface;
+use Neat\Database\SQLQuery;
 use Neat\Object\Collection;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Property;
 use Neat\Object\Query;
-use Neat\Object\Repository;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Assertions;
 use Neat\Object\Test\Helper\Factory;
@@ -27,82 +28,144 @@ class SoftDeleteTest extends TestCase
      */
     public function testIterate()
     {
-        $repository = $this->repository(['query', 'iterate']);
-        $softDelete = new SoftDelete(
-            $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
-        );
-        $query      = new Query($this->connection(), $repository);
+        $repository = $this->repository();
+        $column     = 'deleted_at';
+        $property   = 'deletedDate';
+        $softDelete = $this->softDelete($repository, $column, User::class, $property);
+
+        $query = new Query($this->connection(), $repository);
         $query->select('*')->from('user');
         $expectedQuery = clone $query;
-        $expectedQuery->where(['deletedDate' => null]);
+        $expectedQuery->where([$column => null]);
         $repository->expects($this->once())
             ->method('query')
             ->willReturn($query);
         $repository->expects($this->once())
             ->method('iterate')
             ->with($this->equalTo($expectedQuery))
-            ->willReturnCallback(function () {
-                yield from ['test'];
-            });
+            ->willReturnCallback(
+                function () {
+                    yield from ['test'];
+                }
+            );
         $generator = $softDelete->iterate();
         $this->assertInstanceOf(Generator::class, $generator);
         foreach ($generator as $item) {
             $this->assertSame('test', $item);
         }
+    }
 
+    public function testIterateSQLQuery()
+    {
+        $repository = $this->repository();
+        $column     = 'deleted_at';
+        $property   = 'deletedDate';
+        $softDelete = $this->softDelete($repository, $column, User::class, $property);
+
+        $query = new SQLQuery($this->connection(), "SELECT * FROM `user`");
+        $repository->expects($this->once())
+            ->method('iterate')
+            ->with($this->equalTo($query))
+            ->willReturnCallback(
+                function () {
+                    yield from ['test'];
+                }
+            );
+        $generator = $softDelete->iterate($query);
+        $this->assertInstanceOf(Generator::class, $generator);
+        foreach ($generator as $item) {
+            $this->assertSame('test', $item);
+        }
+    }
+
+    public function provideQueryBuilderData()
+    {
+        return [
+            ['all', null, $this->query(['where']), ['test']],
+            ['all', ['param' => 1], $this->query(['where']), ['test']],
+            ['collection', null, $this->query(['where']), new Collection(['test'])],
+            ['collection', ['param' => 1], $this->query(['where']), new Collection(['test'])],
+        ];
     }
 
     /**
-     * Test all
+     * @dataProvider provideQueryBuilderData
+     * @param string           $method
+     * @param                  $queryParameters
+     * @param Query|MockObject $query
+     * @param                  $result
      */
-    public function testAll()
+    public function testQueryBuilders(string $method, $queryParameters, Query $query, $result)
     {
-        $repository = $this->repository(['query', 'all']);
-        $softDelete = new SoftDelete(
-            $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
-        );
-        $query      = new Query($this->connection(), $repository);
-        $query->select('*')->from('user');
-        $expectedQuery = clone $query;
-        $expectedQuery->where(['deletedDate' => null]);
+        $repository = $this->repository();
+        $column     = 'deleted_at';
+        $property   = 'deletedDate';
+        $softDelete = $this->softDelete($repository, $column, User::class, $property);
+
+        $expectedQuery = $this->query([]);
+        $query->expects($this->once())->method('where')->with([$column => null])->willReturn($expectedQuery);
+        $queryMethod = $repository->expects($this->once())->method('query')->willReturn($query);
+        if ($queryParameters !== null) {
+            $queryMethod->with(['param' => 1]);
+        }
         $repository->expects($this->once())
-            ->method('query')
-            ->willReturn($query);
-        $repository->expects($this->once())
-            ->method('all')
+            ->method($method)
             ->with($this->equalTo($expectedQuery))
-            ->willReturn(['test']);
-        $this->assertSame(['test'], $softDelete->all());
+            ->willReturn($result);
+
+        $this->assertSame($result, $softDelete->{$method}($queryParameters));
+    }
+
+    public function providerSQLData()
+    {
+        $query = new SQLQuery($this->connection(), "SELECT * FROM `user`");
+
+        return [
+            ['all', $query, ['test']],
+            ['collection', $query, new Collection(['test'])],
+        ];
     }
 
     /**
-     * Test collection
+     * @dataProvider providerSQLData
+     * @param string   $method
+     * @param SQLQuery $query
+     * @param          $result
      */
-    public function testCollection()
+    public function testSQLQuery(string $method, SQLQuery $query, $result)
     {
-        $repository = $this->repository(['query', 'collection']);
-        $softDelete = new SoftDelete(
-            $repository,
-            'deletedDate',
-            new Property(new ReflectionProperty(User::class, 'deletedDate'))
-        );
-        $query      = new Query($this->connection(), $repository);
-        $query->select('*')->from('user');
-        $expectedQuery = clone $query;
-        $expectedQuery->where(['deletedDate' => null]);
+        $repository = $this->repository();
+        $column     = 'deleted_at';
+        $property   = 'deletedDate';
+        $softDelete = $this->softDelete($repository, $column, User::class, $property);
+
         $repository->expects($this->once())
-            ->method('query')
-            ->willReturn($query);
-        $collection = new Collection(['test']);
-        $repository->expects($this->once())
-            ->method('collection')
-            ->with($this->equalTo($expectedQuery))
-            ->willReturn($collection);
-        $this->assertSame($collection, $softDelete->collection());
+            ->method($method)
+            ->with($this->equalTo($query))
+            ->willReturn($result);
+
+        $this->assertSame($result, $softDelete->{$method}($query));
+    }
+
+    private function softDelete(
+        RepositoryInterface $repository,
+        string $column,
+        string $class,
+        string $property
+    ): SoftDelete {
+        return new SoftDelete($repository, $column, new Property(new ReflectionProperty($class, $property)));
+    }
+
+    /**
+     * @param array $methods
+     * @return QueryInterface|MockObject
+     */
+    private function query(array $methods): QueryInterface
+    {
+        return $this->getMockBuilder(Query::class)
+            ->setMethods($methods)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -110,7 +173,7 @@ class SoftDeleteTest extends TestCase
      */
     public function testDelete()
     {
-        $repository = $this->repository(['store']);
+        $repository = $this->repository();
         $softDelete = new SoftDelete(
             $repository,
             'deletedDate',
@@ -119,17 +182,21 @@ class SoftDeleteTest extends TestCase
         $date       = null;
         $repository->expects($this->once())
             ->method('store')
-            ->with($this->callback(function (User $user) use (&$date) {
-                $date = $user->deletedDate;
-                if (is_null($user->deletedDate)) {
-                    return false;
-                }
-                if (!$user->deletedDate instanceof DateTime) {
-                    return false;
-                }
+            ->with(
+                $this->callback(
+                    function (User $user) use (&$date) {
+                        $date = $user->deletedDate;
+                        if (is_null($user->deletedDate)) {
+                            return false;
+                        }
+                        if (!$user->deletedDate instanceof DateTime) {
+                            return false;
+                        }
 
-                return true;
-            }));
+                        return true;
+                    }
+                )
+            );
         $user = new User();
         $softDelete->delete($user);
         $this->assertSame($date, $user->deletedDate);
@@ -138,14 +205,10 @@ class SoftDeleteTest extends TestCase
     }
 
     /**
-     * @param array $methods
      * @return RepositoryInterface|MockObject
      */
-    private function repository(array $methods)
+    private function repository()
     {
-        return $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->setMethods($methods)
-            ->getMock();
+        return $this->getMockForAbstractClass(RepositoryInterface::class);
     }
 }

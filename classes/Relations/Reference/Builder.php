@@ -105,6 +105,6 @@ trait Builder
         }
         $properties = $this->policy->properties($class);
 
-        return $properties[$property];
+        return $properties[$this->policy->column($property)];
     }
 }

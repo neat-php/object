@@ -4,7 +4,10 @@ namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Query;
 use Neat\Object\Relations\Reference\LocalKey;
+use Neat\Object\Relations\Reference\LocalKeyBuilder;
+use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
@@ -28,9 +31,7 @@ class LocalKeyTest extends TestCase
         $remoteKey       = new Property(new ReflectionProperty(User::class, 'id'));
         $localForeignKey = new Property(new ReflectionProperty(Address::class, 'userId'));
 
-        return new LocalKey($localForeignKey, $remoteKey, 'id',
-            $policy->repository(User::class, $this->connection())
-        );
+        return new LocalKey($localForeignKey, $remoteKey, 'id', $policy->repository(User::class, $this->connection()));
     }
 
     /**
@@ -61,7 +62,7 @@ class LocalKeyTest extends TestCase
     {
         $localKey = $this->localKey();
 
-        $address  = new Address();
+        $address = new Address();
         $localKey->store($address, []);
         $this->assertSame(null, $address->userId);
 
@@ -69,5 +70,24 @@ class LocalKeyTest extends TestCase
         $user->id = 1;
         $localKey->store($address, [$user]);
         $this->assertSame(1, $address->userId);
+    }
+
+    public function testSelect()
+    {
+        $repository = $this->getMockForAbstractClass(RepositoryInterface::class);
+        $query      = $this->getMockBuilder(Query::class)->disableOriginalConstructor()
+            ->setMethods(['where'])->getMock();
+        $query->expects($this->once())->method('where')->with(['id' => 1])->willReturnSelf();
+        $repository->expects($this->at(0))->method('select')->with()->willReturn($query);
+        $localKey = $this->localKeyFactory(Address::class, User::class)->setRemoteRepository($repository)->resolve();
+
+        $address         = new Address();
+        $address->userId = 1;
+        $localKey->select($address);
+    }
+
+    public function localKeyFactory(string $local, string $remote)
+    {
+        return new LocalKeyBuilder($this->manager(), $this->policy(), $local, $remote);
     }
 }

@@ -58,9 +58,9 @@ class RemoteKey extends Reference
      */
     public function select($local): Query
     {
-        return $this->remoteRepository
-            ->select()
-            ->where([$this->remoteKey => $this->localKey->get($local)]);
+        $remoteKey = $this->localKey->get($local);
+
+        return $this->remoteRepository->select()->where([$this->remoteKey => $remoteKey]);
     }
 
     public function store($local, array $remotes)

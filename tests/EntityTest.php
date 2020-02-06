@@ -203,6 +203,21 @@ class EntityTest extends TestCase
     }
 
     /**
+     *
+     * @runInSeparateProcess enabled
+     */
+    public function testLoad()
+    {
+        Manager::set($this->manager());
+
+        $dbUser = User::get(1);
+        $user     = new User();
+        $user->id = 1;
+        $user->load();
+        $this->assertEquals($dbUser, $user);
+    }
+
+    /**
      * Test delete
      *
      * @runInSeparateProcess enabled

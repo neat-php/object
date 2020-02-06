@@ -50,10 +50,10 @@ class LocalKeyBuilder implements ReferenceBuilder
     }
 
     /**
-     * @param string $localKey
+     * @param Property $localKey
      * @return LocalKeyBuilder
      */
-    public function setLocalKey(string $localKey): LocalKeyBuilder
+    public function setLocalKey(Property $localKey): LocalKeyBuilder
     {
         $this->localKey = $localKey;
 

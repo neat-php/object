@@ -155,6 +155,6 @@ class JunctionTable extends Reference
      */
     public function getRemoteKeyValue($remote)
     {
-        return $this->remoteKey->get($remote);
+        return $this->remoteRepository->identifier($remote);
     }
 }

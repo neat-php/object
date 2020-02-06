@@ -63,7 +63,8 @@ class LocalKey extends Reference
      */
     public function store($local, array $remotes)
     {
-        if (($remote = reset($remotes))) {
+        $remote = reset($remotes);
+        if ($remote) {
             $this->localForeignKey->set($local, $this->remoteKey->get($remote));
         }
     }

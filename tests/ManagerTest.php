@@ -77,4 +77,29 @@ class ManagerTest extends TestCase
         $this->assertTrue(Manager::isset());
         $this->assertInstanceOf(Manager::class, Manager::get());
     }
+
+    /**
+     * @runInSeparateProcess enabled
+     */
+    public function testSet()
+    {
+        Manager::setFactory(
+            function () {
+                return $this->manager();
+            }
+        );
+
+        $this->assertTrue(Manager::isset());
+        Manager::unset();
+        $this->assertFalse(Manager::isset());
+
+        Manager::setFactory(
+            function () {
+                return $this->manager();
+            }
+        );
+        $this->assertInstanceOf(Manager::class, Manager::get());
+        Manager::unset();
+        $this->assertFalse(Manager::isset());
+    }
 }
