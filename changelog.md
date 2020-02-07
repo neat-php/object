@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Property adapters to replace the switch statement.
+- Build methods and builder classes for Relations and References.
 
 ## [0.10.0] - 2019-10-31
 ### Removed
