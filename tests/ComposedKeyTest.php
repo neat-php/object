@@ -28,9 +28,6 @@ class ComposedKeyTest extends TestCase
         return new LocalKey($localForeignKey, $remoteKey, 'user_id', $this->repository(GroupUser::class));
     }
 
-    /**
-     *
-     */
     public function testLocalKey()
     {
         $user     = new User();
@@ -44,7 +41,7 @@ class ComposedKeyTest extends TestCase
     }
 
     /**
-     * Setup before each test method
+     * @return Repository
      */
     public function remoteRepository(): Repository
     {

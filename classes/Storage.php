@@ -87,7 +87,7 @@ trait Storage
     /**
      * @see RepositoryInterface::collection()
      * @param Query|string|array|null $conditions
-     * @return Collection|static[]
+     * @return Collection
      */
     public static function collection($conditions = null): Collection
     {
@@ -97,7 +97,7 @@ trait Storage
     /**
      * @see RepositoryInterface::iterate()
      * @param Query|string|array|null $conditions
-     * @return Traversable|static[]
+     * @return Traversable
      */
     public static function iterate($conditions = null): Traversable
     {

@@ -75,6 +75,7 @@ interface RepositoryInterface
      * Store entity to the database
      *
      * @param object $entity
+     * @return void
      */
     public function store($entity);
 

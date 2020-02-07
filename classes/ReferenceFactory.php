@@ -2,7 +2,6 @@
 
 namespace Neat\Object;
 
-use Neat\Database\Connection;
 use Neat\Object\Relations\Reference\JunctionTable;
 use Neat\Object\Relations\Reference\JunctionTableBuilder;
 use Neat\Object\Relations\Reference\LocalKey;
@@ -30,6 +29,12 @@ trait ReferenceFactory
         return $reference;
     }
 
+    /**
+     * @param string $key
+     * @param string $local
+     * @param string $remote
+     * @return RemoteKeyBuilder
+     */
     public function buildRemoteKey(string $key, string $local, string $remote): RemoteKeyBuilder
     {
         /** @var RemoteKeyBuilder $builder */
@@ -69,6 +74,11 @@ trait ReferenceFactory
         return $builder;
     }
 
+    /**
+     * @param string $local
+     * @param string $remote
+     * @return JunctionTable
+     */
     public function junctionTable(string $local, string $remote): JunctionTable
     {
         /** @var JunctionTable $reference */
@@ -77,6 +87,12 @@ trait ReferenceFactory
         return $reference;
     }
 
+    /**
+     * @param string $key
+     * @param string $local
+     * @param string $remote
+     * @return JunctionTableBuilder
+     */
     public function buildJunctionTable(string $key, string $local, string $remote): JunctionTableBuilder
     {
         /** @var JunctionTableBuilder $builder */
@@ -89,9 +105,5 @@ trait ReferenceFactory
 
     abstract public function manager(): Manager;
 
-    abstract public function connection(): Connection;
-
     abstract public function policy(): Policy;
-
-    abstract public function repository(string $class): RepositoryInterface;
 }

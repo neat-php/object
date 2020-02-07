@@ -19,7 +19,7 @@ class One extends Relation
     }
 
     /**
-     * @param object $remote
+     * @param object|null $remote
      * @return $this
      */
     public function set($remote): self

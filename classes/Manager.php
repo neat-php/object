@@ -114,7 +114,7 @@ class Manager
         }
 
         self::$instances[$manager] = (self::$factories[$manager])();
-        self::$factories[$manager] = null;
+        unset(self::$factories[$manager]);
 
         return self::$instances[$manager];
     }
@@ -124,11 +124,12 @@ class Manager
      *
      * @param Manager $instance
      * @param string  $manager
+     * @return void
      */
     public static function set(Manager $instance, string $manager = 'default')
     {
         self::$instances[$manager] = $instance;
-        self::$factories[$manager] = null;
+        unset(self::$factories[$manager]);
     }
 
     /**
@@ -136,10 +137,11 @@ class Manager
      *
      * @param callable $factory
      * @param string   $manager
+     * @return void
      */
     public static function setFactory(callable $factory, string $manager = 'default')
     {
-        self::$instances[$manager] = null;
+        unset(self::$instances[$manager]);
         self::$factories[$manager] = $factory;
     }
 
@@ -159,6 +161,7 @@ class Manager
      * Unset manager
      *
      * @param string $manager
+     * @return void
      */
     public static function unset(string $manager = 'default')
     {

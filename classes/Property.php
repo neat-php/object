@@ -94,6 +94,7 @@ class Property
      *
      * @param object $object
      * @param mixed  $value
+     * @return void
      */
     public function set($object, $value)
     {
@@ -128,7 +129,7 @@ class Property
     /**
      * Get doc block
      *
-     * @return bool|string
+     * @return string|false
      */
     public function docBlock()
     {

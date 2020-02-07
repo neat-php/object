@@ -26,6 +26,12 @@ trait Builder
     /** @var string */
     private $class;
 
+    /**
+     * @param Manager $manager
+     * @param Policy  $policy
+     * @param string  $class
+     * @return void
+     */
     protected function init(Manager $manager, Policy $policy, string $class)
     {
         $this->manager = $manager;

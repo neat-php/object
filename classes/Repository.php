@@ -5,46 +5,36 @@ namespace Neat\Object;
 use Neat\Database\Connection;
 use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
-use Neat\Database\SQLQuery;
 use Neat\Object\Relations\Relation;
 use RuntimeException;
 use Traversable;
 
 class Repository implements RepositoryInterface
 {
-    /**
-     * @var Connection
-     */
+    /** @var Connection */
     private $connection;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $class;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $table;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $key;
 
-    /**
-     * @var Property[]
-     */
+    /** @var Property[] */
     private $properties;
 
     /**
      * Repository constructor
      *
-     * @param Connection $connection
-     * @param string     $class
-     * @param string     $table
-     * @param string[]   $key
-     * @param Property[] $properties
+     * @param Connection $connection The connection to the database the entity table exists in
+     * @param string     $class The class name of the entity the repository is meant for
+     * @param string     $table The table name for the entity
+     * @param string[]   $key The primary key columns for the table, pass multiple items for a composed key
+     * @param Property[] $properties The properties of the entity, should only include properties which actually map to
+     * a database column
      */
     public function __construct(Connection $connection, string $class, string $table, array $key, array $properties)
     {
@@ -56,51 +46,41 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Has entity with identifier?
-     *
-     * @param int|string|array $id Identifier value(s)
-     * @return bool
+     * @inheritDoc
      */
     public function has($id): bool
     {
-        return $this->connection
-                ->select('count(1)')->from($this->table)->where($this->where($id))->limit(1)
+        $identifier = $this->where($id);
+
+        return $this->connection->select('count(1)')->from($this->table)->where($identifier)->limit(1)
                 ->query()->value() === '1';
     }
 
     /**
-     * Get entity by identifier?
-     *
-     * @param int|string|array $id Identifier value(s)
-     * @return mixed|null
+     * @inheritDoc
      */
     public function get($id)
     {
-        return $this->one($this->where($id));
+        $identifier = $this->where($id);
+
+        return $this->one($identifier);
     }
 
     /**
-     * Create select query
-     *
-     * @param string $alias Table alias (optional)
-     * @return Query
+     * @inheritDoc
      */
     public function select(string $alias = null): Query
     {
         $quotedTable = $this->connection->quoteIdentifier($this->table);
 
         $query = new Query($this->connection, $this);
-        $query->select(($alias ?? $quotedTable) . '.*')
-            ->from($this->table, $alias);
+        $query->select(($alias ?? $quotedTable) . '.*')->from($this->table, $alias);
 
         return $query;
     }
 
     /**
-     * Create select query with conditions
-     *
-     * @param QueryBuilder|string|array $conditions Query instance or where clause (optional)
-     * @return QueryBuilder
+     * @inheritDoc
      */
     public function query($conditions = null): QueryBuilder
     {
@@ -117,14 +97,11 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get one by conditions
-     *
-     * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
-     * @return mixed|null
+     * @inheritDoc
      */
     public function one($conditions = null)
     {
-        if ($conditions instanceof SQLQuery) {
+        if (!$conditions instanceof QueryBuilder && $conditions instanceof QueryInterface) {
             $row = $conditions->query()->row();
         } else {
             $row = $this->query($conditions)->limit(1)->query()->row();
@@ -137,14 +114,11 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get all by conditions
-     *
-     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return object[]
+     * @inheritDoc
      */
     public function all($conditions = null): array
     {
-        if ($conditions instanceof SQLQuery) {
+        if (!$conditions instanceof QueryBuilder && $conditions instanceof QueryInterface) {
             $rows = $conditions->query()->rows();
         } else {
             $rows = $this->query($conditions)->query()->rows();
@@ -154,10 +128,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get collection of entities by conditions
-     *
-     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return Collection|object[]
+     * @inheritDoc
      */
     public function collection($conditions = null): Collection
     {
@@ -167,14 +138,11 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Iterate entities by conditions
-     *
-     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return Traversable|object[]
+     * @inheritDoc
      */
     public function iterate($conditions = null): Traversable
     {
-        if ($conditions instanceof SQLQuery) {
+        if (!$conditions instanceof QueryBuilder && $conditions instanceof QueryInterface) {
             $result = $conditions->query();
         } else {
             $result = $this->query($conditions)->query();
@@ -185,9 +153,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Store entity to the database
-     *
-     * @param object $entity
+     * @inheritDoc
      */
     public function store($entity)
     {
@@ -211,6 +177,7 @@ class Repository implements RepositoryInterface
 
     /**
      * @param Relation[] $relations
+     * @return void
      */
     private function setRelations(array $relations)
     {
@@ -221,6 +188,10 @@ class Repository implements RepositoryInterface
         }
     }
 
+    /**
+     * @param Relation[] $relations
+     * @return void
+     */
     private function storeRelations(array $relations)
     {
         foreach ($relations as $key => $relation) {
@@ -231,10 +202,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Insert entity data into database table and return inserted id
-     *
-     * @param array $data
-     * @return int
+     * @inheritDoc
      */
     public function insert(array $data): int
     {
@@ -244,11 +212,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Update entity data in database table
-     *
-     * @param int|string|array $id
-     * @param array            $data
-     * @return false|int
+     * @inheritDoc
      */
     public function update($id, array $data)
     {
@@ -258,8 +222,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param object $entity
-     * @return false|int
+     * @inheritDoc
      */
     public function delete($entity)
     {
@@ -270,8 +233,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param object $entity
-     * @return object
+     * @inheritDoc
      */
     public function load($entity)
     {
@@ -290,10 +252,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Convert to an associative array
-     *
-     * @param object $entity
-     * @return array
+     * @inheritDoc
      */
     public function toArray($entity): array
     {
@@ -306,11 +265,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Convert from an associative array
-     *
-     * @param object $entity
-     * @param array  $data
-     * @return mixed
+     * @inheritDoc
      */
     public function fromArray($entity, array $data)
     {
@@ -322,10 +277,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Create entity from row
-     *
-     * @param array $data
-     * @return mixed
+     * @inheritDoc
      */
     public function create(array $data)
     {
@@ -333,10 +285,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get identifier for entity
-     *
-     * @param object $entity
-     * @return array
+     * @inheritDoc
      */
     public function identifier($entity)
     {
@@ -354,6 +303,7 @@ class Repository implements RepositoryInterface
      * Validate the identifier to prevent unexpected behaviour
      *
      * @param int|string|array $id
+     * @return void
      */
     private function validateIdentifier($id)
     {
@@ -378,6 +328,7 @@ class Repository implements RepositoryInterface
     private function where($id)
     {
         $this->validateIdentifier($id);
+        /** @var string $key */
         $key = reset($this->key);
 
         if (!is_array($id)) {

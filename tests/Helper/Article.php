@@ -29,7 +29,7 @@ class Article
         /** @var Relations\One $relation */
         $relation = $this->buildBelongsToOne(User::class, 'ArticleBelongsToOneCreator')
             ->referenceFactory(function (Relations\Reference\LocalKeyBuilder $builder) {
-                $builder->setLocalKey('createdBy');
+                $builder->setLocalKey($builder->property(self::class, 'createdBy'));
             })
             ->resolve();
 

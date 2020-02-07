@@ -21,6 +21,13 @@ class LocalKey extends Reference
     /** @var RepositoryInterface */
     private $remoteRepository;
 
+    /**
+     * LocalKey constructor.
+     * @param Property            $localForeignKey
+     * @param Property            $remoteKey
+     * @param string              $remoteKeyString
+     * @param RepositoryInterface $remoteRepository
+     */
     public function __construct(
         Property $localForeignKey,
         Property $remoteKey,
@@ -34,8 +41,7 @@ class LocalKey extends Reference
     }
 
     /**
-     * @param object $local
-     * @return object[]
+     * @inheritDoc
      */
     public function load($local): array
     {
@@ -45,9 +51,7 @@ class LocalKey extends Reference
     }
 
     /**
-     *
-     * @param object $local
-     * @return Query
+     * @inheritDoc
      */
     public function select($local): Query
     {
@@ -57,9 +61,7 @@ class LocalKey extends Reference
     }
 
     /**
-     * @param object   $local
-     * @param object[] $remotes
-     * @return void
+     * @inheritDoc
      */
     public function store($local, array $remotes)
     {
@@ -70,8 +72,7 @@ class LocalKey extends Reference
     }
 
     /**
-     * @param $remote
-     * @return mixed
+     * @inheritDoc
      */
     public function getRemoteKeyValue($remote)
     {

@@ -25,6 +25,13 @@ class LocalKeyBuilder implements ReferenceBuilder
     /** @var RepositoryInterface */
     private $remoteRepository;
 
+    /**
+     * LocalKeyBuilder constructor.
+     * @param Manager $manager
+     * @param Policy  $policy
+     * @param string  $local
+     * @param string  $remote
+     */
     public function __construct(Manager $manager, Policy $policy, string $local, string $remote)
     {
         $this->init($manager, $policy, LocalKey::class);

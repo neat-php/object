@@ -29,7 +29,12 @@ trait Relations
         return $this->relations;
     }
 
-    public function buildHasOne(string $key, string $remoteClass): RelationBuilder
+    /**
+     * @param string $key
+     * @param string $remoteClass
+     * @return RelationBuilder
+     */
+    public function buildHasOne(string $remoteClass, string $key): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
         $relationBuilder = $this->relations()->get(
@@ -62,12 +67,17 @@ trait Relations
     public function hasOne(string $remoteClass): One
     {
         /** @var One $relation */
-        $relation = $this->buildHasOne(__METHOD__ . $remoteClass, $remoteClass)->resolve();
+        $relation = $this->buildHasOne($remoteClass, __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }
 
-    public function buildHasMany(string $key, string $remoteClass): RelationBuilder
+    /**
+     * @param string $key
+     * @param string $remoteClass
+     * @return RelationBuilder
+     */
+    public function buildHasMany(string $remoteClass, string $key): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
         $relationBuilder = $this->relations()->get(
@@ -100,11 +110,16 @@ trait Relations
     public function hasMany(string $remoteClass): Many
     {
         /** @var Many $relation */
-        $relation = $this->buildHasMany(__METHOD__ . $remoteClass, $remoteClass)->resolve();
+        $relation = $this->buildHasMany($remoteClass, __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }
 
+    /**
+     * @param string $remoteClass
+     * @param string $key
+     * @return RelationBuilder
+     */
     public function buildBelongsToOne(string $remoteClass, string $key): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
@@ -122,18 +137,23 @@ trait Relations
     }
 
     /**
-     * @param string $class
+     * @param string $remoteClass
      * @return One
      */
-    public function belongsToOne(string $class): One
+    public function belongsToOne(string $remoteClass): One
     {
         /** @var One $relation */
-        $relation = $this->buildBelongsToOne($class, __METHOD__ . $class)->resolve();
+        $relation = $this->buildBelongsToOne($remoteClass, __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }
 
-    public function buildBelongsToMany(string $key, string $remoteClass): RelationBuilder
+    /**
+     * @param string $key
+     * @param string $remoteClass
+     * @return RelationBuilder
+     */
+    public function buildBelongsToMany(string $remoteClass, string $key): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
         $relationBuilder = $this->relations()->get(
@@ -156,7 +176,7 @@ trait Relations
     public function belongsToMany(string $remoteClass): Many
     {
         /** @var Many $relation */
-        $relation = $this->buildBelongsToMany(__METHOD__ . $remoteClass, $remoteClass)->resolve();
+        $relation = $this->buildBelongsToMany($remoteClass, __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }

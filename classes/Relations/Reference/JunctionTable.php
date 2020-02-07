@@ -34,6 +34,17 @@ class JunctionTable extends Reference
     /** @var string */
     private $junctionTableRemoteForeignKey;
 
+    /**
+     * JunctionTable constructor.
+     * @param Property            $localKey
+     * @param Property            $remoteKey
+     * @param string              $remoteKeyString
+     * @param RepositoryInterface $remoteRepository
+     * @param Connection          $connection
+     * @param string              $junctionTable
+     * @param string              $localForeignKey
+     * @param string              $remoteForeignKey
+     */
     public function __construct(
         Property $localKey,
         Property $remoteKey,
@@ -55,8 +66,7 @@ class JunctionTable extends Reference
     }
 
     /**
-     * @param object $local
-     * @return object[]
+     * @inheritDoc
      */
     public function load($local): array
     {
@@ -64,34 +74,36 @@ class JunctionTable extends Reference
     }
 
     /**
-     *
-     * @param object $local
-     * @return Query
+     * @inheritDoc
      */
     public function select($local): Query
     {
         return $this->remoteRepository
             ->select('rt')
-            ->innerJoin($this->junctionTable, 'jt',
-                "rt.$this->remoteKeyColumn = jt.$this->junctionTableRemoteForeignKey")
+            ->innerJoin(
+                $this->junctionTable,
+                'jt',
+                "rt.$this->remoteKeyColumn = jt.$this->junctionTableRemoteForeignKey"
+            )
             ->where([$this->junctionTableLocalForeignKey => $this->localKey->get($local)]);
     }
 
     /**
-     * @param object   $local
-     * @param object[] $remotes
-     * @return void
+     * @inheritDoc
      */
     public function store($local, array $remotes)
     {
         $localIdentifier = $this->localKey->get($local);
 
-        $after = array_map(function ($remote) use ($localIdentifier) {
-            return [
-                $this->junctionTableLocalForeignKey  => (string)$localIdentifier,
-                $this->junctionTableRemoteForeignKey => (string)$this->remoteKey->get($remote),
-            ];
-        }, $remotes);
+        $after = array_map(
+            function ($remote) use ($localIdentifier) {
+                return [
+                    $this->junctionTableLocalForeignKey  => (string)$localIdentifier,
+                    $this->junctionTableRemoteForeignKey => (string)$this->remoteKey->get($remote),
+                ];
+            },
+            $remotes
+        );
 
         $before = $this->connection
             ->select('*')
@@ -120,15 +132,18 @@ class JunctionTable extends Reference
      */
     public function diff(array $a, array $b, callable $compare): array
     {
-        return array_filter($a, function ($itemA) use ($b, $compare) {
-            foreach ($b as $itemB) {
-                if ($compare($itemA, $itemB)) {
-                    return false;
+        return array_filter(
+            $a,
+            function ($itemA) use ($b, $compare) {
+                foreach ($b as $itemB) {
+                    if ($compare($itemA, $itemB)) {
+                        return false;
+                    }
                 }
-            }
 
-            return true;
-        });
+                return true;
+            }
+        );
     }
 
     /**
@@ -150,8 +165,7 @@ class JunctionTable extends Reference
     }
 
     /**
-     * @param $remote
-     * @return mixed
+     * @inheritDoc
      */
     public function getRemoteKeyValue($remote)
     {

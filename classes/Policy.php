@@ -18,7 +18,7 @@ class Policy
      * @param Connection $connection
      * @return RepositoryInterface
      */
-    public function repository(string $class, Connection $connection)
+    public function repository(string $class, Connection $connection): RepositoryInterface
     {
         $properties = $this->properties($class);
         $table      = $this->table($class);
@@ -119,8 +119,7 @@ class Policy
      */
     public function skip(Property $property): bool
     {
-        return $property->static()
-            || preg_match('/\\s@nostorage\\s/', $property->docBlock());
+        return $property->static() || preg_match('/\\s@nostorage\\s/', $property->docBlock());
     }
 
     /**

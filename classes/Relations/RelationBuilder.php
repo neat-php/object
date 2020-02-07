@@ -16,6 +16,12 @@ class RelationBuilder
     /** @var object */
     private $local;
 
+    /**
+     * RelationBuilder constructor.
+     * @param string           $class
+     * @param ReferenceBuilder $builder
+     * @param object           $local
+     */
     public function __construct(string $class, ReferenceBuilder $builder, $local)
     {
         $this->class   = $class;
@@ -23,6 +29,9 @@ class RelationBuilder
         $this->local   = $local;
     }
 
+    /**
+     * @return Relation
+     */
     public function resolve(): Relation
     {
         if ($this->resolved === null) {
@@ -32,6 +41,9 @@ class RelationBuilder
         return $this->resolved;
     }
 
+    /**
+     * @return void
+     */
     private function build()
     {
         $this->resolved = new $this->class($this->builder->resolve(), $this->local);

@@ -6,18 +6,13 @@ use Neat\Database\Connection;
 use Neat\Object\Manager;
 use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\ReferenceBuilder;
 use Neat\Object\RepositoryInterface;
 
 class JunctionTableBuilder implements ReferenceBuilder
 {
     use Builder;
-
-    /** @var JunctionTable|null */
-    private $resolved;
-
-    /** @var callable */
-    private $factory;
 
     /** @var Property */
     private $localKey;
@@ -43,6 +38,13 @@ class JunctionTableBuilder implements ReferenceBuilder
     /** @var string */
     private $junctionTableRemoteForeignKey;
 
+    /**
+     * JunctionTableBuilder constructor.
+     * @param Manager $manager
+     * @param Policy  $policy
+     * @param string  $local
+     * @param string  $remote
+     */
     public function __construct(Manager $manager, Policy $policy, string $local, string $remote)
     {
         $this->init($manager, $policy, JunctionTable::class);
@@ -61,7 +63,10 @@ class JunctionTableBuilder implements ReferenceBuilder
         $this->junctionTableRemoteForeignKey = $remoteForeignKey;
     }
 
-    private function build(): JunctionTable
+    /**
+     * @inheritDoc
+     */
+    protected function build(): Reference
     {
         return new $this->class(
             $this->localKey,

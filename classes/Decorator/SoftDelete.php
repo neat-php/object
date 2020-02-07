@@ -8,6 +8,9 @@ use Traversable;
 
 class SoftDelete extends TimeStamp
 {
+    /**
+     * @inheritDoc
+     */
     public function all($conditions = null): array
     {
         if ($conditions instanceof SQLQuery) {
@@ -17,6 +20,9 @@ class SoftDelete extends TimeStamp
         return parent::all($this->query($conditions)->where([$this->column => null]));
     }
 
+    /**
+     * @inheritDoc
+     */
     public function collection($conditions = null): Collection
     {
         if ($conditions instanceof SQLQuery) {
@@ -27,6 +33,9 @@ class SoftDelete extends TimeStamp
         return parent::collection($this->query($conditions)->where([$this->column => null]));
     }
 
+    /**
+     * @inheritDoc
+     */
     public function iterate($conditions = null): Traversable
     {
         if ($conditions instanceof SQLQuery) {
@@ -37,8 +46,7 @@ class SoftDelete extends TimeStamp
     }
 
     /**
-     * @param object $entity
-     * @return false|int
+     * @inheritDoc
      */
     public function delete($entity)
     {

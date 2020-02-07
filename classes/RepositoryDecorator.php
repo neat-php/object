@@ -2,19 +2,15 @@
 
 namespace Neat\Object;
 
-use Neat\Database\QueryInterface;
-use Traversable;
 use Neat\Database\Query as QueryBuilder;
+use Traversable;
 
 trait RepositoryDecorator
 {
     abstract protected function repository(): RepositoryInterface;
 
     /**
-     * Has entity with identifier?
-     *
-     * @param int|string|array $id Identifier value(s)
-     * @return bool
+     * @inheritDoc
      */
     public function has($id): bool
     {
@@ -22,10 +18,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Get entity by identifier?
-     *
-     * @param int|string|array $id Identifier value(s)
-     * @return mixed|null
+     * @inheritDoc
      */
     public function get($id)
     {
@@ -33,10 +26,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Create select query
-     *
-     * @param string $alias Table alias (optional)
-     * @return Query
+     * @inheritDoc
      */
     public function select(string $alias = null): Query
     {
@@ -44,10 +34,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Create select query with conditions
-     *
-     * @param QueryBuilder|string|array $conditions Query instance or where clause (optional)
-     * @return QueryBuilder
+     * @inheritDoc
      */
     public function query($conditions = null): QueryBuilder
     {
@@ -55,10 +42,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Get one by conditions
-     *
-     * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
-     * @return mixed|null
+     * @inheritDoc
      */
     public function one($conditions = null)
     {
@@ -66,10 +50,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Get all by conditions
-     *
-     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return object[]
+     * @inheritDoc
      */
     public function all($conditions = null): array
     {
@@ -77,10 +58,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Get collection of entities by conditions
-     *
-     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return Collection|object[]
+     * @inheritDoc
      */
     public function collection($conditions = null): Collection
     {
@@ -88,10 +66,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Iterate entities by conditions
-     *
-     * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return Traversable|object[]
+     * @inheritDoc
      */
     public function iterate($conditions = null): Traversable
     {
@@ -99,9 +74,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Store entity to the database
-     *
-     * @param object $entity
+     * @inheritDoc
      */
     public function store($entity)
     {
@@ -109,10 +82,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Insert entity data into database table and return inserted id
-     *
-     * @param array $data
-     * @return int
+     * @inheritDoc
      */
     public function insert(array $data)
     {
@@ -120,11 +90,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Update entity data in database table
-     *
-     * @param int|string|array $id
-     * @param array            $data
-     * @return false|int
+     * @inheritDoc
      */
     public function update($id, array $data)
     {
@@ -132,8 +98,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * @param object $entity
-     * @return object
+     * @inheritDoc
      */
     public function load($entity)
     {
@@ -141,8 +106,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * @param object $entity
-     * @return false|int
+     * @inheritDoc
      */
     public function delete($entity)
     {
@@ -150,10 +114,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Convert to an associative array
-     *
-     * @param object $entity
-     * @return array
+     * @inheritDoc
      */
     public function toArray($entity): array
     {
@@ -161,11 +122,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Convert from an associative array
-     *
-     * @param object $entity
-     * @param array  $data
-     * @return mixed
+     * @inheritDoc
      */
     public function fromArray($entity, array $data)
     {
@@ -173,10 +130,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Create entity from row
-     *
-     * @param array $data
-     * @return mixed
+     * @inheritDoc
      */
     public function create(array $data)
     {
@@ -184,10 +138,7 @@ trait RepositoryDecorator
     }
 
     /**
-     * Get identifier for entity
-     *
-     * @param object $entity
-     * @return array
+     * @inheritDoc
      */
     public function identifier($entity)
     {
