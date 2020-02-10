@@ -6,12 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- Removed property type method.
 - The property class can't handle types other than string use the adapters instead.
 
 ### Added
 - Property adapters to replace the switch statement.
 - Build methods and builder classes for Relations and References.
+
+### Removed
+- Property->type() method.
 
 ## [0.10.0] - 2019-10-31
 ### Removed
