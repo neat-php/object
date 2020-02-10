@@ -11,10 +11,8 @@ use Neat\Object\Relations\Reference\RemoteKeyBuilder;
 
 trait ReferenceFactory
 {
-    /**
-     * @var Cache
-     */
-    public $references;
+    /** @var Cache */
+    protected $references;
 
     /**
      * @param string $local
