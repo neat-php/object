@@ -92,7 +92,7 @@ interface RepositoryInterface
      *
      * @param int|string|array $id
      * @param array            $data
-     * @return false|int
+     * @return int
      */
     public function update($id, array $data);
 
@@ -104,7 +104,7 @@ interface RepositoryInterface
 
     /**
      * @param object $entity
-     * @return false|int
+     * @return int
      */
     public function delete($entity);
 
