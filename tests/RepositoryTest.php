@@ -1,10 +1,9 @@
 <?php
 
-/** @noinspection SqlResolve */
-
 namespace Neat\Object\Test;
 
 use Generator;
+use Neat\Database\SQLQuery;
 use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Assertions;
@@ -131,6 +130,14 @@ class RepositoryTest extends TestCase
         $this->assertSame(1, $user->id);
     }
 
+    public function testOneSQLQuery()
+    {
+        $repository = $this->repository(User::class);
+        $user       = $repository->one(new SQLQuery($this->connection(), "SELECT * FROM `user` WHERE id = '1';"));
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame(1, $user->id);
+    }
+
     /**
      * Test all
      */
@@ -138,6 +145,22 @@ class RepositoryTest extends TestCase
     {
         $repository = $this->repository(User::class);
         $users      = $repository->all($repository->select()->orderBy('id DESC'));
+        self::assertThat($users, new IsType('array'));
+        $this->assertCount(3, $users);
+        $user = reset($users);
+        $this->assertSame(3, $user->id);
+
+        $users = $repository->all(['active' => false]);
+        self::assertThat($users, new IsType('array'));
+        $this->assertCount(1, $users);
+    }
+
+    public function testAllSQLQuery()
+    {
+        $repository = $this->repository(User::class);
+        $users      = $repository->all(
+            new SQLQuery($this->connection(), $repository->select()->orderBy('id DESC')->getSelectQuery())
+        );
         self::assertThat($users, new IsType('array'));
         $this->assertCount(3, $users);
         $user = reset($users);
@@ -161,6 +184,18 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
+    public function testCollectionSQLQuery()
+    {
+        $repository      = $this->repository(User::class);
+        $usersCollection = $repository->collection(
+            new SQLQuery($this->connection(), $repository->select()->orderBy('id DESC')->getSelectQuery())
+        );
+        $this->assertInstanceOf(Collection::class, $usersCollection);
+        $this->assertCount(3, $usersCollection);
+        $user = $usersCollection->first();
+        $this->assertInstanceOf(User::class, $user);
+    }
+
     /**
      * Test iterate
      */
@@ -175,6 +210,22 @@ class RepositoryTest extends TestCase
             $this->assertSame($i++, $user->id);
         }
         $this->assertInstanceOf(Generator::class, $userRepository->iterate());
+    }
+
+    public function testIterateSQLQuery()
+    {
+        $repository = $this->repository(User::class);
+
+        $userIterator = $repository->iterate(
+            new SQLQuery($this->connection(), $repository->select()->orderBy('id DESC')->getSelectQuery())
+        );
+        $this->assertCount(3, $userIterator);
+        $i = 1;
+        foreach ($repository->iterate() as $user) {
+            $this->assertInstanceOf(User::class, $user);
+            $this->assertSame($i++, $user->id);
+        }
+        $this->assertInstanceOf(Generator::class, $repository->iterate());
     }
 
     /**
@@ -218,5 +269,26 @@ class RepositoryTest extends TestCase
         $this->assertEquals($user, $user1);
         $user = $repository->get(1);
         $this->assertSame($user, $repository->load($user));
+    }
+
+    public function testLoadWithoutIdentifier()
+    {
+        $repository = $this->repository(User::class);
+
+        $notPersistedUser           = new User();
+        $notPersistedUser->lastName = 'test';
+        $user2                      = clone $notPersistedUser;
+        $this->assertEquals($user2, $repository->load($notPersistedUser));
+    }
+
+    public function testLoadWithNonExistingEntity()
+    {
+        $repository = $this->repository(User::class);
+
+        $notPersistedUser           = new User();
+        $notPersistedUser->id       = 1234567890;
+        $notPersistedUser->lastName = 'test';
+        $user2                      = clone $notPersistedUser;
+        $this->assertEquals($user2, $repository->load($notPersistedUser));
     }
 }

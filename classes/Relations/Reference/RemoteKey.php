@@ -9,33 +9,31 @@ use Neat\Object\RepositoryInterface;
 
 class RemoteKey extends Reference
 {
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $localKey;
 
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $remoteForeignKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $remoteKey;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $remoteRepository;
 
+    /**
+     * RemoteKey constructor.
+     * @param Property            $localKey
+     * @param Property            $remoteForeignKey
+     * @param string              $remoteKey
+     * @param RepositoryInterface $remoteRepository
+     */
     public function __construct(
         Property $localKey,
         Property $remoteForeignKey,
         string $remoteKey,
         RepositoryInterface $remoteRepository
     ) {
-
         $this->localKey         = $localKey;
         $this->remoteForeignKey = $remoteForeignKey;
         $this->remoteKey        = $remoteKey;
@@ -43,8 +41,7 @@ class RemoteKey extends Reference
     }
 
     /**
-     * @param object $local
-     * @return object[]
+     * @inheritDoc
      */
     public function load($local): array
     {
@@ -52,17 +49,18 @@ class RemoteKey extends Reference
     }
 
     /**
-     *
-     * @param object $local
-     * @return Query
+     * @inheritDoc
      */
     public function select($local): Query
     {
-        return $this->remoteRepository
-            ->select()
-            ->where([$this->remoteKey => $this->localKey->get($local)]);
+        $remoteKey = $this->localKey->get($local);
+
+        return $this->remoteRepository->select()->where([$this->remoteKey => $remoteKey]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function store($local, array $remotes)
     {
         $id     = $this->localKey->get($local);
@@ -83,11 +81,10 @@ class RemoteKey extends Reference
     }
 
     /**
-     * @param $remote
-     * @return mixed
+     * @inheritDoc
      */
     public function getRemoteKeyValue($remote)
     {
-        return $this->remoteForeignKey->get($remote);
+        return $this->remoteRepository->identifier($remote);
     }
 }

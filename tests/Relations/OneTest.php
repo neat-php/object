@@ -2,16 +2,21 @@
 
 namespace Neat\Object\Test\Relations;
 
+use Neat\Object\Query;
 use Neat\Object\Relations\One;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\Reference\RemoteKey;
+use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Address;
+use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class OneTest extends TestCase
 {
+    use Factory;
+
     /**
      * Create reference
      *
@@ -33,7 +38,7 @@ class OneTest extends TestCase
      */
     public function one(Reference $reference = null): One
     {
-        $user = new User();
+        $user     = new User();
         $user->id = 1;
 
         return new One($reference ?? $this->mockedRemoteKey(), $user);
@@ -44,8 +49,8 @@ class OneTest extends TestCase
      */
     public function testGet()
     {
-        $address = new Address();
-        $address->id = 1;
+        $address         = new Address();
+        $address->id     = 1;
         $address->userId = 1;
 
         $reference = $this->mockedRemoteKey();
@@ -80,11 +85,11 @@ class OneTest extends TestCase
      */
     public function testSet()
     {
-        $address = new Address();
-        $address->id = 1;
+        $address         = new Address();
+        $address->id     = 1;
         $address->userId = 1;
 
-        $user = new User();
+        $user     = new User();
         $user->id = 1;
 
         $reference = $this->mockedRemoteKey();
@@ -104,5 +109,18 @@ class OneTest extends TestCase
 
         $one->set(null);
         $one->store();
+    }
+
+    public function testSelect()
+    {
+        $reference = $this->getMockForAbstractClass(Reference::class);
+        $user      = new User();
+        $query     = new Query($this->connection(), $this->getMockForAbstractClass(RepositoryInterface::class));
+        $reference->expects($this->once())
+            ->method('select')
+            ->with($user)
+            ->willReturn($query);
+        $relation = new One($reference, $user);
+        $this->assertSame($query, $relation->select());
     }
 }

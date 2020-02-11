@@ -29,6 +29,11 @@ class ReferenceFactoryMock
         $this->references = new Cache();
     }
 
+    public function manager(): Manager
+    {
+        return $this->manager;
+    }
+
     /**
      * Get connection
      *

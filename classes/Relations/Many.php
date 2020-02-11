@@ -54,7 +54,7 @@ class Many extends Relation
     }
 
     /**
-     * @param $remote
+     * @param object $remote
      * @return bool
      */
     public function has($remote): bool

@@ -2,9 +2,6 @@
 
 namespace Neat\Object;
 
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
 use ReflectionProperty;
 
 class Property
@@ -13,11 +10,6 @@ class Property
      * @var ReflectionProperty
      */
     protected $reflection;
-
-    /**
-     * @var string|null
-     */
-    protected $type;
 
     /**
      * Property constructor
@@ -30,13 +22,6 @@ class Property
         $reflection->setAccessible(true);
 
         $this->reflection = $reflection;
-
-        if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
-            $this->type = strtr(ltrim($matches[1], '\\'), [
-                'integer' => 'int',
-                'boolean' => 'bool',
-            ]);
-        }
     }
 
     /**
@@ -44,19 +29,51 @@ class Property
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return $this->reflection->getName();
     }
 
     /**
-     * Get type
+     * Is static?
      *
-     * @return string|null
+     * @return bool
      */
-    public function type()
+    public function static(): bool
     {
-        return $this->type;
+        return $this->reflection->isStatic();
+    }
+
+    /**
+     * Get doc comment
+     *
+     * @return string
+     */
+    public function comment(): string
+    {
+        return $this->reflection->getDocComment() ?: '';
+    }
+
+    /**
+     * Cast value to string
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public function toString($value): string
+    {
+        return (string) $value;
+    }
+
+    /**
+     * Cast value from string
+     *
+     * @param string $value
+     * @return mixed
+     */
+    public function fromString(string $value)
+    {
+        return $value;
     }
 
     /**
@@ -72,21 +89,7 @@ class Property
             return null;
         }
 
-        switch ($this->type) {
-            case 'bool':
-                return $value ? 1 : 0;
-            case 'int':
-                return (int)$value;
-            case 'DateTime':
-            case 'DateTimeImmutable':
-                if (!$value instanceof DateTimeInterface) {
-                    $value = new DateTime($value);
-                }
-
-                return $value->format('Y-m-d H:i:s');
-            default:
-                return $value;
-        }
+        return $this->toString($value);
     }
 
     /**
@@ -94,44 +97,14 @@ class Property
      *
      * @param object $object
      * @param mixed  $value
+     * @return void
      */
     public function set($object, $value)
     {
         if ($value !== null) {
-            switch ($this->type) {
-                case 'bool':
-                case 'int':
-                    settype($value, $this->type);
-                    break;
-                case 'DateTime':
-                    $value = new DateTime($value);
-                    break;
-                case 'DateTimeImmutable':
-                    $value = new DateTimeImmutable($value);
-                    break;
-            }
+            $value = $this->fromString($value);
         }
 
         $this->reflection->setValue($object, $value);
-    }
-
-    /**
-     * Is static?
-     *
-     * @return bool
-     */
-    public function static()
-    {
-        return $this->reflection->isStatic();
-    }
-
-    /**
-     * Get doc block
-     *
-     * @return bool|string
-     */
-    public function docBlock()
-    {
-        return $this->reflection->getDocComment();
     }
 }

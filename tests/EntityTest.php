@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection SqlResolve */
-
 namespace Neat\Object\Test;
 
 use DateTime;
@@ -202,6 +200,21 @@ class EntityTest extends TestCase
         $groupUser->store();
         $this->assertEquals($user->id, $groupUser->userId);
         $this->assertEquals(3, $groupUser->groupId);
+    }
+
+    /**
+     *
+     * @runInSeparateProcess enabled
+     */
+    public function testLoad()
+    {
+        Manager::set($this->manager());
+
+        $dbUser = User::get(1);
+        $user     = new User();
+        $user->id = 1;
+        $user->load();
+        $this->assertEquals($dbUser, $user);
     }
 
     /**

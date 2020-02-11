@@ -2,8 +2,13 @@
 
 namespace Neat\Object\Test;
 
+use Neat\Object\Decorator\CreatedAt;
+use Neat\Object\Decorator\SoftDelete;
+use Neat\Object\Decorator\UpdatedAt;
 use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Repository;
+use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\HardDelete;
@@ -16,6 +21,8 @@ use RuntimeException;
 
 class PolicyTest extends TestCase
 {
+    use Factory;
+
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create property
@@ -25,7 +32,6 @@ class PolicyTest extends TestCase
      */
     public function createProperty($name)
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $reflection = new ReflectionProperty(User::class, $name);
 
         return new Property($reflection);
@@ -243,5 +249,17 @@ class PolicyTest extends TestCase
 
         $policy = new Policy();
         $policy->key(NoEntity::class);
+    }
+
+    public function testDecoratedRepository()
+    {
+        $policy          = new Policy();
+        $connection      = $this->connection();
+        $repositoryStack = $policy->repository(TimeStamps::class, $connection);
+        $repository      = new Repository($connection, TimeStamps::class, 'time_stamps', ['id'], $policy->properties(TimeStamps::class));
+        $softDelete      = new SoftDelete($repository, 'deleted_at', $this->propertyDateTime(TimeStamps::class, 'deletedAt'));
+        $createdAt       = new CreatedAt($softDelete, 'created_at', $this->propertyDateTime(TimeStamps::class, 'createdAt'));
+        $updatedAt       = new UpdatedAt($createdAt, 'updated_at', $this->propertyDateTime(TimeStamps::class, 'updatedAt'));
+        $this->assertEquals($updatedAt, $repositoryStack);
     }
 }

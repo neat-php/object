@@ -47,6 +47,7 @@ trait Collectible
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
      * @param mixed $offset
      * @param mixed $value
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
@@ -59,6 +60,7 @@ trait Collectible
      *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
      * @param mixed $offset
+     * @return void
      */
     public function offsetUnset($offset)
     {
@@ -130,15 +132,13 @@ trait Collectible
      *
      * The callback should accept an `$item` parameter
      *
-     * @param callable $callback (optional)
+     * @param callable|null $callback
      * @return static
      */
-    public function filter(callable $callback = null)
+    public function filter(callable $callback = null): self
     {
         if (!$callback) {
-            $callback = function ($item) {
-                return !!$item;
-            };
+            $callback = [$this, 'falsyFilter'];
         }
         $new   = clone $this;
         $items = &$new->items();
@@ -152,12 +152,21 @@ trait Collectible
     }
 
     /**
+     * @param mixed $item
+     * @return bool
+     */
+    public function falsyFilter($item): bool
+    {
+        return !!$item;
+    }
+
+    /**
      * Get mapped item results as new collection
      *
      * The callback should accept an `$item` parameter
      *
      * @param callable $callback
-     * @return Collection|array
+     * @return Collection
      */
     public function map(callable $callback)
     {
@@ -168,7 +177,7 @@ trait Collectible
      * Get given column for every item as new collection
      *
      * @param string $column
-     * @return Collection|array
+     * @return Collection
      */
     public function column($column)
     {

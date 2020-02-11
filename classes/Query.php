@@ -45,7 +45,7 @@ class Query extends \Neat\Database\Query
 
     /**
      * @see RepositoryInterface::collection()
-     * @return Collection|array
+     * @return Collection
      */
     public function collection(): Collection
     {
@@ -54,7 +54,7 @@ class Query extends \Neat\Database\Query
 
     /**
      * @see RepositoryInterface::iterate()
-     * @return Traversable|array
+     * @return Traversable
      */
     public function iterate(): Traversable
     {

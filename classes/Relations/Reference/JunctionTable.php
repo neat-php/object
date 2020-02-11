@@ -10,46 +10,41 @@ use Neat\Object\RepositoryInterface;
 
 class JunctionTable extends Reference
 {
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $localKey;
 
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $remoteKey;
 
-    /**
-     * @var string
-     */
-    private $remoteKeyString;
+    /** @var string */
+    private $remoteKeyColumn;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $remoteRepository;
 
-    /**
-     * @var Connection
-     */
+    /** @var Connection */
     private $connection;
 
-    /**
-     * @var string
-     */
-    private $table;
+    /** @var string */
+    private $junctionTable;
+
+    /** @var string */
+    private $junctionTableLocalForeignKey;
+
+    /** @var string */
+    private $junctionTableRemoteForeignKey;
 
     /**
-     * @var string
+     * JunctionTable constructor.
+     * @param Property            $localKey
+     * @param Property            $remoteKey
+     * @param string              $remoteKeyString
+     * @param RepositoryInterface $remoteRepository
+     * @param Connection          $connection
+     * @param string              $junctionTable
+     * @param string              $localForeignKey
+     * @param string              $remoteForeignKey
      */
-    private $localForeignKey;
-
-    /**
-     * @var string
-     */
-    private $remoteForeignKey;
-
     public function __construct(
         Property $localKey,
         Property $remoteKey,
@@ -60,19 +55,18 @@ class JunctionTable extends Reference
         string $localForeignKey,
         string $remoteForeignKey
     ) {
-        $this->localKey         = $localKey;
-        $this->remoteKey        = $remoteKey;
-        $this->remoteKeyString  = $remoteKeyString;
-        $this->remoteRepository = $remoteRepository;
-        $this->connection       = $connection;
-        $this->table            = $junctionTable;
-        $this->localForeignKey  = $localForeignKey;
-        $this->remoteForeignKey = $remoteForeignKey;
+        $this->localKey                      = $localKey;
+        $this->remoteKey                     = $remoteKey;
+        $this->remoteKeyColumn               = $remoteKeyString;
+        $this->remoteRepository              = $remoteRepository;
+        $this->connection                    = $connection;
+        $this->junctionTable                 = $junctionTable;
+        $this->junctionTableLocalForeignKey  = $localForeignKey;
+        $this->junctionTableRemoteForeignKey = $remoteForeignKey;
     }
 
     /**
-     * @param object $local
-     * @return object[]
+     * @inheritDoc
      */
     public function load($local): array
     {
@@ -80,48 +74,51 @@ class JunctionTable extends Reference
     }
 
     /**
-     *
-     * @param object $local
-     * @return Query
+     * @inheritDoc
      */
     public function select($local): Query
     {
         return $this->remoteRepository
             ->select('rt')
-            ->innerJoin($this->table, 'jt', "rt.$this->remoteKeyString = jt.$this->remoteForeignKey")
-            ->where([$this->localForeignKey => $this->localKey->get($local)]);
+            ->innerJoin(
+                $this->junctionTable,
+                'jt',
+                "rt.$this->remoteKeyColumn = jt.$this->junctionTableRemoteForeignKey"
+            )
+            ->where([$this->junctionTableLocalForeignKey => $this->localKey->get($local)]);
     }
 
     /**
-     * @param object   $local
-     * @param object[] $remotes
-     * @return void
+     * @inheritDoc
      */
     public function store($local, array $remotes)
     {
         $localIdentifier = $this->localKey->get($local);
 
-        $after = array_map(function ($remote) use ($localIdentifier) {
-            return [
-                $this->localForeignKey  => (string)$localIdentifier,
-                $this->remoteForeignKey => (string)$this->remoteKey->get($remote),
-            ];
-        }, $remotes);
+        $after = array_map(
+            function ($remote) use ($localIdentifier) {
+                return [
+                    $this->junctionTableLocalForeignKey  => (string)$localIdentifier,
+                    $this->junctionTableRemoteForeignKey => (string)$this->remoteKey->get($remote),
+                ];
+            },
+            $remotes
+        );
 
         $before = $this->connection
             ->select('*')
-            ->from($this->table)
-            ->where([$this->localForeignKey => $localIdentifier])
+            ->from($this->junctionTable)
+            ->where([$this->junctionTableLocalForeignKey => $localIdentifier])
             ->query()
             ->rows();
 
         $delete = $this->diff($before, $after, [$this, 'compare']);
         $insert = $this->diff($after, $before, [$this, 'compare']);
         foreach ($delete as $row) {
-            $this->connection->delete($this->table, $row);
+            $this->connection->delete($this->junctionTable, $row);
         }
         foreach ($insert as $row) {
-            $this->connection->insert($this->table, $row);
+            $this->connection->insert($this->junctionTable, $row);
         }
     }
 
@@ -135,15 +132,18 @@ class JunctionTable extends Reference
      */
     public function diff(array $a, array $b, callable $compare): array
     {
-        return array_filter($a, function ($itemA) use ($b, $compare) {
-            foreach ($b as $itemB) {
-                if ($compare($itemA, $itemB)) {
-                    return false;
+        return array_filter(
+            $a,
+            function ($itemA) use ($b, $compare) {
+                foreach ($b as $itemB) {
+                    if ($compare($itemA, $itemB)) {
+                        return false;
+                    }
                 }
-            }
 
-            return true;
-        });
+                return true;
+            }
+        );
     }
 
     /**
@@ -165,11 +165,10 @@ class JunctionTable extends Reference
     }
 
     /**
-     * @param $remote
-     * @return mixed
+     * @inheritDoc
      */
     public function getRemoteKeyValue($remote)
     {
-        return $this->remoteKey->get($remote);
+        return $this->remoteRepository->identifier($remote);
     }
 }

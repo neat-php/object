@@ -22,7 +22,7 @@ abstract class Relation
     /**
      * @var object[]
      */
-    protected $objects;
+    protected $objects = [];
 
     /**
      * Relation constructor.

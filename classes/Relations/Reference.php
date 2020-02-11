@@ -26,7 +26,7 @@ abstract class Reference
     abstract public function getRemoteKeyValue($remote);
 
     /**
-     * @param $local
+     * @param object $local
      * @return Query
      */
     abstract public function select($local): Query;

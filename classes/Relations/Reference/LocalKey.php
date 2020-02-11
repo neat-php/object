@@ -9,26 +9,25 @@ use Neat\Object\RepositoryInterface;
 
 class LocalKey extends Reference
 {
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $localForeignKey;
 
-    /**
-     * @var Property
-     */
+    /** @var Property */
     private $remoteKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $remoteKeyString;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $remoteRepository;
 
+    /**
+     * LocalKey constructor.
+     * @param Property            $localForeignKey
+     * @param Property            $remoteKey
+     * @param string              $remoteKeyString
+     * @param RepositoryInterface $remoteRepository
+     */
     public function __construct(
         Property $localForeignKey,
         Property $remoteKey,
@@ -42,8 +41,7 @@ class LocalKey extends Reference
     }
 
     /**
-     * @param object $local
-     * @return object[]
+     * @inheritDoc
      */
     public function load($local): array
     {
@@ -53,9 +51,7 @@ class LocalKey extends Reference
     }
 
     /**
-     *
-     * @param object $local
-     * @return Query
+     * @inheritDoc
      */
     public function select($local): Query
     {
@@ -65,23 +61,21 @@ class LocalKey extends Reference
     }
 
     /**
-     * @param object   $local
-     * @param object[] $remotes
-     * @return void
+     * @inheritDoc
      */
     public function store($local, array $remotes)
     {
-        if (($remote = reset($remotes))) {
+        $remote = reset($remotes);
+        if ($remote) {
             $this->localForeignKey->set($local, $this->remoteKey->get($remote));
         }
     }
 
     /**
-     * @param $remote
-     * @return mixed
+     * @inheritDoc
      */
     public function getRemoteKeyValue($remote)
     {
-        return $this->remoteKey->get($remote);
+        return $this->remoteRepository->identifier($remote);
     }
 }

@@ -74,6 +74,9 @@ class Diff
         return array_values($this->delete);
     }
 
+    /**
+     * @return void
+     */
     protected function diff()
     {
         $this->insert = array_filter($this->after, function ($newObject) {

@@ -3,7 +3,6 @@
 namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Manager;
-use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\Reference\JunctionTable;
 use Neat\Object\Relations\Reference\LocalKey;
@@ -14,7 +13,6 @@ use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\ReferenceFactoryMock;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
 /**
  * @runTestsInSeparateProcesses enabled
@@ -33,20 +31,6 @@ class ReferenceFactoryTest extends TestCase
         return new ReferenceFactoryMock(Manager::get());
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
-    /**
-     * Get property access
-     *
-     * @param string $class
-     * @param string $property
-     * @return Property
-     */
-    private function property(string $class, string $property): Property
-    {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return new Property(new ReflectionProperty($class, $property));
-    }
-
     /**
      * Test junctionTable factory
      */
@@ -57,8 +41,8 @@ class ReferenceFactoryTest extends TestCase
         $this->assertInstanceOf(JunctionTable::class, $reference);
 
         $expect = new JunctionTable(
-            $this->property(User::class, 'id'),
-            $this->property(Group::class, 'id'),
+            $this->propertyInteger(User::class, 'id'),
+            $this->propertyInteger(Group::class, 'id'),
             'id',
             Manager::get()->repository(Group::class),
             Manager::get()->connection(),
@@ -79,8 +63,8 @@ class ReferenceFactoryTest extends TestCase
         $this->assertInstanceOf(LocalKey::class, $reference);
 
         $expected = new LocalKey(
-            $this->property(Address::class, 'userId'),
-            $this->property(User::class, 'id'),
+            $this->propertyInteger(Address::class, 'userId'),
+            $this->propertyInteger(User::class, 'id'),
             'id',
             Manager::get()->repository(User::class)
         );
@@ -96,8 +80,8 @@ class ReferenceFactoryTest extends TestCase
         $this->assertInstanceOf(Reference::class, $reference);
 
         $expected = new RemoteKey(
-            $this->property(User::class, 'id'),
-            $this->property(Address::class, 'userId'),
+            $this->propertyInteger(User::class, 'id'),
+            $this->propertyInteger(Address::class, 'userId'),
             'user_id',
             Manager::get()->repository(Address::class)
         );
