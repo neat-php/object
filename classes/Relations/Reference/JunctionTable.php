@@ -98,8 +98,8 @@ class JunctionTable extends Reference
         $after = array_map(
             function ($remote) use ($localIdentifier) {
                 return [
-                    $this->junctionTableLocalForeignKey  => (string)$localIdentifier,
-                    $this->junctionTableRemoteForeignKey => (string)$this->remoteKey->get($remote),
+                    $this->junctionTableLocalForeignKey  => (string) $localIdentifier,
+                    $this->junctionTableRemoteForeignKey => (string) $this->remoteKey->get($remote),
                 ];
             },
             $remotes

@@ -2,7 +2,9 @@
 
 namespace Neat\Object\Exception;
 
-class ClassMismatchException extends \LogicException
+use LogicException;
+
+class ClassMismatchException extends LogicException
 {
     public function __construct(string $expected, string $actual)
     {

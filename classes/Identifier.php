@@ -2,10 +2,11 @@
 
 namespace Neat\Object;
 
+/**
+ * @deprecated Just implement it yourself
+ */
 trait Identifier
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 }

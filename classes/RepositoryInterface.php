@@ -98,7 +98,7 @@ interface RepositoryInterface
 
     /**
      * @param object $entity
-     * @return object
+     * @return mixed
      */
     public function load($entity);
 

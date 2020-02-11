@@ -6,9 +6,7 @@ use ReflectionProperty;
 
 class Property
 {
-    /**
-     * @var ReflectionProperty
-     */
+    /** @var ReflectionProperty */
     protected $reflection;
 
     /**

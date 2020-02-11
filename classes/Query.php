@@ -7,9 +7,7 @@ use Traversable;
 
 class Query extends \Neat\Database\Query
 {
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $repository;
 
     /**
@@ -26,8 +24,8 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see RepositoryInterface::one()
      * @return mixed|null
+     * @see RepositoryInterface::one()
      */
     public function one()
     {
@@ -35,8 +33,8 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see RepositoryInterface::all()
      * @return array
+     * @see RepositoryInterface::all()
      */
     public function all(): array
     {
@@ -44,8 +42,8 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see RepositoryInterface::collection()
      * @return Collection
+     * @see RepositoryInterface::collection()
      */
     public function collection(): Collection
     {
@@ -53,8 +51,8 @@ class Query extends \Neat\Database\Query
     }
 
     /**
-     * @see RepositoryInterface::iterate()
      * @return Traversable
+     * @see RepositoryInterface::iterate()
      */
     public function iterate(): Traversable
     {

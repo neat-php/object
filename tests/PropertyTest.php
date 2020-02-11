@@ -12,7 +12,6 @@ use ReflectionProperty;
 
 class PropertyTest extends TestCase
 {
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create property
      *
@@ -21,7 +20,6 @@ class PropertyTest extends TestCase
      */
     public function createProperty($name)
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $reflection = new ReflectionProperty(User::class, $name);
 
         return (new Policy())->property($reflection);
@@ -60,7 +58,6 @@ class PropertyTest extends TestCase
         $this->assertInstanceOf($type, $property);
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Provide set values
      *
@@ -118,7 +115,6 @@ class PropertyTest extends TestCase
         }
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Provide get values
      *

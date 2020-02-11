@@ -8,8 +8,7 @@ use Neat\Object\Relations\RelationBuilder;
 
 trait Relations
 {
-    /**
-     * @nostorage
+    /** @nostorage
      * @var Cache
      */
     private $relations;

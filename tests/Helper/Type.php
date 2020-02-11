@@ -4,13 +4,9 @@ namespace Neat\Object\Test\Helper;
 
 class Type
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 }

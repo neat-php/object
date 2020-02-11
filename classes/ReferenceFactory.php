@@ -36,9 +36,12 @@ trait ReferenceFactory
     public function buildRemoteKey(string $key, string $local, string $remote): RemoteKeyBuilder
     {
         /** @var RemoteKeyBuilder $builder */
-        $builder = $this->references->get($key, function () use ($local, $remote) {
-            return new RemoteKeyBuilder($this->manager(), $local, $remote);
-        });
+        $builder = $this->references->get(
+            $key,
+            function () use ($local, $remote) {
+                return new RemoteKeyBuilder($this->manager(), $local, $remote);
+            }
+        );
 
         return $builder;
     }
@@ -65,9 +68,12 @@ trait ReferenceFactory
     public function buildLocalKey(string $key, string $local, string $remote): LocalKeyBuilder
     {
         /** @var LocalKeyBuilder $builder */
-        $builder = $this->references->get($key, function () use ($local, $remote) {
-            return new LocalKeyBuilder($this->manager(), $local, $remote);
-        });
+        $builder = $this->references->get(
+            $key,
+            function () use ($local, $remote) {
+                return new LocalKeyBuilder($this->manager(), $local, $remote);
+            }
+        );
 
         return $builder;
     }
@@ -94,9 +100,12 @@ trait ReferenceFactory
     public function buildJunctionTable(string $key, string $local, string $remote): JunctionTableBuilder
     {
         /** @var JunctionTableBuilder $builder */
-        $builder = $this->references->get($key, function () use ($local, $remote) {
-            return new JunctionTableBuilder($this->manager(), $local, $remote);
-        });
+        $builder = $this->references->get(
+            $key,
+            function () use ($local, $remote) {
+                return new JunctionTableBuilder($this->manager(), $local, $remote);
+            }
+        );
 
         return $builder;
     }

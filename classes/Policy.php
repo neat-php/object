@@ -89,7 +89,6 @@ class Policy
         return $this->table($class) . '_id';
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Get properties for class
      *
@@ -99,7 +98,6 @@ class Policy
     public function properties(string $class): array
     {
         $properties = [];
-        /** @noinspection PhpUnhandledExceptionInspection */
         foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
             $property = $this->property($reflection);
             if ($this->skip($property)) {
@@ -190,8 +188,7 @@ class Policy
     public function key(string $class): array
     {
         if (defined($class . '::KEY')) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            return (array)$class::KEY;
+            return (array) constant($class . '::KEY');
         }
 
         if (property_exists($class, 'id')) {

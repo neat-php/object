@@ -12,22 +12,20 @@ trait ArrayConversion
     abstract public static function repository(): RepositoryInterface;
 
     /**
-     * Convert from an associative array
-     *
-     * @param $array
-     * @return mixed
+     * @param array $data
+     * @return $this
+     * @see RepositoryInterface::fromArray()
      */
-    public function fromArray($array)
+    public function fromArray(array $data): self
     {
-        return $this::repository()->fromArray($this, $array);
+        return $this::repository()->fromArray($this, $data);
     }
 
     /**
-     * Convert to an associative array
-     *
      * @return array
+     * @see RepositoryInterface::toArray()
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this::repository()->toArray($this);
     }

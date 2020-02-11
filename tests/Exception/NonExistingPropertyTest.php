@@ -12,10 +12,6 @@ class NonExistingPropertyTest extends TestCase
     {
         $this->assertSame(
             "Class: '" . User::class . "' doesn't have a property test",
-            (new PropertyNotFoundException(new User(), 'test'))->getMessage()
-        );
-        $this->assertSame(
-            "Class: '" . User::class . "' doesn't have a property test",
             (new PropertyNotFoundException(User::class, 'test'))->getMessage()
         );
     }

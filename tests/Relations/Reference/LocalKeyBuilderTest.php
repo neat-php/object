@@ -22,7 +22,7 @@ class LocalKeyBuilderTest extends TestCase
     {
         $repository = $this->repository(Address::class);
         $builder    = $this->localKeyBuilder();
-        $localKey = $builder->property(Address::class, 'street');
+        $localKey   = $builder->property(Address::class, 'street');
         $this->assertSame($builder, $builder->setLocalKey($localKey));
         $remoteKey = $builder->property(User::class, 'typeId');
         $this->assertSame($builder, $builder->setRemoteKey($remoteKey));

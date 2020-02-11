@@ -1,29 +1,21 @@
 <?php
 
-/** @noinspection PhpMissingDocCommentInspection */
-
 namespace Neat\Object\Test\Helper;
 
 use DateTime;
-use Neat\Object\Identifier;
 
 class TimeStamps extends Entity
 {
-    use Identifier;
+    /** @var int */
+    public $id;
 
-    /**
-     * @var DateTime
-     */
+    /** @var DateTime */
     public $createdAt;
 
-    /**
-     * @var DateTime
-     */
+    /** @var DateTime */
     public $updatedAt;
 
-    /**
-     * @var DateTime
-     */
+    /** @var DateTime */
     public $deletedAt;
 
 }

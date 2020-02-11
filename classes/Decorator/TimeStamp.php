@@ -10,19 +10,13 @@ abstract class TimeStamp implements RepositoryInterface
 {
     use RepositoryDecorator;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     protected $repository;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $column;
 
-    /**
-     * @var Property
-     */
+    /** @var Property */
     protected $property;
 
     /**

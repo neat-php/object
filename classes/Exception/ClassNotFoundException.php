@@ -2,7 +2,9 @@
 
 namespace Neat\Object\Exception;
 
-class ClassNotFoundException extends \LogicException
+use LogicException;
+
+class ClassNotFoundException extends LogicException
 {
     public function __construct(string $class)
     {

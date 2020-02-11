@@ -2,36 +2,26 @@
 
 namespace Neat\Object;
 
-use RuntimeException;
 use Neat\Database\Connection;
+use RuntimeException;
 
 class Manager
 {
     use ReferenceFactory;
 
-    /**
-     * @var self[]
-     */
+    /** @var self[] */
     private static $instances = [];
 
-    /**
-     * @var callable[]
-     */
+    /** @var callable[] */
     private static $factories = [];
 
-    /**
-     * @var Connection
-     */
+    /** @var Connection */
     private $connection;
 
-    /**
-     * @var Policy
-     */
+    /** @var Policy */
     private $policy;
 
-    /**
-     * @var Cache
-     */
+    /** @var Cache */
     private $repositories;
 
     /**
@@ -82,9 +72,12 @@ class Manager
     public function repository(string $class): RepositoryInterface
     {
         /** @var RepositoryInterface $repository */
-        $repository = $this->repositories->get($class, function () use ($class) {
-            return $this->policy->repository($class, $this->connection);
-        });
+        $repository = $this->repositories->get(
+            $class,
+            function () use ($class) {
+                return $this->policy->repository($class, $this->connection);
+            }
+        );
 
         return $repository;
     }

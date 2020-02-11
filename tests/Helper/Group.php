@@ -4,19 +4,14 @@ namespace Neat\Object\Test\Helper;
 
 class Group extends Entity
 {
-    /**
-     * @noinspection PhpLongTypeFormInspection
+    /** @noinspection PhpLongTypeFormInspection
      * @var integer
      */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 }

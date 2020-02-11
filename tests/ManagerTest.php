@@ -70,9 +70,11 @@ class ManagerTest extends TestCase
      */
     public function testGetAndSetFactory()
     {
-        Manager::setFactory(function () {
-            return $this->manager();
-        });
+        Manager::setFactory(
+            function () {
+                return $this->manager();
+            }
+        );
 
         $this->assertTrue(Manager::isset());
         $this->assertInstanceOf(Manager::class, Manager::get());

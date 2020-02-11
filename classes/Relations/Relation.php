@@ -4,24 +4,16 @@ namespace Neat\Object\Relations;
 
 abstract class Relation
 {
-    /**
-     * @var Reference
-     */
+    /** @var Reference */
     protected $reference;
 
-    /**
-     * @var object
-     */
+    /** @var object */
     protected $local;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $loaded = false;
 
-    /**
-     * @var object[]
-     */
+    /** @var object[] */
     protected $objects = [];
 
     /**

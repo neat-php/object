@@ -88,12 +88,15 @@ class ComposedKeyTest extends TestCase
 
     private function groups(User $user, array $ids)
     {
-        return array_map(function (int $id) use ($user) {
-            $group          = new GroupUser();
-            $group->userId  = $user->id;
-            $group->groupId = $id;
+        return array_map(
+            function (int $id) use ($user) {
+                $group          = new GroupUser();
+                $group->userId  = $user->id;
+                $group->groupId = $id;
 
-            return $group;
-        }, $ids);
+                return $group;
+            },
+            $ids
+        );
     }
 }

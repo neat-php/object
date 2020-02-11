@@ -4,38 +4,24 @@ namespace Neat\Object\Test\Helper;
 
 class Address
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $userId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $street;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $houseNumber;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $zipCode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $city;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $country;
 }

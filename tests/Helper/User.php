@@ -1,15 +1,13 @@
 <?php
 
-/** @noinspection PhpMissingDocCommentInspection */
-
 namespace Neat\Object\Test\Helper;
 
 use DateTime;
-use Neat\Object\Identifier;
 
 class User extends Entity
 {
-    use Identifier;
+    /** @var int */
+    public $id;
 
     /** @var int */
     public $typeId;

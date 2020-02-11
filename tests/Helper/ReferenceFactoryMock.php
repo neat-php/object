@@ -13,9 +13,7 @@ class ReferenceFactoryMock
 {
     use ReferenceFactory;
 
-    /**
-     * @var Manager
-     */
+    /** @var Manager */
     private $manager;
 
     /**

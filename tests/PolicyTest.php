@@ -23,7 +23,6 @@ class PolicyTest extends TestCase
 {
     use Factory;
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create property
      *
@@ -256,10 +255,19 @@ class PolicyTest extends TestCase
         $policy          = new Policy();
         $connection      = $this->connection();
         $repositoryStack = $policy->repository(TimeStamps::class, $connection);
-        $repository      = new Repository($connection, TimeStamps::class, 'time_stamps', ['id'], $policy->properties(TimeStamps::class));
-        $softDelete      = new SoftDelete($repository, 'deleted_at', $this->propertyDateTime(TimeStamps::class, 'deletedAt'));
-        $createdAt       = new CreatedAt($softDelete, 'created_at', $this->propertyDateTime(TimeStamps::class, 'createdAt'));
-        $updatedAt       = new UpdatedAt($createdAt, 'updated_at', $this->propertyDateTime(TimeStamps::class, 'updatedAt'));
+        $properties      = $policy->properties(TimeStamps::class);
+
+        $repository = new Repository($connection, TimeStamps::class, 'time_stamps', ['id'], $properties);
+
+        $deletedAtProperty = $this->propertyDateTime(TimeStamps::class, 'deletedAt');
+        $softDelete        = new SoftDelete($repository, 'deleted_at', $deletedAtProperty);
+
+        $createdAtProperty = $this->propertyDateTime(TimeStamps::class, 'createdAt');
+        $createdAt         = new CreatedAt($softDelete, 'created_at', $createdAtProperty);
+
+        $updatedAtProperty = $this->propertyDateTime(TimeStamps::class, 'updatedAt');
+        $updatedAt         = new UpdatedAt($createdAt, 'updated_at', $updatedAtProperty);
+
         $this->assertEquals($updatedAt, $repositoryStack);
     }
 }

@@ -21,7 +21,7 @@ class RemoteKeyTest extends TestCase
      */
     public function remoteRepository(): Repository
     {
-        $policy = new Policy();
+        $policy     = new Policy();
         $properties = $policy->properties(Address::class);
 
         return new Repository(
@@ -40,7 +40,7 @@ class RemoteKeyTest extends TestCase
      */
     public function remoteKey(): RemoteKey
     {
-        $localKey = $this->propertyInteger(User::class, 'id');
+        $localKey         = $this->propertyInteger(User::class, 'id');
         $remoteForeignKey = $this->propertyInteger(Address::class, 'userId');
 
         return new RemoteKey($localKey, $remoteForeignKey, 'user_id', $this->remoteRepository());
@@ -54,7 +54,7 @@ class RemoteKeyTest extends TestCase
         $key = $this->remoteKey();
 
         // Insert test
-        $user = new User();
+        $user     = new User();
         $user->id = 4;
         $address1 = new Address();
         $key->store($user, [$address1]);
@@ -107,7 +107,7 @@ class RemoteKeyTest extends TestCase
         $load = $key->load($user);
         self::assertThat($load, new IsType('array'));
 
-        $user = new User();
+        $user     = new User();
         $user->id = 1;
         /** @var Address[] $load */
         $load = $key->load($user);

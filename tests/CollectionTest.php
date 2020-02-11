@@ -3,8 +3,8 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Collection;
-use Neat\Object\Test\Helper\User;
 use Neat\Object\Test\Helper\GroupUser;
+use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
@@ -144,9 +144,14 @@ class CollectionTest extends TestCase
     public function testMap()
     {
         $firstNameCollection = new Collection($this->firstNames());
-        $this->assertEquals($firstNameCollection, $this->collection()->map(function ($data) {
-            return $data['firstName'];
-        }));
+        $this->assertEquals(
+            $firstNameCollection,
+            $this->collection()->map(
+                function ($data) {
+                    return $data['firstName'];
+                }
+            )
+        );
     }
 
     /**
@@ -170,9 +175,11 @@ class CollectionTest extends TestCase
             'jdoe'    => $this->items()['jdoe'],
             'janedoe' => $this->items()['janedoe'],
         ];
-        $filtered = $this->collection()->filter(function ($data): bool {
-            return !$data['middleName'];
-        });
+        $filtered = $this->collection()->filter(
+            function ($data): bool {
+                return !$data['middleName'];
+            }
+        );
 
         $this->assertEquals(new Collection($expected), $filtered);
     }
@@ -217,8 +224,11 @@ class CollectionTest extends TestCase
      */
     private function firstNames()
     {
-        return array_map(function ($data) {
-            return $data['firstName'];
-        }, $this->items());
+        return array_map(
+            function ($data) {
+                return $data['firstName'];
+            },
+            $this->items()
+        );
     }
 }

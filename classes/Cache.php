@@ -4,9 +4,7 @@ namespace Neat\Object;
 
 class Cache
 {
-    /**
-     * @var object[]
-     */
+    /** @var object[] */
     protected $objects = [];
 
     /**

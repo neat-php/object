@@ -210,7 +210,7 @@ class EntityTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $dbUser = User::get(1);
+        $dbUser   = User::get(1);
         $user     = new User();
         $user->id = 1;
         $user->load();

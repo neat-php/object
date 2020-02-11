@@ -11,9 +11,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 {
     use Collectible;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $items;
 
     /**

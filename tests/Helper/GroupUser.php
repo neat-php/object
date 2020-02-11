@@ -6,13 +6,9 @@ class GroupUser extends Entity
 {
     const KEY = ['user_id', 'group_id'];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $userId;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $groupId;
 }
