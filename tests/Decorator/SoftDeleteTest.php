@@ -81,6 +81,8 @@ class SoftDeleteTest extends TestCase
         return [
             ['all', null, $this->query(['where']), ['test']],
             ['all', ['param' => 1], $this->query(['where']), ['test']],
+            ['one', null, $this->query(['where']), 'test'],
+            ['one', ['param' => 1], $this->query(['where']), 'test'],
             ['collection', null, $this->query(['where']), new Collection(['test'])],
             ['collection', ['param' => 1], $this->query(['where']), new Collection(['test'])],
         ];
@@ -120,6 +122,7 @@ class SoftDeleteTest extends TestCase
 
         return [
             ['all', $query, ['test']],
+            ['one', $query, 'test'],
             ['collection', $query, new Collection(['test'])],
         ];
     }

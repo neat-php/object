@@ -11,6 +11,18 @@ class SoftDelete extends TimeStamp
     /**
      * @inheritDoc
      */
+    public function one($conditions = null)
+    {
+        if ($conditions instanceof SQLQuery) {
+            return parent::one($conditions);
+        }
+
+        return parent::one($this->query($conditions)->where([$this->column => null]));
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function all($conditions = null): array
     {
         if ($conditions instanceof SQLQuery) {
@@ -28,7 +40,6 @@ class SoftDelete extends TimeStamp
         if ($conditions instanceof SQLQuery) {
             return parent::collection($conditions);
         }
-
 
         return parent::collection($this->query($conditions)->where([$this->column => null]));
     }
