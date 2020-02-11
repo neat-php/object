@@ -3,10 +3,10 @@
 namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Manager;
-use Neat\Object\Relations\Reference;
-use Neat\Object\Relations\Reference\JunctionTable;
-use Neat\Object\Relations\Reference\LocalKey;
-use Neat\Object\Relations\Reference\RemoteKey;
+use Neat\Object\Reference\JunctionTable;
+use Neat\Object\Reference\LocalKey;
+use Neat\Object\Reference\Reference;
+use Neat\Object\Reference\RemoteKey;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;

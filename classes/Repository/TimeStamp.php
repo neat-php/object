@@ -1,9 +1,8 @@
 <?php
 
-namespace Neat\Object\Decorator;
+namespace Neat\Object\Repository;
 
-use Neat\Object\Property;
-use Neat\Object\RepositoryDecorator;
+use Neat\Object\Property\Property;
 use Neat\Object\RepositoryInterface;
 
 abstract class TimeStamp implements RepositoryInterface

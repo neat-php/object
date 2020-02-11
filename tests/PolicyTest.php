@@ -2,13 +2,13 @@
 
 namespace Neat\Object\Test;
 
-use Neat\Object\Decorator\CreatedAt;
-use Neat\Object\Decorator\SoftDelete;
-use Neat\Object\Decorator\UpdatedAt;
 use Neat\Object\Exception\ClassNotFoundException;
 use Neat\Object\Policy;
-use Neat\Object\Property;
-use Neat\Object\Repository;
+use Neat\Object\Property\Property;
+use Neat\Object\Repository\CreatedAt;
+use Neat\Object\Repository\Repository;
+use Neat\Object\Repository\SoftDelete;
+use Neat\Object\Repository\UpdatedAt;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\GroupUser;

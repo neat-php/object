@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object\Relations\Reference;
+namespace Neat\Object\Reference;
 
 use Neat\Object\RepositoryInterface;
 

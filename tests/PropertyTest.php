@@ -16,7 +16,7 @@ class PropertyTest extends TestCase
      * Create property
      *
      * @param string $name
-     * @return Property
+     * @return Property\Property
      */
     public function createProperty($name)
     {
@@ -32,9 +32,9 @@ class PropertyTest extends TestCase
     {
         return [
             ['id', Property\Integer::class],
-            ['username', Property::class],
-            ['middleName', Property::class],
-            ['lastName', Property::class],
+            ['username', Property\Property::class],
+            ['middleName', Property\Property::class],
+            ['lastName', Property\Property::class],
             ['active', Property\Boolean::class],
             ['ignored', Property\Integer::class],
             ['registerDate', Property\DateTimeImmutable::class],

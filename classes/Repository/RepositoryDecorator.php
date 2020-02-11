@@ -1,8 +1,11 @@
 <?php
 
-namespace Neat\Object;
+namespace Neat\Object\Repository;
 
 use Neat\Database\Query as QueryBuilder;
+use Neat\Object\Collection;
+use Neat\Object\Query;
+use Neat\Object\RepositoryInterface;
 use Traversable;
 
 trait RepositoryDecorator

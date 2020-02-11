@@ -1,11 +1,15 @@
 <?php
 
-namespace Neat\Object;
+namespace Neat\Object\Repository;
 
 use Neat\Database\Connection;
 use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
-use Neat\Object\Relations\Relation;
+use Neat\Object\Collection;
+use Neat\Object\Property\Property;
+use Neat\Object\Query;
+use Neat\Object\Relation\Relation;
+use Neat\Object\RepositoryInterface;
 use RuntimeException;
 use Traversable;
 

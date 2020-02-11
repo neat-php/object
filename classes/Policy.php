@@ -3,9 +3,11 @@
 namespace Neat\Object;
 
 use Neat\Database\Connection;
-use Neat\Object\Decorator\CreatedAt;
-use Neat\Object\Decorator\SoftDelete;
-use Neat\Object\Decorator\UpdatedAt;
+use Neat\Object\Property;
+use Neat\Object\Repository\CreatedAt;
+use Neat\Object\Repository\Repository;
+use Neat\Object\Repository\SoftDelete;
+use Neat\Object\Repository\UpdatedAt;
 use Neat\Object\Exception\ClassNotFoundException;
 use ReflectionClass;
 use ReflectionException;
@@ -95,7 +97,7 @@ class Policy
      * Get properties for class
      *
      * @param string $class
-     * @return Property[]
+     * @return Property\Property[]
      */
     public function properties(string $class): array
     {
@@ -120,9 +122,9 @@ class Policy
 
     /**
      * @param ReflectionProperty $reflection
-     * @return Property
+     * @return Property\Property
      */
-    public function property(ReflectionProperty $reflection): Property
+    public function property(ReflectionProperty $reflection): Property\Property
     {
         if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
             $type = ltrim($matches[1], '\\');
@@ -140,16 +142,16 @@ class Policy
             }
         }
 
-        return new Property($reflection);
+        return new Property\Property($reflection);
     }
 
     /**
      * Skip property?
      *
-     * @param Property $property
+     * @param Property\Property $property
      * @return bool
      */
-    public function skip(Property $property): bool
+    public function skip(Property\Property $property): bool
     {
         return $property->static() || preg_match('/\\s@nostorage\\s/', $property->comment());
     }

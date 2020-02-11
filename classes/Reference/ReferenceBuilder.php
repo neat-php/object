@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object\Relations;
+namespace Neat\Object\Reference;
 
 interface ReferenceBuilder
 {

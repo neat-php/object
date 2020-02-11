@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object;
+namespace Neat\Object\Property;
 
 use ReflectionProperty;
 

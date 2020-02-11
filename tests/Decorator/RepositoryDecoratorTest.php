@@ -4,7 +4,7 @@ namespace Neat\Object\Test\Decorator;
 
 use Neat\Object\Collection;
 use Neat\Object\Query;
-use Neat\Object\RepositoryDecorator;
+use Neat\Object\Repository\RepositoryDecorator;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\RepositoryDecoratorMock;

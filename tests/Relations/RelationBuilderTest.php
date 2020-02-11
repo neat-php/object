@@ -2,11 +2,11 @@
 
 namespace Neat\Object\Test\Relations;
 
-use Neat\Object\Relations\Many;
-use Neat\Object\Relations\One;
-use Neat\Object\Relations\Reference\LocalKey;
-use Neat\Object\Relations\ReferenceBuilder;
-use Neat\Object\Relations\RelationBuilder;
+use Neat\Object\Reference\LocalKey;
+use Neat\Object\Reference\ReferenceBuilder;
+use Neat\Object\Relation\Many;
+use Neat\Object\Relation\One;
+use Neat\Object\Relation\RelationBuilder;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

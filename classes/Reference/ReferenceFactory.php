@@ -1,13 +1,9 @@
 <?php
 
-namespace Neat\Object;
+namespace Neat\Object\Reference;
 
-use Neat\Object\Relations\Reference\JunctionTable;
-use Neat\Object\Relations\Reference\JunctionTableBuilder;
-use Neat\Object\Relations\Reference\LocalKey;
-use Neat\Object\Relations\Reference\LocalKeyBuilder;
-use Neat\Object\Relations\Reference\RemoteKey;
-use Neat\Object\Relations\Reference\RemoteKeyBuilder;
+use Neat\Object\Cache;
+use Neat\Object\Manager;
 
 trait ReferenceFactory
 {

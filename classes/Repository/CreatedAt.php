@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object\Decorator;
+namespace Neat\Object\Repository;
 
 class CreatedAt extends TimeStamp
 {

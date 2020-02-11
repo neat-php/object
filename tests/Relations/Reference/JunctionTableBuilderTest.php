@@ -2,8 +2,8 @@
 
 namespace Neat\Object\Test\Relations\Reference;
 
-use Neat\Object\Relations\Reference\JunctionTable;
-use Neat\Object\Relations\Reference\JunctionTableBuilder;
+use Neat\Object\Reference\JunctionTable;
+use Neat\Object\Reference\JunctionTableBuilder;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;

@@ -1,12 +1,10 @@
 <?php
 
-namespace Neat\Object\Relations\Reference;
+namespace Neat\Object\Reference;
 
 use Neat\Database\Connection;
 use Neat\Object\Manager;
-use Neat\Object\Property;
-use Neat\Object\Relations\Reference;
-use Neat\Object\Relations\ReferenceBuilder;
+use Neat\Object\Property\Property;
 use Neat\Object\RepositoryInterface;
 
 class JunctionTableBuilder implements ReferenceBuilder

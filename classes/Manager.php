@@ -3,6 +3,7 @@
 namespace Neat\Object;
 
 use Neat\Database\Connection;
+use Neat\Object\Reference\ReferenceFactory;
 use RuntimeException;
 
 class Manager

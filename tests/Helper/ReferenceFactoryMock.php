@@ -6,7 +6,7 @@ use Neat\Database\Connection;
 use Neat\Object\Cache;
 use Neat\Object\Manager;
 use Neat\Object\Policy;
-use Neat\Object\ReferenceFactory;
+use Neat\Object\Reference\ReferenceFactory;
 use Neat\Object\RepositoryInterface;
 
 class ReferenceFactoryMock

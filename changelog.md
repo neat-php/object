@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - The property class can't handle types other than string use the adapters instead.
 - Repository::one() method will now filter soft-deleted objects.
+- Moved classes and namespaces.
 
 ### Added
 - Property adapters to replace the switch statement.

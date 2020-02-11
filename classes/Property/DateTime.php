@@ -2,8 +2,6 @@
 
 namespace Neat\Object\Property;
 
-use Neat\Object\Property;
-
 class DateTime extends Property
 {
     /**

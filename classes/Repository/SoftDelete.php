@@ -1,6 +1,6 @@
 <?php
 
-namespace Neat\Object\Decorator;
+namespace Neat\Object\Repository;
 
 use Neat\Database\SQLQuery;
 use Neat\Object\Collection;

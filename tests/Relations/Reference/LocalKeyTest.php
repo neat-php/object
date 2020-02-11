@@ -4,8 +4,8 @@ namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Policy;
 use Neat\Object\Query;
-use Neat\Object\Relations\Reference\LocalKey;
-use Neat\Object\Relations\Reference\LocalKeyBuilder;
+use Neat\Object\Reference\LocalKey;
+use Neat\Object\Reference\LocalKeyBuilder;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;

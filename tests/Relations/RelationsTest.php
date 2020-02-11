@@ -3,9 +3,9 @@
 namespace Neat\Object\Test\Relations;
 
 use Neat\Object\Manager;
-use Neat\Object\Relations\Many;
-use Neat\Object\Relations\One;
-use Neat\Object\Relations\Relation;
+use Neat\Object\Relation\Many;
+use Neat\Object\Relation\One;
+use Neat\Object\Relation\Relation;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Type;

@@ -1,6 +1,8 @@
 <?php
 
-namespace Neat\Object\Relations;
+namespace Neat\Object\Relation;
+
+use Neat\Object\Reference\ReferenceBuilder;
 
 class RelationBuilder
 {

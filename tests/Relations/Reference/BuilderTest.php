@@ -6,8 +6,8 @@ use Neat\Object\Exception\ClassMismatchException;
 use Neat\Object\Exception\ClassNotFoundException;
 use Neat\Object\Exception\PropertyNotFoundException;
 use Neat\Object\Policy;
-use Neat\Object\Property;
-use Neat\Object\Relations\Reference;
+use Neat\Object\Property\Property;
+use Neat\Object\Reference;
 use Neat\Object\Test\Helper\CallableMock;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\ReferenceBuilderMock;
@@ -55,7 +55,7 @@ class BuilderTest extends TestCase
 
     public function testResolve()
     {
-        $resolved = $this->getMockForAbstractClass(Reference::class);
+        $resolved = $this->getMockForAbstractClass(Reference\Reference::class);
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
         $builder->setClass(MockObject::class);
@@ -68,14 +68,14 @@ class BuilderTest extends TestCase
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder  = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
-        $resolved = $this->getMockForAbstractClass(Reference::class);
+        $resolved = $this->getMockForAbstractClass(Reference\Reference::class);
         $builder->setResolved($resolved);
         $this->assertSame($resolved, $builder->resolve());
     }
 
     public function testResolveFactory()
     {
-        $resolved = $this->getMockForAbstractClass(Reference::class);
+        $resolved = $this->getMockForAbstractClass(Reference\Reference::class);
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
         $builder->setClass(MockObject::class);

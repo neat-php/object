@@ -3,8 +3,8 @@
 namespace Neat\Object\Test\Decorator;
 
 use DateTime;
-use Neat\Object\Decorator\CreatedAt;
-use Neat\Object\Repository;
+use Neat\Object\Repository\CreatedAt;
+use Neat\Object\Repository\Repository;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;

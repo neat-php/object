@@ -4,8 +4,8 @@ namespace Neat\Object\Test\Helper;
 
 use Neat\Object\Manager;
 use Neat\Object\Policy;
-use Neat\Object\Relations\Reference;
-use Neat\Object\Relations\Reference\Builder;
+use Neat\Object\Reference\Builder;
+use Neat\Object\Reference\Reference;
 
 abstract class ReferenceBuilderMock
 {

@@ -3,9 +3,9 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Policy;
-use Neat\Object\Relations\Reference\LocalKey;
-use Neat\Object\Relations\Reference\RemoteKey;
-use Neat\Object\Repository;
+use Neat\Object\Reference\LocalKey;
+use Neat\Object\Reference\RemoteKey;
+use Neat\Object\Repository\Repository;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\User;

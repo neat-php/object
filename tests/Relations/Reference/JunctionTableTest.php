@@ -3,9 +3,9 @@
 namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Policy;
-use Neat\Object\Relations\Reference\JunctionTable;
-use Neat\Object\Relations\Reference\JunctionTableBuilder;
-use Neat\Object\Repository;
+use Neat\Object\Reference\JunctionTable;
+use Neat\Object\Reference\JunctionTableBuilder;
+use Neat\Object\Repository\Repository;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;

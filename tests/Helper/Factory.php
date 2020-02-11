@@ -157,8 +157,8 @@ SQL;
         return new Property\DateTime(new ReflectionProperty($class, $property));
     }
 
-    public function property(string $class, $property): Property
+    public function property(string $class, $property): Property\Property
     {
-        return new Property(new ReflectionProperty($class, $property));
+        return new Property\Property(new ReflectionProperty($class, $property));
     }
 }
