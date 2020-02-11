@@ -2,7 +2,7 @@
 
 namespace Neat\Object\Exception;
 
-class NonExistingProperty extends \LogicException
+class PropertyNotFoundException extends \LogicException
 {
     /**
      * NonExistingProperty constructor.

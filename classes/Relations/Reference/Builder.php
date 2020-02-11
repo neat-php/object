@@ -2,8 +2,9 @@
 
 namespace Neat\Object\Relations\Reference;
 
+use Neat\Object\Exception\ClassMismatchException;
 use Neat\Object\Exception\ClassNotFoundException;
-use Neat\Object\Exception\NonExistingProperty;
+use Neat\Object\Exception\PropertyNotFoundException;
 use Neat\Object\Manager;
 use Neat\Object\Policy;
 use Neat\Object\Property;
@@ -56,7 +57,7 @@ trait Builder
         }
         $this->resolved = $this->build();
         if (!$this->resolved instanceof $this->class) {
-            // throw
+            throw new ClassMismatchException($this->class, get_class($this->resolved));
         }
 
         return $this->resolved;
@@ -107,7 +108,7 @@ trait Builder
             throw new ClassNotFoundException($class);
         }
         if (!property_exists($class, $property)) {
-            throw new NonExistingProperty($class, $property);
+            throw new PropertyNotFoundException($class, $property);
         }
         $properties = $this->policy->properties($class);
 

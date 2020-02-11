@@ -2,13 +2,15 @@
 
 namespace Neat\Object\Test\Relations\Reference;
 
+use Neat\Object\Exception\ClassMismatchException;
 use Neat\Object\Exception\ClassNotFoundException;
-use Neat\Object\Exception\NonExistingProperty;
+use Neat\Object\Exception\PropertyNotFoundException;
 use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Test\Helper\CallableMock;
 use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\InvalidBuilder;
 use Neat\Object\Test\Helper\ReferenceBuilderMock;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -38,7 +40,7 @@ class BuilderTest extends TestCase
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
-        $class = 'ThisIsANonExistingClass';
+        $class   = 'ThisIsANonExistingClass';
         $this->expectExceptionObject(new ClassNotFoundException($class));
         $builder->property($class, 'a');
     }
@@ -48,7 +50,7 @@ class BuilderTest extends TestCase
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder  = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
         $property = 'abcd';
-        $this->expectExceptionObject(new NonExistingProperty(User::class, $property));
+        $this->expectExceptionObject(new PropertyNotFoundException(User::class, $property));
         $builder->property(User::class, $property);
     }
 
@@ -85,5 +87,20 @@ class BuilderTest extends TestCase
 
         $builder->factory($callable);
         $this->assertSame($resolved, $builder->resolve());
+    }
+
+    public function testResolveException()
+    {
+        $resolved = $this->getMockBuilder(Reference\RemoteKey::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['build'])
+            ->getMock();
+        /** @var ReferenceBuilderMock|MockObject $builder */
+        $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
+        $builder->setClass(Reference\LocalKey::class);
+        $builder->expects($this->once())->method('build')->willReturn($resolved);
+
+        $this->expectExceptionObject(new ClassMismatchException(Reference\LocalKey::class, get_class($resolved)));
+        $builder->resolve();
     }
 }
