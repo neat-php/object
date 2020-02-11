@@ -3,9 +3,11 @@
 namespace Neat\Object;
 
 use Neat\Database\Connection;
-use Neat\Object\Decorator\CreatedAt;
-use Neat\Object\Decorator\SoftDelete;
-use Neat\Object\Decorator\UpdatedAt;
+use Neat\Object\Repository as RepositoryInterface;
+use Neat\Object\Repository\CreatedAt;
+use Neat\Object\Repository\Repository;
+use Neat\Object\Repository\SoftDelete;
+use Neat\Object\Repository\UpdatedAt;
 use Neat\Object\Exception\ClassNotFoundException;
 use ReflectionClass;
 use ReflectionException;

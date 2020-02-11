@@ -27,12 +27,12 @@ class User
         echo 'Hello, ' . $this->name . '!';
     }
 
-    public function address(): Neat\Object\Relations\One
+    public function address(): Neat\Object\Relation\One
     {
         return $this->hasOne(Address::class);
     }
 
-    public function roles(): Neat\Object\Relations\Many
+    public function roles(): Neat\Object\Relation\Many
     {
         return $this->hasMany(Role::class);
     }

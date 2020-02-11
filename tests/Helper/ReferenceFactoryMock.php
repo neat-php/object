@@ -6,8 +6,8 @@ use Neat\Database\Connection;
 use Neat\Object\Cache;
 use Neat\Object\Manager;
 use Neat\Object\Policy;
-use Neat\Object\ReferenceFactory;
-use Neat\Object\RepositoryInterface;
+use Neat\Object\Reference\ReferenceFactory;
+use Neat\Object\Repository;
 
 class ReferenceFactoryMock
 {
@@ -56,9 +56,9 @@ class ReferenceFactoryMock
      * Get repository
      *
      * @param string $class
-     * @return RepositoryInterface
+     * @return Repository
      */
-    public function repository(string $class): RepositoryInterface
+    public function repository(string $class): Repository
     {
         return $this->manager->repository($class);
     }

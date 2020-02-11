@@ -149,7 +149,7 @@ class User
     use Neat\Object\Storage;
     use Neat\Object\Relations;
 
-    public function address(): Neat\Object\Relations\One
+    public function address(): Neat\Object\Relation\One
     {
         return $this->hasOne(Address::class);
     }
@@ -175,7 +175,7 @@ $user->roles()->map(function (Role $role) {
 ```
 You can extend the relation classes to add commonly needed functionality:
 ```php
-class ManyOrderArticles extends Neat\Object\Relations\Many {
+class ManyOrderArticles extends Neat\Object\Relation\Many {
     public function filterByType(string $type)
     {
         return $this->filter(function (Article $article) use ($type) {

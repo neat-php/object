@@ -17,9 +17,9 @@ trait Storage
     /**
      * Get repository
      *
-     * @return RepositoryInterface
+     * @return Repository
      */
-    public static function repository(): RepositoryInterface
+    public static function repository(): Repository
     {
         return static::manager()->repository(static::class);
     }
@@ -27,7 +27,7 @@ trait Storage
     /**
      * @param int|string|array $id
      * @return bool
-     * @see RepositoryInterface::has()
+     * @see Repository::has()
      */
     public static function has($id): bool
     {
@@ -37,7 +37,7 @@ trait Storage
     /**
      * @param int|string|array $id
      * @return static|null
-     * @see RepositoryInterface::get()
+     * @see Repository::get()
      */
     public static function get($id)
     {
@@ -47,7 +47,7 @@ trait Storage
     /**
      * @param string|null $alias
      * @return Query
-     * @see RepositoryInterface::select()
+     * @see Repository::select()
      */
     public static function select(string $alias = null): Query
     {
@@ -57,7 +57,7 @@ trait Storage
     /**
      * @param Query|string|array|null $conditions
      * @return Query
-     * @see RepositoryInterface::query()
+     * @see Repository::query()
      */
     public static function query($conditions = null): Query
     {
@@ -77,7 +77,7 @@ trait Storage
     /**
      * @param Query|string|array|null $conditions
      * @return static|null
-     * @see RepositoryInterface::one()
+     * @see Repository::one()
      */
     public static function one($conditions = null)
     {
@@ -87,7 +87,7 @@ trait Storage
     /**
      * @param Query|string|array|null $conditions
      * @return static[]
-     * @see RepositoryInterface::all()
+     * @see Repository::all()
      */
     public static function all($conditions = null): array
     {
@@ -97,7 +97,7 @@ trait Storage
     /**
      * @param Query|string|array|null $conditions
      * @return Collection
-     * @see RepositoryInterface::collection()
+     * @see Repository::collection()
      */
     public static function collection($conditions = null): Collection
     {
@@ -107,7 +107,7 @@ trait Storage
     /**
      * @param Query|string|array|null $conditions
      * @return Traversable
-     * @see RepositoryInterface::iterate()
+     * @see Repository::iterate()
      */
     public static function iterate($conditions = null): Traversable
     {
@@ -116,7 +116,7 @@ trait Storage
 
     /**
      * @return void
-     * @see RepositoryInterface::store()
+     * @see Repository::store()
      */
     public function store()
     {
@@ -125,7 +125,7 @@ trait Storage
 
     /**
      * @return $this
-     * @see RepositoryInterface::load()
+     * @see Repository::load()
      */
     public function load(): self
     {
@@ -134,7 +134,7 @@ trait Storage
 
     /**
      * @return void
-     * @see RepositoryInterface::delete()
+     * @see Repository::delete()
      */
     public function delete()
     {

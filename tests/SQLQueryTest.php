@@ -5,7 +5,7 @@ namespace Neat\Object\Test;
 use Generator;
 use Neat\Object\Collection;
 use Neat\Object\SQLQuery;
-use Neat\Object\Repository;
+use Neat\Object\Repository\Repository;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;

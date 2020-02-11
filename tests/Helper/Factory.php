@@ -7,7 +7,7 @@ use Neat\Database\Connection;
 use Neat\Object\Manager;
 use Neat\Object\Policy;
 use Neat\Object\Property;
-use Neat\Object\RepositoryInterface;
+use Neat\Object\Repository;
 use PDO;
 use ReflectionProperty;
 
@@ -147,7 +147,7 @@ SQL;
      * Create repository instance
      *
      * @param string $class
-     * @return RepositoryInterface
+     * @return Repository
      */
     public function repository(string $class)
     {

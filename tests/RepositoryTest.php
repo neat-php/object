@@ -3,7 +3,6 @@
 namespace Neat\Object\Test;
 
 use Generator;
-use Neat\Database\SQLQuery;
 use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Assertions;

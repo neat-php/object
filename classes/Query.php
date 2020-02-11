@@ -11,10 +11,10 @@ class Query extends \Neat\Database\Query
     /**
      * Query constructor
      *
-     * @param Connection          $connection
-     * @param RepositoryInterface $repository
+     * @param Connection $connection
+     * @param Repository $repository
      */
-    public function __construct(Connection $connection, RepositoryInterface $repository)
+    public function __construct(Connection $connection, Repository $repository)
     {
         parent::__construct($connection);
 

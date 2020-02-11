@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Support data to be merged in sql query when using Repository::sql().
 
+### Changed
+- Moved classes and namespaces:
+    - Moved Neat\Object\Decorator namespace to Neat\Object\Repository.
+    - Moved Neat\Object\RepositoryDecorator to Neat\Object\Repository\RepositoryDecorator
+    - Moved Neat\Object\Repository class to Neat\Object\Repository\Repository.
+    - Moved Neat\Object\RepositoryInterface interface to Neat\Object\Repository.
+    - Moved Neat\Object\Relations\Reference namespace and class to Neat\Object\Reference.
+    - Moved Neat\Object\Relations\Relation class to Neat\Object\Relation.
+    - Moved Neat\Object\Relations\ReferenceBuilder to Neat\Object\Reference\ReferenceBuilder
+    - Moved Neat\Object\Relations namespace to Neat\Object\Relation.
+    - Moved Neat\Object\ReferenceFactory class to Neat\Object\Reference\ReferenceFactory.
+- Changed Neat\Object\Reference from abstract class into an interface.
+
 ## [0.11.0] - 2020-06-19
 ### Changed
 - The property class can't handle types other than string use the adapters instead.

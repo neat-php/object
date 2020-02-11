@@ -2,6 +2,7 @@
 
 namespace Neat\Object\Test;
 
+use DateTime;
 use Neat\Object\Manager;
 use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Factory;
@@ -26,8 +27,8 @@ class RepositoryRelationsTest extends TestCase
         $user->firstName    = 'repository';
         $user->lastName     = 'relations';
         $user->active       = true;
-        $user->registerDate = new \DateTime('2020-04-21');
-        $user->updateDate   = new \DateTime('2020-04-21');
+        $user->registerDate = new DateTime('2020-04-21');
+        $user->updateDate   = new DateTime('2020-04-21');
 
         $address       = new Address();
         $address->city = 'test';

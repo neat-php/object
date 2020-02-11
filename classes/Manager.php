@@ -3,6 +3,7 @@
 namespace Neat\Object;
 
 use Neat\Database\Connection;
+use Neat\Object\Reference\ReferenceFactory;
 use RuntimeException;
 
 class Manager
@@ -67,11 +68,11 @@ class Manager
      * Get or create repository
      *
      * @param string $class
-     * @return RepositoryInterface
+     * @return Repository
      */
-    public function repository(string $class): RepositoryInterface
+    public function repository(string $class): Repository
     {
-        /** @var RepositoryInterface $repository */
+        /** @var Repository $repository */
         $repository = $this->repositories->get(
             $class,
             function () use ($class) {

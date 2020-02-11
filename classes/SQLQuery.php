@@ -11,11 +11,11 @@ class SQLQuery extends \Neat\Database\SQLQuery
     /**
      * SQLQuery constructor
      *
-     * @param Connection          $connection
-     * @param RepositoryInterface $repository
-     * @param string              $sql
+     * @param Connection $connection
+     * @param Repository $repository
+     * @param string     $sql
      */
-    public function __construct(Connection $connection, RepositoryInterface $repository, string $sql)
+    public function __construct(Connection $connection, Repository $repository, string $sql)
     {
         parent::__construct($connection, $sql);
 

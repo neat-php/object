@@ -2,9 +2,9 @@
 
 namespace Neat\Object;
 
-use Neat\Object\Relations\Many;
-use Neat\Object\Relations\One;
-use Neat\Object\Relations\RelationBuilder;
+use Neat\Object\Relation\Many;
+use Neat\Object\Relation\One;
+use Neat\Object\Relation\RelationBuilder;
 
 trait Relations
 {

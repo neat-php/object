@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Test\Helper;
 
+use Neat\Object\Reference\LocalKeyBuilder;
+use Neat\Object\Relation\One;
 use Neat\Object\Relations;
 use Neat\Object\Storage;
 
@@ -25,12 +27,12 @@ class Article
     /** @var int */
     public $deletedBy;
 
-    public function creator(): Relations\One
+    public function creator(): One
     {
-        /** @var Relations\One $relation */
+        /** @var One $relation */
         $relation = $this->buildBelongsToOne(User::class, 'ArticleBelongsToOneCreator')
             ->referenceFactory(
-                function (Relations\Reference\LocalKeyBuilder $builder) {
+                function (LocalKeyBuilder $builder) {
                     $builder->setLocalKey($builder->property(self::class, 'createdBy'));
                 }
             )

@@ -7,14 +7,14 @@ trait ArrayConversion
     /**
      * Get repository
      *
-     * @return RepositoryInterface
+     * @return Repository
      */
-    abstract public static function repository(): RepositoryInterface;
+    abstract public static function repository(): Repository;
 
     /**
      * @param array $data
      * @return $this
-     * @see RepositoryInterface::fromArray()
+     * @see Repository::fromArray()
      */
     public function fromArray(array $data): self
     {
@@ -23,7 +23,7 @@ trait ArrayConversion
 
     /**
      * @return array
-     * @see RepositoryInterface::toArray()
+     * @see Repository::toArray()
      */
     public function toArray(): array
     {

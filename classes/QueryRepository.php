@@ -6,12 +6,12 @@ use Traversable;
 
 trait QueryRepository
 {
-    /** @var RepositoryInterface */
+    /** @var Repository */
     private $repository;
 
     /**
      * @return mixed|null
-     * @see RepositoryInterface::one()
+     * @see Repository::one()
      */
     public function one()
     {
@@ -20,7 +20,7 @@ trait QueryRepository
 
     /**
      * @return array
-     * @see RepositoryInterface::all()
+     * @see Repository::all()
      */
     public function all(): array
     {
@@ -29,7 +29,7 @@ trait QueryRepository
 
     /**
      * @return Collection
-     * @see RepositoryInterface::collection()
+     * @see Repository::collection()
      */
     public function collection(): Collection
     {
@@ -38,7 +38,7 @@ trait QueryRepository
 
     /**
      * @return Traversable
-     * @see RepositoryInterface::iterate()
+     * @see Repository::iterate()
      */
     public function iterate(): Traversable
     {
