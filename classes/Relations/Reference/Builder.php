@@ -102,9 +102,9 @@ trait Builder
      * @param string        $property
      * @return Property
      */
-    public function property($class, string $property): Property
+    public function property(string $class, string $property): Property
     {
-        if (!is_object($class) && !class_exists($class)) {
+        if (!class_exists($class)) {
             throw new ClassNotFoundException($class);
         }
         if (!property_exists($class, $property)) {
