@@ -3,7 +3,6 @@
 namespace Neat\Object\Relations\Reference;
 
 use Neat\Object\Manager;
-use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\ReferenceBuilder;
@@ -28,12 +27,12 @@ class RemoteKeyBuilder implements ReferenceBuilder
     /**
      * RemoteKeyBuilder constructor.
      * @param Manager $manager
-     * @param Policy  $policy
      * @param string  $local
      * @param string  $remote
      */
-    public function __construct(Manager $manager, Policy $policy, string $local, string $remote)
+    public function __construct(Manager $manager, string $local, string $remote)
     {
+        $policy = $manager->policy();
         $this->init($manager, $policy, RemoteKey::class);
         $localKey         = $policy->key($local);
         $foreignKey       = $policy->foreignKey($local);

@@ -37,7 +37,7 @@ trait ReferenceFactory
     {
         /** @var RemoteKeyBuilder $builder */
         $builder = $this->references->get($key, function () use ($local, $remote) {
-            return new RemoteKeyBuilder($this->manager(), $this->policy(), $local, $remote);
+            return new RemoteKeyBuilder($this->manager(), $local, $remote);
         });
 
         return $builder;
@@ -66,7 +66,7 @@ trait ReferenceFactory
     {
         /** @var LocalKeyBuilder $builder */
         $builder = $this->references->get($key, function () use ($local, $remote) {
-            return new LocalKeyBuilder($this->manager(), $this->policy(), $local, $remote);
+            return new LocalKeyBuilder($this->manager(), $local, $remote);
         });
 
         return $builder;
@@ -95,13 +95,11 @@ trait ReferenceFactory
     {
         /** @var JunctionTableBuilder $builder */
         $builder = $this->references->get($key, function () use ($local, $remote) {
-            return new JunctionTableBuilder($this->manager(), $this->policy(), $local, $remote);
+            return new JunctionTableBuilder($this->manager(), $local, $remote);
         });
 
         return $builder;
     }
 
     abstract public function manager(): Manager;
-
-    abstract public function policy(): Policy;
 }

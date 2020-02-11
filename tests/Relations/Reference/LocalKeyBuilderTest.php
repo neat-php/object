@@ -15,7 +15,7 @@ class LocalKeyBuilderTest extends TestCase
 
     private function localKeyBuilder(): LocalKeyBuilder
     {
-        return new LocalKeyBuilder($this->manager(), $this->policy(), Address::class, User::class);
+        return new LocalKeyBuilder($this->manager(), Address::class, User::class);
     }
 
     public function testBuild()

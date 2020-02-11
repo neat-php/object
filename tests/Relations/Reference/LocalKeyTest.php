@@ -85,6 +85,6 @@ class LocalKeyTest extends TestCase
 
     public function localKeyFactory(string $local, string $remote)
     {
-        return new LocalKeyBuilder($this->manager(), $this->policy(), $local, $remote);
+        return new LocalKeyBuilder($this->manager(), $local, $remote);
     }
 }

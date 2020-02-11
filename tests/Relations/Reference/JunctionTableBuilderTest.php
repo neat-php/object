@@ -15,7 +15,7 @@ class JunctionTableBuilderTest extends TestCase
 
     private function junctionTableBuilder()
     {
-        return new JunctionTableBuilder($this->manager(), $this->policy(), User::class, Address::class);
+        return new JunctionTableBuilder($this->manager(), User::class, Address::class);
     }
 
     public function testBuild()

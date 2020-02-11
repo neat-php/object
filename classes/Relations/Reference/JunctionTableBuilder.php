@@ -4,7 +4,6 @@ namespace Neat\Object\Relations\Reference;
 
 use Neat\Database\Connection;
 use Neat\Object\Manager;
-use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\ReferenceBuilder;
@@ -41,12 +40,12 @@ class JunctionTableBuilder implements ReferenceBuilder
     /**
      * JunctionTableBuilder constructor.
      * @param Manager $manager
-     * @param Policy  $policy
      * @param string  $local
      * @param string  $remote
      */
-    public function __construct(Manager $manager, Policy $policy, string $local, string $remote)
+    public function __construct(Manager $manager, string $local, string $remote)
     {
+        $policy = $manager->policy();
         $this->init($manager, $policy, JunctionTable::class);
         $localKey         = $policy->key($local);
         $remoteKey        = $policy->key($remote);

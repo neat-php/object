@@ -131,11 +131,6 @@ class JunctionTableTest extends TestCase
 
     private function junctionTableFactory(string $local, string $remote)
     {
-        return new JunctionTableBuilder(
-            $this->manager(),
-            $this->policy(),
-            $local,
-            $remote
-        );
+        return new JunctionTableBuilder($this->manager(), $local, $remote);
     }
 }

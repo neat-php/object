@@ -10,7 +10,6 @@ use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Test\Helper\CallableMock;
 use Neat\Object\Test\Helper\Factory;
-use Neat\Object\Test\Helper\InvalidBuilder;
 use Neat\Object\Test\Helper\ReferenceBuilderMock;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
