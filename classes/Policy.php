@@ -6,7 +6,9 @@ use Neat\Database\Connection;
 use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
+use Neat\Object\Exception\ClassNotFoundException;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
 
@@ -97,8 +99,14 @@ class Policy
      */
     public function properties(string $class): array
     {
+        try {
+            $reflection = new ReflectionClass($class);
+        } catch (ReflectionException $e) {
+            throw new ClassNotFoundException($class);
+        }
+
         $properties = [];
-        foreach ((new ReflectionClass($class))->getProperties() as $reflection) {
+        foreach ($reflection->getProperties() as $reflection) {
             $property = $this->property($reflection);
             if ($this->skip($property)) {
                 continue;

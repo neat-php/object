@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Property adapters to replace the switch statement.
 - Build methods and builder classes for Relations and References.
+- Policy now throws a ClassNotFoundException when the requested class cannot be found.
 
 ### Removed
 - Property->type() method.

@@ -5,6 +5,7 @@ namespace Neat\Object\Test;
 use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
+use Neat\Object\Exception\ClassNotFoundException;
 use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Repository;
@@ -22,6 +23,19 @@ use RuntimeException;
 class PolicyTest extends TestCase
 {
     use Factory;
+
+    /**
+     * Test class not found exception
+     */
+    public function testClassNotFoundException()
+    {
+        $connection = $this->connection();
+        $policy     = new Policy();
+
+        $this->expectException(ClassNotFoundException::class);
+
+        $policy->repository('ThisClassDoesNotExist', $connection);
+    }
 
     /**
      * Create property
