@@ -1,10 +1,15 @@
 # Changelog
-All notable changes to Neat Database components will be documented in this file.
+All notable changes to Neat Object components will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.10.1] - 2020-02-18
+### Added
+- Repository can use a custom factory for creating an entity instance from array.
+- Policy will use the static createFromArray method as custom factory when it exists.
 
 ## [0.10.0] - 2019-10-31
 ### Removed

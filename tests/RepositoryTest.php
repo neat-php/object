@@ -10,6 +10,7 @@ use Neat\Object\Query;
 use Neat\Object\Test\Helper\Assertions;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
+use Neat\Object\Test\Helper\Type;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -18,6 +19,22 @@ class RepositoryTest extends TestCase
 {
     use Assertions;
     use Factory;
+
+    public function testCreate()
+    {
+        $data = [
+            'id'   => 1,
+            'name' => 'John',
+        ];
+
+        $expected = new Type();
+        $expected->id = 1;
+        $expected->name = 'John';
+
+        $repository = $this->repository(Type::class);
+
+        $this->assertEquals($expected, $repository->create($data));
+    }
 
     /**
      * Test has

@@ -23,8 +23,9 @@ class Policy
         $properties = $this->properties($class);
         $table      = $this->table($class);
         $key        = $this->key($class);
+        $factory    = $this->factory($class);
 
-        $repository = new Repository($connection, $class, $table, $key, $properties);
+        $repository = new Repository($connection, $class, $table, $key, $properties, $factory);
         if ($softDelete = $this->softDelete($class)) {
             $repository = new SoftDelete($repository, $softDelete, $properties[$softDelete]);
         }
@@ -121,6 +122,17 @@ class Policy
     {
         return $property->static()
             || preg_match('/\\s@nostorage\\s/', $property->docBlock());
+    }
+
+    /**
+     * Get factory method
+     *
+     * @param string $class
+     * @return callable|null
+     */
+    public function factory(string $class)
+    {
+        return method_exists($class, 'createFromArray') ? [$class, 'createFromArray'] : null;
     }
 
     /**
