@@ -15,6 +15,7 @@ use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\HardDelete;
 use Neat\Object\Test\Helper\NoEntity;
 use Neat\Object\Test\Helper\TimeStamps;
+use Neat\Object\Test\Helper\Type;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -35,6 +36,16 @@ class PolicyTest extends TestCase
         $this->expectException(ClassNotFoundException::class);
 
         $policy->repository('ThisClassDoesNotExist', $connection);
+    }
+
+    /**
+     * Test factory method
+     */
+    public function testFactory()
+    {
+        $policy = new Policy();
+        $this->assertNull($policy->factory(User::class));
+        $this->assertSame([Type::class, 'createFromArray'], $policy->factory(Type::class));
     }
 
     /**

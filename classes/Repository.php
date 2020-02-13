@@ -26,23 +26,35 @@ class Repository implements RepositoryInterface
     /** @var Property[] */
     private $properties;
 
+    /** @var callable */
+    private $factory;
+
     /**
      * Repository constructor
      *
-     * @param Connection $connection The connection to the database the entity table exists in
-     * @param string     $class The class name of the entity the repository is meant for
-     * @param string     $table The table name for the entity
-     * @param string[]   $key The primary key columns for the table, pass multiple items for a composed key
-     * @param Property[] $properties The properties of the entity, should only include properties which actually map to
-     * a database column
+     * @param Connection $connection Connection to the database the entity table exists in
+     * @param string     $class      Class name of the entity the repository is meant for
+     * @param string     $table      Table name for the entity
+     * @param string[]   $key        Primary key columns for the table, pass multiple items for a composed key
+     * @param Property[] $properties Properties of the entity, should only include properties which actually map to a database column
+     * @param callable   $factory    Factory closure used to create entity instances from a table row result
      */
-    public function __construct(Connection $connection, string $class, string $table, array $key, array $properties)
-    {
+    public function __construct(
+        Connection $connection,
+        string $class,
+        string $table,
+        array $key,
+        array $properties,
+        callable $factory = null
+    ) {
         $this->connection = $connection;
         $this->class      = $class;
         $this->table      = $table;
         $this->key        = $key;
         $this->properties = $properties;
+        $this->factory    = $factory ?? function () use ($class) {
+                return new $class;
+            };
     }
 
     /**
@@ -281,7 +293,7 @@ class Repository implements RepositoryInterface
      */
     public function create(array $data)
     {
-        return $this->fromArray(new $this->class(), $data);
+        return $this->fromArray(($this->factory)($data), $data);
     }
 
     /**
