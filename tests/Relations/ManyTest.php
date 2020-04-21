@@ -138,11 +138,11 @@ class ManyTest extends TestCase
         $reference
             ->expects($this->at(1))
             ->method('getRemoteKeyValue')
-            ->willReturn($address1->id);
+            ->willReturn(['id' => $address1->id]);
         $reference
             ->expects($this->at(2))
             ->method('getRemoteKeyValue')
-            ->willReturn($address2->id);
+            ->willReturn(['id' => $address2->id]);
         $reference
             ->expects($this->at(3))
             ->method('store')
@@ -168,7 +168,7 @@ class ManyTest extends TestCase
             ->expects($this->at(0))
             ->method('getRemoteKeyValue')
             ->with($address1)
-            ->willReturn($address1->id);
+            ->willReturn(['id' => $address1->id]);
         $reference
             ->expects($this->at(1))
             ->method('load')
@@ -177,17 +177,17 @@ class ManyTest extends TestCase
             ->expects($this->at(2))
             ->method('getRemoteKeyValue')
             ->with($address1)
-            ->willReturn($address1->id);
+            ->willReturn(['id' => $address1->id]);
         $reference
             ->expects($this->at(3))
             ->method('getRemoteKeyValue')
             ->with($address2)
-            ->willReturn($address2->id);
+            ->willReturn(['id' => $address2->id]);
         $reference
             ->expects($this->at(4))
             ->method('getRemoteKeyValue')
             ->with($address1)
-            ->willReturn($address1->id);
+            ->willReturn(['id' => $address1->id]);
 
         $many = $this->many($reference);
 
@@ -217,7 +217,7 @@ class ManyTest extends TestCase
         $reference
             ->expects($this->at(1))
             ->method('getRemoteKeyValue')
-            ->willReturn($address2->id);
+            ->willReturn(['id' => $address2->id]);
         $reference
             ->expects($this->at(2))
             ->method('store')

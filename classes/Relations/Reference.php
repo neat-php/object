@@ -21,7 +21,7 @@ abstract class Reference
 
     /**
      * @param $remote
-     * @return mixed
+     * @return array
      */
     abstract public function getRemoteKeyValue($remote);
 

@@ -60,8 +60,10 @@ class Many extends Relation
     public function has($remote): bool
     {
         $remoteKeyValue = $this->reference->getRemoteKeyValue($remote);
-        if ($remoteKeyValue === null) {
-            return false;
+        foreach ($remoteKeyValue as $value) {
+            if ($value === null) {
+                return false;
+            }
         }
 
         foreach ($this->all() as $object) {

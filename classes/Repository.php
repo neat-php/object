@@ -6,6 +6,7 @@ use Neat\Database\Connection;
 use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
 use Neat\Object\Relations\Relation;
+use Neat\Object\Relations\RelationBuilder;
 use RuntimeException;
 use Traversable;
 
@@ -169,9 +170,16 @@ class Repository implements RepositoryInterface
      */
     public function store($entity)
     {
+        $relations = [];
         if (method_exists($entity, 'relations')) {
-            $this->setRelations($entity->relations()->all());
+            $relations = array_map(
+                function (RelationBuilder $builder): Relation {
+                    return $builder->resolve();
+                },
+                $entity->relations()->all()
+            );
         }
+        $this->setRelations($relations);
         $data       = $this->toArray($entity);
         $identifier = $this->identifier($entity);
         if ($identifier && array_filter($identifier) && $this->has($identifier)) {
@@ -182,9 +190,7 @@ class Repository implements RepositoryInterface
                 $this->properties[reset($this->key)]->set($entity, $id);
             }
         }
-        if (method_exists($entity, 'relations')) {
-            $this->storeRelations($entity->relations()->all());
-        }
+        $this->storeRelations($relations);
     }
 
     /**
@@ -194,9 +200,7 @@ class Repository implements RepositoryInterface
     private function setRelations(array $relations)
     {
         foreach ($relations as $key => $relation) {
-            if (strpos($key, 'belongsToOne') !== false) {
-                $relation->store();
-            }
+            $relation->setRelation();
         }
     }
 
@@ -207,9 +211,7 @@ class Repository implements RepositoryInterface
     private function storeRelations(array $relations)
     {
         foreach ($relations as $key => $relation) {
-            if (strpos($key, 'belongsToOne') === false) {
-                $relation->store();
-            }
+            $relation->storeRelation();
         }
     }
 

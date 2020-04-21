@@ -70,9 +70,9 @@ class User extends Entity
         return $this->hasOne(Address::class);
     }
 
-    public function addresses()
+    public function properties()
     {
-        return $this->hasMany(Address::class);
+        return $this->hasMany(Property::class);
     }
 
     public function type()

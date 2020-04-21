@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Relations;
 
+use Neat\Object\Relations\Reference\LocalKey;
+
 abstract class Relation
 {
     /** @var Reference */
@@ -53,5 +55,25 @@ abstract class Relation
         }
 
         return $this;
+    }
+
+    /**
+     * @internal
+     */
+    public function setRelation()
+    {
+        if ($this instanceof One && $this->reference instanceof LocalKey) {
+            $this->store();
+        }
+    }
+
+    /**
+     * @internal
+     */
+    public function storeRelation()
+    {
+        if (!$this instanceof One || !$this->reference instanceof LocalKey) {
+            $this->store();
+        }
     }
 }

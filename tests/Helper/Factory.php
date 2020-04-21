@@ -35,16 +35,16 @@ VALUES (1, 'admin'),
        (2, 'user');
 CREATE TABLE user
 (
-    id           INTEGER PRIMARY KEY,
-    type_id      INTEGER  NOT NULL,
-    username     TEXT     NOT NULL,
-    first_name   TEXT     NOT NULL,
-    middle_name  TEXT     NULL,
-    last_name    TEXT     NOT NULL,
-    active       INTEGER  NOT NULL DEFAULT 1,
+    id            INTEGER PRIMARY KEY,
+    type_id       INTEGER  NOT NULL,
+    username      TEXT     NOT NULL,
+    first_name    TEXT     NOT NULL,
+    middle_name   TEXT     NULL,
+    last_name     TEXT     NOT NULL,
+    active        INTEGER  NOT NULL DEFAULT 1,
     register_date DATETIME NOT NULL,
-    update_date  DATETIME NOT NULL,
-    deleted_date DATETIME NULL,
+    update_date   DATETIME NOT NULL,
+    deleted_date  DATETIME NULL,
     FOREIGN KEY (type_id)
         REFERENCES type (id)
         ON DELETE RESTRICT
@@ -99,6 +99,13 @@ CREATE TABLE `time_stamps`
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     deleted_at DATETIME DEFAULT NULL
+);
+CREATE TABLE `property`
+(
+    id      INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    name    VARCHAR NOT NULL,
+    value   VARCHAR NOT NULL
 );
 SQL;
         $pdo->exec($sql);
