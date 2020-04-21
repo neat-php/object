@@ -13,11 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Property adapters to replace the switch statement.
 - Build methods and builder classes for Relations and References.
 - Policy now throws a ClassNotFoundException when the requested class cannot be found.
-- Repository can use a custom factory for creating an entity instance from array.
 - Policy will use the static createFromArray method as custom factory when it exists.
+
+### Fixed
+- Adding multiple unsaved items to a many relation.
 
 ### Removed
 - Property->type() method.
+
+## [0.10.1] - 2020-02-13
+### Added
+- Repository can use a custom factory for creating an entity instance from array.
 
 ## [0.10.0] - 2019-10-31
 ### Removed
