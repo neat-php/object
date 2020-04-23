@@ -51,9 +51,11 @@ class JunctionTableBuilder implements ReferenceBuilder
         $remoteKey        = $policy->key($remote);
         $localForeignKey  = $policy->foreignKey($local);
         $remoteForeignKey = $policy->foreignKey($remote);
+        $localProperties  = $policy->properties($local);
+        $remoteProperties = $policy->properties($remote);
 
-        $this->localKey                      = $this->property($local, reset($localKey));
-        $this->remoteKey                     = $this->property($remote, reset($remoteKey));
+        $this->localKey                      = $localProperties[reset($localKey)] ?? null;
+        $this->remoteKey                     = $remoteProperties[reset($remoteKey)] ?? null;
         $this->remoteKeyColumn               = reset($remoteKey);
         $this->remoteRepository              = $manager->repository($remote);
         $this->connection                    = $manager->connection();

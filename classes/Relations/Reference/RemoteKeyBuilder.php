@@ -39,8 +39,8 @@ class RemoteKeyBuilder implements ReferenceBuilder
         $localProperties  = $policy->properties($local);
         $remoteProperties = $policy->properties($remote);
 
-        $this->localKey         = $localProperties[reset($localKey)];
-        $this->remoteForeignKey = $remoteProperties[$foreignKey];
+        $this->localKey         = $localProperties[reset($localKey)] ?? null;
+        $this->remoteForeignKey = $remoteProperties[$foreignKey] ?? null;
         $this->remoteKey        = $foreignKey;
         $this->remoteRepository = $manager->repository($remote);
     }

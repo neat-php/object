@@ -54,7 +54,7 @@ class Repository implements RepositoryInterface
         $this->key        = $key;
         $this->properties = $properties;
         $this->factory    = $factory ?? function () use ($class) {
-                return new $class;
+                return new $class();
             };
     }
 
