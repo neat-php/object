@@ -8,6 +8,7 @@ use Generator;
 use Neat\Object\Collection;
 use Neat\Object\Manager;
 use Neat\Object\Query;
+use Neat\Object\SQLQuery;
 use Neat\Object\Test\Helper\Assertions;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
@@ -70,6 +71,19 @@ class EntityTest extends TestCase
         $select = User::query('active = 1');
         $this->assertInstanceOf(Query::class, $select);
         $this->assertSQL('SELECT `user`.* FROM `user` WHERE active = 1', $select->getQuery());
+    }
+
+    /**
+     * Test query
+     *
+     * @runInSeparateProcess enabled
+     */
+    public function testSQL()
+    {
+        Manager::set($this->manager());
+
+        $this->assertInstanceOf(SQLQuery::class, User::sql('SELECT'));
+        $this->assertSame('SELECT * FROM user', User::sql('SELECT * FROM user')->getQuery());
     }
 
     /**

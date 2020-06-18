@@ -112,6 +112,14 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
+    public function sql(string $sql): SQLQuery
+    {
+        return new SQLQuery($this->connection, $this, $sql);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function one($conditions = null)
     {
         if (!$conditions instanceof QueryBuilder && $conditions instanceof QueryInterface) {

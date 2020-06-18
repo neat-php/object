@@ -6,6 +6,7 @@ use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\RepositoryDecorator;
 use Neat\Object\RepositoryInterface;
+use Neat\Object\SQLQuery;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\RepositoryDecoratorMock;
 use Neat\Object\Test\Helper\User;
@@ -38,6 +39,7 @@ class RepositoryDecoratorTest extends TestCase
         $user      = new User();
         $queryData = ['name' => 'test'];
         $arrayData = ['id' => 1];
+        $sql       = 'SELECT * FROM dual';
 
         return [
             ['has', [1], false],
@@ -48,6 +50,7 @@ class RepositoryDecoratorTest extends TestCase
             ['select', ['alias'], new Query($connection, $this->repository(User::class))],
             ['query', [], new Query($connection, $this->repository(User::class))],
             ['query', [$queryData], new Query($connection, $this->repository(User::class))],
+            ['sql', [$sql], new SQLQuery($connection, $this->repository(User::class), $sql)],
             ['one', [], null],
             ['one', [], null],
             ['all', [], []],

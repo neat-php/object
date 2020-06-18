@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Repository::one() method will now filter soft-deleted objects.
 
 ### Added
+- Repository sql method and SQLQuery support.
 - Property adapters to replace the switch statement.
 - Build methods and builder classes for Relations and References.
 - Policy now throws a ClassNotFoundException when the requested class cannot be found.
