@@ -175,7 +175,7 @@ class RepositoryTest extends TestCase
     public function testAllSQL()
     {
         $repository = $this->repository(User::class);
-        $users      = $repository->sql($repository->select()->orderBy('id DESC')->getSelectQuery())->all();
+        $users      = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->all();
         self::assertThat($users, new IsType('array'));
         $this->assertCount(3, $users);
         $user = reset($users);
@@ -202,7 +202,7 @@ class RepositoryTest extends TestCase
     public function testCollectionSQL()
     {
         $repository      = $this->repository(User::class);
-        $usersCollection = $repository->sql($repository->select()->orderBy('id DESC')->getSelectQuery())->collection();
+        $usersCollection = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->collection();
         $this->assertInstanceOf(Collection::class, $usersCollection);
         $this->assertCount(3, $usersCollection);
         $user = $usersCollection->first();
@@ -229,7 +229,7 @@ class RepositoryTest extends TestCase
     {
         $repository = $this->repository(User::class);
 
-        $userIterator = $repository->sql($repository->select()->orderBy('id DESC')->getSelectQuery())->iterate();
+        $userIterator = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->iterate();
         $this->assertCount(3, $userIterator);
         $i = 1;
         foreach ($repository->iterate() as $user) {
