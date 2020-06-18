@@ -147,10 +147,10 @@ class RepositoryTest extends TestCase
         $this->assertSame(1, $user->id);
     }
 
-    public function testOneSQLQuery()
+    public function testOneSQL()
     {
         $repository = $this->repository(User::class);
-        $user       = $repository->one(new SQLQuery($this->connection(), "SELECT * FROM `user` WHERE id = '1';"));
+        $user       = $repository->sql("SELECT * FROM `user` WHERE id = '1';")->one();
         $this->assertInstanceOf(User::class, $user);
         $this->assertSame(1, $user->id);
     }
@@ -172,12 +172,10 @@ class RepositoryTest extends TestCase
         $this->assertCount(1, $users);
     }
 
-    public function testAllSQLQuery()
+    public function testAllSQL()
     {
         $repository = $this->repository(User::class);
-        $users      = $repository->all(
-            new SQLQuery($this->connection(), $repository->select()->orderBy('id DESC')->getSelectQuery())
-        );
+        $users      = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->all();
         self::assertThat($users, new IsType('array'));
         $this->assertCount(3, $users);
         $user = reset($users);
@@ -201,12 +199,10 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
-    public function testCollectionSQLQuery()
+    public function testCollectionSQL()
     {
         $repository      = $this->repository(User::class);
-        $usersCollection = $repository->collection(
-            new SQLQuery($this->connection(), $repository->select()->orderBy('id DESC')->getSelectQuery())
-        );
+        $usersCollection = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->collection();
         $this->assertInstanceOf(Collection::class, $usersCollection);
         $this->assertCount(3, $usersCollection);
         $user = $usersCollection->first();
@@ -229,13 +225,11 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(Generator::class, $userRepository->iterate());
     }
 
-    public function testIterateSQLQuery()
+    public function testIterateSQL()
     {
         $repository = $this->repository(User::class);
 
-        $userIterator = $repository->iterate(
-            new SQLQuery($this->connection(), $repository->select()->orderBy('id DESC')->getSelectQuery())
-        );
+        $userIterator = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->iterate();
         $this->assertCount(3, $userIterator);
         $i = 1;
         foreach ($repository->iterate() as $user) {

@@ -40,6 +40,12 @@ interface RepositoryInterface
     public function query($conditions = null): \Neat\Database\Query;
 
     /**
+     * @param string $sql
+     * @return SQLQuery
+     */
+    public function sql(string $sql): SQLQuery;
+
+    /**
      * Get one by conditions
      *
      * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance

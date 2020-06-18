@@ -65,6 +65,15 @@ trait Storage
     }
 
     /**
+     * @param string $sql
+     * @return SQLQuery
+     */
+    public static function sql(string $sql): SQLQuery
+    {
+        return static::repository()->sql($sql);
+    }
+
+    /**
      * @param Query|string|array|null $conditions
      * @return static|null
      * @see RepositoryInterface::one()
