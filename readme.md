@@ -53,7 +53,7 @@ class User
 
 To persist these entities into the database, we can use a repository:
 ```php
-$respository = $manager->repository(User::class);
+$repository = $manager->repository(User::class);
 
 $user = new User();
 $user->name = 'John';
@@ -71,7 +71,7 @@ If you know the identifier for your entity, you can access it using the
 $user = $repository->get(1); // Returns user with id 1 or null if not found
 
 // Or just check if it exists
-if (!$respository->has(1)) {
+if (!$repository->has(1)) {
     throw new Exception('boohoo');
 }
 ```
@@ -107,13 +107,22 @@ $administrators = $repository
     ->all();
 ```
 
+When you prefer a handwritten SQL query, you can use the sql method instead
+```php
+// Get one user using your own SQL query
+$user = $repository->sql('SELECT * FROM users WHERE id = 1')->one();
+
+// Or multiple in an array
+$active = $repository->sql('SELECT * FROM users WHERE active = 1')->all();
+```
+
 ## Find using static access
 To prevent littering your code with manager and repository instances, you can
 use the `Storage` trait to allow for static repository access:
 ```php
 class User
 {
-    use Storage;
+    use Neat\Object\Storage;
 
     /** @var int */
     public $id;
@@ -127,7 +136,7 @@ $user = User::get(1);
 $users = User::all();
 $latest = User::select()->orderBy('created_at DESC')->one();
 foreach (User::iterate() as $user) {
-    // Do something with every user
+    $user->greet();
 }
 ```
 
@@ -137,10 +146,10 @@ for hasOne/-Many and belongsToOne/-Many relations.
 ```php
 class User
 {
-    use Storage;
-    use Relations;
+    use Neat\Object\Storage;
+    use Neat\Object\Relations;
 
-    public function address(): One
+    public function address(): Neat\Object\Relations\One
     {
         return $this->hasOne(Address::class);
     }
@@ -166,7 +175,7 @@ $user->roles()->map(function (Role $role) {
 ```
 You can extend the relation classes to add commonly needed functionality:
 ```php
-class ManyOrderArticles extends Many {
+class ManyOrderArticles extends Neat\Object\Relations\Many {
     public function filterByType(string $type)
     {
         return $this->filter(function (Article $article) use ($type) {
