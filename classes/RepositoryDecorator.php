@@ -44,9 +44,9 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function sql(string $sql): SQLQuery
+    public function sql(string $sql, ...$data): SQLQuery
     {
-        return $this->repository()->sql($sql);
+        return $this->repository()->sql($sql, ...$data);
     }
 
     /**

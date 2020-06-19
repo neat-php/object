@@ -150,7 +150,7 @@ class RepositoryTest extends TestCase
     public function testOneSQL()
     {
         $repository = $this->repository(User::class);
-        $user       = $repository->sql("SELECT * FROM `user` WHERE id = '1';")->one();
+        $user       = $repository->sql("SELECT * FROM `user` WHERE id = ?", 1)->one();
         $this->assertInstanceOf(User::class, $user);
         $this->assertSame(1, $user->id);
     }

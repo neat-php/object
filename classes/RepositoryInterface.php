@@ -41,9 +41,10 @@ interface RepositoryInterface
 
     /**
      * @param string $sql
+     * @param mixed  ...$data
      * @return SQLQuery
      */
-    public function sql(string $sql): SQLQuery;
+    public function sql(string $sql, ...$data): SQLQuery;
 
     /**
      * Get one by conditions

@@ -107,13 +107,13 @@ $administrators = $repository
     ->all();
 ```
 
-When you prefer a handwritten SQL query, you can use the sql method instead
+When you prefer a handwritten SQL query, you can use the ```sql``` method instead
 ```php
 // Get one user using your own SQL query
-$user = $repository->sql('SELECT * FROM users WHERE id = 1')->one();
+$user = $repository->sql('SELECT * FROM users WHERE id = ?', 1)->one();
 
 // Or multiple in an array
-$active = $repository->sql('SELECT * FROM users WHERE active = 1')->all();
+$active = $repository->sql('SELECT * FROM users WHERE deleted = 0')->all();
 ```
 
 ## Find using static access

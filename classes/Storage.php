@@ -66,11 +66,12 @@ trait Storage
 
     /**
      * @param string $sql
+     * @param mixed  ...$data
      * @return SQLQuery
      */
-    public static function sql(string $sql): SQLQuery
+    public static function sql(string $sql, ...$data): SQLQuery
     {
-        return static::repository()->sql($sql);
+        return static::repository()->sql($sql, ...$data);
     }
 
     /**
