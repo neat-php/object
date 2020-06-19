@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for DateTimeImmutable type hint in entities
 - Remove support for relations
 - PHP 7.3 support
+
 ### Fixed
 - Relations trait: manager method is now static
 - Prevent adding double relations
