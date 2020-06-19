@@ -30,7 +30,8 @@
     "require": {
         "php": ">=7.0",
         "ext-json": "*",
-        "neat/database": "^1.2"
+        "neat/database": "^1.2",
+        "psr/event-dispatcher": "^1.0"
     },
     "require-dev": {
         "ext-pdo": "*",

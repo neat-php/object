@@ -3,9 +3,14 @@
 namespace Neat\Object\Test\Helper;
 
 use DateTime;
+use Neat\Object\Event;
 
 class TimeStamps extends Entity
 {
+    const EVENTS = [
+        Event::STORING => Event\Storing::class,
+    ];
+
     /** @var int */
     public $id;
 
@@ -17,5 +22,4 @@ class TimeStamps extends Entity
 
     /** @var DateTime */
     public $deletedAt;
-
 }

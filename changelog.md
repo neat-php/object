@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Support data to be merged in sql query when using Repository::sql().
+- PSR-14 Event Dispatcher support using repository decorator.
+- Event implementations: Loading, Loaded, Storing, Stored, Deleting, Deleted.
 
 ## [0.11.0] - 2020-06-19
 ### Changed
