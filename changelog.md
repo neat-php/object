@@ -5,12 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.11.0] - 2020-06-19
 ### Changed
 - The property class can't handle types other than string use the adapters instead.
 - Repository::one() method will now filter soft-deleted objects.
 
 ### Added
-- Repository sql method and SQLQuery support.
+- Repository::sql() method and SQLQuery support.
 - Property adapters to replace the switch statement.
 - Build methods and builder classes for Relations and References.
 - Policy now throws a ClassNotFoundException when the requested class cannot be found.
