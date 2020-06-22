@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Property;
 
+use DateTimeInterface;
+use Exception;
 use Neat\Object\Property;
 
 class DateTime extends Property
@@ -11,10 +13,11 @@ class DateTime extends Property
      *
      * @param \DateTime $value
      * @return string
+     * @throws Exception
      */
     public function toString($value): string
     {
-        if (!$value instanceof \DateTimeInterface) {
+        if (!$value instanceof DateTimeInterface) {
             $value = new \DateTime($value);
         }
 
@@ -26,6 +29,7 @@ class DateTime extends Property
      *
      * @param string $value
      * @return \DateTime
+     * @throws Exception
      */
     public function fromString(string $value): \DateTime
     {

@@ -2,6 +2,8 @@
 
 namespace Neat\Object\Property;
 
+use DateTimeInterface;
+use Exception;
 use Neat\Object\Property;
 
 class DateTimeImmutable extends Property
@@ -11,10 +13,11 @@ class DateTimeImmutable extends Property
      *
      * @param \DateTimeImmutable $value
      * @return string
+     * @throws Exception
      */
     public function toString($value): string
     {
-        if (!$value instanceof \DateTimeInterface) {
+        if (!$value instanceof DateTimeInterface) {
             $value = new \DateTimeImmutable($value);
         }
 
@@ -26,6 +29,7 @@ class DateTimeImmutable extends Property
      *
      * @param string $value
      * @return \DateTimeImmutable
+     * @throws Exception
      */
     public function fromString(string $value): \DateTimeImmutable
     {
