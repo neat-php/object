@@ -6,7 +6,7 @@ use Neat\Object\Event;
 
 class Events
 {
-    const EVENTS = [
+    public const EVENTS = [
         Event::LOADING  => Event\Loading::class,
         Event::LOADED   => Event\Loaded::class,
         Event::STORING  => Event\Storing::class,

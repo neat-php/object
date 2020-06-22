@@ -7,7 +7,7 @@ use Neat\Object\Event;
 
 class TimeStamps extends Entity
 {
-    const EVENTS = [
+    public const EVENTS = [
         Event::STORING => Event\Storing::class,
     ];
 
