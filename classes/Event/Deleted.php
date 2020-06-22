@@ -6,5 +6,4 @@ use Neat\Object\Event;
 
 class Deleted extends Event
 {
-    use Entity;
 }

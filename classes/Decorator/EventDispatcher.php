@@ -47,8 +47,9 @@ class EventDispatcher implements RepositoryInterface
      *
      * @param string $event
      * @param object $entity
+     * @return void
      */
-    public function trigger(string $event, $entity)
+    public function trigger(string $event, object $entity): void
     {
         if ($class = $this->events[$event] ?? null) {
             $instance = new $class($entity);

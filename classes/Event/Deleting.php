@@ -6,5 +6,4 @@ use Neat\Object\Event;
 
 class Deleting extends Event
 {
-    use Entity;
 }

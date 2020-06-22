@@ -6,5 +6,4 @@ use Neat\Object\Event;
 
 class Loading extends Event
 {
-    use Entity;
 }
