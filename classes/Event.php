@@ -4,10 +4,10 @@ namespace Neat\Object;
 
 abstract class Event
 {
-    const STORING  = 'storing';
-    const STORED   = 'stored';
-    const LOADING  = 'loading';
-    const LOADED   = 'loaded';
-    const DELETING = 'deleting';
-    const DELETED  = 'deleted';
+    public const STORING  = 'storing';
+    public const STORED   = 'stored';
+    public const LOADING  = 'loading';
+    public const LOADED   = 'loaded';
+    public const DELETING = 'deleting';
+    public const DELETED  = 'deleted';
 }
