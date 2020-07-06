@@ -47,7 +47,7 @@ class LocalKey extends Reference
     {
         $identifier = $this->localForeignKey->get($local);
 
-        return is_null($identifier) ? [] : $this->remoteRepository->all([$this->remoteKeyString => $identifier]);
+        return is_null($identifier) ? [] : $this->select($local)->all();
     }
 
     /**
