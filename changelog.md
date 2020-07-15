@@ -6,17 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.2] - 2020-07-15
+- PSR-14 Event Dispatcher support using repository decorator.
+- Event implementations: Loading, Loaded, Storing, Stored, Deleting, Deleted.
+
+### Removed
+- PHP 7.0 and PHP 7.1 support.
+
 ## [0.11.1] - 2020-07-06
 ### Changed
 - The belongsToOne relation includes soft deleted entities.
 
 ### Added
 - Support data to be merged in sql query when using Repository::sql().
-- PSR-14 Event Dispatcher support using repository decorator.
-- Event implementations: Loading, Loaded, Storing, Stored, Deleting, Deleted.
-
-### Removed
-- PHP 7.0 and PHP 7.1 support.
 
 ## [0.11.0] - 2020-06-19
 ### Changed
