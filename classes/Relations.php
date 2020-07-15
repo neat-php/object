@@ -65,8 +65,9 @@ trait Relations
      */
     public function hasOne(string $remoteClass): One
     {
+        $localClass = get_class($this);
         /** @var One $relation */
-        $relation = $this->buildHasOne($remoteClass, __METHOD__ . $remoteClass)->resolve();
+        $relation = $this->buildHasOne($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }
@@ -108,8 +109,9 @@ trait Relations
      */
     public function hasMany(string $remoteClass): Many
     {
+        $localClass = get_class($this);
         /** @var Many $relation */
-        $relation = $this->buildHasMany($remoteClass, __METHOD__ . $remoteClass)->resolve();
+        $relation = $this->buildHasMany($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }
@@ -141,8 +143,9 @@ trait Relations
      */
     public function belongsToOne(string $remoteClass): One
     {
+        $localClass = get_class($this);
         /** @var One $relation */
-        $relation = $this->buildBelongsToOne($remoteClass, __METHOD__ . $remoteClass)->resolve();
+        $relation = $this->buildBelongsToOne($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }
@@ -174,8 +177,9 @@ trait Relations
      */
     public function belongsToMany(string $remoteClass): Many
     {
+        $localClass = get_class($this);
         /** @var Many $relation */
-        $relation = $this->buildBelongsToMany($remoteClass, __METHOD__ . $remoteClass)->resolve();
+        $relation = $this->buildBelongsToMany($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
 
         return $relation;
     }
