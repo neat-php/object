@@ -3,12 +3,14 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Decorator\CreatedAt;
+use Neat\Object\Decorator\EventDispatcher;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use Neat\Object\Exception\ClassNotFoundException;
 use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Repository;
+use Neat\Object\Test\Helper\Events;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\GroupUser;
@@ -18,6 +20,7 @@ use Neat\Object\Test\Helper\TimeStamps;
 use Neat\Object\Test\Helper\Type;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use ReflectionProperty;
 use RuntimeException;
 
@@ -238,6 +241,17 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test events
+     */
+    public function testEvents()
+    {
+        $policy = new Policy();
+
+        $this->assertSame(Events::EVENTS, $policy->events(Events::class));
+        $this->assertSame([], $policy->events(User::class));
+    }
+
+    /**
      * Provide keys
      *
      * @return array
@@ -277,7 +291,8 @@ class PolicyTest extends TestCase
 
     public function testDecoratedRepository()
     {
-        $policy          = new Policy();
+        $dispatcher      = $this->createMock(EventDispatcherInterface::class);
+        $policy          = new Policy($dispatcher);
         $connection      = $this->connection();
         $repositoryStack = $policy->repository(TimeStamps::class, $connection);
         $properties      = $policy->properties(TimeStamps::class);
@@ -293,6 +308,8 @@ class PolicyTest extends TestCase
         $updatedAtProperty = $this->propertyDateTime(TimeStamps::class, 'updatedAt');
         $updatedAt         = new UpdatedAt($createdAt, 'updated_at', $updatedAtProperty);
 
-        $this->assertEquals($updatedAt, $repositoryStack);
+        $eventDispatcher   = new EventDispatcher($updatedAt, $dispatcher, TimeStamps::EVENTS);
+
+        $this->assertEquals($eventDispatcher, $repositoryStack);
     }
 }

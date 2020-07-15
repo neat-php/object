@@ -4,9 +4,11 @@ namespace Neat\Object;
 
 use Neat\Database\Connection;
 use Neat\Object\Decorator\CreatedAt;
+use Neat\Object\Decorator\EventDispatcher;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use Neat\Object\Exception\ClassNotFoundException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
@@ -14,6 +16,19 @@ use RuntimeException;
 
 class Policy
 {
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
+
+    /**
+     * Policy constructor
+     *
+     * @param EventDispatcherInterface|null $dispatcher
+     */
+    public function __construct(EventDispatcherInterface $dispatcher = null)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
     /**
      * Get repository
      *
@@ -37,6 +52,9 @@ class Policy
         }
         if ($updatedStamp = $this->updatedStamp($class)) {
             $repository = new UpdatedAt($repository, $updatedStamp, $properties[$updatedStamp]);
+        }
+        if ($this->dispatcher && $events = $this->events($class)) {
+            $repository = new EventDispatcher($repository, $this->dispatcher, $events);
         }
 
         return $repository;
@@ -164,6 +182,21 @@ class Policy
     public function factory(string $class)
     {
         return method_exists($class, 'createFromArray') ? [$class, 'createFromArray'] : null;
+    }
+
+    /**
+     * Get event classes
+     *
+     * @param string $class
+     * @return string[]
+     */
+    public function events(string $class): array
+    {
+        if (defined($class . '::EVENTS')) {
+            return (array) constant($class . '::EVENTS');
+        }
+
+        return [];
     }
 
     /**
