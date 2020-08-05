@@ -77,11 +77,22 @@ class EventDispatcher implements RepositoryInterface
      */
     public function store($entity)
     {
-        $this->trigger(Event::STORING, $entity);
+        $identifier = $this->identifier($entity);
+        $exists = ($identifier && array_filter($identifier) && $this->has($identifier));
+
+        if ($exists) {
+            $this->trigger(Event::UPDATING, $entity);
+        } else {
+            $this->trigger(Event::CREATING, $entity);
+        }
 
         $this->repository()->store($entity);
 
-        $this->trigger(Event::STORED, $entity);
+        if ($exists) {
+            $this->trigger(Event::UPDATED, $entity);
+        } else {
+            $this->trigger(Event::CREATED, $entity);
+        }
     }
 
     /**

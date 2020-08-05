@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.4] - 2020-08-05
+### Added
+- Event implementations: Creating, Created, Updating, Updated.
+
 ## [0.11.3] - 2020-07-15
 ### Fixed
 - Reference cache key collisions.

@@ -19,8 +19,9 @@ class EventDispatcherTest extends TestCase
     {
         return [
             ['load', $entity = new Events(), $entity, 'loading', 'loaded', Event\Loading::class, Event\Loaded::class],
-            ['store', new Events(), null, 'storing', 'stored', Event\Storing::class, Event\Stored::class],
             ['delete', new Events(), 1, 'deleting', 'deleted', Event\Deleting::class, Event\Deleted::class],
+            ['store', new Events(), null, 'updating', 'updated', Event\Updating::class, Event\Updated::class],
+            ['store', new Events(), null, 'creating', 'created', Event\Creating::class, Event\Created::class]
         ];
     }
 
@@ -56,6 +57,16 @@ class EventDispatcherTest extends TestCase
             });
 
         $repository = $this->createMock(Repository::class);
+        if ($pre =='updating') {
+            $repository
+                ->expects($this->at(0))
+                ->method('identifier')
+                ->willReturn(['id' => 1]);
+            $repository
+                ->expects($this->once())
+                ->method('has')
+                ->willReturn(true);
+        }
         $repository
             ->expects($this->once())
             ->method($method)
@@ -81,6 +92,10 @@ class EventDispatcherTest extends TestCase
             [Event\Stored::class],
             [Event\Deleting::class],
             [Event\Deleted::class],
+            [Event\Updating::class],
+            [Event\Updated::class],
+            [Event\Creating::class],
+            [Event\Created::class],
         ];
     }
 
