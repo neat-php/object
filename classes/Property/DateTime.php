@@ -31,8 +31,12 @@ class DateTime extends Property
      * @return \DateTime
      * @throws Exception
      */
-    public function fromString(string $value): \DateTime
+    public function fromString(string $value): ?\DateTime
     {
+        if ($value === '0000-00-00 00:00:00' || $value === '0000-00-00') {
+            return null;
+        }
+
         return new \DateTime($value);
     }
 }

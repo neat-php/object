@@ -31,8 +31,12 @@ class DateTimeImmutable extends Property
      * @return \DateTimeImmutable
      * @throws Exception
      */
-    public function fromString(string $value): \DateTimeImmutable
+    public function fromString(string $value): ?\DateTimeImmutable
     {
+        if ($value === '0000-00-00 00:00:00' || $value === '0000-00-00') {
+            return null;
+        }
+
         return new \DateTimeImmutable($value);
     }
 }

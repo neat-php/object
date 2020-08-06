@@ -85,9 +85,13 @@ class PropertyTest extends TestCase
             ['ignored', 0, 0],
             ['ignored', 1, 1],
             ['registerDate', null, null],
+            ['registerDate', '0000-00-00', null],
+            ['registerDate', '0000-00-00 00:00:00', null],
             ['registerDate', '2001-02-03', new DateTimeImmutable('2001-02-03 00:00:00')],
             ['registerDate', '2001-02-03 04:05:06', new DateTimeImmutable('2001-02-03 04:05:06')],
             ['updateDate', null, null],
+            ['updateDate', '0000-00-00', null],
+            ['updateDate', '0000-00-00 00:00:00', null],
             ['updateDate', '2001-02-03', new DateTime('2001-02-03 00:00:00')],
             ['updateDate', '2001-02-03 04:05:06', new DateTime('2001-02-03 04:05:06')],
         ];
