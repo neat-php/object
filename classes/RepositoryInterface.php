@@ -2,6 +2,7 @@
 
 namespace Neat\Object;
 
+use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
 use Traversable;
 
@@ -26,7 +27,7 @@ interface RepositoryInterface
     /**
      * Create select query
      *
-     * @param string $alias Table alias (optional)
+     * @param string|null $alias Table alias (optional)
      * @return Query
      */
     public function select(string $alias = null): Query;
@@ -34,10 +35,10 @@ interface RepositoryInterface
     /**
      * Create select query with conditions
      *
-     * @param Query|string|array $conditions Query instance or where clause (optional)
-     * @return Query
+     * @param QueryBuilder|Query|string|array|null $conditions Query instance or where clause (optional)
+     * @return QueryBuilder|Query
      */
-    public function query($conditions = null): \Neat\Database\Query;
+    public function query($conditions = null): QueryBuilder;
 
     /**
      * @param string $sql
