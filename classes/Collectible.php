@@ -185,6 +185,23 @@ trait Collectible
     }
 
     /**
+     * @param callable|null $callback
+     * @return $this
+     */
+    public function sort(callable $callback = null): self
+    {
+        $new   = clone $this;
+        $items = &$new->items();
+        if ($callback) {
+            usort($items, $callback);
+        } else {
+            sort($items);
+        }
+
+        return $new;
+    }
+
+    /**
      * Get items for JSON serialization
      *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php

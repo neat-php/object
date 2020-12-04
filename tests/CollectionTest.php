@@ -159,11 +159,14 @@ class CollectionTest extends TestCase
      */
     public function testFilter()
     {
-        $collection = new Collection([null, false, true, 0, 1]);
+        $initial    = [null, false, true, 0, 1];
+        $collection = new Collection($initial);
         $expected   = new Collection([2 => true, 4 => 1]);
         $filtered   = $collection->filter();
 
         $this->assertEquals($expected, $filtered);
+        $this->assertEquals($initial, $collection->all());
+        $this->assertNotSame($collection, $filtered);
     }
 
     /**
@@ -182,6 +185,34 @@ class CollectionTest extends TestCase
         );
 
         $this->assertEquals(new Collection($expected), $filtered);
+    }
+
+    public function testSort()
+    {
+        $initial    = [5, 1, 3, 2, 4];
+        $collection = new Collection($initial);
+        $expected   = new Collection([1, 2, 3, 4, 5]);
+        $sorted     = $collection->sort();
+
+        $this->assertEquals($expected, $sorted);
+        $this->assertEquals($initial, $collection->all());
+        $this->assertNotSame($collection, $sorted);
+    }
+
+    public function testCallbackSort()
+    {
+        $initial    = [5, 1, 3, 2, 4];
+        $collection = new Collection($initial);
+        $expected   = new Collection([5, 4, 3, 2, 1]);
+        $sorted     = $collection->sort(
+            function (int $a, int $b): int {
+                return $b <=> $a;
+            }
+        );
+
+        $this->assertEquals($expected, $sorted);
+        $this->assertEquals($initial, $collection->all());
+        $this->assertNotSame($collection, $sorted);
     }
 
     /**
