@@ -12,13 +12,7 @@ use ReflectionProperty;
 
 class PropertyTest extends TestCase
 {
-    /**
-     * Create property
-     *
-     * @param string $name
-     * @return Property
-     */
-    public function createProperty($name)
+    public function createProperty(string $name): Property
     {
         $reflection = new ReflectionProperty(User::class, $name);
 
@@ -28,7 +22,7 @@ class PropertyTest extends TestCase
     /**
      * Provide type test data
      */
-    public function provideTypes()
+    public function provideTypes(): array
     {
         return [
             ['id', Property\Integer::class],
@@ -50,12 +44,14 @@ class PropertyTest extends TestCase
      * @param string $name
      * @param mixed  $type
      */
-    public function testType($name, $type)
+    public function testType(string $name, $type)
     {
         $property = $this->createProperty($name);
 
         $this->assertSame($name, $property->name());
-        $this->assertInstanceOf($type, $property);
+        if ($type !== null) {
+            $this->assertInstanceOf($type, $property);
+        }
     }
 
     /**
@@ -63,10 +59,9 @@ class PropertyTest extends TestCase
      *
      * @return array
      */
-    public function provideSetData()
+    public function provideSetData(): array
     {
         return [
-            ['id', null, null],
             ['id', 1, 1],
             ['id', '1', 1],
             ['username', null, null],
@@ -101,7 +96,7 @@ class PropertyTest extends TestCase
      * @param mixed  $in
      * @param mixed  $out
      */
-    public function testSet($name, $in, $out)
+    public function testSet(string $name, $in, $out)
     {
         $user = new User();
 
@@ -120,10 +115,9 @@ class PropertyTest extends TestCase
      *
      * @return array
      */
-    public function provideGetData()
+    public function provideGetData(): array
     {
         return [
-            ['id', null, null],
             ['id', 1, '1'],
             ['id', '1', '1'],
             ['username', null, null],
@@ -156,7 +150,7 @@ class PropertyTest extends TestCase
      * @param mixed  $in
      * @param mixed  $out
      */
-    public function testGet($name, $in, $out)
+    public function testGet(string $name, $in, $out)
     {
         $user        = new User();
         $user->$name = $in;

@@ -11,8 +11,10 @@ use Neat\Object\Exception\ClassNotFoundException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
 use ReflectionProperty;
 use RuntimeException;
+use Serializable;
 
 class Policy
 {
@@ -44,13 +46,16 @@ class Policy
         $factory    = $this->factory($class);
 
         $repository = new Repository($connection, $class, $table, $key, $properties, $factory);
-        if ($softDelete = $this->softDelete($class)) {
+        $softDelete = $this->softDelete($class);
+        if ($softDelete) {
             $repository = new SoftDelete($repository, $softDelete, $properties[$softDelete]);
         }
-        if ($createdStamp = $this->createdStamp($class)) {
+        $createdStamp = $this->createdStamp($class);
+        if ($createdStamp) {
             $repository = new CreatedAt($repository, $createdStamp, $properties[$createdStamp]);
         }
-        if ($updatedStamp = $this->updatedStamp($class)) {
+        $updatedStamp = $this->updatedStamp($class);
+        if ($updatedStamp) {
             $repository = new UpdatedAt($repository, $updatedStamp, $properties[$updatedStamp]);
         }
         if ($this->dispatcher && $events = $this->events($class)) {
@@ -137,10 +142,6 @@ class Policy
         return $properties;
     }
 
-    /**
-     * @param ReflectionProperty $reflection
-     * @return Property
-     */
     public function property(ReflectionProperty $reflection): Property
     {
         if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
@@ -156,6 +157,37 @@ class Policy
                     return new Property\DateTime($reflection);
                 case 'DateTimeImmutable':
                     return new Property\DateTimeImmutable($reflection);
+            }
+
+            return new Property($reflection);
+        }
+        if (PHP_VERSION_ID < 70400) {
+            return new Property($reflection);
+        }
+
+        /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
+        $type = $reflection->getType();
+        if (!$type) {
+            return new Property($reflection);
+        }
+
+        if ($type instanceof ReflectionNamedType) {
+            $typeName = $type->getName();
+            switch ($typeName) {
+                case 'string':
+                    return new Property($reflection);
+                case 'bool':
+                    return new Property\Boolean($reflection);
+                case 'int':
+                    return new Property\Integer($reflection);
+                case 'DateTime':
+                    return new Property\DateTime($reflection);
+                case 'DateTimeImmutable':
+                    return new Property\DateTimeImmutable($reflection);
+            }
+
+            if (is_a($typeName, Serializable::class, true)) {
+                return new Property\Serializable($reflection);
             }
         }
 
@@ -248,6 +280,6 @@ class Policy
             return ['id'];
         }
 
-        throw new RuntimeException('Unable to determine the key');
+        throw new RuntimeException("Unable to determine the key for class: '{$class}'");
     }
 }

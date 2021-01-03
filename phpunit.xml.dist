@@ -14,6 +14,8 @@
     <testsuites>
         <testsuite name="Neat Test Suite">
             <directory suffix=".php">tests</directory>
+            <exclude>tests/Helper/Contact.php</exclude>
+            <exclude>tests/Helper/Phone.php</exclude>
         </testsuite>
     </testsuites>
     <filter>

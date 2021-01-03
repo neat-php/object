@@ -34,17 +34,6 @@ class JunctionTable extends Reference
     /** @var string */
     private $junctionTableRemoteForeignKey;
 
-    /**
-     * JunctionTable constructor.
-     * @param Property            $localKey
-     * @param Property            $remoteKey
-     * @param string              $remoteKeyString
-     * @param RepositoryInterface $remoteRepository
-     * @param Connection          $connection
-     * @param string              $junctionTable
-     * @param string              $localForeignKey
-     * @param string              $remoteForeignKey
-     */
     public function __construct(
         Property $localKey,
         Property $remoteKey,

@@ -28,8 +28,7 @@
         }
     },
     "require": {
-        "php": ">=7.2",
-        "ext-json": "*",
+        "php": "^7.2 || ^8.0",
         "neat/database": "^1.2",
         "psr/event-dispatcher": "^1.0"
     },
