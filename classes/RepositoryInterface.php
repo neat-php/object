@@ -9,6 +9,15 @@ use Traversable;
 interface RepositoryInterface
 {
     /**
+     * Get repository decorator layer by class name
+     *
+     * @template T of RepositoryInterface
+     * @param class-string<T> $class
+     * @return T
+     */
+    public function layer(string $class): RepositoryInterface;
+
+    /**
      * Has entity with identifier?
      *
      * @param int|string|array $id Identifier value(s)

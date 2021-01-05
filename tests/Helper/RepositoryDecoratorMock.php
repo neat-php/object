@@ -5,7 +5,7 @@ namespace Neat\Object\Test\Helper;
 use Neat\Object\RepositoryDecorator;
 use Neat\Object\RepositoryInterface;
 
-class RepositoryDecoratorMock
+class RepositoryDecoratorMock implements RepositoryInterface
 {
     use RepositoryDecorator;
 

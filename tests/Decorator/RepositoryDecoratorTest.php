@@ -2,13 +2,17 @@
 
 namespace Neat\Object\Test\Decorator;
 
+use ArrayIterator;
 use Neat\Object\Collection;
+use Neat\Object\Exception\LayerNotFoundException;
 use Neat\Object\Query;
+use Neat\Object\Repository;
 use Neat\Object\RepositoryDecorator;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\SQLQuery;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\RepositoryDecoratorMock;
+use Neat\Object\Test\Helper\Type;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,6 +33,31 @@ class RepositoryDecoratorTest extends TestCase
         $this->decorator  = new RepositoryDecoratorMock($this->repository);
 
         return $this->decorator;
+    }
+
+    public function testLayerReturnsInner()
+    {
+        $repository = $this->repository(Type::class);
+        $decorator  = new RepositoryDecoratorMock($repository);
+
+        $this->assertSame($repository, $decorator->layer(Repository::class));
+    }
+
+    public function testLayerReturnsSelf()
+    {
+        $repository = $this->repository(Type::class);
+        $decorator  = new RepositoryDecoratorMock($repository);
+
+        $this->assertSame($decorator, $decorator->layer(RepositoryDecoratorMock::class));
+    }
+
+    public function testLayerNotFoundException()
+    {
+        $repository = $this->repository(Type::class);
+
+        $this->expectException(LayerNotFoundException::class);
+
+        $repository->layer(RepositoryDecoratorMock::class);
     }
 
     public function provideMethodData()
@@ -57,8 +86,8 @@ class RepositoryDecoratorTest extends TestCase
             ['all', [$queryData], [$user]],
             ['collection', [], new Collection([])],
             ['collection', [$queryData], new Collection([])],
-            ['iterate', [], new \ArrayIterator()],
-            ['iterate', [$queryData], new \ArrayIterator()],
+            ['iterate', [], new ArrayIterator()],
+            ['iterate', [$queryData], new ArrayIterator()],
             ['store', [$user], null, true],
             ['insert', [$arrayData], 1],
             ['update', [1, $arrayData], 1],

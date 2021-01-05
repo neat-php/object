@@ -5,6 +5,7 @@ namespace Neat\Object;
 use Neat\Database\Connection;
 use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
+use Neat\Object\Exception\LayerNotFoundException;
 use Neat\Object\Relations\Relation;
 use Neat\Object\Relations\RelationBuilder;
 use RuntimeException;
@@ -56,6 +57,18 @@ class Repository implements RepositoryInterface
         $this->factory    = $factory ?? function () use ($class) {
                 return new $class();
             };
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function layer(string $class): RepositoryInterface
+    {
+        if ($this instanceof $class) {
+            return $this;
+        }
+
+        throw new LayerNotFoundException($class);
     }
 
     /**

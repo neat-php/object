@@ -12,6 +12,19 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
+    public function layer(string $class): RepositoryInterface
+    {
+        if ($this instanceof $class) {
+            /** @noinspection PhpIncompatibleReturnTypeInspection */
+            return $this;
+        }
+
+        return $this->repository()->layer($class);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function has($id): bool
     {
         return $this->repository()->has($id);
