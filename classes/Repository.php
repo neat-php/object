@@ -354,7 +354,6 @@ class Repository implements RepositoryInterface
     private function where($id)
     {
         $this->validateIdentifier($id);
-        /** @var string $key */
         $key = reset($this->key);
 
         if (!is_array($id)) {

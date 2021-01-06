@@ -106,7 +106,7 @@ class JunctionTable extends Reference
         );
 
         $before = $this->connection
-            ->select('*')
+            ->select()
             ->from($this->junctionTable)
             ->where([$this->junctionTableLocalForeignKey => $localIdentifier])
             ->query()

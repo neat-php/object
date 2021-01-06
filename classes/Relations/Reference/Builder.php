@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpPrivateFieldCanBeLocalVariableInspection */
+
 namespace Neat\Object\Relations\Reference;
 
 use Neat\Object\Exception\ClassMismatchException;
