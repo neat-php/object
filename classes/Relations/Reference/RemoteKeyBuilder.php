@@ -24,12 +24,6 @@ class RemoteKeyBuilder implements ReferenceBuilder
     /** @var RepositoryInterface */
     private $remoteRepository;
 
-    /**
-     * RemoteKeyBuilder constructor.
-     * @param Manager $manager
-     * @param string  $local
-     * @param string  $remote
-     */
     public function __construct(Manager $manager, string $local, string $remote)
     {
         $policy = $manager->policy();
@@ -48,5 +42,38 @@ class RemoteKeyBuilder implements ReferenceBuilder
     protected function build(): Reference
     {
         return new $this->class($this->localKey, $this->remoteForeignKey, $this->remoteKey, $this->remoteRepository);
+    }
+
+    /**
+     * @param Property $localKey
+     * @return $this
+     */
+    public function setLocalKey(Property $localKey): self
+    {
+        $this->localKey = $localKey;
+
+        return $this;
+    }
+
+    /**
+     * @param Property $remoteKey
+     * @return $this
+     */
+    public function setRemoteKey(Property $remoteKey): self
+    {
+        $this->remoteForeignKey = $remoteKey;
+
+        return $this;
+    }
+
+    /**
+     * @param string $remoteKeyString
+     * @return $this
+     */
+    public function setRemoteKeyString(string $remoteKeyString): self
+    {
+        $this->remoteKey = $remoteKeyString;
+
+        return $this;
     }
 }
