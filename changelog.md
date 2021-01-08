@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Collection / Collectible documentation.
 - Relation $configure parameter of type callable(ReferenceBuilder).
 - Support for setting local and remote keys using property or column names as string.
+- Relation accessor methods by using the Accessors trait.
 
 ### Deprecated
 - ReferenceBuilder setRemoteKeyString() in favour of setRemoteKeyColumn().

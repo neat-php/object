@@ -10,6 +10,14 @@ class Many extends Relation
     use Collectible;
 
     /**
+     * @return object[]
+     */
+    public function get(): array
+    {
+        return $this->items();
+    }
+
+    /**
      * @param object[] $remotes
      * @return $this
      */
