@@ -15,7 +15,7 @@ class Repository implements RepositoryInterface
     /** @var Connection */
     private $connection;
 
-    /** @var string */
+    /** @var class-string */
     private $class;
 
     /** @var string */
@@ -34,7 +34,7 @@ class Repository implements RepositoryInterface
      * Repository constructor
      *
      * @param Connection    $connection Connection to the database the entity table exists in
-     * @param string        $class      Class name of the entity the repository is meant for
+     * @param class-string  $class      Class name of the entity the repository is meant for
      * @param string        $table      Table name for the entity
      * @param string[]      $key        Primary key columns for the table, pass multiple items for a composed key
      * @param Property[]    $properties Properties of the entity, should only include properties which actually map to a database column

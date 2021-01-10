@@ -26,13 +26,13 @@ trait Builder
     /** @var Policy */
     private $policy;
 
-    /** @var string */
+    /** @var class-string */
     private $class;
 
     /**
-     * @param Manager $manager
-     * @param Policy  $policy
-     * @param string  $class
+     * @param Manager      $manager
+     * @param Policy       $policy
+     * @param class-string $class
      * @return void
      */
     protected function init(Manager $manager, Policy $policy, string $class)
@@ -89,7 +89,7 @@ trait Builder
     /**
      * Set's the class of the reference that should be build
      *
-     * @param string $class
+     * @param class-string $class
      * @return $this
      */
     public function setClass(string $class): self
@@ -100,12 +100,15 @@ trait Builder
     }
 
     /**
-     * @param string|object $class
-     * @param string        $property
+     * @param class-string|object $class
+     * @param string              $property
      * @return Property
      */
-    public function property(string $class, string $property): Property
+    public function property($class, string $property): Property
     {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
         if (!class_exists($class)) {
             throw new ClassNotFoundException($class);
         }

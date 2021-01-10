@@ -24,6 +24,13 @@ class RemoteKeyBuilder implements ReferenceBuilder
     /** @var RepositoryInterface */
     private $remoteRepository;
 
+    /**
+     * RemoteKeyBuilder constructor.
+     *
+     * @param Manager      $manager
+     * @param class-string $local
+     * @param class-string $remote
+     */
     public function __construct(Manager $manager, string $local, string $remote)
     {
         $policy = $manager->policy();

@@ -15,8 +15,8 @@ trait ReferenceFactory
     protected $references;
 
     /**
-     * @param string $local
-     * @param string $remote
+     * @param class-string $local
+     * @param class-string $remote
      * @return RemoteKey
      */
     public function remoteKey(string $local, string $remote): RemoteKey
@@ -28,9 +28,9 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string $key
-     * @param string $local
-     * @param string $remote
+     * @param string       $key
+     * @param class-string $local
+     * @param class-string $remote
      * @return RemoteKeyBuilder
      */
     public function buildRemoteKey(string $key, string $local, string $remote): RemoteKeyBuilder
@@ -47,8 +47,8 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string $local
-     * @param string $remote
+     * @param class-string $local
+     * @param class-string $remote
      * @return LocalKey
      */
     public function localKey(string $local, string $remote): LocalKey
@@ -60,9 +60,9 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string $key
-     * @param string $local
-     * @param string $remote
+     * @param string       $key
+     * @param class-string $local
+     * @param class-string $remote
      * @return LocalKeyBuilder
      */
     public function buildLocalKey(string $key, string $local, string $remote): LocalKeyBuilder
@@ -79,8 +79,8 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string $local
-     * @param string $remote
+     * @param class-string $local
+     * @param class-string $remote
      * @return JunctionTable
      */
     public function junctionTable(string $local, string $remote): JunctionTable
@@ -92,9 +92,9 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string $key
-     * @param string $local
-     * @param string $remote
+     * @param string       $key
+     * @param class-string $local
+     * @param class-string $remote
      * @return JunctionTableBuilder
      */
     public function buildJunctionTable(string $key, string $local, string $remote): JunctionTableBuilder

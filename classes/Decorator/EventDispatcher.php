@@ -45,8 +45,8 @@ class EventDispatcher implements RepositoryInterface
     /**
      * Trigger event for an entity
      *
-     * @param string $event
-     * @param object $entity
+     * @param class-string $event
+     * @param object       $entity
      * @return void
      */
     public function trigger(string $event, object $entity): void

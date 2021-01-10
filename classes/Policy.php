@@ -16,7 +16,7 @@ use RuntimeException;
 
 class Policy
 {
-    /** @var EventDispatcherInterface */
+    /** @var EventDispatcherInterface|null */
     private $dispatcher;
 
     /**
@@ -32,8 +32,8 @@ class Policy
     /**
      * Get repository
      *
-     * @param string     $class
-     * @param Connection $connection
+     * @param class-string $class
+     * @param Connection   $connection
      * @return RepositoryInterface
      */
     public function repository(string $class, Connection $connection): RepositoryInterface
@@ -63,7 +63,7 @@ class Policy
     /**
      * Get table name for class
      *
-     * @param string $class
+     * @param class-string $class
      * @return string
      */
     public function table(string $class): string
@@ -76,8 +76,8 @@ class Policy
     /**
      * Get junction table name for two classes
      *
-     * @param string $classA
-     * @param string $classB
+     * @param class-string $classA
+     * @param class-string $classB
      * @return string
      */
     public function junctionTable(string $classA, string $classB): string
@@ -102,7 +102,7 @@ class Policy
     /**
      * Get column name for a foreign key
      *
-     * @param string $class
+     * @param class-string $class
      * @return string
      */
     public function foreignKey(string $class): string
@@ -113,7 +113,7 @@ class Policy
     /**
      * Get properties for class
      *
-     * @param string $class
+     * @param class-string $class
      * @return Property[]
      */
     public function properties(string $class): array
@@ -176,10 +176,10 @@ class Policy
     /**
      * Get factory method
      *
-     * @param string $class
+     * @param class-string $class
      * @return callable|null
      */
-    public function factory(string $class)
+    public function factory(string $class): ?callable
     {
         return method_exists($class, 'createFromArray') ? [$class, 'createFromArray'] : null;
     }
@@ -187,13 +187,13 @@ class Policy
     /**
      * Get event classes
      *
-     * @param string $class
+     * @param class-string $class
      * @return string[]
      */
     public function events(string $class): array
     {
         if (defined($class . '::EVENTS')) {
-            return (array) constant($class . '::EVENTS');
+            return (array)constant($class . '::EVENTS');
         }
 
         return [];
@@ -202,10 +202,10 @@ class Policy
     /**
      * Get delete stamp property
      *
-     * @param string $class
+     * @param class-string $class
      * @return string|null
      */
-    public function softDelete(string $class)
+    public function softDelete(string $class): ?string
     {
         return property_exists($class, 'deletedAt') ? $this->column('deletedAt') : null;
     }
@@ -213,10 +213,10 @@ class Policy
     /**
      * Get create stamp property
      *
-     * @param string $class
+     * @param class-string $class
      * @return string|null
      */
-    public function createdStamp(string $class)
+    public function createdStamp(string $class): ?string
     {
         return property_exists($class, 'createdAt') ? $this->column('createdAt') : null;
     }
@@ -224,10 +224,10 @@ class Policy
     /**
      * Get create stamp property
      *
-     * @param string $class
+     * @param class-string $class
      * @return string|null
      */
-    public function updatedStamp(string $class)
+    public function updatedStamp(string $class): ?string
     {
         return property_exists($class, 'updatedAt') ? $this->column('updatedAt') : null;
     }
@@ -235,13 +235,13 @@ class Policy
     /**
      * Get key property names
      *
-     * @param string $class
+     * @param class-string $class
      * @return string[]
      */
     public function key(string $class): array
     {
         if (defined($class . '::KEY')) {
-            return (array) constant($class . '::KEY');
+            return (array)constant($class . '::KEY');
         }
 
         if (property_exists($class, 'id')) {

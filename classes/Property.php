@@ -60,7 +60,7 @@ class Property
      */
     public function toString($value): string
     {
-        return (string) $value;
+        return (string)$value;
     }
 
     /**
@@ -80,7 +80,7 @@ class Property
      * @param object $object
      * @return mixed
      */
-    public function get($object)
+    public function get(object $object)
     {
         $value = $this->reflection->getValue($object);
         if ($value === null) {
@@ -97,7 +97,7 @@ class Property
      * @param mixed  $value
      * @return void
      */
-    public function set($object, $value)
+    public function set(object $object, $value)
     {
         if ($value !== null) {
             $value = $this->fromString($value);

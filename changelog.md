@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - RemoteKeyBuilder was missing the setRemoteRepository method.
+- Type-hints & doc-blocks.
 
 ## [0.11.7] - 2021-01-06
 ### Fixed

@@ -9,26 +9,27 @@ class Diff
     /** @var RepositoryInterface */
     private $remoteRepository;
 
-    /** @var array */
+    /** @var array<object> */
     private $after;
 
-    /** @var array */
+    /** @var array<object> */
     private $before;
 
-    /** @var array */
+    /** @var array<object> */
     private $insert = [];
 
-    /** @var array */
+    /** @var array<object> */
     private $update = [];
 
-    /** @var array */
+    /** @var array<object> */
     private $delete = [];
 
     /**
      * Diff constructor.
+     *
      * @param RepositoryInterface $remoteRepository
-     * @param array               $before
-     * @param array               $after
+     * @param array<object>       $before
+     * @param array<object>       $after
      */
     public function __construct(RepositoryInterface $remoteRepository, array $before, array $after)
     {
@@ -39,7 +40,7 @@ class Diff
     }
 
     /**
-     * @return array
+     * @return array<object>
      */
     public function getInsert(): array
     {
@@ -47,7 +48,7 @@ class Diff
     }
 
     /**
-     * @return array
+     * @return array<object>
      */
     public function getUpdate(): array
     {
@@ -55,7 +56,7 @@ class Diff
     }
 
     /**
-     * @return array
+     * @return array<object>
      */
     public function getDelete(): array
     {
@@ -65,11 +66,11 @@ class Diff
     /**
      * @return void
      */
-    protected function diff()
+    protected function diff(): void
     {
         $this->insert = array_filter(
             $this->after,
-            function ($newObject) {
+            function (object $newObject) {
                 foreach ($this->before as $key => $currentObject) {
                     if (!$this->compare($newObject, $currentObject)) {
                         continue;
@@ -92,7 +93,7 @@ class Diff
      * @param object $entityB
      * @return bool
      */
-    protected function compare($entityA, $entityB): bool
+    protected function compare(object $entityA, object $entityB): bool
     {
         return $this->remoteRepository->identifier($entityA) === $this->remoteRepository->identifier($entityB);
     }

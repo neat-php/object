@@ -29,8 +29,8 @@ trait Relations
     }
 
     /**
-     * @param string $key
-     * @param string $remoteClass
+     * @param class-string $remoteClass
+     * @param string       $key
      * @return RelationBuilder
      */
     public function buildHasOne(string $remoteClass, string $key): RelationBuilder
@@ -60,7 +60,7 @@ trait Relations
      * action is executed. However when the relation is loaded and a remote entity is available the foreign key will be
      * set and the entity will be stored.
      *
-     * @param string $remoteClass
+     * @param class-string $remoteClass
      * @return One
      */
     public function hasOne(string $remoteClass): One
@@ -73,8 +73,8 @@ trait Relations
     }
 
     /**
-     * @param string $key
-     * @param string $remoteClass
+     * @param class-string $remoteClass
+     * @param string       $key
      * @return RelationBuilder
      */
     public function buildHasMany(string $remoteClass, string $key): RelationBuilder
@@ -104,7 +104,7 @@ trait Relations
      * action is executed. However when the relation is loaded and remote entities are available the foreign key will be
      * set and the entities will be stored, updated and deleted when necessary.
      *
-     * @param string $remoteClass
+     * @param class-string $remoteClass
      * @return Many
      */
     public function hasMany(string $remoteClass): Many
@@ -117,8 +117,8 @@ trait Relations
     }
 
     /**
-     * @param string $remoteClass
-     * @param string $key
+     * @param class-string $remoteClass
+     * @param string       $key
      * @return RelationBuilder
      */
     public function buildBelongsToOne(string $remoteClass, string $key): RelationBuilder
@@ -138,7 +138,7 @@ trait Relations
     }
 
     /**
-     * @param string $remoteClass
+     * @param class-string $remoteClass
      * @return One
      */
     public function belongsToOne(string $remoteClass): One
@@ -151,8 +151,8 @@ trait Relations
     }
 
     /**
-     * @param string $key
-     * @param string $remoteClass
+     * @param class-string $remoteClass
+     * @param string       $key
      * @return RelationBuilder
      */
     public function buildBelongsToMany(string $remoteClass, string $key): RelationBuilder
@@ -172,7 +172,7 @@ trait Relations
     }
 
     /**
-     * @param string $remoteClass
+     * @param class-string $remoteClass
      * @return Many
      */
     public function belongsToMany(string $remoteClass): Many

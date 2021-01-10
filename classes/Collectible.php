@@ -12,7 +12,7 @@ trait Collectible
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->items());
     }
@@ -24,7 +24,7 @@ trait Collectible
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->items()[$offset]);
     }
@@ -73,7 +73,7 @@ trait Collectible
      *
      * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->items();
     }
@@ -84,7 +84,7 @@ trait Collectible
      * @link http://php.net/manual/en/countable.count.php
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->items());
     }
@@ -92,11 +92,14 @@ trait Collectible
     /**
      * Get first item
      *
-     * @return mixed|false
+     * @return mixed|null
      */
     public function first()
     {
         $items = $this->items();
+        if ($this->count() === 0) {
+            return null;
+        }
 
         return reset($items);
     }
@@ -104,11 +107,14 @@ trait Collectible
     /**
      * Get last item
      *
-     * @return mixed|false
+     * @return mixed|null
      */
     public function last()
     {
         $items = $this->items();
+        if ($this->count() === 0) {
+            return null;
+        }
 
         return end($items);
     }
@@ -119,7 +125,7 @@ trait Collectible
      * @param mixed $item
      * @return $this
      */
-    public function push($item)
+    public function push($item): self
     {
         $items   = &$this->items();
         $items[] = $item;
@@ -168,7 +174,7 @@ trait Collectible
      * @param callable $callback
      * @return Collection
      */
-    public function map(callable $callback)
+    public function map(callable $callback): Collection
     {
         return new Collection(array_map($callback, $this->items()));
     }
@@ -179,7 +185,7 @@ trait Collectible
      * @param string $column
      * @return Collection
      */
-    public function column($column)
+    public function column(string $column): Collection
     {
         return new Collection(array_column($this->items(), $column));
     }
@@ -201,13 +207,7 @@ trait Collectible
         return $new;
     }
 
-    /**
-     * Get items for JSON serialization
-     *
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->items();
     }

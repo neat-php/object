@@ -23,7 +23,7 @@ abstract class Relation
      * @param Reference $reference
      * @param object    $local
      */
-    public function __construct(Reference $reference, $local)
+    public function __construct(Reference $reference, object $local)
     {
         $this->reference = $reference;
         $this->local     = $local;
@@ -60,7 +60,7 @@ abstract class Relation
     /**
      * @internal
      */
-    public function setRelation()
+    public function setRelation(): void
     {
         if ($this instanceof One && $this->reference instanceof LocalKey) {
             $this->store();
@@ -70,7 +70,7 @@ abstract class Relation
     /**
      * @internal
      */
-    public function storeRelation()
+    public function storeRelation(): void
     {
         if (!$this instanceof One || !$this->reference instanceof LocalKey) {
             $this->store();

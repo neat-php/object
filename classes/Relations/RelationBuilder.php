@@ -7,7 +7,7 @@ class RelationBuilder
     /** @var Relation|null */
     private $resolved;
 
-    /** @var string */
+    /** @var class-string */
     private $class;
 
     /** @var ReferenceBuilder */
@@ -18,11 +18,12 @@ class RelationBuilder
 
     /**
      * RelationBuilder constructor.
-     * @param string           $class
+     *
+     * @param class-string     $class
      * @param ReferenceBuilder $builder
      * @param object           $local
      */
-    public function __construct(string $class, ReferenceBuilder $builder, $local)
+    public function __construct(string $class, ReferenceBuilder $builder, object $local)
     {
         $this->class   = $class;
         $this->builder = $builder;

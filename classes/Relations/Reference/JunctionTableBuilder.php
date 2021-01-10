@@ -39,9 +39,10 @@ class JunctionTableBuilder implements ReferenceBuilder
 
     /**
      * JunctionTableBuilder constructor.
-     * @param Manager $manager
-     * @param string  $local
-     * @param string  $remote
+     *
+     * @param Manager      $manager
+     * @param class-string $local
+     * @param class-string $remote
      */
     public function __construct(Manager $manager, string $local, string $remote)
     {

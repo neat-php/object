@@ -9,7 +9,7 @@ class One extends Relation
     /**
      * @return object|null
      */
-    public function get()
+    public function get(): ?object
     {
         if (!$this->loaded()) {
             $this->load();
@@ -22,7 +22,7 @@ class One extends Relation
      * @param object|null $remote
      * @return $this
      */
-    public function set($remote): self
+    public function set(?object $remote): self
     {
         $this->loaded = true;
         if ($remote) {
@@ -37,7 +37,7 @@ class One extends Relation
     /**
      * @return Query
      */
-    public function select()
+    public function select(): Query
     {
         return $this->reference->select($this->local);
     }

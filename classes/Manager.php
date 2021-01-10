@@ -66,7 +66,7 @@ class Manager
     /**
      * Get or create repository
      *
-     * @param string $class
+     * @param class-string $class
      * @return RepositoryInterface
      */
     public function repository(string $class): RepositoryInterface

@@ -21,7 +21,7 @@ class Cache
      * @param callable $factory
      * @return object
      */
-    public function get(string $key, callable $factory)
+    public function get(string $key, callable $factory): object
     {
         return $this->has($key) ? $this->objects[$key] : $this->set($key, $factory());
     }
@@ -39,7 +39,7 @@ class Cache
      * @param object $object
      * @return object
      */
-    public function set(string $key, $object)
+    public function set(string $key, object $object): object
     {
         return $this->objects[$key] = $object;
     }
