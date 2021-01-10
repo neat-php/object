@@ -76,4 +76,15 @@ class RemoteKeyBuilder implements ReferenceBuilder
 
         return $this;
     }
+
+    /**
+     * @param RepositoryInterface $remoteRepository
+     * @return $this
+     */
+    public function setRemoteRepository(RepositoryInterface $remoteRepository): self
+    {
+        $this->remoteRepository = $remoteRepository;
+
+        return $this;
+    }
 }

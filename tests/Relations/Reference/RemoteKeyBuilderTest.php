@@ -1,0 +1,42 @@
+<?php
+
+namespace Neat\Object\Test\Relations\Reference;
+
+use Neat\Object\Relations\Reference\RemoteKey;
+use Neat\Object\Relations\Reference\RemoteKeyBuilder;
+use Neat\Object\Test\Helper\Address;
+use Neat\Object\Test\Helper\Factory;
+use Neat\Object\Test\Helper\User;
+use PHPUnit\Framework\TestCase;
+
+class RemoteKeyBuilderTest extends TestCase
+{
+    use Factory;
+
+    private function remoteKeyBuilder(): RemoteKeyBuilder
+    {
+        return new RemoteKeyBuilder($this->manager(), User::class, Address::class);
+    }
+
+    public function testBuild()
+    {
+        $repository = $this->repository(User::class);
+        $builder    = $this->remoteKeyBuilder();
+        $localKey   = $builder->property(Address::class, 'street');
+        $this->assertSame($builder, $builder->setLocalKey($localKey));
+        $remoteKey = $builder->property(User::class, 'typeId');
+        $this->assertSame($builder, $builder->setRemoteKey($remoteKey));
+        $this->assertSame($builder, $builder->setRemoteKeyString('test_remote_key_column'));
+        $this->assertSame($builder, $builder->setRemoteRepository($repository));
+
+        $this->assertEquals(
+            new RemoteKey(
+                $localKey,
+                $remoteKey,
+                'test_remote_key_column',
+                $repository
+            ),
+            $builder->resolve()
+        );
+    }
+}
