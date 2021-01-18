@@ -4,6 +4,7 @@ namespace Neat\Object\Test;
 
 use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\EventDispatcher;
+use Neat\Object\Decorator\OrderBy;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use Neat\Object\Exception\ClassNotFoundException;
@@ -17,6 +18,7 @@ use Neat\Object\Test\Helper\Group;
 use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\HardDelete;
 use Neat\Object\Test\Helper\NoEntity;
+use Neat\Object\Test\Helper\Ordered;
 use Neat\Object\Test\Helper\TimeStamps;
 use Neat\Object\Test\Helper\Type;
 use Neat\Object\Test\Helper\User;
@@ -253,6 +255,16 @@ class PolicyTest extends TestCase
     }
 
     /**
+     * Test order by
+     */
+    public function testOrderBy()
+    {
+        $policy = new Policy();
+        $this->assertSame('name', $policy->orderBy(Ordered::class));
+        $this->assertNull($policy->orderBy(User::class));
+    }
+
+    /**
      * Provide keys
      *
      * @return array
@@ -312,5 +324,18 @@ class PolicyTest extends TestCase
         $eventDispatcher   = new EventDispatcher($updatedAt, $dispatcher, TimeStamps::EVENTS);
 
         $this->assertEquals($eventDispatcher, $repositoryStack);
+    }
+
+    public function testOrderByDecoratedRepository()
+    {
+        $policy = new Policy();
+        $connection      = $this->connection();
+        $repositoryStack = $policy->repository(Ordered::class, $connection);
+
+        $properties      = $policy->properties(Ordered::class);
+        $repository = new Repository($connection, Ordered::class, 'ordered', ['id'], $properties);
+        $orderBy    = new OrderBy($repository, 'name');
+
+        $this->assertEquals($orderBy, $repositoryStack);
     }
 }

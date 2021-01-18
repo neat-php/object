@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Relation accessor methods by using the Accessors trait.
 - Policy accessorRelationMethod() to determine the relation targeted by calling an accessor.
 - Policy constructor parameter $pluralize.
+- Order by repository decorator.
 
 ### Deprecated
 - ReferenceBuilder setRemoteKeyString() in favour of setRemoteKeyColumn().

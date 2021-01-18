@@ -5,6 +5,7 @@ namespace Neat\Object;
 use Neat\Database\Connection;
 use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Decorator\EventDispatcher;
+use Neat\Object\Decorator\OrderBy;
 use Neat\Object\Decorator\SoftDelete;
 use Neat\Object\Decorator\UpdatedAt;
 use Neat\Object\Exception\ClassNotFoundException;
@@ -49,6 +50,9 @@ class Policy
         $factory    = $this->factory($class);
 
         $repository = new Repository($connection, $class, $table, $key, $properties, $factory);
+        if ($orderBy = $this->orderBy($class)) {
+            $repository = new OrderBy($repository, $orderBy);
+        }
         if ($softDelete = $this->softDelete($class)) {
             $repository = new SoftDelete($repository, $softDelete, $properties[$softDelete]);
         }
@@ -202,6 +206,21 @@ class Policy
         }
 
         return [];
+    }
+
+    /**
+     * Get default order by
+     *
+     * @param string $class
+     * @return string|null
+     */
+    public function orderBy(string $class): ?string
+    {
+        if (defined($class . '::ORDER_BY')) {
+            return constant($class . '::ORDER_BY');
+        }
+
+        return null;
     }
 
     /**
