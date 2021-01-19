@@ -10,34 +10,35 @@ use Neat\Object\RepositoryInterface;
 class RemoteKey extends Reference
 {
     /** @var Property */
-    private $localKey;
+    private $localKeyProperty;
 
     /** @var Property */
-    private $remoteForeignKey;
+    private $remoteKeyProperty;
 
     /** @var string */
-    private $remoteKey;
+    private $remoteKeyColumn;
 
     /** @var RepositoryInterface */
     private $remoteRepository;
 
     /**
      * RemoteKey constructor.
-     * @param Property            $localKey
-     * @param Property            $remoteForeignKey
-     * @param string              $remoteKey
+     *
+     * @param Property            $localKeyProperty
+     * @param Property            $remoteKeyProperty
+     * @param string              $remoteKeyColumn
      * @param RepositoryInterface $remoteRepository
      */
     public function __construct(
-        Property $localKey,
-        Property $remoteForeignKey,
-        string $remoteKey,
+        Property $localKeyProperty,
+        Property $remoteKeyProperty,
+        string $remoteKeyColumn,
         RepositoryInterface $remoteRepository
     ) {
-        $this->localKey         = $localKey;
-        $this->remoteForeignKey = $remoteForeignKey;
-        $this->remoteKey        = $remoteKey;
-        $this->remoteRepository = $remoteRepository;
+        $this->localKeyProperty  = $localKeyProperty;
+        $this->remoteKeyProperty = $remoteKeyProperty;
+        $this->remoteKeyColumn   = $remoteKeyColumn;
+        $this->remoteRepository  = $remoteRepository;
     }
 
     /**
@@ -53,9 +54,9 @@ class RemoteKey extends Reference
      */
     public function select($local): Query
     {
-        $remoteKey = $this->localKey->get($local);
+        $remoteKey = $this->localKeyProperty->get($local);
 
-        return $this->remoteRepository->select()->where([$this->remoteKey => $remoteKey]);
+        return $this->remoteRepository->select()->where([$this->remoteKeyColumn => $remoteKey]);
     }
 
     /**
@@ -63,12 +64,12 @@ class RemoteKey extends Reference
      */
     public function store($local, array $remotes)
     {
-        $id     = $this->localKey->get($local);
+        $id     = $this->localKeyProperty->get($local);
         $before = $this->load($local);
         $after  = $remotes;
         $diff   = new Diff($this->remoteRepository, $before, $after);
         foreach ($diff->getInsert() as $remote) {
-            $this->remoteForeignKey->set($remote, $id);
+            $this->remoteKeyProperty->set($remote, $id);
             $this->remoteRepository->store($remote);
         }
         foreach ($diff->getDelete() as $remote) {

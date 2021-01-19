@@ -8,9 +8,7 @@ use Neat\Object\Relations\RelationBuilder;
 
 trait Relations
 {
-    /** @nostorage
-     * @var Cache
-     */
+    /** @var Cache @nostorage */
     private $relations;
 
     /**
@@ -29,18 +27,21 @@ trait Relations
     }
 
     /**
-     * @param class-string $remoteClass
-     * @param string       $key
+     * @param string        $remoteClass
+     * @param string        $key
+     * @param callable|null $configure
+     * @psalm-param callable(RemoteKeyBuilder)|null $configure
      * @return RelationBuilder
+     * @deprecated use hasOne() with $role and $configure parameter instead
      */
-    public function buildHasOne(string $remoteClass, string $key): RelationBuilder
+    public function buildHasOne(string $remoteClass, string $key, callable $configure = null): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
         $relationBuilder = $this->relations()->get(
             $key,
-            function () use ($key, $remoteClass): RelationBuilder {
+            function () use ($key, $remoteClass, $configure): RelationBuilder {
                 $localClass = get_class($this);
-                $builder    = $this->manager()->buildRemoteKey($key, $localClass, $remoteClass);
+                $builder    = $this->manager()->buildRemoteKey($key, $localClass, $remoteClass, $configure);
 
                 return new RelationBuilder(One::class, $builder, $this);
             }
@@ -60,31 +61,37 @@ trait Relations
      * action is executed. However when the relation is loaded and a remote entity is available the foreign key will be
      * set and the entity will be stored.
      *
-     * @param class-string $remoteClass
+     * @param class-string  $remoteClass
+     * @param string|null   $role
+     * @param callable|null $configure
+     * @psalm-param callable(RemoteKeyBuilder)|null $configure
      * @return One
      */
-    public function hasOne(string $remoteClass): One
+    public function hasOne(string $remoteClass, string $role = null, callable $configure = null): One
     {
-        $localClass = get_class($this);
-        /** @var One $relation */
-        $relation = $this->buildHasOne($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
+        $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
-        return $relation;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return $this->buildHasOne($remoteClass, $key, $configure)->resolve();
     }
 
     /**
-     * @param class-string $remoteClass
-     * @param string       $key
+     * @param string        $remoteClass
+     * @param string        $key
+     * @param callable|null $configure
+     * @psalm-param callable(RemoteKeyBuilder)|null $configure
      * @return RelationBuilder
+     * @deprecated use hasMany() with $role and $configure parameter instead
      */
-    public function buildHasMany(string $remoteClass, string $key): RelationBuilder
+    public function buildHasMany(string $remoteClass, string $key, callable $configure = null): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
         $relationBuilder = $this->relations()->get(
             $key,
-            function () use ($key, $remoteClass): RelationBuilder {
+            function () use ($key, $remoteClass, $configure): RelationBuilder {
                 $localClass = get_class($this);
-                $builder    = $this->manager()->buildRemoteKey($key, $localClass, $remoteClass);
+                $builder    = $this->manager()->buildRemoteKey($key, $localClass, $remoteClass, $configure);
 
                 return new RelationBuilder(Many::class, $builder, $this);
             }
@@ -104,31 +111,37 @@ trait Relations
      * action is executed. However when the relation is loaded and remote entities are available the foreign key will be
      * set and the entities will be stored, updated and deleted when necessary.
      *
-     * @param class-string $remoteClass
+     * @param class-string  $remoteClass
+     * @param string|null   $role
+     * @param callable|null $configure
+     * @psalm-param callable(RemoteKeyBuilder)|null $configure
      * @return Many
      */
-    public function hasMany(string $remoteClass): Many
+    public function hasMany(string $remoteClass, string $role = null, callable $configure = null): Many
     {
-        $localClass = get_class($this);
-        /** @var Many $relation */
-        $relation = $this->buildHasMany($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
+        $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
-        return $relation;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return $this->buildHasMany($remoteClass, $key, $configure)->resolve();
     }
 
     /**
-     * @param class-string $remoteClass
-     * @param string       $key
+     * @param class-string  $remoteClass
+     * @param string        $key
+     * @param callable|null $configure
+     * @psalm-param callable(LocalKeyBuilder)|null $configure
      * @return RelationBuilder
+     * @deprecated use belongsToOne() with $role and $configure parameter instead
      */
-    public function buildBelongsToOne(string $remoteClass, string $key): RelationBuilder
+    public function buildBelongsToOne(string $remoteClass, string $key, callable $configure = null): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
         $relationBuilder = $this->relations()->get(
             $key,
-            function () use ($key, $remoteClass): RelationBuilder {
+            function () use ($key, $remoteClass, $configure): RelationBuilder {
                 $localClass = get_class($this);
-                $builder    = $this->manager()->buildLocalKey($key, $localClass, $remoteClass);
+                $builder    = $this->manager()->buildLocalKey($key, $localClass, $remoteClass, $configure);
 
                 return new RelationBuilder(One::class, $builder, $this);
             }
@@ -138,31 +151,37 @@ trait Relations
     }
 
     /**
-     * @param class-string $remoteClass
+     * @param class-string  $remoteClass
+     * @param string|null   $role
+     * @param callable|null $configure
+     * @psalm-param callable(LocalKeyBuilder)|null $configure
      * @return One
      */
-    public function belongsToOne(string $remoteClass): One
+    public function belongsToOne(string $remoteClass, string $role = null, callable $configure = null): One
     {
-        $localClass = get_class($this);
-        /** @var One $relation */
-        $relation = $this->buildBelongsToOne($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
+        $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
-        return $relation;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return $this->buildBelongsToOne($remoteClass, $key, $configure)->resolve();
     }
 
     /**
-     * @param class-string $remoteClass
-     * @param string       $key
+     * @param class-string  $remoteClass
+     * @param string        $key
+     * @param callable|null $configure
+     * @psalm-param callable(JunctionTableBuilder)|null $configure
      * @return RelationBuilder
+     * @deprecated use belongsToMany() with $role and $configure parameter instead
      */
-    public function buildBelongsToMany(string $remoteClass, string $key): RelationBuilder
+    public function buildBelongsToMany(string $remoteClass, string $key, callable $configure = null): RelationBuilder
     {
         /** @var RelationBuilder $relationBuilder */
         $relationBuilder = $this->relations()->get(
             $key,
-            function () use ($key, $remoteClass): RelationBuilder {
+            function () use ($key, $remoteClass, $configure): RelationBuilder {
                 $localClass = get_class($this);
-                $builder    = $this->manager()->buildJunctionTable($key, $localClass, $remoteClass);
+                $builder    = $this->manager()->buildJunctionTable($key, $localClass, $remoteClass, $configure);
 
                 return new RelationBuilder(Many::class, $builder, $this);
             }
@@ -172,16 +191,19 @@ trait Relations
     }
 
     /**
-     * @param class-string $remoteClass
+     * @param class-string  $remoteClass
+     * @param string|null   $role
+     * @param callable|null $configure
+     * @psalm-param callable(JunctionTableBuilder)|null $configure
      * @return Many
      */
-    public function belongsToMany(string $remoteClass): Many
+    public function belongsToMany(string $remoteClass, string $role = null, callable $configure = null): Many
     {
-        $localClass = get_class($this);
-        /** @var Many $relation */
-        $relation = $this->buildBelongsToMany($remoteClass, $localClass . __METHOD__ . $remoteClass)->resolve();
+        $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
-        return $relation;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return $this->buildBelongsToMany($remoteClass, $key, $configure)->resolve();
     }
 
     abstract public static function manager(): Manager;

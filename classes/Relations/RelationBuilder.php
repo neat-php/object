@@ -53,6 +53,7 @@ class RelationBuilder
     /**
      * @param callable $factory
      * @return $this
+     * @deprecated Pass the callable(Reference\Builder) $configure parameter to the Relations trait method instead
      */
     public function referenceFactory(callable $factory): self
     {

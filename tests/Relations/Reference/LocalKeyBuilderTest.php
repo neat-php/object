@@ -22,18 +22,55 @@ class LocalKeyBuilderTest extends TestCase
     {
         $repository = $this->repository(Address::class);
         $builder    = $this->localKeyBuilder();
+        $this->assertSame($builder, $builder->setLocalKey('street'));
+        $this->assertSame($builder, $builder->setRemoteKey('typeId'));
+        $this->assertSame($builder, $builder->setRemoteRepository($repository));
+
+        $this->assertEquals(
+            new LocalKey(
+                $builder->property(Address::class, 'street'),
+                $builder->property(User::class, 'typeId'),
+                'type_id',
+                $repository
+            ),
+            $builder->resolve()
+        );
+    }
+
+    public function testBuildColumn()
+    {
+        $repository = $this->repository(Address::class);
+        $builder    = $this->localKeyBuilder();
+        $this->assertSame($builder, $builder->setLocalKeyColumn('street'));
+        $this->assertSame($builder, $builder->setRemoteKeyColumn('type_id'));
+        $this->assertSame($builder, $builder->setRemoteRepository($repository));
+
+        $this->assertEquals(
+            new LocalKey(
+                $builder->propertyByColumn(Address::class, 'street'),
+                $builder->propertyByColumn(User::class, 'type_id'),
+                'type_id',
+                $repository
+            ),
+            $builder->resolve()
+        );
+    }
+
+    public function testBuildDeprecated()
+    {
+        $repository = $this->repository(Address::class);
+        $builder    = $this->localKeyBuilder();
         $localKey   = $builder->property(Address::class, 'street');
         $this->assertSame($builder, $builder->setLocalKey($localKey));
         $remoteKey = $builder->property(User::class, 'typeId');
         $this->assertSame($builder, $builder->setRemoteKey($remoteKey));
-        $this->assertSame($builder, $builder->setRemoteKeyString('test_remote_key_column'));
         $this->assertSame($builder, $builder->setRemoteRepository($repository));
 
         $this->assertEquals(
             new LocalKey(
                 $localKey,
                 $remoteKey,
-                'test_remote_key_column',
+                'type_id',
                 $repository
             ),
             $builder->resolve()
