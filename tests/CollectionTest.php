@@ -74,6 +74,13 @@ class CollectionTest extends TestCase
         $this->assertSame($last, $this->collection()->last());
     }
 
+    public function testFirstLastEmptyCollection()
+    {
+        $collection = new Collection([]);
+        $this->assertNull($collection->first());
+        $this->assertNull($collection->last());
+    }
+
     /**
      * Test array offset exists
      */

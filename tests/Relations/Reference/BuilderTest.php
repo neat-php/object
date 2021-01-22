@@ -35,6 +35,22 @@ class BuilderTest extends TestCase
         $this->assertSame($expectedProperty, $builder->property(User::class, 'id'));
     }
 
+    public function testPropertyOnObject()
+    {
+        /** @var ReferenceBuilderMock|MockObject $builder */
+        $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
+        /** @var Policy|MockObject $policy */
+        $policy = $this->getMockBuilder(Policy::class)->setMethods(['properties', 'column'])->getMock();
+        $builder->setPolicy($policy);
+        $expectedProperty = $this->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
+        $property         = $this->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
+        $policy->expects($this->once())->method('properties')
+            ->with(User::class)
+            ->willReturn(['id' => $expectedProperty, 'test' => $property]);
+        $policy->expects($this->once())->method('column')->with('id')->willReturn('id');
+        $this->assertSame($expectedProperty, $builder->property(new User(), 'id'));
+    }
+
     public function testPropertyClassNotFound()
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
