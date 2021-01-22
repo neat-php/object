@@ -6,15 +6,19 @@ use DateTime;
 use DateTimeImmutable;
 use Generator;
 use Neat\Object\Collection;
+use Neat\Object\Exception\EventNotDefinedException;
 use Neat\Object\Manager;
+use Neat\Object\Policy;
 use Neat\Object\Query;
 use Neat\Object\SQLQuery;
 use Neat\Object\Test\Helper\Assertions;
+use Neat\Object\Test\Helper\Event\Custom;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\GroupUser;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class EntityTest extends TestCase
 {
@@ -284,5 +288,50 @@ class EntityTest extends TestCase
         $this->assertEquals("Thijs", $user->firstName);
         $this->assertEquals(true, $user->active);
         $this->assertEquals($data, $user->toArray());
+    }
+
+    /**
+     * @runInSeparateProcess enabled
+     */
+    public function testTrigger()
+    {
+        $dispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        Manager::set(new Manager($this->connection(), new Policy($dispatcher)));
+
+        $user = new User();
+        $dispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with(new Custom($user));
+
+        $user->trigger('custom');
+    }
+
+    /**
+     * @runInSeparateProcess enabled
+     */
+    public function testTriggerFails()
+    {
+        $dispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        Manager::set(new Manager($this->connection(), new Policy($dispatcher)));
+
+        $user      = new User();
+        $userClass = get_class($user);
+        $this->expectExceptionObject(
+            new EventNotDefinedException("No event defined for '{$userClass}' named 'undefined'")
+        );
+        $user->trigger('undefined');
+    }
+
+    /**
+     * @runInSeparateProcess enabled
+     */
+    public function testTriggerIfExists()
+    {
+        $dispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        Manager::set(new Manager($this->connection(), new Policy($dispatcher)));
+
+        $user = new User();
+        $user->triggerIfExists('undefined');
+        $this->addToAssertionCount(1);
     }
 }

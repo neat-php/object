@@ -10,6 +10,7 @@ use Neat\Object\Exception\ClassNotFoundException;
 use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Repository;
+use Neat\Object\Test\Helper\Address;
 use Neat\Object\Test\Helper\Events;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Group;
@@ -248,7 +249,7 @@ class PolicyTest extends TestCase
         $policy = new Policy();
 
         $this->assertSame(Events::EVENTS, $policy->events(Events::class));
-        $this->assertSame([], $policy->events(User::class));
+        $this->assertSame([], $policy->events(Address::class));
     }
 
     /**

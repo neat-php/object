@@ -3,9 +3,16 @@
 namespace Neat\Object\Test\Helper;
 
 use DateTime;
+use Neat\Object\Test\Helper\Event\Custom;
 
 class User extends Entity
 {
+    use \Neat\Object\Events;
+
+    public const EVENTS = [
+        'custom' => Custom::class,
+    ];
+
     /** @var int */
     public $id;
 

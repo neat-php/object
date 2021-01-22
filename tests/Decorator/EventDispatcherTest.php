@@ -21,7 +21,7 @@ class EventDispatcherTest extends TestCase
             ['load', $entity = new Events(), $entity, 'loading', 'loaded', Event\Loading::class, Event\Loaded::class],
             ['delete', new Events(), 1, 'deleting', 'deleted', Event\Deleting::class, Event\Deleted::class],
             ['store', new Events(), null, 'updating', 'updated', Event\Updating::class, Event\Updated::class],
-            ['store', new Events(), null, 'creating', 'created', Event\Creating::class, Event\Created::class]
+            ['store', new Events(), null, 'creating', 'created', Event\Creating::class, Event\Created::class],
         ];
     }
 

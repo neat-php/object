@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Events->triggerIfExists().
+- EventDispatcher->triggerIfExists().
+
+### Changed
+- EventDispatcher->trigger() now throws if an event is not defined.
 
 ## [0.11.9] - 2021-01-19
 ### Added
