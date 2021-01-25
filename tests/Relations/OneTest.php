@@ -24,10 +24,7 @@ class OneTest extends TestCase
      */
     public function mockedRemoteKey()
     {
-        return $this->getMockBuilder(RemoteKey::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'store'])
-            ->getMock();
+        return $this->createPartialMock(RemoteKey::class, ['load', 'store']);
     }
 
     /**
@@ -94,13 +91,12 @@ class OneTest extends TestCase
 
         $reference = $this->mockedRemoteKey();
         $reference
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('store')
-            ->with($this->equalTo($user), $this->equalTo([$address]));
-        $reference
-            ->expects($this->at(1))
-            ->method('store')
-            ->with($this->equalTo($user), $this->equalTo([]));
+            ->withConsecutive(
+                [$this->equalTo($user), $this->equalTo([$address])],
+                [$this->equalTo($user), $this->equalTo([])]
+            );
 
         $one = $this->one($reference);
 

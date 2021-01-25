@@ -25,10 +25,7 @@ class ManyTest extends TestCase
      */
     public function mockedRemoteKey()
     {
-        return $this->getMockBuilder(RemoteKey::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'store', 'getRemoteKeyValue'])
-            ->getMock();
+        return $this->createPartialMock(RemoteKey::class, ['load', 'store', 'getRemoteKeyValue']);
     }
 
     /**
@@ -95,13 +92,12 @@ class ManyTest extends TestCase
 
         $reference = $this->mockedRemoteKey();
         $reference
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('store')
-            ->with($this->equalTo($user), $this->equalTo([$address]));
-        $reference
-            ->expects($this->at(1))
-            ->method('store')
-            ->with($this->equalTo($user), $this->equalTo([]));
+            ->withConsecutive(
+                [$this->equalTo($user), $this->equalTo([$address])],
+                [$this->equalTo($user), $this->equalTo([])]
+            );
 
         $many = $this->many($reference);
         $many->set([$address]);
@@ -132,19 +128,15 @@ class ManyTest extends TestCase
 
         $reference = $this->mockedRemoteKey();
         $reference
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('load')
             ->willReturn([$address1]);
         $reference
-            ->expects($this->at(1))
+            ->expects($this->exactly(2))
             ->method('getRemoteKeyValue')
-            ->willReturn(['id' => $address1->id]);
+            ->willReturnOnConsecutiveCalls(['id' => $address1->id], ['id' => $address2->id]);
         $reference
-            ->expects($this->at(2))
-            ->method('getRemoteKeyValue')
-            ->willReturn(['id' => $address2->id]);
-        $reference
-            ->expects($this->at(3))
+            ->expects($this->once())
             ->method('store')
             ->with($this->equalTo($user), $this->equalTo([$address1, $address2]));
 
@@ -165,29 +157,19 @@ class ManyTest extends TestCase
 
         $reference = $this->mockedRemoteKey();
         $reference
-            ->expects($this->at(0))
-            ->method('getRemoteKeyValue')
-            ->with($address1)
-            ->willReturn(['id' => $address1->id]);
-        $reference
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('load')
             ->willReturn([$address1]);
         $reference
-            ->expects($this->at(2))
+            ->expects($this->exactly(4))
             ->method('getRemoteKeyValue')
-            ->with($address1)
-            ->willReturn(['id' => $address1->id]);
-        $reference
-            ->expects($this->at(3))
-            ->method('getRemoteKeyValue')
-            ->with($address2)
-            ->willReturn(['id' => $address2->id]);
-        $reference
-            ->expects($this->at(4))
-            ->method('getRemoteKeyValue')
-            ->with($address1)
-            ->willReturn(['id' => $address1->id]);
+            ->withConsecutive([$address1], [$address1], [$address2], [$address1])
+            ->willReturnOnConsecutiveCalls(
+                ['id' => $address1->id],
+                ['id' => $address1->id],
+                ['id' => $address2->id],
+                ['id' => $address1->id]
+            );
 
         $many = $this->many($reference);
 
@@ -211,15 +193,15 @@ class ManyTest extends TestCase
 
         $reference = $this->mockedRemoteKey();
         $reference
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('load')
             ->willReturn([$address1]);
         $reference
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('getRemoteKeyValue')
             ->willReturn(['id' => $address2->id]);
         $reference
-            ->expects($this->at(2))
+            ->expects($this->once())
             ->method('store')
             ->with($this->equalTo($user), $this->equalTo([$address1, $address2]));
 
@@ -246,21 +228,16 @@ class ManyTest extends TestCase
 
         $reference = $this->mockedRemoteKey();
         $reference
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('load')
             ->willReturn([$address1, $address2]);
         $reference
-            ->expects($this->at(1))
+            ->expects($this->exactly(2))
             ->method('getRemoteKeyValue')
             ->with($address1)
             ->willReturn($address1->id);
         $reference
-            ->expects($this->at(2))
-            ->method('getRemoteKeyValue')
-            ->with($address1)
-            ->willReturn($address1->id);
-        $reference
-            ->expects($this->at(3))
+            ->expects($this->once())
             ->method('store')
             ->with($this->equalTo($user), $this->equalTo([$address2]));
 
@@ -283,11 +260,11 @@ class ManyTest extends TestCase
 
         $reference = $this->mockedRemoteKey();
         $reference
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('load')
             ->willReturn([]);
         $reference
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('store')
             ->with($user, []);
 

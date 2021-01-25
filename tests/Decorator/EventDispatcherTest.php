@@ -15,13 +15,13 @@ class EventDispatcherTest extends TestCase
 {
     use Factory;
 
-    public function provideMethods()
+    public function provideMethods(): array
     {
         return [
-            ['load', $entity = new Events(), $entity, 'loading', 'loaded', Event\Loading::class, Event\Loaded::class],
-            ['delete', new Events(), 1, 'deleting', 'deleted', Event\Deleting::class, Event\Deleted::class],
-            ['store', new Events(), null, 'updating', 'updated', Event\Updating::class, Event\Updated::class],
-            ['store', new Events(), null, 'creating', 'created', Event\Creating::class, Event\Created::class],
+            ['load', $entity = new Events(), $entity, Event\Loading::class, Event\Loaded::class],
+            ['delete', new Events(), 1, Event\Deleting::class, Event\Deleted::class],
+            ['store', new Events(), null, Event\Updating::class, Event\Updated::class],
+            ['store', new Events(), null, Event\Creating::class, Event\Created::class],
         ];
     }
 
@@ -29,37 +29,22 @@ class EventDispatcherTest extends TestCase
      * @param string $method
      * @param object $in
      * @param mixed  $out
-     * @param string $pre
-     * @param string $post
      * @param string $preClass
      * @param string $postClass
      * @dataProvider provideMethods
      */
-    public function testMethod($method, $in, $out, $pre, $post, $preClass, $postClass)
+    public function testMethod(string $method, object $in, $out, string $preClass, string $postClass)
     {
-        $log = [];
-
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('dispatch')
-            ->with(new $preClass($in))
-            ->willReturnCallback(function () use (&$log, $pre) {
-                $log[] = $pre;
-            });
-
-        $dispatcher
-            ->expects($this->at(1))
-            ->method('dispatch')
-            ->with(new $postClass($in))
-            ->willReturnCallback(function () use (&$log, $post) {
-                $log[] = $post;
-            });
+            ->withConsecutive([new $preClass($in)], [new $postClass($in)]);
 
         $repository = $this->createMock(Repository::class);
-        if ($pre =='updating') {
+        if ($preClass === Event\Updating::class) {
             $repository
-                ->expects($this->at(0))
+                ->expects($this->once())
                 ->method('identifier')
                 ->willReturn(['id' => 1]);
             $repository
@@ -71,19 +56,14 @@ class EventDispatcherTest extends TestCase
             ->expects($this->once())
             ->method($method)
             ->with($in)
-            ->willReturnCallback(function () use (&$log, $method, $out) {
-                $log[] = $method;
-
-                return $out;
-            });
+            ->willReturn($out);
 
         $eventDispatcher = new EventDispatcher($repository, $dispatcher, Events::EVENTS);
 
         $this->assertSame($out, $eventDispatcher->$method($in));
-        $this->assertSame([$pre, $method, $post], $log);
     }
 
-    public function provideEvents()
+    public function provideEvents(): array
     {
         return [
             [Event\Loading::class],

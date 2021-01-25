@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - EventDispatcher->trigger() now throws if an event is not defined.
 
+### Fixed
+- Code coverage and brittle tests using the at() matcher.
+
 ## [0.11.9] - 2021-01-19
 ### Added
 - Events trait with trigger method.

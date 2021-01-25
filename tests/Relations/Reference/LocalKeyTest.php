@@ -72,10 +72,9 @@ class LocalKeyTest extends TestCase
     public function testSelect()
     {
         $repository = $this->getMockForAbstractClass(RepositoryInterface::class);
-        $query      = $this->getMockBuilder(Query::class)->disableOriginalConstructor()
-            ->setMethods(['where'])->getMock();
+        $query      = $this->createPartialMock(Query::class, ['where']);
         $query->expects($this->once())->method('where')->with(['id' => 1])->willReturnSelf();
-        $repository->expects($this->at(0))->method('select')->with()->willReturn($query);
+        $repository->expects($this->once())->method('select')->with()->willReturn($query);
         $localKey = $this->localKeyFactory(Address::class, User::class)->setRemoteRepository($repository)->resolve();
 
         $address         = new Address();
@@ -83,7 +82,7 @@ class LocalKeyTest extends TestCase
         $localKey->select($address);
     }
 
-    public function localKeyFactory(string $local, string $remote)
+    public function localKeyFactory(string $local, string $remote): LocalKeyBuilder
     {
         return new LocalKeyBuilder($this->manager(), $local, $remote);
     }
