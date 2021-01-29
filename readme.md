@@ -15,7 +15,7 @@ composer require neat/object
 ```
 
 
-Then initialize the object manager using the static create factory:
+Then initialize the object manager:
 ```php
 <?php
 
@@ -86,8 +86,9 @@ The repository allows you to query for entities in many ways:
   entities
 * `iterate` returns a generator allowing you to iterate over the matched
   entities
-* `select` returns a query builder that allows chaining any of the methods
-  above
+* `select` returns a mutable query builder that allows chaining any of the
+  methods above
+* `sql` returns a query object using a handwritten SQL query supplied as string
 
 Each of these methods can be passed a query in several ways:
 ```php
@@ -105,10 +106,7 @@ $administrators = $repository
     ->where('g.name = ?', 'administrators')
     ->orderBy('u.name')
     ->all();
-```
 
-When you prefer a handwritten SQL query, you can use the ```sql``` method instead
-```php
 // Get one user using your own SQL query
 $user = $repository->sql('SELECT * FROM users WHERE id = ?', 1)->one();
 
