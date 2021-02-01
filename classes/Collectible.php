@@ -192,7 +192,7 @@ trait Collectible
 
     /**
      * @param callable|null $callback
-     * @return $this
+     * @return static
      */
     public function sort(callable $callback = null): self
     {

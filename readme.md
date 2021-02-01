@@ -165,21 +165,54 @@ $user->store();
 // Sets the Address::$userId
 // Stores the address
 ```
-Many(hasMany & belongsToMany) relations use `Collectible`:
+
+## Collections
+Collections wrap an array of multiple items and offer a chainable way of
+accessing these items using several operations. Relations to multiple
+instances of a class (hasMany and belongsToMany) offer the same
+`Collectible` API:
 ```php
-$user->roles()->map(function (Role $role) {
-    return $role->name;
-});
-```
-You can extend the relation classes to add commonly needed functionality:
-```php
-class ManyOrderArticles extends Neat\Object\Relations\Many {
-    public function filterByType(string $type)
+class User
+{
+    use Neat\Object\Storage;
+    use Neat\Object\Relations;
+
+    public function roles(): Neat\Object\Relations\Many
     {
-        return $this->filter(function (Article $article) use ($type) {
-            return $article->type === $type;
-        });
+        return $this->belongsToMany(Role::class);
     }
 }
+
+// Both of these offer the Collectible API
+$roles = Role::collection();
+$roles = $user->roles();
+
+// Get all roles, the first or the last role
+$all = $user->roles()->all();
+$first = $user->roles()->first();
+$last = $user->roles()->last();
+
+// Count roles
+$count = $user->roles()->count();
+
+// Get a filtered collection of roles
+$filtered = $user->roles()->filter(function (Role $role) {
+    return !$role->invisible;
+});
+
+// Get a sorted collection of roles
+$sorted = $user->roles()->sort(function (Role $a, Role $b) {
+    return $a->name <=> $b->name;
+});
+
+// Map roles and get the results in a collection
+$names = $user->roles()->map(function (Role $role) {
+    return $role->name;
+});
+
+// Or get the values of a single property in a collection
+$names = $user->roles()->column('name');
+
+// Chain multiple collection functions, then get an array of roles
+$result = $user->roles()->filter(...)->sort(...)->all();
 ```
-But you will have to instantiate the relation yourself, copy over the content of the factory method for the appropriate relation and change the relation type and cache key.

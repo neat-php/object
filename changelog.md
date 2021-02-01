@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Events->triggerIfExists().
 - EventDispatcher->triggerIfExists().
+- Collection / Collectible documentation.
 
 ### Changed
 - EventDispatcher->trigger() now throws if an event is not defined.

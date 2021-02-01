@@ -34,7 +34,7 @@ class User
 
     public function roles(): Neat\Object\Relations\Many
     {
-        return $this->hasMany(Role::class);
+        return $this->belongsToMany(Role::class);
     }
 }
 
@@ -50,6 +50,11 @@ class Article
 
 class Role
 {
+    use Neat\Object\Storage;
+
     /** @var string */
     public $name;
+
+    /** @var bool */
+    public $invisible;
 }
