@@ -53,7 +53,7 @@ class User
 
 To persist these entities into the database, we can use a repository:
 ```php
-$repository = $manager->repository(User::class);
+$repository = Neat\Object\Manager::get()->repository(User::class);
 
 $user = new User();
 $user->name = 'John';
@@ -67,6 +67,8 @@ echo $user->id; // 1
 If you know the identifier for your entity, you can access it using the
 `has` and `get` methods.
 ```php
+$repository = Neat\Object\Manager::get()->repository(User::class);
+
 // Get the user at once
 $user = $repository->get(1); // Returns user with id 1 or null if not found
 
@@ -92,6 +94,8 @@ The repository allows you to query for entities in many ways:
 
 Each of these methods can be passed a query in several ways:
 ```php
+$repository = Neat\Object\Manager::get()->repository(User::class);
+
 // Find one user with name John (note the [key => value] query array)
 $user = $repository->one(['name' => 'John']);
 
@@ -153,11 +157,12 @@ class User
     }
 }
 
+$user = User::one(...);
+
 // Returns the address object for the user or null
 $address = $user->address()->get();
-```
-Relations are automatically stored when the parent model is stored:
-```php
+
+// Relations are automatically stored when the parent model is stored:
 $address = new Address();
 $user->address()->set($address);
 $user->store();
@@ -206,10 +211,24 @@ class AgendaLine
     public $description;
 }
 
+class User
+{
+    use Neat\Object\Storage;
+
+    /** @var int */
+    public $id;
+
+    /** @var int */
+    public $alternativeId;
+}
+
 class Appointment
 {
     use Neat\Object\Storage;
     use Neat\Object\Relations;
+
+    /** @var int */
+    public $id;
 
     /** @var int */
     public $createdBy;
@@ -276,6 +295,8 @@ class User
         return $this->belongsToMany(Role::class);
     }
 }
+
+$user = User::one(...);
 
 // Both of these offer the Collectible API
 $roles = Role::collection();
