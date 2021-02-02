@@ -146,8 +146,10 @@ trait Builder
     }
 
     /**
-     * @param Property|string $localKeyProperty
+     * @param string $localKeyProperty
      * @return $this
+     * @note Passing a Property instance to setLocalKey is deprecated
+     * @noinspection PhpMissingParamTypeInspection
      */
     public function setLocalKey($localKeyProperty): self
     {
@@ -197,8 +199,10 @@ trait Builder
     }
 
     /**
-     * @param Property|string $remoteKeyProperty
+     * @param string $remoteKeyProperty
      * @return $this
+     * @note Passing a Property instance to setRemoteKey is deprecated
+     * @noinspection PhpMissingParamTypeInspection
      */
     public function setRemoteKey($remoteKeyProperty): self
     {

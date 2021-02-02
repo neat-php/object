@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - setJunctionTableLocalForeignKey() in favour of setJunctionTableLocalKeyColumn().
 - build*() methods in the Relations trait and ReferenceFactory trait.
 - RelationBuilder->referenceFactory() in favour of $configuration parameter with Relations trait methods.
+- Passing a Property instance to setLocalKey and setRemoteKey is deprecated.
 
 ### Changed
 - EventDispatcher->trigger() now throws if an event is not defined.
