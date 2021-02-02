@@ -13,7 +13,7 @@ class JunctionTableBuilderTest extends TestCase
 {
     use Factory;
 
-    private function junctionTableBuilder()
+    private function junctionTableBuilder(): JunctionTableBuilder
     {
         return new JunctionTableBuilder($this->manager(), User::class, Address::class);
     }
@@ -22,11 +22,90 @@ class JunctionTableBuilderTest extends TestCase
     {
         $repository = $this->repository(Address::class);
         $builder    = $this->junctionTableBuilder();
+        $this->assertSame($builder, $builder->setLocalKey('typeId'));
+        $this->assertSame($builder, $builder->setRemoteKey('street'));
+        $this->assertSame($builder, $builder->setRemoteRepository($repository));
+        $this->assertSame($builder, $builder->setJunctionTable('test_junction_table'));
+        $this->assertSame($builder, $builder->setJunctionTableLocalKeyColumn('test_local_foreign_key'));
+        $this->assertSame($builder, $builder->setJunctionTableRemoteKeyColumn('test_remote_foreign_key'));
+
+        $this->assertEquals(
+            new JunctionTable(
+                $builder->property(User::class, 'typeId'),
+                $builder->property(Address::class, 'street'),
+                'street',
+                $repository,
+                $this->connection(),
+                'test_junction_table',
+                'test_local_foreign_key',
+                'test_remote_foreign_key'
+            ),
+            $builder->resolve()
+        );
+    }
+
+    public function testBuildColumn()
+    {
+        $repository = $this->repository(Address::class);
+        $builder    = $this->junctionTableBuilder();
+        $this->assertSame($builder, $builder->setLocalKeyColumn('type_id'));
+        $this->assertSame($builder, $builder->setRemoteKeyColumn('street'));
+        $this->assertSame($builder, $builder->setRemoteRepository($repository));
+        $this->assertSame($builder, $builder->setJunctionTable('test_junction_table'));
+        $this->assertSame($builder, $builder->setJunctionTableLocalKeyColumn('test_local_foreign_key'));
+        $this->assertSame($builder, $builder->setJunctionTableRemoteKeyColumn('test_remote_foreign_key'));
+
+        $this->assertEquals(
+            new JunctionTable(
+                $builder->propertyByColumn(User::class, 'type_id'),
+                $builder->propertyByColumn(Address::class, 'street'),
+                'street',
+                $repository,
+                $this->connection(),
+                'test_junction_table',
+                'test_local_foreign_key',
+                'test_remote_foreign_key'
+            ),
+            $builder->resolve()
+        );
+    }
+
+    public function testBuildProperty()
+    {
+        $repository = $this->repository(Address::class);
+        $builder    = $this->junctionTableBuilder();
         $localKey   = $builder->property(User::class, 'typeId');
         $this->assertSame($builder, $builder->setLocalKey($localKey));
         $remoteKey = $builder->property(Address::class, 'street');
         $this->assertSame($builder, $builder->setRemoteKey($remoteKey));
-        $this->assertSame($builder, $builder->setRemoteKeyColumn('test_remote_key_column'));
+        $this->assertSame($builder, $builder->setRemoteRepository($repository));
+        $this->assertSame($builder, $builder->setJunctionTable('test_junction_table'));
+        $this->assertSame($builder, $builder->setJunctionTableLocalKeyColumn('test_local_foreign_key'));
+        $this->assertSame($builder, $builder->setJunctionTableRemoteKeyColumn('test_remote_foreign_key'));
+
+        $this->assertEquals(
+            new JunctionTable(
+                $localKey,
+                $remoteKey,
+                'street',
+                $repository,
+                $this->connection(),
+                'test_junction_table',
+                'test_local_foreign_key',
+                'test_remote_foreign_key'
+            ),
+            $builder->resolve()
+        );
+    }
+
+    /** @noinspection PhpDeprecationInspection */
+    public function testBuildDeprecated()
+    {
+        $repository = $this->repository(Address::class);
+        $builder    = $this->junctionTableBuilder();
+        $localKey   = $builder->property(User::class, 'typeId');
+        $this->assertSame($builder, $builder->setLocalKey($localKey));
+        $this->assertSame($builder, $builder->setRemoteKeyString('street'));
         $this->assertSame($builder, $builder->setRemoteRepository($repository));
         $this->assertSame($builder, $builder->setJunctionTable('test_junction_table'));
         $this->assertSame($builder, $builder->setJunctionTableLocalForeignKey('test_local_foreign_key'));
@@ -35,8 +114,8 @@ class JunctionTableBuilderTest extends TestCase
         $this->assertEquals(
             new JunctionTable(
                 $localKey,
-                $remoteKey,
-                'test_remote_key_column',
+                $builder->property(Address::class, 'street'),
+                'street',
                 $repository,
                 $this->connection(),
                 'test_junction_table',

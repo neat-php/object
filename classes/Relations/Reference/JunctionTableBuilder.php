@@ -4,26 +4,12 @@ namespace Neat\Object\Relations\Reference;
 
 use Neat\Database\Connection;
 use Neat\Object\Manager;
-use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\ReferenceBuilder;
-use Neat\Object\RepositoryInterface;
 
 class JunctionTableBuilder implements ReferenceBuilder
 {
     use Builder;
-
-    /** @var Property */
-    private $localKey;
-
-    /** @var Property */
-    private $remoteKey;
-
-    /** @var string */
-    private $remoteKeyColumn;
-
-    /** @var RepositoryInterface */
-    private $remoteRepository;
 
     /** @var Connection */
     private $connection;
@@ -32,37 +18,26 @@ class JunctionTableBuilder implements ReferenceBuilder
     private $junctionTable;
 
     /** @var string */
-    private $junctionTableLocalForeignKey;
+    private $junctionTableLocalKeyColumn;
 
     /** @var string */
-    private $junctionTableRemoteForeignKey;
+    private $junctionTableRemoteKeyColumn;
 
     /**
-     * JunctionTableBuilder constructor.
-     *
      * @param Manager      $manager
-     * @param class-string $local
-     * @param class-string $remote
+     * @param class-string $localClass
+     * @param class-string $remoteClass
      */
-    public function __construct(Manager $manager, string $local, string $remote)
+    public function __construct(Manager $manager, string $localClass, string $remoteClass)
     {
-        $policy = $manager->policy();
-        $this->init($manager, $policy, JunctionTable::class);
-        $localKey         = $policy->key($local);
-        $remoteKey        = $policy->key($remote);
-        $localForeignKey  = $policy->foreignKey($local);
-        $remoteForeignKey = $policy->foreignKey($remote);
-        $localProperties  = $policy->properties($local);
-        $remoteProperties = $policy->properties($remote);
+        $this->init($manager, JunctionTable::class, $localClass, $remoteClass);
+        $this->initLocalKeyColumn($this->keyColumn($localClass));
+        $this->initRemoteKeyColumn($this->keyColumn($remoteClass));
 
-        $this->localKey                      = $localProperties[reset($localKey)] ?? null;
-        $this->remoteKey                     = $remoteProperties[reset($remoteKey)] ?? null;
-        $this->remoteKeyColumn               = reset($remoteKey);
-        $this->remoteRepository              = $manager->repository($remote);
-        $this->connection                    = $manager->connection();
-        $this->junctionTable                 = $policy->junctionTable($local, $remote);
-        $this->junctionTableLocalForeignKey  = $localForeignKey;
-        $this->junctionTableRemoteForeignKey = $remoteForeignKey;
+        $this->connection                   = $manager->connection();
+        $this->junctionTable                = $this->junctionTable($localClass, $remoteClass);
+        $this->junctionTableLocalKeyColumn  = $this->foreignKeyColumn($localClass);
+        $this->junctionTableRemoteKeyColumn = $this->foreignKeyColumn($remoteClass);
     }
 
     /**
@@ -71,59 +46,25 @@ class JunctionTableBuilder implements ReferenceBuilder
     protected function build(): Reference
     {
         return new $this->class(
-            $this->localKey,
-            $this->remoteKey,
+            $this->localKeyProperty,
+            $this->remoteKeyProperty,
             $this->remoteKeyColumn,
             $this->remoteRepository,
             $this->connection,
             $this->junctionTable,
-            $this->junctionTableLocalForeignKey,
-            $this->junctionTableRemoteForeignKey
+            $this->junctionTableLocalKeyColumn,
+            $this->junctionTableRemoteKeyColumn
         );
     }
 
     /**
-     * @param Property $localKey
-     * @return self
+     * @param class-string $localClass
+     * @param class-string $remoteClass
+     * @return string
      */
-    public function setLocalKey(Property $localKey): self
+    public function junctionTable(string $localClass, string $remoteClass): string
     {
-        $this->localKey = $localKey;
-
-        return $this;
-    }
-
-    /**
-     * @param Property $remoteKey
-     * @return self
-     */
-    public function setRemoteKey(Property $remoteKey): self
-    {
-        $this->remoteKey = $remoteKey;
-
-        return $this;
-    }
-
-    /**
-     * @param string $remoteKeyColumn
-     * @return self
-     */
-    public function setRemoteKeyColumn(string $remoteKeyColumn): self
-    {
-        $this->remoteKeyColumn = $remoteKeyColumn;
-
-        return $this;
-    }
-
-    /**
-     * @param RepositoryInterface $remoteRepository
-     * @return self
-     */
-    public function setRemoteRepository(RepositoryInterface $remoteRepository): self
-    {
-        $this->remoteRepository = $remoteRepository;
-
-        return $this;
+        return $this->policy->junctionTable($localClass, $remoteClass);
     }
 
     /**
@@ -138,23 +79,43 @@ class JunctionTableBuilder implements ReferenceBuilder
     }
 
     /**
-     * @param string $junctionTableLocalForeignKey
+     * @param string $junctionTableLocalKeyColumn
+     * @return $this
+     * @deprecated Use setJunctionTableLocalKeyColumn instead
+     */
+    public function setJunctionTableLocalForeignKey(string $junctionTableLocalKeyColumn): self
+    {
+        return $this->setJunctionTableLocalKeyColumn($junctionTableLocalKeyColumn);
+    }
+
+    /**
+     * @param string $junctionTableLocalKeyColumn
      * @return self
      */
-    public function setJunctionTableLocalForeignKey(string $junctionTableLocalForeignKey): self
+    public function setJunctionTableLocalKeyColumn(string $junctionTableLocalKeyColumn): self
     {
-        $this->junctionTableLocalForeignKey = $junctionTableLocalForeignKey;
+        $this->junctionTableLocalKeyColumn = $junctionTableLocalKeyColumn;
 
         return $this;
     }
 
     /**
-     * @param string $junctionTableRemoteForeignKey
+     * @param string $junctionTableRemoteKeyColumn
+     * @return $this
+     * @deprecated Use setJunctionTableRemoteKeyColumn instead
+     */
+    public function setJunctionTableRemoteForeignKey(string $junctionTableRemoteKeyColumn): self
+    {
+        return $this->setJunctionTableRemoteKeyColumn($junctionTableRemoteKeyColumn);
+    }
+
+    /**
+     * @param string $junctionTableRemoteKeyColumn
      * @return self
      */
-    public function setJunctionTableRemoteForeignKey(string $junctionTableRemoteForeignKey): self
+    public function setJunctionTableRemoteKeyColumn(string $junctionTableRemoteKeyColumn): self
     {
-        $this->junctionTableRemoteForeignKey = $junctionTableRemoteForeignKey;
+        $this->junctionTableRemoteKeyColumn = $junctionTableRemoteKeyColumn;
 
         return $this;
     }

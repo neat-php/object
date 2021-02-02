@@ -3,7 +3,6 @@
 namespace Neat\Object\Test\Relations\Reference;
 
 use Neat\Object\Exception\ClassMismatchException;
-use Neat\Object\Exception\ClassNotFoundException;
 use Neat\Object\Exception\PropertyNotFoundException;
 use Neat\Object\Policy;
 use Neat\Object\Property;
@@ -24,49 +23,110 @@ class BuilderTest extends TestCase
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
         /** @var Policy|MockObject $policy */
-        $policy = $this->getMockBuilder(Policy::class)->setMethods(['properties', 'column'])->getMock();
+        $policy = $this->createPartialMock(Policy::class, ['properties', 'column']);
         $builder->setPolicy($policy);
-        $expectedProperty = $this->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
-        $property         = $this->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
-        $policy->expects($this->once())->method('properties')
+        $expectedProperty = $this->createMock(Property::class);
+        $property         = $this->createMock(Property::class);
+
+        $policy
+            ->expects($this->once())
+            ->method('properties')
             ->with(User::class)
             ->willReturn(['id' => $expectedProperty, 'test' => $property]);
-        $policy->expects($this->once())->method('column')->with('id')->willReturn('id');
+        $policy
+            ->expects($this->once())
+            ->method('column')
+            ->with('id')
+            ->willReturn('id');
+
         $this->assertSame($expectedProperty, $builder->property(User::class, 'id'));
     }
 
-    public function testPropertyOnObject()
+    public function testPropertyByObject()
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
         /** @var Policy|MockObject $policy */
-        $policy = $this->getMockBuilder(Policy::class)->setMethods(['properties', 'column'])->getMock();
+        $policy = $this->createPartialMock(Policy::class, ['properties', 'column']);
         $builder->setPolicy($policy);
-        $expectedProperty = $this->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
-        $property         = $this->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
-        $policy->expects($this->once())->method('properties')
+        $user = new User();
+        $expectedProperty = $this->createMock(Property::class);
+        $property         = $this->createMock(Property::class);
+
+        $policy
+            ->expects($this->once())
+            ->method('properties')
             ->with(User::class)
             ->willReturn(['id' => $expectedProperty, 'test' => $property]);
-        $policy->expects($this->once())->method('column')->with('id')->willReturn('id');
-        $this->assertSame($expectedProperty, $builder->property(new User(), 'id'));
+        $policy
+            ->expects($this->once())
+            ->method('column')
+            ->with('id')
+            ->willReturn('id');
+
+        $this->assertSame($expectedProperty, $builder->property($user, 'id'));
     }
 
-    public function testPropertyClassNotFound()
+    public function testPropertyNotFound()
+    {
+        $this->expectException(PropertyNotFoundException::class);
+
+        /** @var ReferenceBuilderMock|MockObject $builder */
+        $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
+        /** @var Policy|MockObject $policy */
+        $policy = $this->createPartialMock(Policy::class, ['properties', 'column']);
+        $builder->setPolicy($policy);
+
+        $policy
+            ->expects($this->once())
+            ->method('properties')
+            ->with(User::class)
+            ->willReturn(['id' => $this->createMock(Property::class), 'test' => $this->createMock(Property::class)]);
+        $policy
+            ->expects($this->once())
+            ->method('column')
+            ->with('nonExistingProperty')
+            ->willReturn('non_existing_property');
+
+        $builder->property(User::class, 'nonExistingProperty');
+    }
+
+    public function testPropertyByColumn()
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
-        $class   = 'ThisIsANonExistingClass';
-        $this->expectExceptionObject(new ClassNotFoundException($class));
-        $builder->property($class, 'a');
+        /** @var Policy|MockObject $policy */
+        $policy = $this->createPartialMock(Policy::class, ['properties']);
+        $builder->setPolicy($policy);
+        $expectedProperty = $this->createMock(Property::class);
+        $property         = $this->createMock(Property::class);
+
+        $policy
+            ->expects($this->once())
+            ->method('properties')
+            ->with(User::class)
+            ->willReturn(['id' => $expectedProperty, 'test' => $property]);
+
+        $this->assertSame($expectedProperty, $builder->propertyByColumn(User::class, 'id'));
     }
 
-    public function testPropertyNonExistingProperty()
+    public function testPropertyByColumnNotFound()
     {
+        $this->expectException(PropertyNotFoundException::class);
+
         /** @var ReferenceBuilderMock|MockObject $builder */
-        $builder  = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
-        $property = 'abcd';
-        $this->expectExceptionObject(new PropertyNotFoundException(User::class, $property));
-        $builder->property(User::class, $property);
+        $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
+        /** @var Policy|MockObject $policy */
+        $policy = $this->createPartialMock(Policy::class, ['properties']);
+        $builder->setPolicy($policy);
+
+        $policy
+            ->expects($this->once())
+            ->method('properties')
+            ->with(User::class)
+            ->willReturn(['id' => $this->createMock(Property::class), 'test' => $this->createMock(Property::class)]);
+
+        $builder->propertyByColumn(User::class, 'non_existing_column');
     }
 
     public function testResolve()
@@ -97,7 +157,7 @@ class BuilderTest extends TestCase
         $builder->setClass(MockObject::class);
         $builder->expects($this->once())->method('build')->willReturn($resolved);
         /** @var CallableMock|MockObject $callable */
-        $callable = $this->getMockBuilder(CallableMock::class)->setMethods(['__invoke'])->getMock();
+        $callable = $this->createPartialMock(CallableMock::class, ['__invoke']);
         $callable->expects($this->once())->method('__invoke')->willReturn($builder);
 
         $builder->factory($callable);
@@ -106,10 +166,7 @@ class BuilderTest extends TestCase
 
     public function testResolveException()
     {
-        $resolved = $this->getMockBuilder(Reference\RemoteKey::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['build'])
-            ->getMock();
+        $resolved = $this->createMock(Reference\RemoteKey::class);
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
         $builder->setClass(Reference\LocalKey::class);

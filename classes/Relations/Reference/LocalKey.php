@@ -16,27 +16,28 @@ class LocalKey extends Reference
     private $remoteKey;
 
     /** @var string */
-    private $remoteKeyString;
+    private $remoteKeyColumn;
 
     /** @var RepositoryInterface */
     private $remoteRepository;
 
     /**
      * LocalKey constructor.
+     *
      * @param Property            $localForeignKey
      * @param Property            $remoteKey
-     * @param string              $remoteKeyString
+     * @param string              $remoteKeyColumn
      * @param RepositoryInterface $remoteRepository
      */
     public function __construct(
         Property $localForeignKey,
         Property $remoteKey,
-        string $remoteKeyString,
+        string $remoteKeyColumn,
         RepositoryInterface $remoteRepository
     ) {
         $this->localForeignKey  = $localForeignKey;
         $this->remoteKey        = $remoteKey;
-        $this->remoteKeyString  = $remoteKeyString;
+        $this->remoteKeyColumn  = $remoteKeyColumn;
         $this->remoteRepository = $remoteRepository;
     }
 
@@ -57,7 +58,7 @@ class LocalKey extends Reference
     {
         $identifier = $this->localForeignKey->get($local);
 
-        return $this->remoteRepository->select()->where([$this->remoteKeyString => $identifier]);
+        return $this->remoteRepository->select()->where([$this->remoteKeyColumn => $identifier]);
     }
 
     /**

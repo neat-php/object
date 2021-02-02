@@ -5,8 +5,12 @@ namespace Neat\Object\Test\Relations;
 use Neat\Object\Manager;
 use Neat\Object\Relations\Many;
 use Neat\Object\Relations\One;
+use Neat\Object\Relations\Reference\JunctionTableBuilder;
+use Neat\Object\Relations\Reference\LocalKeyBuilder;
+use Neat\Object\Relations\Reference\RemoteKeyBuilder;
 use Neat\Object\Relations\Relation;
 use Neat\Object\Test\Helper\Address;
+use Neat\Object\Test\Helper\CallableMock;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\Type;
 use Neat\Object\Test\Helper\User;
@@ -32,6 +36,10 @@ class RelationsTest extends TestCase
         $expected = new One(Manager::get()->remoteKey(User::class, Address::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->hasOne(Address::class));
+
+        $configure = $this->createPartialMock(CallableMock::class, ['__invoke']);
+        $configure->expects($this->once())->method('__invoke')->with($this->isInstanceOf(RemoteKeyBuilder::class));
+        $user->hasOne(Address::class, 'hasOneAddress', $configure);
     }
 
     /**
@@ -50,6 +58,10 @@ class RelationsTest extends TestCase
         $expected = new Many(Manager::get()->remoteKey(User::class, Address::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->hasMany(Address::class));
+
+        $configure = $this->createPartialMock(CallableMock::class, ['__invoke']);
+        $configure->expects($this->once())->method('__invoke')->with($this->isInstanceOf(RemoteKeyBuilder::class));
+        $user->hasMany(Address::class, 'hasManyAddresses', $configure);
     }
 
     /**
@@ -68,6 +80,10 @@ class RelationsTest extends TestCase
         $expected = new One(Manager::get()->localKey(User::class, Type::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->belongsToOne(Type::class));
+
+        $configure = $this->createPartialMock(CallableMock::class, ['__invoke']);
+        $configure->expects($this->once())->method('__invoke')->with($this->isInstanceOf(LocalKeyBuilder::class));
+        $user->belongsToOne(Type::class, 'belongsToOneType', $configure);
     }
 
     /**
@@ -87,5 +103,9 @@ class RelationsTest extends TestCase
         $expected = new Many(Manager::get()->junctionTable(User::class, Address::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->belongsToMany(Address::class));
+
+        $configure = $this->createPartialMock(CallableMock::class, ['__invoke']);
+        $configure->expects($this->once())->method('__invoke')->with($this->isInstanceOf(JunctionTableBuilder::class));
+        $user->belongsToMany(Address::class, 'belongsToManyAddress', $configure);
     }
 }

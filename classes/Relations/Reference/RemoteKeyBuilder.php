@@ -3,95 +3,27 @@
 namespace Neat\Object\Relations\Reference;
 
 use Neat\Object\Manager;
-use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\ReferenceBuilder;
-use Neat\Object\RepositoryInterface;
 
 class RemoteKeyBuilder implements ReferenceBuilder
 {
     use Builder;
 
-    /** @var Property */
-    private $localKey;
-
-    /** @var Property */
-    private $remoteForeignKey;
-
-    /** @var string */
-    private $remoteKey;
-
-    /** @var RepositoryInterface */
-    private $remoteRepository;
-
     /**
-     * RemoteKeyBuilder constructor.
-     *
      * @param Manager      $manager
-     * @param class-string $local
-     * @param class-string $remote
+     * @param class-string $localClass
+     * @param class-string $remoteClass
      */
-    public function __construct(Manager $manager, string $local, string $remote)
+    public function __construct(Manager $manager, string $localClass, string $remoteClass)
     {
-        $policy = $manager->policy();
-        $this->init($manager, $policy, RemoteKey::class);
-        $localKey         = $policy->key($local);
-        $foreignKey       = $policy->foreignKey($local);
-        $localProperties  = $policy->properties($local);
-        $remoteProperties = $policy->properties($remote);
-
-        $this->localKey         = $localProperties[reset($localKey)] ?? null;
-        $this->remoteForeignKey = $remoteProperties[$foreignKey] ?? null;
-        $this->remoteKey        = $foreignKey;
-        $this->remoteRepository = $manager->repository($remote);
+        $this->init($manager, RemoteKey::class, $localClass, $remoteClass);
+        $this->initLocalKeyColumn($this->keyColumn($localClass));
+        $this->initRemoteKeyColumn($this->foreignKeyColumn($localClass));
     }
 
     protected function build(): Reference
     {
-        return new $this->class($this->localKey, $this->remoteForeignKey, $this->remoteKey, $this->remoteRepository);
-    }
-
-    /**
-     * @param Property $localKey
-     * @return $this
-     */
-    public function setLocalKey(Property $localKey): self
-    {
-        $this->localKey = $localKey;
-
-        return $this;
-    }
-
-    /**
-     * @param Property $remoteKey
-     * @return $this
-     */
-    public function setRemoteKey(Property $remoteKey): self
-    {
-        $this->remoteForeignKey = $remoteKey;
-
-        return $this;
-    }
-
-    /**
-     * @param string $remoteKeyString
-     * @return $this
-     */
-    public function setRemoteKeyString(string $remoteKeyString): self
-    {
-        $this->remoteKey = $remoteKeyString;
-
-        return $this;
-    }
-
-    /**
-     * @param RepositoryInterface $remoteRepository
-     * @return $this
-     */
-    public function setRemoteRepository(RepositoryInterface $remoteRepository): self
-    {
-        $this->remoteRepository = $remoteRepository;
-
-        return $this;
+        return new $this->class($this->localKeyProperty, $this->remoteKeyProperty, $this->remoteKeyColumn, $this->remoteRepository);
     }
 }
