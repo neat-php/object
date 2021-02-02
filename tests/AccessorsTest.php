@@ -3,6 +3,7 @@
 namespace Neat\Object\Test;
 
 use Neat\Object\Manager;
+use Neat\Object\Policy;
 use Neat\Object\Query;
 use Neat\Object\Relations\Many;
 use Neat\Object\Relations\One;
@@ -12,6 +13,13 @@ use PHPUnit\Framework\TestCase;
 class AccessorsTest extends TestCase
 {
     use Helper\Factory;
+
+    public function policy(): Policy
+    {
+        return new Policy(null, function (string $singular) {
+            return $singular . 's';
+        });
+    }
 
     public function provideAccessorCalls(): array
     {

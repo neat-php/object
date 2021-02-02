@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Relation $configure parameter of type callable(ReferenceBuilder).
 - Support for setting local and remote keys using property or column names as string.
 - Relation accessor methods by using the Accessors trait.
+- Policy accessorRelationMethod() to determine the relation targeted by calling an accessor.
+- Policy constructor parameter $pluralize.
 
 ### Deprecated
 - ReferenceBuilder setRemoteKeyString() in favour of setRemoteKeyColumn().

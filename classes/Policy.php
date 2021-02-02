@@ -19,14 +19,19 @@ class Policy
     /** @var EventDispatcherInterface|null */
     private $dispatcher;
 
+    /** @var callable|null @psalm-var callable(string):string|null */
+    private $pluralize;
     /**
      * Policy constructor
      *
      * @param EventDispatcherInterface|null $dispatcher
+     * @param callable|null                 $pluralize
+     * @psalm-param callable(string):string|null $pluralize
      */
-    public function __construct(EventDispatcherInterface $dispatcher = null)
+    public function __construct(EventDispatcherInterface $dispatcher = null, callable $pluralize = null)
     {
         $this->dispatcher = $dispatcher;
+        $this->pluralize  = $pluralize;
     }
 
     /**
@@ -241,30 +246,8 @@ class Policy
      */
     public function accessorRelationMethod(string $operation, string $relation): string
     {
-        $plural = array(
-            '/(quiz)$/i'               => "$1zes",
-            '/^(ox)$/i'                => "$1en",
-            '/([m|l])ouse$/i'          => "$1ice",
-            '/(matr|vert|ind)ix|ex$/i' => "$1ices",
-            '/(x|ch|ss|sh)$/i'         => "$1es",
-            '/([^aeiouy]|qu)y$/i'      => "$1ies",
-            '/(hive)$/i'               => "$1s",
-            '/(?:([^f])fe|([lr])f)$/i' => "$1$2ves",
-            '/(shea|lea|loa|thie)f$/i' => "$1ves",
-            '/sis$/i'                  => "ses",
-            '/([ti])um$/i'             => "$1a",
-            '/(tomat|potat|ech|her|vet)o$/i'=> "$1oes",
-            '/(bu)s$/i'                => "$1ses",
-            '/(alias)$/i'              => "$1es",
-            '/(octop)us$/i'            => "$1i",
-            '/(ax|test)is$/i'          => "$1es",
-            '/(us)$/i'                 => "$1es",
-            '/s$/i'                    => "s",
-            '/$/'                      => "s"
-        );
-
-        if (in_array(strtolower($operation), ['add', 'has', 'remove'])) {
-            $relation = preg_replace(array_keys($plural), array_values($plural), $relation);
+        if ($this->pluralize && in_array(strtolower($operation), ['add', 'has', 'remove'])) {
+            $relation = ($this->pluralize)($relation);
         }
 
         return lcfirst($relation);
