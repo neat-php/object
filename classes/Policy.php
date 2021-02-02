@@ -19,14 +19,19 @@ class Policy
     /** @var EventDispatcherInterface|null */
     private $dispatcher;
 
+    /** @var callable|null @psalm-var callable(string):string|null */
+    private $pluralize;
     /**
      * Policy constructor
      *
      * @param EventDispatcherInterface|null $dispatcher
+     * @param callable|null                 $pluralize
+     * @psalm-param callable(string):string|null $pluralize
      */
-    public function __construct(EventDispatcherInterface $dispatcher = null)
+    public function __construct(EventDispatcherInterface $dispatcher = null, callable $pluralize = null)
     {
         $this->dispatcher = $dispatcher;
+        $this->pluralize  = $pluralize;
     }
 
     /**
@@ -230,6 +235,22 @@ class Policy
     public function updatedStamp(string $class): ?string
     {
         return property_exists($class, 'updatedAt') ? $this->column('updatedAt') : null;
+    }
+
+    /**
+     * Get accessor relation method
+     *
+     * @param string $operation
+     * @param string $relation
+     * @return string
+     */
+    public function accessorRelationMethod(string $operation, string $relation): string
+    {
+        if ($this->pluralize && in_array(strtolower($operation), ['add', 'has', 'remove'])) {
+            $relation = ($this->pluralize)($relation);
+        }
+
+        return lcfirst($relation);
     }
 
     /**

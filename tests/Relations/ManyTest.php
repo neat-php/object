@@ -60,6 +60,7 @@ class ManyTest extends TestCase
         $many = $this->many($reference);
 
         $this->assertSame([$address], $many->all());
+        $this->assertSame([$address], $many->get());
     }
 
     /**
@@ -76,6 +77,7 @@ class ManyTest extends TestCase
         $many = $this->many($reference);
 
         $this->assertSame([], $many->all());
+        $this->assertSame([], $many->get());
     }
 
     /**

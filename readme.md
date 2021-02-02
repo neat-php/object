@@ -279,6 +279,52 @@ class Appointment
 }
 ```
 
+## Accessors
+Accessor methods allow you to call methods like ```add```, ```all```, ```has```,
+```get```, ```remove```, ```select``` and ```set``` on your entity object
+directly:
+```php
+class UserAccount
+{
+    use Neat\Object\Storage;
+    use Neat\Object\Relations;
+
+    // Use the Accessors trait to add accessor methods
+    use Neat\Object\Accessors;
+
+    public function address(): Neat\Object\Relations\One
+    {
+        return $this->belongsToOne(Address::class);
+    }
+
+    public function roles(): Neat\Object\Relations\Many
+    {
+        return $this->belongsToMany(Role::class);
+    }
+}
+
+$user = UserAccount::one(...);
+
+$user->getAddress(); // same as $user->address()->get();
+$user->setAddress(...); // same as $user->address()->set(...);
+
+$user->addRole(...); // same as $user->roles()->add(...);
+$user->hasRole(...); // same as $user->roles()->has(...);
+$user->deleteRole(...); // same as $user->roles()->delete(...);
+$user->getRoles(); // same as $user->roles()->get();
+$user->selectRoles(); // same as $user->roles()->select();
+```
+
+Translating ```$user->addRole()``` to ```$user->roles()->add()``` is done by
+the Policy. In its constructor you can provide a pluralize function to allow
+for proper translations:
+```php
+// Use the Policy with custom $pluralize function to initialize your Manager
+$policy = new Neat\Object\Policy(null, function (string $singular): string {
+    return $singular . 's'; // lousy way of pluralizing relation names
+});
+```
+
 ## Collections
 Collections wrap an array of multiple items and offer a chainable way of
 accessing these items using several operations. Relations to multiple
