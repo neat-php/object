@@ -23,10 +23,9 @@ trait ReferenceFactory
      */
     public function remoteKey(string $local, string $remote, callable $configure = null): RemoteKey
     {
-        /** @var RemoteKey $reference */
-        $reference = $this->buildRemoteKey("{$local}remote{$remote}", $local, $remote, $configure)->resolve();
-
-        return $reference;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return $this->buildRemoteKey("{$local}remote{$remote}", $local, $remote, $configure)->resolve();
     }
 
     /**
@@ -65,10 +64,9 @@ trait ReferenceFactory
      */
     public function localKey(string $local, string $remote, callable $configure = null): LocalKey
     {
-        /** @var LocalKey $reference */
-        $reference = $this->buildLocalKey("{$local}local{$remote}", $local, $remote, $configure)->resolve();
-
-        return $reference;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return $this->buildLocalKey("{$local}local{$remote}", $local, $remote, $configure)->resolve();
     }
 
     /**
@@ -107,11 +105,9 @@ trait ReferenceFactory
      */
     public function junctionTable(string $local, string $remote, callable $configure = null): JunctionTable
     {
-        /** @var JunctionTable $reference */
-        $reference = $this->buildJunctionTable("{$local}junctionTable{$remote}", $local, $remote,
-            $configure)->resolve();
-
-        return $reference;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return $this->buildJunctionTable("{$local}junctionTable{$remote}", $local, $remote, $configure)->resolve();
     }
 
     /**
