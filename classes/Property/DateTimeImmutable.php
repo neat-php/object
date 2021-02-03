@@ -11,7 +11,7 @@ class DateTimeImmutable extends Property
     /**
      * Cast DateTimeImmutable to string
      *
-     * @param \DateTimeImmutable $value
+     * @param mixed $value
      * @return string
      * @throws Exception
      */

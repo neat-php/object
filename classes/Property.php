@@ -68,6 +68,7 @@ class Property
      *
      * @param string $value
      * @return mixed
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function fromString(string $value)
     {
@@ -78,9 +79,9 @@ class Property
      * Get Value
      *
      * @param object $object
-     * @return mixed
+     * @return string|null
      */
-    public function get(object $object)
+    public function get(object $object): ?string
     {
         $value = $this->reflection->getValue($object);
         if ($value === null) {
@@ -97,7 +98,7 @@ class Property
      * @param mixed  $value
      * @return void
      */
-    public function set(object $object, $value)
+    public function set(object $object, $value): void
     {
         if ($value !== null) {
             $value = $this->fromString($value);

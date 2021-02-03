@@ -3,6 +3,7 @@
 namespace Neat\Object\Test\Helper;
 
 use DateTime;
+use Neat\Object\Relations;
 use Neat\Object\Test\Helper\Event\Custom;
 
 class User extends Entity
@@ -72,22 +73,22 @@ class User extends Entity
      */
     public static $nostorage;
 
-    public function address()
+    public function address(): Relations\One
     {
         return $this->hasOne(Address::class);
     }
 
-    public function properties()
+    public function properties(): Relations\Many
     {
         return $this->hasMany(Property::class);
     }
 
-    public function type()
+    public function type(): Relations\One
     {
         return $this->belongsToOne(Type::class);
     }
 
-    public function groups()
+    public function groups(): Relations\Many
     {
         return $this->belongsToMany(Group::class);
     }

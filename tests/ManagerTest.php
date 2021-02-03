@@ -14,7 +14,7 @@ class ManagerTest extends TestCase
     /**
      * Test connection getter
      */
-    public function testConnection()
+    public function testConnection(): void
     {
         $connection = $this->connection();
         $policy     = $this->policy();
@@ -26,7 +26,7 @@ class ManagerTest extends TestCase
     /**
      * Test policy getter
      */
-    public function testPolicy()
+    public function testPolicy(): void
     {
         $connection = $this->connection();
         $policy     = $this->policy();
@@ -40,7 +40,7 @@ class ManagerTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testGetAfterUnset()
+    public function testGetAfterUnset(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Object manager not set: default');
@@ -54,12 +54,13 @@ class ManagerTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testGetAndSet()
+    public function testGetAndSet(): void
     {
         Manager::set($manager = $this->manager());
 
         $this->assertTrue(Manager::isset());
         $this->assertSame($manager, Manager::get());
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->assertSame($manager, Manager::get('default'));
     }
 
@@ -68,7 +69,7 @@ class ManagerTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testGetAndSetFactory()
+    public function testGetAndSetFactory(): void
     {
         Manager::setFactory(
             function () {
@@ -83,7 +84,7 @@ class ManagerTest extends TestCase
     /**
      * @runInSeparateProcess enabled
      */
-    public function testSet()
+    public function testSet(): void
     {
         Manager::setFactory(
             function () {

@@ -18,7 +18,7 @@ class LocalKeyBuilderTest extends TestCase
         return new LocalKeyBuilder($this->manager(), Address::class, User::class);
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         $repository = $this->repository(Address::class);
         $builder    = $this->localKeyBuilder();
@@ -37,7 +37,7 @@ class LocalKeyBuilderTest extends TestCase
         );
     }
 
-    public function testBuildColumn()
+    public function testBuildColumn(): void
     {
         $repository = $this->repository(Address::class);
         $builder    = $this->localKeyBuilder();

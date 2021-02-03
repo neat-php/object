@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection SqlResolve */
+
 namespace Neat\Object\Test\Decorator;
 
 use DateTime;
@@ -24,7 +26,7 @@ class SoftDeleteTest extends TestCase
     /**
      * Test iterate
      */
-    public function testIterate()
+    public function testIterate(): void
     {
         $repository = $this->repository();
         $column     = 'deleted_at';
@@ -53,7 +55,7 @@ class SoftDeleteTest extends TestCase
         }
     }
 
-    public function testIterateSQLQuery()
+    public function testIterateSQLQuery(): void
     {
         $repository = $this->repository();
         $column     = 'deleted_at';
@@ -76,15 +78,15 @@ class SoftDeleteTest extends TestCase
         }
     }
 
-    public function provideQueryBuilderData()
+    public function provideQueryBuilderData(): array
     {
         return [
-            ['all', null, $this->query(['where']), ['test']],
-            ['all', ['param' => 1], $this->query(['where']), ['test']],
-            ['one', null, $this->query(['where']), 'test'],
-            ['one', ['param' => 1], $this->query(['where']), 'test'],
-            ['collection', null, $this->query(['where']), new Collection(['test'])],
-            ['collection', ['param' => 1], $this->query(['where']), new Collection(['test'])],
+            ['all', null, $this->query(['where']), [(object) []]],
+            ['all', ['param' => 1], $this->query(['where']), [(object) []]],
+            ['one', null, $this->query(['where']), (object) []],
+            ['one', ['param' => 1], $this->query(['where']), (object) []],
+            ['collection', null, $this->query(['where']), new Collection([(object) []])],
+            ['collection', ['param' => 1], $this->query(['where']), new Collection([(object) []])],
         ];
     }
 
@@ -95,7 +97,7 @@ class SoftDeleteTest extends TestCase
      * @param Query|MockObject $query
      * @param                  $result
      */
-    public function testQueryBuilders(string $method, $queryParameters, Query $query, $result)
+    public function testQueryBuilders(string $method, $queryParameters, Query $query, $result): void
     {
         $repository = $this->repository();
         $column     = 'deleted_at';
@@ -116,14 +118,14 @@ class SoftDeleteTest extends TestCase
         $this->assertSame($result, $softDelete->{$method}($queryParameters));
     }
 
-    public function providerSQLData()
+    public function providerSQLData(): array
     {
         $query = new SQLQuery($this->connection(), "SELECT * FROM `user`");
 
         return [
-            ['all', $query, ['test']],
-            ['one', $query, 'test'],
-            ['collection', $query, new Collection(['test'])],
+            ['all', $query, [(object) []]],
+            ['one', $query, (object) []],
+            ['collection', $query, new Collection([(object) []])],
         ];
     }
 
@@ -133,7 +135,7 @@ class SoftDeleteTest extends TestCase
      * @param SQLQuery $query
      * @param          $result
      */
-    public function testSQLQuery(string $method, SQLQuery $query, $result)
+    public function testSQLQuery(string $method, SQLQuery $query, $result): void
     {
         $repository = $this->repository();
         $column     = 'deleted_at';
@@ -163,16 +165,13 @@ class SoftDeleteTest extends TestCase
      */
     private function query(array $methods): QueryInterface
     {
-        return $this->getMockBuilder(Query::class)
-            ->setMethods($methods)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createPartialMock(Query::class, $methods);
     }
 
     /**
      * Test delete
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         $repository = $this->repository();
         $softDelete = new SoftDelete(

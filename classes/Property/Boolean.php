@@ -9,7 +9,7 @@ class Boolean extends Property
     /**
      * Cast boolean to string
      *
-     * @param bool $value
+     * @param mixed $value
      * @return string
      */
     public function toString($value): string

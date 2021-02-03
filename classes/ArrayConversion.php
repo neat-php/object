@@ -18,6 +18,7 @@ trait ArrayConversion
      */
     public function fromArray(array $data): self
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this::repository()->fromArray($this, $data);
     }
 

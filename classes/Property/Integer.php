@@ -9,7 +9,7 @@ class Integer extends Property
     /**
      * Cast value from bool to scalar
      *
-     * @param int $value
+     * @param mixed $value
      * @return string
      */
     public function toString($value): string

@@ -149,23 +149,26 @@ SQL;
      * @param string $class
      * @return RepositoryInterface
      */
-    public function repository(string $class)
+    public function repository(string $class): RepositoryInterface
     {
         return $this->policy()->repository($class, $this->connection());
     }
 
     public function propertyInteger(string $class, string $property): Property\Integer
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         return new Property\Integer(new ReflectionProperty($class, $property));
     }
 
     public function propertyDateTime(string $class, $property): Property\DateTime
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         return new Property\DateTime(new ReflectionProperty($class, $property));
     }
 
     public function property(string $class, $property): Property
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         return new Property(new ReflectionProperty($class, $property));
     }
 }

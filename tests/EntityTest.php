@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection SqlResolve */
+
 namespace Neat\Object\Test;
 
 use DateTime;
@@ -30,7 +32,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testHas()
+    public function testHas(): void
     {
         Manager::set($this->manager());
 
@@ -43,7 +45,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testSelect()
+    public function testSelect(): void
     {
         Manager::set($this->manager());
 
@@ -61,7 +63,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testQuery()
+    public function testQuery(): void
     {
         Manager::set($this->manager());
 
@@ -82,7 +84,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testSQL()
+    public function testSQL(): void
     {
         Manager::set($this->manager());
 
@@ -95,7 +97,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testGet()
+    public function testGet(): void
     {
         Manager::set($this->manager());
 
@@ -111,7 +113,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testOne()
+    public function testOne(): void
     {
         Manager::set($this->manager());
 
@@ -127,7 +129,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testAll()
+    public function testAll(): void
     {
         Manager::set($this->manager());
 
@@ -153,7 +155,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testCollection()
+    public function testCollection(): void
     {
         Manager::set($this->manager());
 
@@ -169,7 +171,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testIterate()
+    public function testIterate(): void
     {
         Manager::set($this->manager());
 
@@ -188,7 +190,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testStore()
+    public function testStore(): void
     {
         Manager::set($this->manager());
 
@@ -224,7 +226,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testLoad()
+    public function testLoad(): void
     {
         Manager::set($this->manager());
 
@@ -240,7 +242,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         Manager::set($this->manager());
 
@@ -265,7 +267,7 @@ class EntityTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testArrayConversion()
+    public function testArrayConversion(): void
     {
         Manager::set($this->manager());
 
@@ -293,7 +295,7 @@ class EntityTest extends TestCase
     /**
      * @runInSeparateProcess enabled
      */
-    public function testTrigger()
+    public function testTrigger(): void
     {
         $dispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
         Manager::set(new Manager($this->connection(), new Policy($dispatcher)));
@@ -309,7 +311,7 @@ class EntityTest extends TestCase
     /**
      * @runInSeparateProcess enabled
      */
-    public function testTriggerFails()
+    public function testTriggerFails(): void
     {
         $dispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
         Manager::set(new Manager($this->connection(), new Policy($dispatcher)));
@@ -325,7 +327,7 @@ class EntityTest extends TestCase
     /**
      * @runInSeparateProcess enabled
      */
-    public function testTriggerIfExists()
+    public function testTriggerIfExists(): void
     {
         $dispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
         Manager::set(new Manager($this->connection(), new Policy($dispatcher)));

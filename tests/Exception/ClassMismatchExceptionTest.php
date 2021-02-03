@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class ClassMismatchExceptionTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->assertSame(
             "Expected instanceof '" . LocalKey::class . "', got '" . RemoteKey::class . "'",

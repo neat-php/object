@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class NonExistingPropertyTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->assertSame(
             "Class: '" . User::class . "' doesn't have a property test",

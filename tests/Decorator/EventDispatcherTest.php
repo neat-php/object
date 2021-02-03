@@ -33,7 +33,7 @@ class EventDispatcherTest extends TestCase
      * @param string $postClass
      * @dataProvider provideMethods
      */
-    public function testMethod(string $method, object $in, $out, string $preClass, string $postClass)
+    public function testMethod(string $method, object $in, $out, string $preClass, string $postClass): void
     {
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher
@@ -52,11 +52,13 @@ class EventDispatcherTest extends TestCase
                 ->method('has')
                 ->willReturn(true);
         }
-        $repository
+        $expects = $repository
             ->expects($this->once())
             ->method($method)
-            ->with($in)
-            ->willReturn($out);
+            ->with($in);
+        if ($out !== null) {
+            $expects->willReturn($out);
+        }
 
         $eventDispatcher = new EventDispatcher($repository, $dispatcher, Events::EVENTS);
 
@@ -83,7 +85,7 @@ class EventDispatcherTest extends TestCase
      * @param string $class
      * @dataProvider provideEvents
      */
-    public function testEvent(string $class)
+    public function testEvent(string $class): void
     {
         $user  = new User();
         $event = new $class($user);

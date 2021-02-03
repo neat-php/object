@@ -45,7 +45,7 @@ class ManyTest extends TestCase
     /**
      * Test get
      */
-    public function testAll()
+    public function testAll(): void
     {
         $address         = new Address();
         $address->id     = 1;
@@ -66,7 +66,7 @@ class ManyTest extends TestCase
     /**
      * Test getEmpty
      */
-    public function testAllEmpty()
+    public function testAllEmpty(): void
     {
         $reference = $this->mockedRemoteKey();
         $reference
@@ -83,7 +83,7 @@ class ManyTest extends TestCase
     /**
      * Test set
      */
-    public function testSet()
+    public function testSet(): void
     {
         $address         = new Address();
         $address->id     = 1;
@@ -115,7 +115,7 @@ class ManyTest extends TestCase
     /**
      * Test add
      */
-    public function testAdd()
+    public function testAdd(): void
     {
         $address1         = new Address();
         $address1->id     = 1;
@@ -147,7 +147,7 @@ class ManyTest extends TestCase
         $many->store();
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $address1         = new Address();
         $address1->id     = 1;
@@ -182,7 +182,7 @@ class ManyTest extends TestCase
     /**
      * Test add multiple
      */
-    public function testAddMultiple()
+    public function testAddMultiple(): void
     {
         $address1         = new Address();
         $address1->userId = 1;
@@ -215,7 +215,7 @@ class ManyTest extends TestCase
     /**
      * Test remove
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $address1         = new Address();
         $address1->id     = 1;
@@ -237,7 +237,7 @@ class ManyTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getRemoteKeyValue')
             ->with($address1)
-            ->willReturn($address1->id);
+            ->willReturn([$address1->id]);
         $reference
             ->expects($this->once())
             ->method('store')
@@ -251,7 +251,7 @@ class ManyTest extends TestCase
     /**
      * Test remove
      */
-    public function testRemoveNonRelatedArticle()
+    public function testRemoveNonRelatedArticle(): void
     {
         $address1         = new Address();
         $address1->id     = 1;
@@ -275,7 +275,7 @@ class ManyTest extends TestCase
         $many->store();
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         $reference = $this->getMockForAbstractClass(Reference::class);
         $user      = new User();

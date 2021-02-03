@@ -33,7 +33,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function get($id)
+    public function get($id): ?object
     {
         return $this->repository()->get($id);
     }
@@ -65,7 +65,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function one($conditions = null)
+    public function one($conditions = null): ?object
     {
         return $this->repository()->one($conditions);
     }
@@ -97,7 +97,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function store($entity)
+    public function store(object $entity): void
     {
         $this->repository()->store($entity);
     }
@@ -105,7 +105,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function insert(array $data)
+    public function insert(array $data): int
     {
         return $this->repository()->insert($data);
     }
@@ -113,7 +113,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function update($id, array $data)
+    public function update($id, array $data): int
     {
         return $this->repository()->update($id, $data);
     }
@@ -121,7 +121,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function load($entity)
+    public function load(object $entity): object
     {
         return $this->repository()->load($entity);
     }
@@ -129,7 +129,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function delete($entity)
+    public function delete(object $entity): int
     {
         return $this->repository()->delete($entity);
     }
@@ -137,7 +137,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function toArray($entity): array
+    public function toArray(object $entity): array
     {
         return $this->repository()->toArray($entity);
     }
@@ -145,7 +145,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function fromArray($entity, array $data)
+    public function fromArray(object $entity, array $data): object
     {
         return $this->repository()->fromArray($entity, $data);
     }
@@ -153,7 +153,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function create(array $data)
+    public function create(array $data): object
     {
         return $this->repository()->create($data);
     }
@@ -161,7 +161,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function identifier($entity)
+    public function identifier(object $entity): array
     {
         return $this->repository()->identifier($entity);
     }

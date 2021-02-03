@@ -4,7 +4,7 @@ namespace Neat\Object\Decorator;
 
 class CreatedAt extends TimeStamp
 {
-    public function store($entity)
+    public function store(object $entity): void
     {
         if (!$this->property->get($entity)) {
             $this->property->set($entity, 'now');

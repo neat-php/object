@@ -7,35 +7,19 @@ use Neat\Object\Collection;
 use Neat\Object\Exception\LayerNotFoundException;
 use Neat\Object\Query;
 use Neat\Object\Repository;
-use Neat\Object\RepositoryDecorator;
 use Neat\Object\RepositoryInterface;
 use Neat\Object\SQLQuery;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\RepositoryDecoratorMock;
 use Neat\Object\Test\Helper\Type;
 use Neat\Object\Test\Helper\User;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryDecoratorTest extends TestCase
 {
     use Factory;
 
-    /** @var RepositoryInterface|MockObject */
-    private $repository;
-
-    /** @var RepositoryDecorator */
-    private $decorator;
-
-    private function decorator(): RepositoryDecoratorMock
-    {
-        $this->repository = $this->getMockForAbstractClass(RepositoryInterface::class);
-        $this->decorator  = new RepositoryDecoratorMock($this->repository);
-
-        return $this->decorator;
-    }
-
-    public function testLayerReturnsInner()
+    public function testLayerReturnsInner(): void
     {
         $repository = $this->repository(Type::class);
         $decorator  = new RepositoryDecoratorMock($repository);
@@ -43,7 +27,7 @@ class RepositoryDecoratorTest extends TestCase
         $this->assertSame($repository, $decorator->layer(Repository::class));
     }
 
-    public function testLayerReturnsSelf()
+    public function testLayerReturnsSelf(): void
     {
         $repository = $this->repository(Type::class);
         $decorator  = new RepositoryDecoratorMock($repository);
@@ -51,7 +35,7 @@ class RepositoryDecoratorTest extends TestCase
         $this->assertSame($decorator, $decorator->layer(RepositoryDecoratorMock::class));
     }
 
-    public function testLayerNotFoundException()
+    public function testLayerNotFoundException(): void
     {
         $repository = $this->repository(Type::class);
 
@@ -60,7 +44,7 @@ class RepositoryDecoratorTest extends TestCase
         $repository->layer(RepositoryDecoratorMock::class);
     }
 
-    public function provideMethodData()
+    public function provideMethodData(): array
     {
         $connection = $this->connection();
 
@@ -93,7 +77,7 @@ class RepositoryDecoratorTest extends TestCase
             ['update', [1, $arrayData], 1],
             ['load', [$user], $user],
             ['delete', [$user], 1],
-            ['delete', [$user], false],
+            ['delete', [$user], 0],
             ['toArray', [$user], $arrayData],
             ['fromArray', [$user, $arrayData], $user],
             ['create', [$arrayData], $user],
@@ -110,8 +94,9 @@ class RepositoryDecoratorTest extends TestCase
      */
     public function testMethods(string $method, array $arguments = [], $returnValue = null, $void = false)
     {
-        $decorator = $this->decorator();
-        $expects   = $this->repository->expects($this->once())->method($method);
+        $repository = $this->getMockForAbstractClass(RepositoryInterface::class);
+        $decorator  = new RepositoryDecoratorMock($repository);
+        $expects    = $repository->expects($this->once())->method($method);
         if ($arguments) {
             $expects->with(...$arguments);
         }

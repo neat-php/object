@@ -11,7 +11,7 @@ class DateTime extends Property
     /**
      * Cast value from bool to scalar
      *
-     * @param \DateTime $value
+     * @param mixed $value
      * @return string
      * @throws Exception
      */

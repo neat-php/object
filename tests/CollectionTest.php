@@ -36,7 +36,7 @@ class CollectionTest extends TestCase
     /**
      * Test all
      */
-    public function testAll()
+    public function testAll(): void
     {
         $this->assertSame($this->items(), $this->collection()->all());
     }
@@ -44,7 +44,7 @@ class CollectionTest extends TestCase
     /**
      * Test count
      */
-    public function testCount()
+    public function testCount(): void
     {
         $this->assertSame(3, $this->collection()->count());
     }
@@ -52,7 +52,7 @@ class CollectionTest extends TestCase
     /**
      * Test first
      */
-    public function testFirst()
+    public function testFirst(): void
     {
         $items = $this->items();
         $first = reset($items);
@@ -65,7 +65,7 @@ class CollectionTest extends TestCase
     /**
      * Test last
      */
-    public function testLast()
+    public function testLast(): void
     {
         $items = $this->items();
         $last  = end($items);
@@ -74,7 +74,7 @@ class CollectionTest extends TestCase
         $this->assertSame($last, $this->collection()->last());
     }
 
-    public function testFirstLastEmptyCollection()
+    public function testFirstLastEmptyCollection(): void
     {
         $collection = new Collection([]);
         $this->assertNull($collection->first());
@@ -84,7 +84,7 @@ class CollectionTest extends TestCase
     /**
      * Test array offset exists
      */
-    public function testOffsetExists()
+    public function testOffsetExists(): void
     {
         $collection = $this->collection();
 
@@ -95,7 +95,7 @@ class CollectionTest extends TestCase
     /**
      * Test array offset unset
      */
-    public function testOffsetUnset()
+    public function testOffsetUnset(): void
     {
         $collection = $this->collection();
 
@@ -106,7 +106,7 @@ class CollectionTest extends TestCase
     /**
      * Test array offset get
      */
-    public function testOffsetGet()
+    public function testOffsetGet(): void
     {
         $items = $this->items();
         $first = reset($items);
@@ -116,7 +116,7 @@ class CollectionTest extends TestCase
     /**
      * Test array offset set
      */
-    public function testOffsetSet()
+    public function testOffsetSet(): void
     {
         $collection = $this->collection();
 
@@ -128,7 +128,7 @@ class CollectionTest extends TestCase
     /**
      * Test push
      */
-    public function testPush()
+    public function testPush(): void
     {
         $arrayCollection = new Collection([]);
         $arrayCollection->push("test");
@@ -139,7 +139,7 @@ class CollectionTest extends TestCase
     /**
      * Test column
      */
-    public function testColumn()
+    public function testColumn(): void
     {
         $expected = new Collection(array_values($this->firstNames()));
         $this->assertEquals($expected, $this->collection()->column('firstName'));
@@ -148,7 +148,7 @@ class CollectionTest extends TestCase
     /**
      * Test map
      */
-    public function testMap()
+    public function testMap(): void
     {
         $firstNameCollection = new Collection($this->firstNames());
         $this->assertEquals(
@@ -164,7 +164,7 @@ class CollectionTest extends TestCase
     /**
      * Test filter
      */
-    public function testFilter()
+    public function testFilter(): void
     {
         $initial    = [null, false, true, 0, 1];
         $collection = new Collection($initial);
@@ -179,7 +179,7 @@ class CollectionTest extends TestCase
     /**
      * Test callback filter
      */
-    public function testCallbackFilter()
+    public function testCallbackFilter(): void
     {
         $expected = [
             'jdoe'    => $this->items()['jdoe'],
@@ -194,7 +194,7 @@ class CollectionTest extends TestCase
         $this->assertEquals(new Collection($expected), $filtered);
     }
 
-    public function testSort()
+    public function testSort(): void
     {
         $initial    = [5, 1, 3, 2, 4];
         $collection = new Collection($initial);
@@ -206,7 +206,7 @@ class CollectionTest extends TestCase
         $this->assertNotSame($collection, $sorted);
     }
 
-    public function testCallbackSort()
+    public function testCallbackSort(): void
     {
         $initial    = [5, 1, 3, 2, 4];
         $collection = new Collection($initial);
@@ -225,7 +225,7 @@ class CollectionTest extends TestCase
     /**
      * Test get iterator
      */
-    public function testGetIterator()
+    public function testGetIterator(): void
     {
         $arrayCollection = new Collection(['foo' => 'bar',]);
         foreach ($arrayCollection as $key => $value) {
@@ -238,7 +238,7 @@ class CollectionTest extends TestCase
     /**
      * Test untyped collection
      */
-    public function testUntypedCollection()
+    public function testUntypedCollection(): void
     {
         $user       = new User();
         $collection = new Collection([$user]);
@@ -250,7 +250,7 @@ class CollectionTest extends TestCase
     /**
      * Test json serialize
      */
-    public function testJsonSerialize()
+    public function testJsonSerialize(): void
     {
         $this->assertEquals(json_encode($this->items()), json_encode($this->collection()));
     }
@@ -260,7 +260,7 @@ class CollectionTest extends TestCase
      *
      * @return array
      */
-    private function firstNames()
+    private function firstNames(): array
     {
         return array_map(
             function ($data) {

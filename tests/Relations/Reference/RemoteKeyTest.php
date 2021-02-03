@@ -49,7 +49,7 @@ class RemoteKeyTest extends TestCase
     /**
      * Test store
      */
-    public function testStore()
+    public function testStore(): void
     {
         $key = $this->remoteKey();
 
@@ -79,7 +79,7 @@ class RemoteKeyTest extends TestCase
     /**
      * Test diff
      */
-    public function testDiff()
+    public function testDiff(): void
     {
         $address1      = new Address();
         $address1->id  = 1;
@@ -98,7 +98,7 @@ class RemoteKeyTest extends TestCase
     /**
      * Test load
      */
-    public function testLoad()
+    public function testLoad(): void
     {
         $key = $this->remoteKey();
 

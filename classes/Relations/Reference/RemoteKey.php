@@ -44,7 +44,7 @@ class RemoteKey extends Reference
     /**
      * @inheritDoc
      */
-    public function load($local): array
+    public function load(object $local): array
     {
         return $this->select($local)->all();
     }
@@ -52,7 +52,7 @@ class RemoteKey extends Reference
     /**
      * @inheritDoc
      */
-    public function select($local): Query
+    public function select(object $local): Query
     {
         $remoteKey = $this->localKeyProperty->get($local);
 
@@ -62,7 +62,7 @@ class RemoteKey extends Reference
     /**
      * @inheritDoc
      */
-    public function store($local, array $remotes)
+    public function store(object $local, array $remotes): void
     {
         $id     = $this->localKeyProperty->get($local);
         $before = $this->load($local);
@@ -84,7 +84,7 @@ class RemoteKey extends Reference
     /**
      * @inheritDoc
      */
-    public function getRemoteKeyValue($remote)
+    public function getRemoteKeyValue(object $remote): array
     {
         return $this->remoteRepository->identifier($remote);
     }

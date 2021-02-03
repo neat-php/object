@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - $key parameter to ReferenceFactory methods (breaks backward compatibility).
+- Type hints (may break backward compatibility when you extend Neat Object classes, which is inherently bad).
 
 ### Changed
 - Improved Relations efficiency by caching relations and references instead of builders.

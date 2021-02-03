@@ -13,7 +13,7 @@ trait Assertions
      * @param string $query
      * @return string
      */
-    protected function minifySQL($query)
+    protected function minifySQL(string $query): string
     {
         $replace = [
             '|\s+|m'     => ' ',
@@ -32,7 +32,7 @@ trait Assertions
      * @param string $expected
      * @param string $actual
      */
-    protected function assertSQL($expected, $actual)
+    protected function assertSQL(string $expected, string $actual)
     {
         $this->assertEquals(
             $this->minifySQL($expected),
