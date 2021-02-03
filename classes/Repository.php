@@ -7,7 +7,6 @@ use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
 use Neat\Object\Exception\LayerNotFoundException;
 use Neat\Object\Relations\Relation;
-use Neat\Object\Relations\RelationBuilder;
 use RuntimeException;
 use Traversable;
 
@@ -197,12 +196,7 @@ class Repository implements RepositoryInterface
     {
         $relations = [];
         if (method_exists($entity, 'relations')) {
-            $relations = array_map(
-                function (RelationBuilder $builder): Relation {
-                    return $builder->resolve();
-                },
-                $entity->relations()->all()
-            );
+            $relations = $entity->relations()->all();
         }
         $this->setRelations($relations);
         $data       = $this->toArray($entity);

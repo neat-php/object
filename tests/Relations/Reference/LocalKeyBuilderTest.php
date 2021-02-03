@@ -55,25 +55,4 @@ class LocalKeyBuilderTest extends TestCase
             $builder->resolve()
         );
     }
-
-    public function testBuildDeprecated()
-    {
-        $repository = $this->repository(Address::class);
-        $builder    = $this->localKeyBuilder();
-        $localKey   = $builder->property(Address::class, 'street');
-        $this->assertSame($builder, $builder->setLocalKey($localKey));
-        $remoteKey = $builder->property(User::class, 'typeId');
-        $this->assertSame($builder, $builder->setRemoteKey($remoteKey));
-        $this->assertSame($builder, $builder->setRemoteRepository($repository));
-
-        $this->assertEquals(
-            new LocalKey(
-                $localKey,
-                $remoteKey,
-                'type_id',
-                $repository
-            ),
-            $builder->resolve()
-        );
-    }
 }

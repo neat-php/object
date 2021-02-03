@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- $key parameter to ReferenceFactory methods (breaks backward compatibility).
+
+### Changed
+- Improved Relations efficiency by caching relations and references instead of builders.
+
+### Removed
+- ReferenceBuilder setRemoteKeyString().
+- setJunctionTableRemoteForeignKey() and setJunctionTableLocalForeignKey().
+- build*() methods in the Relations trait and ReferenceFactory trait.
+- Passing a Property instance to setLocalKey and setRemoteKey.
+- RelationBuilder (the deprecated referenceFactory method was its only reason of existence)
 
 ## [0.11.10] - 2021-02-03
 ### Added

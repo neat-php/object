@@ -80,16 +80,6 @@ class JunctionTableBuilder implements ReferenceBuilder
 
     /**
      * @param string $junctionTableLocalKeyColumn
-     * @return $this
-     * @deprecated Use setJunctionTableLocalKeyColumn instead
-     */
-    public function setJunctionTableLocalForeignKey(string $junctionTableLocalKeyColumn): self
-    {
-        return $this->setJunctionTableLocalKeyColumn($junctionTableLocalKeyColumn);
-    }
-
-    /**
-     * @param string $junctionTableLocalKeyColumn
      * @return self
      */
     public function setJunctionTableLocalKeyColumn(string $junctionTableLocalKeyColumn): self
@@ -97,16 +87,6 @@ class JunctionTableBuilder implements ReferenceBuilder
         $this->junctionTableLocalKeyColumn = $junctionTableLocalKeyColumn;
 
         return $this;
-    }
-
-    /**
-     * @param string $junctionTableRemoteKeyColumn
-     * @return $this
-     * @deprecated Use setJunctionTableRemoteKeyColumn instead
-     */
-    public function setJunctionTableRemoteForeignKey(string $junctionTableRemoteKeyColumn): self
-    {
-        return $this->setJunctionTableRemoteKeyColumn($junctionTableRemoteKeyColumn);
     }
 
     /**
