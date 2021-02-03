@@ -25,17 +25,14 @@ trait ReferenceFactory
     public function remoteKey(string $key, string $local, string $remote, callable $configure = null): RemoteKey
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->references->get(
-            $key,
-            function () use ($local, $remote, $configure) {
-                $builder = new RemoteKeyBuilder($this->manager(), $local, $remote);
-                if ($configure) {
-                    $configure($builder);
-                }
-
-                return $builder->resolve();
+        return $this->references->get($key, function () use ($local, $remote, $configure) {
+            $builder = new RemoteKeyBuilder($this->manager(), $local, $remote);
+            if ($configure) {
+                $configure($builder);
             }
-        );
+
+            return $builder->resolve();
+        });
     }
 
     /**
@@ -49,17 +46,14 @@ trait ReferenceFactory
     public function localKey(string $key, string $local, string $remote, callable $configure = null): LocalKey
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->references->get(
-            $key,
-            function () use ($local, $remote, $configure) {
-                $builder = new LocalKeyBuilder($this->manager(), $local, $remote);
-                if ($configure) {
-                    $configure($builder);
-                }
-
-                return $builder->resolve();
+        return $this->references->get($key, function () use ($local, $remote, $configure) {
+            $builder = new LocalKeyBuilder($this->manager(), $local, $remote);
+            if ($configure) {
+                $configure($builder);
             }
-        );
+
+            return $builder->resolve();
+        });
     }
 
     /**
@@ -73,17 +67,14 @@ trait ReferenceFactory
     public function junctionTable(string $key, string $local, string $remote, callable $configure = null): JunctionTable
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->references->get(
-            $key,
-            function () use ($local, $remote, $configure) {
-                $builder = new JunctionTableBuilder($this->manager(), $local, $remote);
-                if ($configure) {
-                    $configure($builder);
-                }
-
-                return $builder->resolve();
+        return $this->references->get($key, function () use ($local, $remote, $configure) {
+            $builder = new JunctionTableBuilder($this->manager(), $local, $remote);
+            if ($configure) {
+                $configure($builder);
             }
-        );
+
+            return $builder->resolve();
+        });
     }
 
     abstract public function manager(): Manager;

@@ -24,6 +24,11 @@ class RemoteKeyBuilder implements ReferenceBuilder
 
     protected function build(): Reference
     {
-        return new $this->class($this->localKeyProperty, $this->remoteKeyProperty, $this->remoteKeyColumn, $this->remoteRepository);
+        return new $this->class(
+            $this->localKeyProperty,
+            $this->remoteKeyProperty,
+            $this->remoteKeyColumn,
+            $this->remoteRepository
+        );
     }
 }
