@@ -4,44 +4,11 @@ namespace Neat\Object\Test\Helper;
 
 use Neat\Object\Manager;
 use Neat\Object\Policy;
-use Neat\Object\Relations\Reference;
 use Neat\Object\Relations\Reference\Builder;
 
 abstract class ReferenceBuilderMock
 {
     use Builder;
-
-    /**
-     * @return Reference|null
-     */
-    public function getResolved(): Reference
-    {
-        return $this->resolved;
-    }
-
-    /**
-     * @param Reference|null $resolved
-     */
-    public function setResolved(Reference $resolved)
-    {
-        $this->resolved = $resolved;
-    }
-
-    /**
-     * @return callable|null
-     */
-    public function getFactory(): callable
-    {
-        return $this->factory;
-    }
-
-    /**
-     * @param callable|null $factory
-     */
-    public function setFactory(callable $factory)
-    {
-        $this->factory = $factory;
-    }
 
     /**
      * @return Manager

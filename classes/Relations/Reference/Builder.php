@@ -14,12 +14,6 @@ use Neat\Object\RepositoryInterface;
 
 trait Builder
 {
-    /** @var Reference|null */
-    private $resolved;
-
-    /** @var callable|null */
-    private $factory;
-
     /** @var Manager */
     private $manager;
 
@@ -66,39 +60,18 @@ trait Builder
     }
 
     /**
-     * This method will resolve or return the reference
-     *  When the reference is not yet resolved, first the factory will be handled if available.
-     *  Next the build method will be called
+     * Resolve (build and check) the reference
      *
      * @return Reference
      */
     public function resolve(): Reference
     {
-        if ($this->resolved !== null) {
-            return $this->resolved;
-        }
-        if ($this->factory !== null) {
-            ($this->factory)($this);
-        }
-        $this->resolved = $this->build();
-        if (!$this->resolved instanceof $this->class) {
-            throw new ClassMismatchException($this->class, get_class($this->resolved));
+        $resolved = $this->build();
+        if (!$resolved instanceof $this->class) {
+            throw new ClassMismatchException($this->class, get_class($resolved));
         }
 
-        return $this->resolved;
-    }
-
-    /**
-     * Pas a callable which accepts a builder and customizes the reference as necessary
-     *
-     * @param callable $factory
-     * @return $this
-     */
-    public function factory(callable $factory): self
-    {
-        $this->factory = $factory;
-
-        return $this;
+        return $resolved;
     }
 
     /**
