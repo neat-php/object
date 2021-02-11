@@ -33,7 +33,7 @@ class RelationsTest extends TestCase
         $relation = $user->hasOne(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
 
-        $expected = new One(Manager::get()->remoteKey(User::class, Address::class), $user);
+        $expected = new One(Manager::get()->remoteKey('testHasOne', User::class, Address::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->hasOne(Address::class));
 
@@ -55,7 +55,7 @@ class RelationsTest extends TestCase
         $relation = $user->hasMany(Address::class);
         $this->assertInstanceOf(Relation::class, $relation);
 
-        $expected = new Many(Manager::get()->remoteKey(User::class, Address::class), $user);
+        $expected = new Many(Manager::get()->remoteKey('testHasMany', User::class, Address::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->hasMany(Address::class));
 
@@ -77,7 +77,7 @@ class RelationsTest extends TestCase
         $relation = $user->belongsToOne(Type::class);
         $this->assertInstanceOf(Relation::class, $relation);
 
-        $expected = new One(Manager::get()->localKey(User::class, Type::class), $user);
+        $expected = new One(Manager::get()->localKey('testBelongsToOne', User::class, Type::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->belongsToOne(Type::class));
 
@@ -100,7 +100,7 @@ class RelationsTest extends TestCase
         $this->assertInstanceOf(Relation::class, $relation);
         $this->assertInstanceOf(Many::class, $relation);
 
-        $expected = new Many(Manager::get()->junctionTable(User::class, Address::class), $user);
+        $expected = new Many(Manager::get()->junctionTable('testBelongsToMany', User::class, Address::class), $user);
         $this->assertEquals($expected, $relation);
         $this->assertSame($relation, $user->belongsToMany(Address::class));
 

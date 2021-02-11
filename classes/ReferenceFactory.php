@@ -15,126 +15,66 @@ trait ReferenceFactory
     protected $references;
 
     /**
+     * @param string        $key
      * @param class-string  $local
      * @param class-string  $remote
      * @param callable|null $configure
      * @psalm-param callable(RemoteKeyBuilder)|null $configure
      * @return RemoteKey
      */
-    public function remoteKey(string $local, string $remote, callable $configure = null): RemoteKey
+    public function remoteKey(string $key, string $local, string $remote, callable $configure = null): RemoteKey
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        /** @noinspection PhpDeprecationInspection */
-        return $this->buildRemoteKey("{$local}remote{$remote}", $local, $remote, $configure)->resolve();
+        return $this->references->get($key, function () use ($local, $remote, $configure) {
+            $builder = new RemoteKeyBuilder($this->manager(), $local, $remote);
+            if ($configure) {
+                $configure($builder);
+            }
+
+            return $builder->resolve();
+        });
     }
 
     /**
      * @param string        $key
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(RemoteKeyBuilder)|null $configure
-     * @return RemoteKeyBuilder
-     * @deprecated Use remoteKey() instead
-     */
-    public function buildRemoteKey(string $key, string $local, string $remote, callable $configure = null): RemoteKeyBuilder
-    {
-        /** @var RemoteKeyBuilder $builder */
-        $builder = $this->references->get(
-            $key,
-            function () use ($local, $remote, $configure) {
-                $builder = new RemoteKeyBuilder($this->manager(), $local, $remote);
-                if ($configure) {
-                    $configure($builder);
-                }
-
-                return $builder;
-            }
-        );
-
-        return $builder;
-    }
-
-    /**
      * @param class-string  $local
      * @param class-string  $remote
      * @param callable|null $configure
      * @psalm-param callable(LocalKeyBuilder)|null $configure
      * @return LocalKey
      */
-    public function localKey(string $local, string $remote, callable $configure = null): LocalKey
+    public function localKey(string $key, string $local, string $remote, callable $configure = null): LocalKey
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        /** @noinspection PhpDeprecationInspection */
-        return $this->buildLocalKey("{$local}local{$remote}", $local, $remote, $configure)->resolve();
+        return $this->references->get($key, function () use ($local, $remote, $configure) {
+            $builder = new LocalKeyBuilder($this->manager(), $local, $remote);
+            if ($configure) {
+                $configure($builder);
+            }
+
+            return $builder->resolve();
+        });
     }
 
     /**
      * @param string        $key
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(LocalKeyBuilder)|null $configure
-     * @return LocalKeyBuilder
-     * @deprecated Use localKey() instead
-     */
-    public function buildLocalKey(string $key, string $local, string $remote, callable $configure = null): LocalKeyBuilder
-    {
-        /** @var LocalKeyBuilder $builder */
-        $builder = $this->references->get(
-            $key,
-            function () use ($local, $remote, $configure) {
-                $builder = new LocalKeyBuilder($this->manager(), $local, $remote);
-                if ($configure) {
-                    $configure($builder);
-                }
-
-                return $builder;
-            }
-        );
-
-        return $builder;
-    }
-
-    /**
      * @param class-string  $local
      * @param class-string  $remote
      * @param callable|null $configure
      * @psalm-param callable(JunctionTableBuilder)|null $configure
      * @return JunctionTable
      */
-    public function junctionTable(string $local, string $remote, callable $configure = null): JunctionTable
+    public function junctionTable(string $key, string $local, string $remote, callable $configure = null): JunctionTable
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        /** @noinspection PhpDeprecationInspection */
-        return $this->buildJunctionTable("{$local}junctionTable{$remote}", $local, $remote, $configure)->resolve();
-    }
-
-    /**
-     * @param string        $key
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(JunctionTableBuilder)|null $configure
-     * @return JunctionTableBuilder
-     * @deprecated Use junctionTable() instead
-     */
-    public function buildJunctionTable(string $key, string $local, string $remote, callable $configure = null): JunctionTableBuilder
-    {
-        /** @var JunctionTableBuilder $builder */
-        $builder = $this->references->get(
-            $key,
-            function () use ($local, $remote, $configure) {
-                $builder = new JunctionTableBuilder($this->manager(), $local, $remote);
-                if ($configure) {
-                    $configure($builder);
-                }
-
-                return $builder;
+        return $this->references->get($key, function () use ($local, $remote, $configure) {
+            $builder = new JunctionTableBuilder($this->manager(), $local, $remote);
+            if ($configure) {
+                $configure($builder);
             }
-        );
 
-        return $builder;
+            return $builder->resolve();
+        });
     }
 
     abstract public function manager(): Manager;

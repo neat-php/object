@@ -7,7 +7,6 @@ use Neat\Object\Exception\PropertyNotFoundException;
 use Neat\Object\Policy;
 use Neat\Object\Property;
 use Neat\Object\Relations\Reference;
-use Neat\Object\Test\Helper\CallableMock;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\ReferenceBuilderMock;
 use Neat\Object\Test\Helper\User;
@@ -137,30 +136,6 @@ class BuilderTest extends TestCase
         $builder->setClass(MockObject::class);
         $builder->expects($this->once())->method('build')->willReturn($resolved);
 
-        $this->assertSame($resolved, $builder->resolve());
-    }
-
-    public function testResolveCached()
-    {
-        /** @var ReferenceBuilderMock|MockObject $builder */
-        $builder  = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
-        $resolved = $this->getMockForAbstractClass(Reference::class);
-        $builder->setResolved($resolved);
-        $this->assertSame($resolved, $builder->resolve());
-    }
-
-    public function testResolveFactory()
-    {
-        $resolved = $this->getMockForAbstractClass(Reference::class);
-        /** @var ReferenceBuilderMock|MockObject $builder */
-        $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
-        $builder->setClass(MockObject::class);
-        $builder->expects($this->once())->method('build')->willReturn($resolved);
-        /** @var CallableMock|MockObject $callable */
-        $callable = $this->createPartialMock(CallableMock::class, ['__invoke']);
-        $callable->expects($this->once())->method('__invoke')->willReturn($builder);
-
-        $builder->factory($callable);
         $this->assertSame($resolved, $builder->resolve());
     }
 

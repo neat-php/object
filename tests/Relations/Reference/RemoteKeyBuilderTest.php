@@ -55,25 +55,4 @@ class RemoteKeyBuilderTest extends TestCase
             $builder->resolve()
         );
     }
-
-    public function testBuildProperty()
-    {
-        $repository = $this->repository(User::class);
-        $builder    = $this->remoteKeyBuilder();
-        $localKey   = $builder->property(Address::class, 'street');
-        $this->assertSame($builder, $builder->setLocalKey($localKey));
-        $remoteKey = $builder->property(User::class, 'typeId');
-        $this->assertSame($builder, $builder->setRemoteKey($remoteKey));
-        $this->assertSame($builder, $builder->setRemoteRepository($repository));
-
-        $this->assertEquals(
-            new RemoteKey(
-                $localKey,
-                $remoteKey,
-                'type_id',
-                $repository
-            ),
-            $builder->resolve()
-        );
-    }
 }
