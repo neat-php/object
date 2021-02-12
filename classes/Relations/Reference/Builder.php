@@ -48,7 +48,7 @@ trait Builder
      * @param class-string $remoteClass
      * @return void
      */
-    protected function init(Manager $manager, string $class, string $localClass, string $remoteClass)
+    protected function init(Manager $manager, string $class, string $localClass, string $remoteClass): void
     {
         $this->manager     = $manager;
         $this->class       = $class;

@@ -21,10 +21,10 @@ class QueryTest extends TestCase
      * @param string[] $methods
      * @return MockObject|Repository
      */
-    public function getMockedRepository($methods)
+    public function getMockedRepository(array $methods)
     {
         return $this->getMockBuilder(Repository::class)
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->setConstructorArgs([$this->connection(), User::class, 'user', ['id'], []])
             ->getMock();
     }
@@ -34,7 +34,7 @@ class QueryTest extends TestCase
      *
      * @return array
      */
-    public function providerFacadeExpectations()
+    public function providerFacadeExpectations(): array
     {
         return [
             ['one', new User()],
@@ -50,7 +50,7 @@ class QueryTest extends TestCase
      * @param string $method
      * @param mixed  $result
      */
-    public function testFacades(string $method, $result)
+    public function testFacades(string $method, $result): void
     {
         $repository = $this->getMockedRepository([$method]);
         $repository->expects($this->once())
@@ -66,7 +66,7 @@ class QueryTest extends TestCase
     /**
      * Test iterating object query results
      */
-    public function testIterate()
+    public function testIterate(): void
     {
         $generator = function () {
             $data = [new User()];

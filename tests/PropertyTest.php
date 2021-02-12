@@ -17,9 +17,11 @@ class PropertyTest extends TestCase
      *
      * @param string $name
      * @return Property
+     * @noinspection PhpDocMissingThrowsInspection
      */
-    public function createProperty($name)
+    public function createProperty(string $name): Property
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $reflection = new ReflectionProperty(User::class, $name);
 
         return (new Policy())->property($reflection);
@@ -28,7 +30,7 @@ class PropertyTest extends TestCase
     /**
      * Provide type test data
      */
-    public function provideTypes()
+    public function provideTypes(): array
     {
         return [
             ['id', Property\Integer::class],
@@ -50,7 +52,7 @@ class PropertyTest extends TestCase
      * @param string $name
      * @param mixed  $type
      */
-    public function testType($name, $type)
+    public function testType(string $name, $type): void
     {
         $property = $this->createProperty($name);
 
@@ -63,7 +65,7 @@ class PropertyTest extends TestCase
      *
      * @return array
      */
-    public function provideSetData()
+    public function provideSetData(): array
     {
         return [
             ['id', null, null],
@@ -101,7 +103,7 @@ class PropertyTest extends TestCase
      * @param mixed  $in
      * @param mixed  $out
      */
-    public function testSet($name, $in, $out)
+    public function testSet(string $name, $in, $out): void
     {
         $user = new User();
 
@@ -120,7 +122,7 @@ class PropertyTest extends TestCase
      *
      * @return array
      */
-    public function provideGetData()
+    public function provideGetData(): array
     {
         return [
             ['id', null, null],
@@ -156,7 +158,7 @@ class PropertyTest extends TestCase
      * @param mixed  $in
      * @param mixed  $out
      */
-    public function testGet($name, $in, $out)
+    public function testGet(string $name, $in, $out): void
     {
         $user        = new User();
         $user->$name = $in;

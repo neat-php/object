@@ -18,7 +18,7 @@ class RemoteKeyBuilderTest extends TestCase
         return new RemoteKeyBuilder($this->manager(), User::class, Address::class);
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         $repository = $this->repository(User::class);
         $builder    = $this->remoteKeyBuilder();
@@ -37,7 +37,7 @@ class RemoteKeyBuilderTest extends TestCase
         );
     }
 
-    public function testBuildColumn()
+    public function testBuildColumn(): void
     {
         $repository = $this->repository(User::class);
         $builder    = $this->remoteKeyBuilder();

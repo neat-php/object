@@ -17,7 +17,7 @@ class BuilderTest extends TestCase
 {
     use Factory;
 
-    public function testProperty()
+    public function testProperty(): void
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
@@ -41,7 +41,7 @@ class BuilderTest extends TestCase
         $this->assertSame($expectedProperty, $builder->property(User::class, 'id'));
     }
 
-    public function testPropertyByObject()
+    public function testPropertyByObject(): void
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
@@ -66,7 +66,7 @@ class BuilderTest extends TestCase
         $this->assertSame($expectedProperty, $builder->property($user, 'id'));
     }
 
-    public function testPropertyNotFound()
+    public function testPropertyNotFound(): void
     {
         $this->expectException(PropertyNotFoundException::class);
 
@@ -90,7 +90,7 @@ class BuilderTest extends TestCase
         $builder->property(User::class, 'nonExistingProperty');
     }
 
-    public function testPropertyByColumn()
+    public function testPropertyByColumn(): void
     {
         /** @var ReferenceBuilderMock|MockObject $builder */
         $builder = $this->getMockForAbstractClass(ReferenceBuilderMock::class);
@@ -109,7 +109,7 @@ class BuilderTest extends TestCase
         $this->assertSame($expectedProperty, $builder->propertyByColumn(User::class, 'id'));
     }
 
-    public function testPropertyByColumnNotFound()
+    public function testPropertyByColumnNotFound(): void
     {
         $this->expectException(PropertyNotFoundException::class);
 
@@ -128,7 +128,7 @@ class BuilderTest extends TestCase
         $builder->propertyByColumn(User::class, 'non_existing_column');
     }
 
-    public function testResolve()
+    public function testResolve(): void
     {
         $resolved = $this->getMockForAbstractClass(Reference::class);
         /** @var ReferenceBuilderMock|MockObject $builder */
@@ -139,7 +139,7 @@ class BuilderTest extends TestCase
         $this->assertSame($resolved, $builder->resolve());
     }
 
-    public function testResolveException()
+    public function testResolveException(): void
     {
         $resolved = $this->createMock(Reference\RemoteKey::class);
         /** @var ReferenceBuilderMock|MockObject $builder */

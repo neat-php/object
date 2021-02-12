@@ -11,7 +11,7 @@ class SoftDelete extends TimeStamp
     /**
      * @inheritDoc
      */
-    public function one($conditions = null)
+    public function one($conditions = null): ?object
     {
         if ($conditions instanceof SQLQuery) {
             return parent::one($conditions);
@@ -59,7 +59,7 @@ class SoftDelete extends TimeStamp
     /**
      * @inheritDoc
      */
-    public function delete($entity)
+    public function delete(object $entity): int
     {
         if (!$this->property->get($entity)) {
             $this->property->set($entity, 'now');

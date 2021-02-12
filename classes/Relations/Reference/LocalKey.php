@@ -44,7 +44,7 @@ class LocalKey extends Reference
     /**
      * @inheritDoc
      */
-    public function load($local): array
+    public function load(object $local): array
     {
         $identifier = $this->localForeignKey->get($local);
 
@@ -54,7 +54,7 @@ class LocalKey extends Reference
     /**
      * @inheritDoc
      */
-    public function select($local): Query
+    public function select(object $local): Query
     {
         $identifier = $this->localForeignKey->get($local);
 
@@ -64,7 +64,7 @@ class LocalKey extends Reference
     /**
      * @inheritDoc
      */
-    public function store($local, array $remotes)
+    public function store(object $local, array $remotes): void
     {
         $remote = reset($remotes);
         if ($remote) {
@@ -75,7 +75,7 @@ class LocalKey extends Reference
     /**
      * @inheritDoc
      */
-    public function getRemoteKeyValue($remote)
+    public function getRemoteKeyValue(object $remote): array
     {
         return $this->remoteRepository->identifier($remote);
     }

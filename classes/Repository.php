@@ -84,7 +84,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function get($id)
+    public function get($id): ?object
     {
         $identifier = $this->where($id);
 
@@ -136,7 +136,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function one($conditions = null)
+    public function one($conditions = null): ?object
     {
         if (!$conditions instanceof QueryBuilder && $conditions instanceof QueryInterface) {
             $row = $conditions->query()->row();
@@ -192,7 +192,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function store($entity)
+    public function store(object $entity): void
     {
         $relations = [];
         if (method_exists($entity, 'relations')) {
@@ -216,7 +216,7 @@ class Repository implements RepositoryInterface
      * @param Relation[] $relations
      * @return void
      */
-    private function setRelations(array $relations)
+    private function setRelations(array $relations): void
     {
         foreach ($relations as $key => $relation) {
             $relation->setRelation();
@@ -227,7 +227,7 @@ class Repository implements RepositoryInterface
      * @param Relation[] $relations
      * @return void
      */
-    private function storeRelations(array $relations)
+    private function storeRelations(array $relations): void
     {
         foreach ($relations as $key => $relation) {
             $relation->storeRelation();
@@ -247,7 +247,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function update($id, array $data)
+    public function update($id, array $data): int
     {
         $where = $this->where($id);
 
@@ -257,7 +257,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function delete($entity)
+    public function delete(object $entity): int
     {
         $identifier = $this->identifier($entity);
         $where      = $this->where($identifier);
@@ -268,7 +268,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function load($entity)
+    public function load(object $entity): object
     {
         $identifier = array_filter($this->identifier($entity));
         if (!$identifier) {
@@ -287,7 +287,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function toArray($entity): array
+    public function toArray(object $entity): array
     {
         $data = [];
         foreach ($this->properties as $key => $property) {
@@ -300,7 +300,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function fromArray($entity, array $data)
+    public function fromArray(object $entity, array $data): object
     {
         foreach ($this->properties as $key => $property) {
             $property->set($entity, $data[$key] ?? null);
@@ -312,7 +312,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function create(array $data)
+    public function create(array $data): object
     {
         return $this->fromArray(($this->factory)($data), $data);
     }
@@ -320,7 +320,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function identifier($entity)
+    public function identifier(object $entity): array
     {
         $keys = array_combine($this->key, $this->key);
 
@@ -338,7 +338,7 @@ class Repository implements RepositoryInterface
      * @param int|string|array $id
      * @return void
      */
-    private function validateIdentifier($id)
+    private function validateIdentifier($id): void
     {
         $printed = print_r($id, true);
         if (count($this->key) > 1 && !is_array($id)) {
@@ -358,7 +358,7 @@ class Repository implements RepositoryInterface
      * @param int|string|array $id
      * @return array
      */
-    private function where($id)
+    private function where($id): array
     {
         $this->validateIdentifier($id);
         $key = reset($this->key);

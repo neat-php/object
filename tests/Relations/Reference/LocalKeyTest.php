@@ -34,7 +34,7 @@ class LocalKeyTest extends TestCase
     /**
      * Test load
      */
-    public function testLoad()
+    public function testLoad(): void
     {
         $localKey = $this->localKey();
 
@@ -55,7 +55,7 @@ class LocalKeyTest extends TestCase
     /**
      * Test store
      */
-    public function testStore()
+    public function testStore(): void
     {
         $localKey = $this->localKey();
 
@@ -69,7 +69,7 @@ class LocalKeyTest extends TestCase
         $this->assertSame(1, $address->userId);
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         $repository = $this->getMockForAbstractClass(RepositoryInterface::class);
         $query      = $this->createPartialMock(Query::class, ['where']);

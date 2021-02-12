@@ -34,7 +34,7 @@ class ReferenceFactoryTest extends TestCase
     /**
      * Test junctionTable factory
      */
-    public function testJunctionTable()
+    public function testJunctionTable(): void
     {
         $reference = $this->referenceFactoryMock()->junctionTable('testJunctionTable', User::class, Group::class);
         $this->assertInstanceOf(Reference::class, $reference);
@@ -56,7 +56,7 @@ class ReferenceFactoryTest extends TestCase
     /**
      * Test localKey factory
      */
-    public function testLocalKey()
+    public function testLocalKey(): void
     {
         $reference = $this->referenceFactoryMock()->localKey('testLocalKey', Address::class, User::class);
         $this->assertInstanceOf(Reference::class, $reference);
@@ -74,7 +74,7 @@ class ReferenceFactoryTest extends TestCase
     /**
      * Test remoteKey factory
      */
-    public function testRemoteKey()
+    public function testRemoteKey(): void
     {
         $reference = $this->referenceFactoryMock()->remoteKey('testRemoteKey', User::class, Address::class);
         $this->assertInstanceOf(Reference::class, $reference);

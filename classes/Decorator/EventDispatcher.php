@@ -86,7 +86,7 @@ class EventDispatcher implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function load($entity)
+    public function load(object $entity)
     {
         $this->triggerIfExists(Event::LOADING, $entity);
 
@@ -100,7 +100,7 @@ class EventDispatcher implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function store($entity)
+    public function store(object $entity): void
     {
         $identifier = $this->identifier($entity);
         $exists     = $identifier && array_filter($identifier) && $this->has($identifier);
@@ -123,7 +123,7 @@ class EventDispatcher implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function delete($entity)
+    public function delete(object $entity): int
     {
         $this->triggerIfExists(Event::DELETING, $entity);
 

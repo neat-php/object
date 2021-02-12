@@ -37,7 +37,7 @@ class RelationStoreTest extends TestCase
         return $mock;
     }
 
-    public function testStore()
+    public function testStore(): void
     {
         $testData = [
             [new One($this->mock(Reference\LocalKey::class, false), new User()), 1],
@@ -60,7 +60,7 @@ class RelationStoreTest extends TestCase
         }
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $testData = [
             [new One($this->mock(Reference\LocalKey::class), new User())],

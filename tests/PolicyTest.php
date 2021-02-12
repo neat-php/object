@@ -32,7 +32,7 @@ class PolicyTest extends TestCase
     /**
      * Test class not found exception
      */
-    public function testClassNotFoundException()
+    public function testClassNotFoundException(): void
     {
         $connection = $this->connection();
         $policy     = new Policy();
@@ -45,7 +45,7 @@ class PolicyTest extends TestCase
     /**
      * Test factory method
      */
-    public function testFactory()
+    public function testFactory(): void
     {
         $policy = new Policy();
         $this->assertNull($policy->factory(User::class));
@@ -57,9 +57,11 @@ class PolicyTest extends TestCase
      *
      * @param string $name
      * @return Property
+     * @noinspection PhpDocMissingThrowsInspection
      */
-    public function createProperty($name)
+    public function createProperty(string $name): Property
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $reflection = new ReflectionProperty(User::class, $name);
 
         return new Property($reflection);
@@ -70,7 +72,7 @@ class PolicyTest extends TestCase
      *
      * @return array
      */
-    public function provideColumns()
+    public function provideColumns(): array
     {
         return [
             ['id', 'id'],
@@ -85,7 +87,7 @@ class PolicyTest extends TestCase
      * @param string $name
      * @param string $column
      */
-    public function testColumn(string $name, string $column)
+    public function testColumn(string $name, string $column): void
     {
         $policy   = new Policy();
         $property = $this->createProperty($name);
@@ -98,7 +100,7 @@ class PolicyTest extends TestCase
      *
      * @return array
      */
-    public function provideForeignKeys()
+    public function provideForeignKeys(): array
     {
         return [
             [User::class, 'user_id'],
@@ -113,7 +115,7 @@ class PolicyTest extends TestCase
      * @param string $class
      * @param string $foreignKey
      */
-    public function testForeignKey(string $class, string $foreignKey)
+    public function testForeignKey(string $class, string $foreignKey): void
     {
         $policy = new Policy();
 
@@ -125,7 +127,7 @@ class PolicyTest extends TestCase
      *
      * @return array
      */
-    public function provideTables()
+    public function provideTables(): array
     {
         return [
             ['User', 'user'],
@@ -145,7 +147,7 @@ class PolicyTest extends TestCase
      * @param string $entity
      * @param string $table
      */
-    public function testTable(string $entity, string $table)
+    public function testTable(string $entity, string $table): void
     {
         $policy = new Policy();
 
@@ -157,7 +159,7 @@ class PolicyTest extends TestCase
      *
      * @return array
      */
-    public function provideJunctionTables()
+    public function provideJunctionTables(): array
     {
         return [
             [User::class, Group::class, 'group_user'],
@@ -173,7 +175,7 @@ class PolicyTest extends TestCase
      * @param string $owned
      * @param string $junctionTable
      */
-    public function testJunctionTable($owner, $owned, $junctionTable)
+    public function testJunctionTable(string $owner, string $owned, string $junctionTable): void
     {
         $policy = new Policy();
 
@@ -185,7 +187,7 @@ class PolicyTest extends TestCase
      *
      * @return array
      */
-    public function provideSkips()
+    public function provideSkips(): array
     {
         return [
             ['id', false],
@@ -200,7 +202,7 @@ class PolicyTest extends TestCase
      * @param string $name
      * @param bool   $skip
      */
-    public function testSkip(string $name, bool $skip)
+    public function testSkip(string $name, bool $skip): void
     {
         $property = $this->createProperty($name);
         $policy   = new Policy();
@@ -211,7 +213,7 @@ class PolicyTest extends TestCase
     /**
      * Test created stamp
      */
-    public function testCreatedStamp()
+    public function testCreatedStamp(): void
     {
         $policy = new Policy();
 
@@ -222,7 +224,7 @@ class PolicyTest extends TestCase
     /**
      * Test updated stamp
      */
-    public function testUpdatedStamp()
+    public function testUpdatedStamp(): void
     {
         $policy = new Policy();
 
@@ -233,7 +235,7 @@ class PolicyTest extends TestCase
     /**
      * Test soft delete
      */
-    public function testSoftDelete()
+    public function testSoftDelete(): void
     {
         $policy = new Policy();
 
@@ -244,7 +246,7 @@ class PolicyTest extends TestCase
     /**
      * Test events
      */
-    public function testEvents()
+    public function testEvents(): void
     {
         $policy = new Policy();
 
@@ -257,7 +259,7 @@ class PolicyTest extends TestCase
      *
      * @return array
      */
-    public function provideKeys()
+    public function provideKeys(): array
     {
         return [
             [User::class, ['id']],
@@ -272,7 +274,7 @@ class PolicyTest extends TestCase
      * @param string $class
      * @param array  $key
      */
-    public function testKey(string $class, array $key)
+    public function testKey(string $class, array $key): void
     {
         $policy = new Policy();
 
@@ -282,7 +284,7 @@ class PolicyTest extends TestCase
     /**
      * Test without key
      */
-    public function testWithoutKey()
+    public function testWithoutKey(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -290,7 +292,7 @@ class PolicyTest extends TestCase
         $policy->key(NoEntity::class);
     }
 
-    public function testDecoratedRepository()
+    public function testDecoratedRepository(): void
     {
         $dispatcher      = $this->createMock(EventDispatcherInterface::class);
         $policy          = new Policy($dispatcher);

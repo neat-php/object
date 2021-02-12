@@ -1,9 +1,10 @@
 <?php
 
+/** @noinspection SqlResolve */
+
 namespace Neat\Object\Test;
 
 use Generator;
-use Neat\Database\SQLQuery;
 use Neat\Object\Collection;
 use Neat\Object\Query;
 use Neat\Object\Test\Helper\Assertions;
@@ -20,7 +21,7 @@ class RepositoryTest extends TestCase
     use Assertions;
     use Factory;
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $data = [
             'id'   => 1,
@@ -39,7 +40,7 @@ class RepositoryTest extends TestCase
     /**
      * Test has
      */
-    public function testHas()
+    public function testHas(): void
     {
         $repository = $this->repository(User::class);
 
@@ -50,7 +51,7 @@ class RepositoryTest extends TestCase
     /**
      * Test get
      */
-    public function testGet()
+    public function testGet(): void
     {
         $userGroupData       = ['user_id' => 1, 'group_id' => 2];
         $userGroupRepository = $this->repository(GroupUser::class);
@@ -70,7 +71,7 @@ class RepositoryTest extends TestCase
     /**
      * Test get composed identifier with single key
      */
-    public function testGetSingle()
+    public function testGetSingle(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -81,7 +82,7 @@ class RepositoryTest extends TestCase
     /**
      * Test get single identifier with composed key
      */
-    public function testGetComposed()
+    public function testGetComposed(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -92,7 +93,7 @@ class RepositoryTest extends TestCase
     /**
      * Test get composed identifier with mismatched element count
      */
-    public function testGetComposedArray()
+    public function testGetComposedArray(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -103,7 +104,7 @@ class RepositoryTest extends TestCase
     /**
      * Test select
      */
-    public function testSelect()
+    public function testSelect(): void
     {
         $repository = $this->repository(User::class);
 
@@ -119,7 +120,7 @@ class RepositoryTest extends TestCase
     /**
      * Test query
      */
-    public function testQuery()
+    public function testQuery(): void
     {
         $repository = $this->repository(User::class);
 
@@ -138,7 +139,7 @@ class RepositoryTest extends TestCase
     /**
      * Test one
      */
-    public function testOne()
+    public function testOne(): void
     {
         $repository = $this->repository(User::class);
 
@@ -147,7 +148,7 @@ class RepositoryTest extends TestCase
         $this->assertSame(1, $user->id);
     }
 
-    public function testOneSQL()
+    public function testOneSQL(): void
     {
         $repository = $this->repository(User::class);
         $user       = $repository->sql("SELECT * FROM `user` WHERE id = ?", 1)->one();
@@ -158,7 +159,7 @@ class RepositoryTest extends TestCase
     /**
      * Test all
      */
-    public function testAll()
+    public function testAll(): void
     {
         $repository = $this->repository(User::class);
         $users      = $repository->all($repository->select()->orderBy('id DESC'));
@@ -172,7 +173,7 @@ class RepositoryTest extends TestCase
         $this->assertCount(1, $users);
     }
 
-    public function testAllSQL()
+    public function testAllSQL(): void
     {
         $repository = $this->repository(User::class);
         $users      = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->all();
@@ -189,7 +190,7 @@ class RepositoryTest extends TestCase
     /**
      * Test collection
      */
-    public function testCollection()
+    public function testCollection(): void
     {
         $userRepository  = $this->repository(User::class);
         $usersCollection = $userRepository->collection();
@@ -199,7 +200,7 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
-    public function testCollectionSQL()
+    public function testCollectionSQL(): void
     {
         $repository      = $this->repository(User::class);
         $usersCollection = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->collection();
@@ -212,7 +213,7 @@ class RepositoryTest extends TestCase
     /**
      * Test iterate
      */
-    public function testIterate()
+    public function testIterate(): void
     {
         $userRepository = $this->repository(User::class);
 
@@ -225,7 +226,7 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(Generator::class, $userRepository->iterate());
     }
 
-    public function testIterateSQL()
+    public function testIterateSQL(): void
     {
         $repository = $this->repository(User::class);
 
@@ -242,7 +243,7 @@ class RepositoryTest extends TestCase
     /**
      * Test insert and update
      */
-    public function testInsertAndUpdate()
+    public function testInsertAndUpdate(): void
     {
         $userRepository = $this->repository(User::class);
         $data           = [
@@ -269,7 +270,7 @@ class RepositoryTest extends TestCase
     /**
      * Test load
      */
-    public function testLoad()
+    public function testLoad(): void
     {
         $repository = $this->repository(User::class);
         /** @var User $user */
@@ -282,7 +283,7 @@ class RepositoryTest extends TestCase
         $this->assertSame($user, $repository->load($user));
     }
 
-    public function testLoadWithoutIdentifier()
+    public function testLoadWithoutIdentifier(): void
     {
         $repository = $this->repository(User::class);
 
@@ -292,7 +293,7 @@ class RepositoryTest extends TestCase
         $this->assertEquals($user2, $repository->load($notPersistedUser));
     }
 
-    public function testLoadWithNonExistingEntity()
+    public function testLoadWithNonExistingEntity(): void
     {
         $repository = $this->repository(User::class);
 

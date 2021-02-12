@@ -28,7 +28,7 @@ class ComposedKeyTest extends TestCase
         return new LocalKey($localForeignKey, $remoteKey, 'user_id', $this->repository(GroupUser::class));
     }
 
-    public function testLocalKey()
+    public function testLocalKey(): void
     {
         $user     = new User();
         $user->id = 1;
@@ -70,7 +70,7 @@ class ComposedKeyTest extends TestCase
         return new RemoteKey($localKey, $remoteForeignKey, 'user_id', $this->remoteRepository());
     }
 
-    public function testRemoteKey()
+    public function testRemoteKey(): void
     {
         $user     = new User();
         $user->id = 1;
@@ -86,7 +86,7 @@ class ComposedKeyTest extends TestCase
         $this->assertEquals($this->groups($user, [1, 2]), $remoteKey->load($user));
     }
 
-    private function groups(User $user, array $ids)
+    private function groups(User $user, array $ids): array
     {
         return array_map(
             function (int $id) use ($user) {

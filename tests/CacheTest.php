@@ -11,7 +11,7 @@ class CacheTest extends TestCase
     /**
      * Test has
      */
-    public function testHas()
+    public function testHas(): void
     {
         $cache = new Cache();
 
@@ -23,7 +23,7 @@ class CacheTest extends TestCase
     /**
      * Test get
      */
-    public function testGet()
+    public function testGet(): void
     {
         $factory = function () {
             return new stdClass();
@@ -43,7 +43,7 @@ class CacheTest extends TestCase
     /**
      * Test all
      */
-    public function testAll()
+    public function testAll(): void
     {
         $objects = [
             'test1' => new stdClass(),
@@ -66,7 +66,7 @@ class CacheTest extends TestCase
     /**
      * Test set
      */
-    public function testSet()
+    public function testSet(): void
     {
         $factory = function () {
             return new stdClass();

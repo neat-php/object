@@ -48,7 +48,7 @@ class AccessorsTest extends TestCase
      * @param string $relation
      * @param string $operation
      */
-    public function testAccessor(string $method, array $arguments, $result, string $type, string $relation, string $operation)
+    public function testAccessor(string $method, array $arguments, $result, string $type, string $relation, string $operation): void
     {
         Manager::set($this->manager());
 
@@ -76,7 +76,7 @@ class AccessorsTest extends TestCase
      * @dataProvider provideExceptionCalls
      * @param string $method
      */
-    public function testException(string $method)
+    public function testException(string $method): void
     {
         try {
             Manager::set($this->manager());

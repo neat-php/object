@@ -18,6 +18,7 @@ trait Events
      */
     public function trigger(string $event): void
     {
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this::repository()->layer(EventDispatcher::class)->trigger($event, $this);
     }
 
@@ -29,6 +30,7 @@ trait Events
      */
     public function triggerIfExists(string $event): void
     {
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this::repository()->layer(EventDispatcher::class)->triggerIfExists($event, $this);
     }
 }

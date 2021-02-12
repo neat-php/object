@@ -5,10 +5,8 @@ namespace Neat\Object\Test\Decorator;
 use DateTime;
 use Neat\Object\Decorator\CreatedAt;
 use Neat\Object\Repository;
-use Neat\Object\RepositoryInterface;
 use Neat\Object\Test\Helper\Factory;
 use Neat\Object\Test\Helper\User;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CreatedAtTest extends TestCase
@@ -18,9 +16,9 @@ class CreatedAtTest extends TestCase
     /**
      * Test store
      */
-    public function testStore()
+    public function testStore(): void
     {
-        $repository = $this->repository(['store']);
+        $repository = $this->createPartialMock(Repository::class, ['store']);
         $createdAt  = new CreatedAt(
             $repository,
             'update_date',
@@ -53,17 +51,5 @@ class CreatedAtTest extends TestCase
         $this->assertSame($date, $user->updateDate);
         $createdAt->store($user);
         $this->assertSame($date, $user->updateDate);
-    }
-
-    /**
-     * @param array $methods
-     * @return RepositoryInterface|MockObject
-     */
-    private function repository(array $methods)
-    {
-        return $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->setMethods($methods)
-            ->getMock();
     }
 }

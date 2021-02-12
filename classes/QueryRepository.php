@@ -10,16 +10,16 @@ trait QueryRepository
     private $repository;
 
     /**
-     * @return mixed|null
+     * @return object|null
      * @see RepositoryInterface::one()
      */
-    public function one()
+    public function one(): ?object
     {
         return $this->repository->one($this);
     }
 
     /**
-     * @return array
+     * @return object[]
      * @see RepositoryInterface::all()
      */
     public function all(): array

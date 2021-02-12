@@ -25,7 +25,7 @@ class RelationsTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testHasOne()
+    public function testHasOne(): void
     {
         Manager::set($this->manager());
 
@@ -47,7 +47,7 @@ class RelationsTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testHasMany()
+    public function testHasMany(): void
     {
         Manager::set($this->manager());
 
@@ -69,7 +69,7 @@ class RelationsTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testBelongsToOne()
+    public function testBelongsToOne(): void
     {
         Manager::set($this->manager());
 
@@ -91,7 +91,7 @@ class RelationsTest extends TestCase
      *
      * @runInSeparateProcess enabled
      */
-    public function testBelongsToMany()
+    public function testBelongsToMany(): void
     {
         Manager::set($this->manager());
 

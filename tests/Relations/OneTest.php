@@ -44,7 +44,7 @@ class OneTest extends TestCase
     /**
      * Test get
      */
-    public function testGet()
+    public function testGet(): void
     {
         $address         = new Address();
         $address->id     = 1;
@@ -64,7 +64,7 @@ class OneTest extends TestCase
     /**
      * Test getNull
      */
-    public function testGetNull()
+    public function testGetNull(): void
     {
         $reference = $this->mockedRemoteKey();
         $reference
@@ -80,7 +80,7 @@ class OneTest extends TestCase
     /**
      * Test set
      */
-    public function testSet()
+    public function testSet(): void
     {
         $address         = new Address();
         $address->id     = 1;
@@ -107,7 +107,7 @@ class OneTest extends TestCase
         $one->store();
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         $reference = $this->getMockForAbstractClass(Reference::class);
         $user      = new User();

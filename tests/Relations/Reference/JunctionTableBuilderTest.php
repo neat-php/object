@@ -18,7 +18,7 @@ class JunctionTableBuilderTest extends TestCase
         return new JunctionTableBuilder($this->manager(), User::class, Address::class);
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         $repository = $this->repository(Address::class);
         $builder    = $this->junctionTableBuilder();
@@ -44,7 +44,7 @@ class JunctionTableBuilderTest extends TestCase
         );
     }
 
-    public function testBuildColumn()
+    public function testBuildColumn(): void
     {
         $repository = $this->repository(Address::class);
         $builder    = $this->junctionTableBuilder();

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ClassNotFoundExceptionTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->assertSame(
             "Class: 'ThisIsANonExistingClass' not found!",

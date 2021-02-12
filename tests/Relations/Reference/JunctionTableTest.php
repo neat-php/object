@@ -53,7 +53,7 @@ class JunctionTableTest extends TestCase
     /**
      * Test load
      */
-    public function testLoad()
+    public function testLoad(): void
     {
         $junctionTable = $this->junctionTable();
 
@@ -74,7 +74,7 @@ class JunctionTableTest extends TestCase
     /**
      * Test store
      */
-    public function testStore()
+    public function testStore(): void
     {
         $junctionTable = $this->junctionTable();
 
@@ -105,17 +105,17 @@ class JunctionTableTest extends TestCase
     }
 
 
-    public function testGetRemoteKeyValue()
+    public function testGetRemoteKeyValue(): void
     {
         // User
         $user       = new User();
         $user->id   = 1;
         $repository = $this->getMockForAbstractClass(RepositoryInterface::class);
-        $repository->expects($this->once())->method('identifier')->with($user)->willReturn($user->id);
+        $repository->expects($this->once())->method('identifier')->with($user)->willReturn([$user->id]);
         $junctionTable = $this->junctionTableFactory(Group::class, User::class)->setRemoteRepository(
             $repository
         )->resolve();
-        $this->assertSame($user->id, $junctionTable->getRemoteKeyValue($user));
+        $this->assertSame([$user->id], $junctionTable->getRemoteKeyValue($user));
 
         // GroupUser
         $groupUser          = new GroupUser();
@@ -129,7 +129,7 @@ class JunctionTableTest extends TestCase
         $this->assertSame($identifier, $junctionTable->getRemoteKeyValue($groupUser));
     }
 
-    private function junctionTableFactory(string $local, string $remote)
+    private function junctionTableFactory(string $local, string $remote): JunctionTableBuilder
     {
         return new JunctionTableBuilder($this->manager(), $local, $remote);
     }
