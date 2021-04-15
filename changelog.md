@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.11] - 2021-04-15
+### Changed
+- Change type hints for Storage::get() and Storage::One from ?self to ?object (fix phpstorm inspections)
+
 ## [0.11.10] - 2021-02-03
 ### Added
 - Events->triggerIfExists().
