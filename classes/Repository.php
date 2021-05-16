@@ -11,12 +11,16 @@ use Neat\Object\Relations\RelationBuilder;
 use RuntimeException;
 use Traversable;
 
+/**
+ * @template   T of object
+ * @implements RepositoryInterface<T>
+ */
 class Repository implements RepositoryInterface
 {
     /** @var Connection */
     private $connection;
 
-    /** @var class-string */
+    /** @var class-string @psalm-var class-string<T> */
     private $class;
 
     /** @var string */
@@ -34,12 +38,14 @@ class Repository implements RepositoryInterface
     /**
      * Repository constructor
      *
-     * @param Connection    $connection Connection to the database the entity table exists in
-     * @param class-string  $class      Class name of the entity the repository is meant for
-     * @param string        $table      Table name for the entity
-     * @param string[]      $key        Primary key columns for the table, pass multiple items for a composed key
-     * @param Property[]    $properties Properties of the entity, should only include properties which actually map to a database column
-     * @param callable|null $factory    Factory closure used to create entity instances from a table row result
+     * @param Connection            $connection Connection to the database the entity table exists in
+     * @param class-string          $class      Class name of the entity the repository is meant for
+     * @psalm-param class-string<T> $class
+     * @param string                $table      Table name for the entity
+     * @param string[]              $key        Primary key columns for the table, pass multiple items for a composed key
+     * @param Property[]            $properties Properties of the entity, should only include properties which actually map to a database column
+     * @param callable|null         $factory    Factory closure used to create entity instances from a table row result
+     * @psalm-param null|callable():T $factory
      */
     public function __construct(
         Connection $connection,
@@ -60,7 +66,11 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Get repository decorator layer by class name
+     *
+     * @template TLayer of RepositoryInterface
+     * @param class-string<TLayer> $class
+     * @return TLayer
      */
     public function layer(string $class): RepositoryInterface
     {
@@ -156,13 +166,23 @@ class Repository implements RepositoryInterface
      */
     public function all($conditions = null): array
     {
-        if (!$conditions instanceof QueryBuilder && $conditions instanceof QueryInterface) {
-            $rows = $conditions->query()->rows();
-        } else {
+        if (
+            is_null($conditions) ||
+            is_string($conditions) ||
+            is_array($conditions) ||
+            $conditions instanceof QueryBuilder
+        ) {
+            /** @var list<array<array-key, string|null>> $rows */
             $rows = $this->query($conditions)->query()->rows();
+        } else {
+            /** @var list<array<array-key, string|null>> $rows */
+            $rows = $conditions->query()->rows();
         }
 
-        return array_map([$this, 'create'], $rows);
+        /** @var list<T> $objects */
+        $objects = array_map([$this, 'create'], $rows);
+
+        return array_values(array_filter($objects));
     }
 
     /**
@@ -316,7 +336,11 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Create entity from row
+     *
+     * @param array $data
+     * @return object
+     * @psalm-return T|null
      */
     public function create(array $data)
     {

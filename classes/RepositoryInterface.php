@@ -4,16 +4,21 @@ namespace Neat\Object;
 
 use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
+use Neat\Object\Exception\LayerNotFoundException;
 use Traversable;
 
+/**
+ * @template T of object
+ */
 interface RepositoryInterface
 {
     /**
      * Get repository decorator layer by class name
      *
-     * @template T of RepositoryInterface
-     * @param class-string<T> $class
-     * @return T
+     * @template TLayer of RepositoryInterface
+     * @param class-string<TLayer> $class
+     * @return TLayer
+     * @throws LayerNotFoundException In case the requested layer is not available in the stack
      */
     public function layer(string $class): RepositoryInterface;
 
@@ -30,6 +35,7 @@ interface RepositoryInterface
      *
      * @param int|string|array $id Identifier value(s)
      * @return mixed|null
+     * @psalm-return T|null
      */
     public function get($id);
 
@@ -61,6 +67,7 @@ interface RepositoryInterface
      *
      * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
      * @return mixed|null
+     * @psalm-return T|null
      */
     public function one($conditions = null);
 
@@ -69,6 +76,7 @@ interface RepositoryInterface
      *
      * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return object[]
+     * @psalm-return list<T>
      */
     public function all($conditions = null): array;
 
@@ -85,13 +93,15 @@ interface RepositoryInterface
      *
      * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
      * @return Traversable|object[]
+     * @psalm-return Traversable<T>
      */
     public function iterate($conditions = null): Traversable;
 
     /**
      * Store entity to the database
      *
-     * @param object $entity
+     * @param object  $entity
+     * @psalm-param T $entity
      * @return void
      */
     public function store($entity);
@@ -114,13 +124,15 @@ interface RepositoryInterface
     public function update($id, array $data);
 
     /**
-     * @param object $entity
+     * @param object  $entity
+     * @psalm-param T $entity
      * @return mixed
      */
     public function load($entity);
 
     /**
-     * @param object $entity
+     * @param object  $entity
+     * @psalm-param T $entity
      * @return int
      */
     public function delete($entity);
@@ -128,7 +140,8 @@ interface RepositoryInterface
     /**
      * Convert to an associative array
      *
-     * @param object $entity
+     * @param object  $entity
+     * @psalm-param T $entity
      * @return array
      */
     public function toArray($entity): array;
@@ -136,9 +149,11 @@ interface RepositoryInterface
     /**
      * Convert from an associative array
      *
-     * @param object $entity
-     * @param array  $data
-     * @return mixed
+     * @param object  $entity
+     * @psalm-param T $entity
+     * @param array   $data
+     * @return object
+     * @psalm-return T
      */
     public function fromArray($entity, array $data);
 
@@ -146,14 +161,16 @@ interface RepositoryInterface
      * Create entity from row
      *
      * @param array $data
-     * @return mixed
+     * @return object
+     * @psalm-return T|null
      */
     public function create(array $data);
 
     /**
      * Get identifier for entity
      *
-     * @param object $entity
+     * @param object  $entity
+     * @psalm-param T $entity
      * @return array
      */
     public function identifier($entity);
