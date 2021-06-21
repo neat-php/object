@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.12] - 2021-06-21
+### Changed
+- Remove type hints for Storage::get() and Storage::One from.
+    ?object does not work for phpstorm inspections either.
+    Wait for php 8.0 so that we can use ?static as type hint.
+
 ## [0.11.11] - 2021-04-15
 ### Changed
 - Change type hints for Storage::get() and Storage::One from ?self to ?object (fix phpstorm inspections)
