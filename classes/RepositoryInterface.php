@@ -6,14 +6,17 @@ use Neat\Database\Query as QueryBuilder;
 use Neat\Database\QueryInterface;
 use Traversable;
 
+/**
+ * @template T of object
+ */
 interface RepositoryInterface
 {
     /**
      * Get repository decorator layer by class name
      *
-     * @template T of RepositoryInterface
-     * @param class-string<T> $class
-     * @return T
+     * @template TLayer of RepositoryInterface
+     * @param class-string<TLayer> $class
+     * @return TLayer
      */
     public function layer(string $class): RepositoryInterface;
 
@@ -29,7 +32,7 @@ interface RepositoryInterface
      * Get entity by identifier?
      *
      * @param int|string|array $id Identifier value(s)
-     * @return object|null
+     * @return T|null
      */
     public function get($id): ?object;
 
@@ -44,8 +47,8 @@ interface RepositoryInterface
     /**
      * Create select query with conditions
      *
-     * @param QueryBuilder|Query|string|array|null $conditions Query instance or where clause (optional)
-     * @return QueryBuilder|Query
+     * @param QueryBuilder|string|array|null $conditions Query instance or where clause (optional)
+     * @return QueryBuilder
      */
     public function query($conditions = null): QueryBuilder;
 
@@ -60,7 +63,7 @@ interface RepositoryInterface
      * Get one by conditions
      *
      * @param QueryInterface|array|string|null $conditions SQL where clause or Query instance
-     * @return object|null
+     * @return T|null
      */
     public function one($conditions = null): ?object;
 
@@ -68,7 +71,7 @@ interface RepositoryInterface
      * Get all by conditions
      *
      * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return object[]
+     * @return array<T>
      */
     public function all($conditions = null): array;
 
@@ -76,7 +79,7 @@ interface RepositoryInterface
      * Get collection of entities by conditions
      *
      * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return Collection|object[]
+     * @return Collection<T>
      */
     public function collection($conditions = null): Collection;
 
@@ -84,14 +87,14 @@ interface RepositoryInterface
      * Iterate entities by conditions
      *
      * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return Traversable|object[]
+     * @return Traversable<T>
      */
     public function iterate($conditions = null): Traversable;
 
     /**
      * Store entity to the database
      *
-     * @param object $entity
+     * @param T $entity
      * @return void
      */
     public function store(object $entity): void;
@@ -114,13 +117,13 @@ interface RepositoryInterface
     public function update($id, array $data): int;
 
     /**
-     * @param object $entity
-     * @return mixed
+     * @param T $entity
+     * @return T
      */
     public function load(object $entity);
 
     /**
-     * @param object $entity
+     * @param T $entity
      * @return int
      */
     public function delete(object $entity): int;
@@ -128,7 +131,7 @@ interface RepositoryInterface
     /**
      * Convert to an associative array
      *
-     * @param object $entity
+     * @param T $entity
      * @return array
      */
     public function toArray(object $entity): array;
@@ -136,9 +139,9 @@ interface RepositoryInterface
     /**
      * Convert from an associative array
      *
-     * @param object $entity
-     * @param array  $data
-     * @return object
+     * @param T     $entity
+     * @param array $data
+     * @return T
      */
     public function fromArray(object $entity, array $data): object;
 
@@ -146,14 +149,14 @@ interface RepositoryInterface
      * Create entity from row
      *
      * @param array $data
-     * @return object
+     * @return T
      */
     public function create(array $data): object;
 
     /**
      * Get identifier for entity
      *
-     * @param object $entity
+     * @param T $entity
      * @return array
      */
     public function identifier(object $entity): array;

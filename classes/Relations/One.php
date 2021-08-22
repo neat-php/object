@@ -4,10 +4,15 @@ namespace Neat\Object\Relations;
 
 use Neat\Object\Query;
 
+/**
+ * @template TLocal of object
+ * @template TRemote of object
+ * @extends Relation<TLocal, TRemote>
+ */
 class One extends Relation
 {
     /**
-     * @return object|null
+     * @return TRemote|null
      */
     public function get(): ?object
     {
@@ -19,7 +24,7 @@ class One extends Relation
     }
 
     /**
-     * @param object|null $remote
+     * @param TRemote|null $remote
      * @return $this
      */
     public function set(?object $remote): self
@@ -35,7 +40,7 @@ class One extends Relation
     }
 
     /**
-     * @return Query
+     * @return Query<TRemote>
      */
     public function select(): Query
     {
