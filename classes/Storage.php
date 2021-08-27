@@ -41,7 +41,7 @@ trait Storage
      * @return static|null
      * @see RepositoryInterface::get()
      */
-    public static function get($id): ?object
+    public static function get($id)
     {
         return static::repository()->get($id);
     }
@@ -81,7 +81,7 @@ trait Storage
      * @return static|null
      * @see RepositoryInterface::one()
      */
-    public static function one($conditions = null): ?object
+    public static function one($conditions = null)
     {
         return static::repository()->one($conditions);
     }
