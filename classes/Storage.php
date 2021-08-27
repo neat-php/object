@@ -2,6 +2,8 @@
 
 namespace Neat\Object;
 
+use Neat\Database\Query as QueryBuilder;
+use Neat\Database\QueryInterface;
 use Traversable;
 
 trait Storage
@@ -17,7 +19,7 @@ trait Storage
     /**
      * Get repository
      *
-     * @return RepositoryInterface
+     * @return RepositoryInterface<static>
      */
     public static function repository(): RepositoryInterface
     {
@@ -55,11 +57,11 @@ trait Storage
     }
 
     /**
-     * @param Query|string|array|null $conditions
-     * @return Query
+     * @param QueryBuilder|string|array|null $conditions
+     * @return QueryBuilder
      * @see RepositoryInterface::query()
      */
-    public static function query($conditions = null): Query
+    public static function query($conditions = null): QueryBuilder
     {
         return static::repository()->query($conditions);
     }
@@ -67,7 +69,7 @@ trait Storage
     /**
      * @param string $sql
      * @param mixed  ...$data
-     * @return SQLQuery
+     * @return SQLQuery<static>
      */
     public static function sql(string $sql, ...$data): SQLQuery
     {
@@ -75,7 +77,7 @@ trait Storage
     }
 
     /**
-     * @param Query|string|array|null $conditions
+     * @param QueryInterface|string|array|null $conditions
      * @return static|null
      * @see RepositoryInterface::one()
      */
@@ -85,7 +87,7 @@ trait Storage
     }
 
     /**
-     * @param Query|string|array|null $conditions
+     * @param QueryInterface|string|array|null $conditions
      * @return static[]
      * @see RepositoryInterface::all()
      */
@@ -95,8 +97,8 @@ trait Storage
     }
 
     /**
-     * @param Query|string|array|null $conditions
-     * @return Collection
+     * @param QueryInterface|string|array|null $conditions
+     * @return Collection<static>
      * @see RepositoryInterface::collection()
      */
     public static function collection($conditions = null): Collection
@@ -105,8 +107,8 @@ trait Storage
     }
 
     /**
-     * @param Query|string|array|null $conditions
-     * @return Traversable
+     * @param QueryInterface|string|array|null $conditions
+     * @return Traversable<static>
      * @see RepositoryInterface::iterate()
      */
     public static function iterate($conditions = null): Traversable

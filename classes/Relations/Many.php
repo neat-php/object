@@ -5,12 +5,18 @@ namespace Neat\Object\Relations;
 use Neat\Object\Collectible;
 use Neat\Object\Query;
 
+/**
+ * @template TLocal of object
+ * @template TRemote of object
+ * @extends Relation<TLocal, TRemote>
+ */
 class Many extends Relation
 {
+    /** @use Collectible<TRemote> */
     use Collectible;
 
     /**
-     * @return object[]
+     * @return array<TRemote>
      */
     public function get(): array
     {
@@ -18,7 +24,7 @@ class Many extends Relation
     }
 
     /**
-     * @param object[] $remotes
+     * @param array<TRemote> $remotes
      * @return $this
      */
     public function set(array $remotes): self
@@ -30,7 +36,7 @@ class Many extends Relation
     }
 
     /**
-     * @param object $remote
+     * @param TRemote $remote
      * @return $this
      */
     public function add(object $remote): self
@@ -44,8 +50,8 @@ class Many extends Relation
     }
 
     /**
-     * @param object $remote
-     * @return Many
+     * @param TRemote $remote
+     * @return $this
      */
     public function remove(object $remote): self
     {
@@ -62,7 +68,7 @@ class Many extends Relation
     }
 
     /**
-     * @param object $remote
+     * @param TRemote $remote
      * @return bool
      */
     public function has(object $remote): bool
@@ -84,7 +90,7 @@ class Many extends Relation
     }
 
     /**
-     * @return Query
+     * @return Query<TRemote>
      */
     public function select(): Query
     {
@@ -92,7 +98,7 @@ class Many extends Relation
     }
 
     /**
-     * @return object[]
+     * @return array<TRemote>
      */
     public function &items(): array
     {

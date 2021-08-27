@@ -4,6 +4,9 @@ namespace Neat\Object;
 
 use ArrayIterator;
 
+/**
+ * @template T
+ */
 trait Collectible
 {
     /**
@@ -34,7 +37,7 @@ trait Collectible
      *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
      * @param mixed $offset
-     * @return mixed
+     * @return T|null
      */
     public function offsetGet($offset)
     {
@@ -46,7 +49,7 @@ trait Collectible
      *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
      * @param mixed $offset
-     * @param mixed $value
+     * @param T $value
      * @return void
      */
     public function offsetSet($offset, $value): void
@@ -71,7 +74,7 @@ trait Collectible
     /**
      * Get all items
      *
-     * @return array
+     * @return array<T>
      */
     public function all(): array
     {
@@ -92,7 +95,7 @@ trait Collectible
     /**
      * Get first item
      *
-     * @return mixed|null
+     * @return T|null
      */
     public function first()
     {
@@ -107,7 +110,7 @@ trait Collectible
     /**
      * Get last item
      *
-     * @return mixed|null
+     * @return T|null
      */
     public function last()
     {
@@ -122,7 +125,7 @@ trait Collectible
     /**
      * Push item onto collection
      *
-     * @param mixed $item
+     * @param T $item
      * @return $this
      */
     public function push($item): self
@@ -139,6 +142,7 @@ trait Collectible
      * The callback should accept an `$item` parameter
      *
      * @param callable|null $callback
+     * @psalm-param callable(T):bool|null $callback
      * @return static
      */
     public function filter(callable $callback = null): self
@@ -158,7 +162,7 @@ trait Collectible
     }
 
     /**
-     * @param mixed $item
+     * @param T $item
      * @return bool
      */
     public function falsyFilter($item): bool
@@ -171,8 +175,10 @@ trait Collectible
      *
      * The callback should accept an `$item` parameter
      *
+     * @psalm-template TReturn
      * @param callable $callback
-     * @return Collection
+     * @psalm-param callable(T):TReturn $callback
+     * @return Collection<TReturn>
      */
     public function map(callable $callback): Collection
     {
@@ -192,7 +198,8 @@ trait Collectible
 
     /**
      * @param callable|null $callback
-     * @return static
+     * @psalm-param callable(T):int|null $callback
+     * @return static<T>
      */
     public function sort(callable $callback = null): self
     {
@@ -212,5 +219,8 @@ trait Collectible
         return $this->items();
     }
 
+    /**
+     * @return array<T>
+     */
     abstract protected function &items(): array;
 }

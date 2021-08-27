@@ -4,30 +4,34 @@ namespace Neat\Object\Relations;
 
 use Neat\Object\Query;
 
+/**
+ * @template TLocal of object
+ * @template TRemote of object
+ */
 abstract class Reference
 {
     /**
-     * @param object $local
-     * @return object[]
+     * @param TLocal $local
+     * @return array<TRemote>
      */
     abstract public function load(object $local): array;
 
     /**
-     * @param object   $local
-     * @param object[] $remotes
+     * @param TLocal   $local
+     * @param array<TRemote> $remotes
      * @return void
      */
     abstract public function store(object $local, array $remotes): void;
 
     /**
      * @param object $remote
-     * @return array
+     * @return array<string, mixed>
      */
     abstract public function getRemoteKeyValue(object $remote): array;
 
     /**
-     * @param object $local
-     * @return Query
+     * @param TLocal $local
+     * @return Query<TRemote>
      */
     abstract public function select(object $local): Query;
 }
