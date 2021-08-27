@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Passing a Property instance to setLocalKey and setRemoteKey.
 - RelationBuilder (the deprecated referenceFactory method was its only reason of existence)
 
+## [0.11.13]
+### Added
+- Generics documentation.
+
 ## [0.11.12] - 2021-06-21
 ### Changed
 - Remove type hints for Storage::get() and Storage::One from.
