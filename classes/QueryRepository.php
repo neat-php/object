@@ -4,22 +4,25 @@ namespace Neat\Object;
 
 use Traversable;
 
+/**
+ * @template T of object
+ */
 trait QueryRepository
 {
-    /** @var RepositoryInterface */
+    /** @var RepositoryInterface<T> */
     private $repository;
 
     /**
-     * @return mixed|null
+     * @return T|null
      * @see RepositoryInterface::one()
      */
-    public function one()
+    public function one(): ?object
     {
         return $this->repository->one($this);
     }
 
     /**
-     * @return array
+     * @return array<T>
      * @see RepositoryInterface::all()
      */
     public function all(): array
@@ -28,7 +31,7 @@ trait QueryRepository
     }
 
     /**
-     * @return Collection
+     * @return Collection<T>
      * @see RepositoryInterface::collection()
      */
     public function collection(): Collection
@@ -37,7 +40,7 @@ trait QueryRepository
     }
 
     /**
-     * @return Traversable
+     * @return Traversable<T>
      * @see RepositoryInterface::iterate()
      */
     public function iterate(): Traversable

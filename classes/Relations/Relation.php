@@ -4,24 +4,28 @@ namespace Neat\Object\Relations;
 
 use Neat\Object\Relations\Reference\LocalKey;
 
+/**
+ * @template TLocal of object
+ * @template TRemote of object
+ */
 abstract class Relation
 {
-    /** @var Reference */
+    /** @var Reference<TLocal, TRemote> */
     protected $reference;
 
-    /** @var object */
+    /** @var TLocal */
     protected $local;
 
     /** @var bool */
     protected $loaded = false;
 
-    /** @var object[] */
+    /** @var array<TRemote> */
     protected $objects = [];
 
     /**
      * Relation constructor.
-     * @param Reference $reference
-     * @param object    $local
+     * @param Reference<TLocal, TRemote> $reference
+     * @param TLocal                     $local
      */
     public function __construct(Reference $reference, object $local)
     {

@@ -4,6 +4,9 @@ namespace Neat\Object;
 
 use Neat\Database\Connection;
 
+/**
+ * @template T of object
+ */
 class Query extends \Neat\Database\Query
 {
     use QueryRepository;
@@ -11,8 +14,8 @@ class Query extends \Neat\Database\Query
     /**
      * Query constructor
      *
-     * @param Connection          $connection
-     * @param RepositoryInterface $repository
+     * @param Connection             $connection
+     * @param RepositoryInterface<T> $repository
      */
     public function __construct(Connection $connection, RepositoryInterface $repository)
     {

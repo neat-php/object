@@ -12,7 +12,7 @@ class Manager
     /** @var self[] */
     private static $instances = [];
 
-    /** @var callable[] */
+    /** @var array<callable():self> */
     private static $factories = [];
 
     /** @var Connection */
@@ -66,12 +66,13 @@ class Manager
     /**
      * Get or create repository
      *
-     * @param class-string $class
-     * @return RepositoryInterface
+     * @template T
+     * @param class-string<T> $class
+     * @return RepositoryInterface<T>
      */
     public function repository(string $class): RepositoryInterface
     {
-        /** @var RepositoryInterface $repository */
+        /** @var RepositoryInterface<T> $repository */
         $repository = $this->repositories->get(
             $class,
             function () use ($class) {
@@ -86,9 +87,9 @@ class Manager
      * Get manager instance
      *
      * @param string $manager
-     * @return Manager
+     * @return self
      */
-    public static function get(string $manager = 'default'): Manager
+    public static function get(string $manager = 'default'): self
     {
         return self::$instances[$manager]
             ?? self::getFactory($manager);
@@ -98,9 +99,9 @@ class Manager
      * Create manager using factory
      *
      * @param string $manager
-     * @return Manager
+     * @return self
      */
-    private static function getFactory(string $manager = 'default'): Manager
+    private static function getFactory(string $manager = 'default'): self
     {
         if (!isset(self::$factories[$manager])) {
             throw new RuntimeException('Object manager not set: ' . $manager);
@@ -115,8 +116,8 @@ class Manager
     /**
      * Set manager instance
      *
-     * @param Manager $instance
-     * @param string  $manager
+     * @param self   $instance
+     * @param string $manager
      * @return void
      */
     public static function set(Manager $instance, string $manager = 'default')
@@ -128,8 +129,8 @@ class Manager
     /**
      * Set manager factory
      *
-     * @param callable $factory
-     * @param string   $manager
+     * @param callable():self $factory
+     * @param string          $manager
      * @return void
      */
     public static function setFactory(callable $factory, string $manager = 'default')
