@@ -105,6 +105,7 @@ class EventDispatcher implements RepositoryInterface
         $identifier = $this->identifier($entity);
         $exists     = $identifier && array_filter($identifier) && $this->has($identifier);
 
+        $this->triggerIfExists(Event::STORING, $entity);
         if ($exists) {
             $this->triggerIfExists(Event::UPDATING, $entity);
         } else {
@@ -113,6 +114,7 @@ class EventDispatcher implements RepositoryInterface
 
         $this->repository()->store($entity);
 
+        $this->triggerIfExists(Event::STORED, $entity);
         if ($exists) {
             $this->triggerIfExists(Event::UPDATED, $entity);
         } else {

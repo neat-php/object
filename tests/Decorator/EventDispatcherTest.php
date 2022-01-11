@@ -15,38 +15,43 @@ class EventDispatcherTest extends TestCase
 {
     use Factory;
 
-    public function provideMethods(): array
+    public function provideMethods(): iterable
     {
-        return [
-            ['load', $entity = new Events(), $entity, Event\Loading::class, Event\Loaded::class],
-            ['delete', new Events(), 1, Event\Deleting::class, Event\Deleted::class],
-            ['store', new Events(), null, Event\Updating::class, Event\Updated::class],
-            ['store', new Events(), null, Event\Creating::class, Event\Created::class],
-        ];
+        $entity = new Events();
+
+        yield ['load', $entity, $entity, null, [new Event\Loading($entity), new Event\Loaded($entity)]];
+        $entity = new Events();
+        yield ['delete', $entity, 1, null, [new Event\Deleting($entity), new Event\Deleted($entity)]];
+        $entity = new Events();
+        $events = [new Event\Storing($entity), new Event\Updating($entity), new Event\Stored($entity), new Event\Updated($entity)];
+        yield ['store', $entity, null, 1, $events,];
+        $entity = new Events();
+        $events = [new Event\Storing($entity), new Event\Creating($entity), new Event\Stored($entity), new Event\Created($entity)];
+        yield ['store', $entity, null, null, $events,];
     }
 
     /**
-     * @param string $method
-     * @param object $in
-     * @param mixed  $out
-     * @param string $preClass
-     * @param string $postClass
+     * @param string       $method
+     * @param object       $in
+     * @param mixed        $out
+     * @param int|null     $id
+     * @param array<Event> $events
      * @dataProvider provideMethods
      */
-    public function testMethod(string $method, object $in, $out, string $preClass, string $postClass): void
+    public function testMethod(string $method, object $in, $out, ?int $id, array $events): void
     {
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(count($events)))
             ->method('dispatch')
-            ->withConsecutive([new $preClass($in)], [new $postClass($in)]);
+            ->withConsecutive(...array_chunk($events, 1));
 
         $repository = $this->createMock(Repository::class);
-        if ($preClass === Event\Updating::class) {
+        if ($id) {
             $repository
                 ->expects($this->once())
                 ->method('identifier')
-                ->willReturn(['id' => 1]);
+                ->willReturn(['id' => $id]);
             $repository
                 ->expects($this->once())
                 ->method('has')
