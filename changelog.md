@@ -5,10 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.11.14] - 2022-01-11
 ### Fixed
 - Storing & stored events were not dispatched.
 
-## [0.11.13]
+## [0.11.13] - 2021-08-27
 ### Added
 - Generics documentation.
 
