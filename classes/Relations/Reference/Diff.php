@@ -4,32 +4,33 @@ namespace Neat\Object\Relations\Reference;
 
 use Neat\Object\RepositoryInterface;
 
+/**
+ * @template T of object
+ */
 class Diff
 {
-    /** @var RepositoryInterface */
+    /** @var RepositoryInterface<T> */
     private $remoteRepository;
 
-    /** @var array<object> */
+    /** @var array<T> */
     private $after;
 
-    /** @var array<object> */
+    /** @var array<T> */
     private $before;
 
-    /** @var array<object> */
+    /** @var array<T> */
     private $insert = [];
 
-    /** @var array<object> */
+    /** @var array<T> */
     private $update = [];
 
-    /** @var array<object> */
+    /** @var array<T> */
     private $delete = [];
 
     /**
-     * Diff constructor.
-     *
-     * @param RepositoryInterface $remoteRepository
-     * @param array<object>       $before
-     * @param array<object>       $after
+     * @param RepositoryInterface<T> $remoteRepository
+     * @param array<T>               $before
+     * @param array<T>               $after
      */
     public function __construct(RepositoryInterface $remoteRepository, array $before, array $after)
     {
@@ -40,7 +41,7 @@ class Diff
     }
 
     /**
-     * @return array<object>
+     * @return array<T>
      */
     public function getInsert(): array
     {
@@ -48,7 +49,7 @@ class Diff
     }
 
     /**
-     * @return array<object>
+     * @return array<T>
      */
     public function getUpdate(): array
     {
@@ -56,7 +57,7 @@ class Diff
     }
 
     /**
-     * @return array<object>
+     * @return array<T>
      */
     public function getDelete(): array
     {
@@ -89,8 +90,8 @@ class Diff
     }
 
     /**
-     * @param object $entityA
-     * @param object $entityB
+     * @param T $entityA
+     * @param T $entityB
      * @return bool
      */
     protected function compare(object $entityA, object $entityB): bool

@@ -4,6 +4,9 @@ namespace Neat\Object;
 
 use Neat\Object\Relations\Many;
 use Neat\Object\Relations\One;
+use Neat\Object\Relations\Reference\JunctionTableBuilder;
+use Neat\Object\Relations\Reference\LocalKeyBuilder;
+use Neat\Object\Relations\Reference\RemoteKeyBuilder;
 use Neat\Object\Relations\RelationBuilder;
 
 trait Relations
@@ -27,10 +30,10 @@ trait Relations
     }
 
     /**
-     * @param string        $remoteClass
-     * @param string        $key
-     * @param callable|null $configure
-     * @psalm-param callable(RemoteKeyBuilder)|null $configure
+     * @template T
+     * @param class-string<T>                      $remoteClass
+     * @param string                               $key
+     * @param null|callable(RemoteKeyBuilder):void $configure
      * @return RelationBuilder
      * @deprecated use hasOne() with $role and $configure parameter instead
      */
@@ -61,11 +64,11 @@ trait Relations
      * action is executed. However when the relation is loaded and a remote entity is available the foreign key will be
      * set and the entity will be stored.
      *
-     * @param class-string  $remoteClass
-     * @param string|null   $role
-     * @param callable|null $configure
-     * @psalm-param callable(RemoteKeyBuilder)|null $configure
-     * @return One
+     * @template T
+     * @param class-string<T>                      $remoteClass
+     * @param string|null                          $role
+     * @param null|callable(RemoteKeyBuilder):void $configure
+     * @return One<static, T>
      */
     public function hasOne(string $remoteClass, string $role = null, callable $configure = null): One
     {
@@ -77,10 +80,10 @@ trait Relations
     }
 
     /**
-     * @param string        $remoteClass
-     * @param string        $key
-     * @param callable|null $configure
-     * @psalm-param callable(RemoteKeyBuilder)|null $configure
+     * @template T
+     * @param class-string<T>                      $remoteClass
+     * @param string                               $key
+     * @param null|callable(RemoteKeyBuilder):void $configure
      * @return RelationBuilder
      * @deprecated use hasMany() with $role and $configure parameter instead
      */
@@ -111,11 +114,11 @@ trait Relations
      * action is executed. However when the relation is loaded and remote entities are available the foreign key will be
      * set and the entities will be stored, updated and deleted when necessary.
      *
-     * @param class-string  $remoteClass
-     * @param string|null   $role
-     * @param callable|null $configure
-     * @psalm-param callable(RemoteKeyBuilder)|null $configure
-     * @return Many
+     * @template T
+     * @param class-string<T>                      $remoteClass
+     * @param string|null                          $role
+     * @param null|callable(RemoteKeyBuilder):void $configure
+     * @return Many<static, T>
      */
     public function hasMany(string $remoteClass, string $role = null, callable $configure = null): Many
     {
@@ -127,10 +130,10 @@ trait Relations
     }
 
     /**
-     * @param class-string  $remoteClass
-     * @param string        $key
-     * @param callable|null $configure
-     * @psalm-param callable(LocalKeyBuilder)|null $configure
+     * @template T
+     * @param class-string<T>                     $remoteClass
+     * @param string                              $key
+     * @param null|callable(LocalKeyBuilder):void $configure
      * @return RelationBuilder
      * @deprecated use belongsToOne() with $role and $configure parameter instead
      */
@@ -151,11 +154,11 @@ trait Relations
     }
 
     /**
-     * @param class-string  $remoteClass
-     * @param string|null   $role
-     * @param callable|null $configure
-     * @psalm-param callable(LocalKeyBuilder)|null $configure
-     * @return One
+     * @template T
+     * @param class-string<T>                     $remoteClass
+     * @param string|null                         $role
+     * @param null|callable(LocalKeyBuilder):void $configure
+     * @return One<static, T>
      */
     public function belongsToOne(string $remoteClass, string $role = null, callable $configure = null): One
     {
@@ -167,10 +170,10 @@ trait Relations
     }
 
     /**
-     * @param class-string  $remoteClass
-     * @param string        $key
-     * @param callable|null $configure
-     * @psalm-param callable(JunctionTableBuilder)|null $configure
+     * @template T
+     * @param class-string<T>                          $remoteClass
+     * @param string                                   $key
+     * @param null|callable(JunctionTableBuilder):void $configure
      * @return RelationBuilder
      * @deprecated use belongsToMany() with $role and $configure parameter instead
      */
@@ -191,11 +194,11 @@ trait Relations
     }
 
     /**
-     * @param class-string  $remoteClass
-     * @param string|null   $role
-     * @param callable|null $configure
-     * @psalm-param callable(JunctionTableBuilder)|null $configure
-     * @return Many
+     * @template T
+     * @param class-string<T>                          $remoteClass
+     * @param string|null                              $role
+     * @param null|callable(JunctionTableBuilder):void $configure
+     * @return Many<static, T>
      */
     public function belongsToMany(string $remoteClass, string $role = null, callable $configure = null): Many
     {

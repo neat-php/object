@@ -197,8 +197,7 @@ trait Collectible
     }
 
     /**
-     * @param callable|null $callback
-     * @psalm-param callable(T):int|null $callback
+     * @param null|callable(T):int $callback
      * @return static<T>
      */
     public function sort(callable $callback = null): self

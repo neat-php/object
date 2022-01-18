@@ -9,6 +9,7 @@ use Neat\Database\Connection;
  */
 class Query extends \Neat\Database\Query
 {
+    /** @use QueryRepository<T> */
     use QueryRepository;
 
     /**
