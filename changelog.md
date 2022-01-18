@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Passing a Property instance to setLocalKey and setRemoteKey.
 - RelationBuilder (the deprecated referenceFactory method was its only reason of existence)
 
+## [0.11.15] = 2022-01-18
+### Added
+- Generics documentation.
+
 ## [0.11.14] - 2022-01-11
 ### Fixed
 - Storing & stored events were not dispatched.

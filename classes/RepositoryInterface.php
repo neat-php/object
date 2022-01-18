@@ -40,7 +40,7 @@ interface RepositoryInterface
      * Create select query
      *
      * @param string|null $alias Table alias (optional)
-     * @return Query
+     * @return Query<T>
      */
     public function select(string $alias = null): Query;
 
@@ -55,7 +55,7 @@ interface RepositoryInterface
     /**
      * @param string $sql
      * @param mixed  ...$data
-     * @return SQLQuery
+     * @return SQLQuery<T>
      */
     public function sql(string $sql, ...$data): SQLQuery;
 
