@@ -39,6 +39,7 @@ trait Collectible
      * @param mixed $offset
      * @return T|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->items()[$offset];

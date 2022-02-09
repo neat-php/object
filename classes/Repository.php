@@ -85,8 +85,8 @@ class Repository implements RepositoryInterface
     {
         $identifier = $this->where($id);
 
-        return $this->connection->select('count(1)')->from($this->table)->where($identifier)->limit(1)
-                ->query()->value() === '1';
+        return (int)$this->connection->select('count(1)')->from($this->table)->where($identifier)->limit(1)
+                                     ->query()->value() === 1;
     }
 
     /**
