@@ -53,8 +53,7 @@ trait Collectible
      * @param T $value
      * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $items          = &$this->items();
         $items[$offset] = $value;
@@ -67,8 +66,7 @@ trait Collectible
      * @param mixed $offset
      * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $items = &$this->items();
         unset($items[$offset]);

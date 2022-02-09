@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "neat/database": "^1.2",
+        "neat/database": "^1.5",
         "psr/event-dispatcher": "^1.0"
     },
     "require-dev": {
