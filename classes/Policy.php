@@ -19,14 +19,12 @@ class Policy
     /** @var EventDispatcherInterface|null */
     private $dispatcher;
 
-    /** @var callable|null @psalm-var callable(string):string|null */
+    /** @var null|callable(string): string */
     private $pluralize;
+
     /**
-     * Policy constructor
-     *
      * @param EventDispatcherInterface|null $dispatcher
-     * @param callable|null                 $pluralize
-     * @psalm-param callable(string):string|null $pluralize
+     * @param null|callable(string): string  $pluralize
      */
     public function __construct(EventDispatcherInterface $dispatcher = null, callable $pluralize = null)
     {

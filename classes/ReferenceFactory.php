@@ -15,11 +15,12 @@ trait ReferenceFactory
     protected $references;
 
     /**
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(RemoteKeyBuilder)|null $configure
-     * @return RemoteKey
+     * @template TLocal
+     * @template TRemote
+     * @param class-string<TLocal>                                   $local
+     * @param class-string<TRemote>                                  $remote
+     * @param null|callable(RemoteKeyBuilder<TLocal, TRemote>): void $configure
+     * @return RemoteKey<TLocal, TRemote>
      */
     public function remoteKey(string $local, string $remote, callable $configure = null): RemoteKey
     {
@@ -29,12 +30,13 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string        $key
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(RemoteKeyBuilder)|null $configure
-     * @return RemoteKeyBuilder
+     * @template   TLocal
+     * @template   TRemote
+     * @param string                                                 $key
+     * @param class-string<TLocal>                                   $local
+     * @param class-string<TRemote>                                  $remote
+     * @param null|callable(RemoteKeyBuilder<TLocal, TRemote>): void $configure
+     * @return RemoteKeyBuilder<TLocal, TRemote>
      * @deprecated Use remoteKey() instead
      */
     public function buildRemoteKey(string $key, string $local, string $remote, callable $configure = null): RemoteKeyBuilder
@@ -56,11 +58,12 @@ trait ReferenceFactory
     }
 
     /**
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(LocalKeyBuilder)|null $configure
-     * @return LocalKey
+     * @template TLocal
+     * @template TRemote
+     * @param class-string<TLocal>                 $local
+     * @param class-string<TRemote>                $remote
+     * @param null|callable(LocalKeyBuilder): void $configure
+     * @return LocalKey<TLocal, TRemote>
      */
     public function localKey(string $local, string $remote, callable $configure = null): LocalKey
     {
@@ -70,12 +73,13 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string        $key
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(LocalKeyBuilder)|null $configure
-     * @return LocalKeyBuilder
+     * @template   TLocal
+     * @template   TRemote
+     * @param string                                                $key
+     * @param class-string<TLocal>                                  $local
+     * @param class-string<TRemote>                                 $remote
+     * @param null|callable(LocalKeyBuilder<TLocal, TRemote>): void $configure
+     * @return LocalKeyBuilder<TLocal, TRemote>
      * @deprecated Use localKey() instead
      */
     public function buildLocalKey(string $key, string $local, string $remote, callable $configure = null): LocalKeyBuilder
@@ -97,11 +101,12 @@ trait ReferenceFactory
     }
 
     /**
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(JunctionTableBuilder)|null $configure
-     * @return JunctionTable
+     * @template TLocal
+     * @template TRemote
+     * @param class-string<TLocal>                                       $local
+     * @param class-string<TRemote>                                      $remote
+     * @param null|callable(JunctionTableBuilder<TLocal, TRemote>): void $configure
+     * @return JunctionTable<TLocal, TRemote>
      */
     public function junctionTable(string $local, string $remote, callable $configure = null): JunctionTable
     {
@@ -111,12 +116,13 @@ trait ReferenceFactory
     }
 
     /**
-     * @param string        $key
-     * @param class-string  $local
-     * @param class-string  $remote
-     * @param callable|null $configure
-     * @psalm-param callable(JunctionTableBuilder)|null $configure
-     * @return JunctionTableBuilder
+     * @template   TLocal
+     * @template   TRemote
+     * @param string                                                     $key
+     * @param class-string<TLocal>                                       $local
+     * @param class-string<TRemote>                                      $remote
+     * @param null|callable(JunctionTableBuilder<TLocal, TRemote>): void $configure
+     * @return JunctionTableBuilder<TLocal, TRemote>
      * @deprecated Use junctionTable() instead
      */
     public function buildJunctionTable(string $key, string $local, string $remote, callable $configure = null): JunctionTableBuilder

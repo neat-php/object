@@ -142,8 +142,7 @@ trait Collectible
      *
      * The callback should accept an `$item` parameter
      *
-     * @param callable|null $callback
-     * @psalm-param callable(T):bool|null $callback
+     * @param null|callable(T): bool $callback
      * @return static
      */
     public function filter(callable $callback = null): self
@@ -176,9 +175,8 @@ trait Collectible
      *
      * The callback should accept an `$item` parameter
      *
-     * @psalm-template TReturn
-     * @param callable $callback
-     * @psalm-param callable(T):TReturn $callback
+     * @template TReturn
+     * @param callable(T): TReturn $callback
      * @return Collection<TReturn>
      */
     public function map(callable $callback): Collection
@@ -220,7 +218,7 @@ trait Collectible
     }
 
     /**
-     * @return array<T>
+     * @return list<T>
      */
     abstract protected function &items(): array;
 }
