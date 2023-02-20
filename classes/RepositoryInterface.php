@@ -71,7 +71,7 @@ interface RepositoryInterface
      * Get all by conditions
      *
      * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return array<T>
+     * @return list<T>
      */
     public function all($conditions = null): array;
 
@@ -87,7 +87,7 @@ interface RepositoryInterface
      * Iterate entities by conditions
      *
      * @param QueryInterface|string|array|null $conditions SQL where clause or Query instance
-     * @return Traversable<T>
+     * @return Traversable<int, T>
      */
     public function iterate($conditions = null): Traversable;
 

@@ -22,7 +22,7 @@ trait QueryRepository
     }
 
     /**
-     * @return array<T>
+     * @return list<T>
      * @see RepositoryInterface::all()
      */
     public function all(): array
@@ -40,7 +40,7 @@ trait QueryRepository
     }
 
     /**
-     * @return Traversable<T>
+     * @return Traversable<int, T>
      * @see RepositoryInterface::iterate()
      */
     public function iterate(): Traversable

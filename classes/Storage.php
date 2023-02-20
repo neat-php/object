@@ -8,17 +8,12 @@ use Traversable;
 
 trait Storage
 {
-    /**
-     * @return Manager
-     */
     public static function manager(): Manager
     {
         return Manager::get();
     }
 
     /**
-     * Get repository
-     *
      * @return RepositoryInterface<static>
      */
     public static function repository(): RepositoryInterface
@@ -48,7 +43,7 @@ trait Storage
 
     /**
      * @param string|null $alias
-     * @return Query
+     * @return Query<static>
      * @see RepositoryInterface::select()
      */
     public static function select(string $alias = null): Query
@@ -88,7 +83,7 @@ trait Storage
 
     /**
      * @param QueryInterface|string|array|null $conditions
-     * @return static[]
+     * @return list<static>
      * @see RepositoryInterface::all()
      */
     public static function all($conditions = null): array
@@ -108,7 +103,7 @@ trait Storage
 
     /**
      * @param QueryInterface|string|array|null $conditions
-     * @return Traversable<static>
+     * @return Traversable<int, static>
      * @see RepositoryInterface::iterate()
      */
     public static function iterate($conditions = null): Traversable

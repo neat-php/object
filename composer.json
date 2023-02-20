@@ -1,12 +1,12 @@
 {
     "name": "neat/object",
     "description": "Neat Object component",
+    "license": "MIT",
     "type": "library",
     "keywords": [
         "Object",
         "ORM"
     ],
-    "license": "MIT",
     "authors": [
         {
             "name": "Bauke van der Woude",
@@ -17,6 +17,15 @@
             "email": "annavanbiemen@gmail.com"
         }
     ],
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "neat/database": "^1.5",
+        "psr/event-dispatcher": "^1.0"
+    },
+    "require-dev": {
+        "ext-sqlite3": "*",
+        "phpunit/phpunit": "^8.0 || ^9.0"
+    },
     "autoload": {
         "psr-4": {
             "Neat\\Object\\": "classes/"
@@ -27,16 +36,10 @@
             "Neat\\Object\\Test\\": "tests/"
         }
     },
-    "require": {
-        "php": ">=7.2",
-        "ext-json": "*",
-        "neat/database": "^1.2",
-        "psr/event-dispatcher": "^1.0"
-    },
-    "require-dev": {
-        "ext-pdo": "*",
-        "ext-sqlite3": "*",
-        "phpunit/phpunit": "^8.0 || ^9.0"
+    "config": {
+        "platform": {
+            "php": "7.2.0"
+        }
     },
     "extra": {
         "branch-alias": {

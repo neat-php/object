@@ -31,21 +31,16 @@ class Repository implements RepositoryInterface
     /** @var Property[] */
     private $properties;
 
-    /** @var callable
-     * @psalm-var callable(array):T
-     */
+    /** @var callable(array): T */
     private $factory;
 
     /**
-     * Repository constructor
-     *
-     * @param Connection                   $connection Connection to the database the entity table exists in
-     * @param class-string<T>              $class      Class name of the entity the repository is meant for
-     * @param string                       $table      Table name for the entity
-     * @param string[]                     $key        Primary key columns for the table, pass multiple items for a composed key
-     * @param Property[]                   $properties Properties of the entity, should only include properties which actually map to a database column
-     * @param callable|null                $factory    Factory closure used to create entity instances from a table row result
-     * @psalm-param callable(array):T|null $factory    Factory closure used to create entity instances from a table row result
+     * @param Connection              $connection Connection to the database the entity table exists in
+     * @param class-string<T>         $class      Class name of the entity the repository is meant for
+     * @param string                  $table      Table name for the entity
+     * @param string[]                $key        Primary key columns for the table, pass multiple items for a composed key
+     * @param Property[]              $properties Properties of the entity, should only include properties which actually map to a database column
+     * @param null|callable(array): T $factory    Factory closure used to create entity instances from a table row result
      */
     public function __construct(
         Connection $connection,
@@ -84,8 +79,8 @@ class Repository implements RepositoryInterface
     {
         $identifier = $this->where($id);
 
-        return $this->connection->select('count(1)')->from($this->table)->where($identifier)->limit(1)
-                ->query()->value() === '1';
+        return (int)$this->connection->select('count(1)')->from($this->table)->where($identifier)->limit(1)
+                                     ->query()->value() === 1;
     }
 
     /**
