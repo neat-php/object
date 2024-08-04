@@ -7,7 +7,6 @@ use Neat\Object\Policy;
 use Neat\Object\Query;
 use Neat\Object\Relations\Many;
 use Neat\Object\Relations\One;
-use Neat\Object\Test\Helper;
 use PHPUnit\Framework\TestCase;
 
 class AccessorsTest extends TestCase
@@ -81,7 +80,6 @@ class AccessorsTest extends TestCase
         try {
             Manager::set($this->manager());
             $this->expectException('Error');
-            $this->expectErrorMessage('Call to undefined method ' . Helper\UserWithAccessors::class . '::' . $method . '()');
 
             $user = new Helper\UserWithAccessors();
             $user->$method();

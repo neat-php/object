@@ -36,11 +36,6 @@
             "Neat\\Object\\Test\\": "tests/"
         }
     },
-    "config": {
-        "platform": {
-            "php": "7.2.0"
-        }
-    },
     "extra": {
         "branch-alias": {
             "dev-master": "0.12.x-dev"

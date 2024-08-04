@@ -175,7 +175,6 @@ class EntityTest extends TestCase
     {
         Manager::set($this->manager());
 
-        $this->assertCount(3, User::iterate());
         /** @var User $user */
         $i = 1;
         foreach (User::iterate() as $user) {

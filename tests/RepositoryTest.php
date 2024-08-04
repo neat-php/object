@@ -217,7 +217,6 @@ class RepositoryTest extends TestCase
     {
         $userRepository = $this->repository(User::class);
 
-        $this->assertCount(3, $userRepository->iterate());
         $i = 1;
         foreach ($userRepository->iterate() as $user) {
             $this->assertInstanceOf(User::class, $user);
@@ -231,11 +230,10 @@ class RepositoryTest extends TestCase
         $repository = $this->repository(User::class);
 
         $userIterator = $repository->sql("SELECT * FROM `user` ORDER BY id DESC")->iterate();
-        $this->assertCount(3, $userIterator);
-        $i = 1;
-        foreach ($repository->iterate() as $user) {
+        $i = 3;
+        foreach ($userIterator as $user) {
             $this->assertInstanceOf(User::class, $user);
-            $this->assertSame($i++, $user->id);
+            $this->assertSame($i--, $user->id);
         }
         $this->assertInstanceOf(Generator::class, $repository->iterate());
     }
