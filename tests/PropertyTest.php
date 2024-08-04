@@ -6,23 +6,26 @@ use DateTime;
 use DateTimeImmutable;
 use Neat\Object\Policy;
 use Neat\Object\Property;
+use Neat\Object\Test\Helper\TypedUser;
 use Neat\Object\Test\Helper\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use TypeError;
 
 class PropertyTest extends TestCase
 {
     /**
      * Create property
      *
-     * @param string $name
+     * @param class-string $class
+     * @param string       $name
      * @return Property
      * @noinspection PhpDocMissingThrowsInspection
      */
-    public function createProperty(string $name): Property
+    public function createProperty(string $class, string $name): Property
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $reflection = new ReflectionProperty(User::class, $name);
+        $reflection = new ReflectionProperty($class, $name);
 
         return (new Policy())->property($reflection);
     }
@@ -54,7 +57,26 @@ class PropertyTest extends TestCase
      */
     public function testType(string $name, $type): void
     {
-        $property = $this->createProperty($name);
+        $property = $this->createProperty(User::class, $name);
+
+        $this->assertSame($name, $property->name());
+        $this->assertInstanceOf($type, $property);
+    }
+
+    /**
+     * Test untyped property access
+     *
+     * @dataProvider provideTypes
+     * @param string $name
+     * @param mixed  $type
+     */
+    public function testTyped(string $name, $type): void
+    {
+        if (PHP_VERSION_ID < 70400) {
+            $this->markTestSkipped("php 7.4 and up only");
+        }
+
+        $property = $this->createProperty(TypedUser::class, $name);
 
         $this->assertSame($name, $property->name());
         $this->assertInstanceOf($type, $property);
@@ -95,6 +117,16 @@ class PropertyTest extends TestCase
         ];
     }
 
+    public function testInvalidTyped(): void
+    {
+        if (PHP_VERSION_ID < 70400) {
+            $this->markTestSkipped("php 7.4 and up only");
+        }
+
+        $this->expectException(TypeError::class);
+        $this->createProperty(TypedUser::class, 'user');
+    }
+
     /**
      * Test set value
      *
@@ -107,7 +139,7 @@ class PropertyTest extends TestCase
     {
         $user = new User();
 
-        $property = $this->createProperty($name);
+        $property = $this->createProperty(User::class, $name);
         $property->set($user, $in);
 
         if (is_object($out)) {
@@ -163,12 +195,25 @@ class PropertyTest extends TestCase
         $user        = new User();
         $user->$name = $in;
 
-        $property = $this->createProperty($name);
+        $property = $this->createProperty(User::class, $name);
 
         if (is_object($out)) {
             $this->assertEquals($out, $property->get($user));
         } else {
             $this->assertSame($out, $property->get($user));
         }
+    }
+
+    public function testIsInitialized(): void
+    {
+        if (PHP_VERSION_ID < 70400) {
+            $this->markTestSkipped("php 7.4 and up only");
+        }
+
+        $user = new TypedUser();
+        $property = $this->createProperty(TypedUser::class,'id');
+        $this->assertFalse($property->isInitialized($user));
+        $user->id = 1;
+        $this->assertTrue($property->isInitialized($user));
     }
 }

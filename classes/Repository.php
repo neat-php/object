@@ -328,7 +328,11 @@ class Repository implements RepositoryInterface
 
         return array_map(
             function (string $key) use ($entity) {
-                return $this->properties[$key]->get($entity);
+                $property = $this->properties[$key];
+                if (!$property->isInitialized($entity)) {
+                    return null;
+                }
+                return $property->get($entity);
             },
             $keys
         );

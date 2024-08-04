@@ -13,6 +13,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
+use TypeError;
 
 class Policy
 {
@@ -24,7 +25,7 @@ class Policy
 
     /**
      * @param EventDispatcherInterface|null $dispatcher
-     * @param null|callable(string): string  $pluralize
+     * @param null|callable(string): string $pluralize
      */
     public function __construct(EventDispatcherInterface $dispatcher = null, callable $pluralize = null)
     {
@@ -146,6 +147,13 @@ class Policy
      */
     public function property(ReflectionProperty $reflection): Property
     {
+        if (PHP_VERSION_ID >= 70400) {
+            $property = $this->typedProperty($reflection);
+            if ($property) {
+                return $property;
+            }
+        }
+
         if (preg_match('/\\s@var\\s([\\w\\\\]+)(?:\\|null)?\\s/', $reflection->getDocComment(), $matches)) {
             $type = ltrim($matches[1], '\\');
             switch ($type) {
@@ -163,6 +171,30 @@ class Policy
         }
 
         return new Property($reflection);
+    }
+
+    public function typedProperty(ReflectionProperty $reflection): ?Property
+    {
+        $reflectionNamedType = $reflection->getType();
+        if (!$reflectionNamedType) {
+            return null;
+        }
+
+        $type = $reflectionNamedType->getName();
+        switch ($type) {
+            case 'bool':
+                return new Property\Boolean($reflection);
+            case 'DateTime':
+                return new Property\DateTime($reflection);
+            case 'DateTimeImmutable':
+                return new Property\DateTimeImmutable($reflection);
+            case 'int':
+                return new Property\Integer($reflection);
+            case 'string':
+                return new Property($reflection);
+        }
+
+        throw new TypeError("Unsupported property type $type");
     }
 
     /**

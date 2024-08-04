@@ -75,6 +75,16 @@ class Property
         return $value;
     }
 
+    public function isInitialized(object $object): bool
+    {
+        if (PHP_VERSION_ID >= 70400) {
+            return $this->reflection->isInitialized($object);
+        }
+        $value = $this->reflection->getValue($object);
+
+        return $value !== null;
+    }
+
     /**
      * Get Value
      *
