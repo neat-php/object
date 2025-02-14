@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.12.0] - 2025-02-14
 ### Added
 - $key parameter to ReferenceFactory methods (breaks backward compatibility).
 - Type hints (may break backward compatibility when you extend Neat Object classes, which is inherently bad).
