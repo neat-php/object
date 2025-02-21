@@ -22,7 +22,7 @@ trait ReferenceFactory
      * @param null|callable(RemoteKeyBuilder<TLocal, TRemote>): void $configure
      * @return RemoteKey<TLocal, TRemote>
      */
-    public function remoteKey(string $key, string $local, string $remote, callable $configure = null): RemoteKey
+    public function remoteKey(string $key, string $local, string $remote, ?callable $configure = null): RemoteKey
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->references->get($key, function () use ($local, $remote, $configure) {
@@ -44,7 +44,7 @@ trait ReferenceFactory
      * @param null|callable(LocalKeyBuilder): void $configure
      * @return LocalKey<TLocal, TRemote>
      */
-    public function localKey(string $key, string $local, string $remote, callable $configure = null): LocalKey
+    public function localKey(string $key, string $local, string $remote, ?callable $configure = null): LocalKey
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->references->get($key, function () use ($local, $remote, $configure) {
@@ -66,7 +66,7 @@ trait ReferenceFactory
      * @param null|callable(JunctionTableBuilder<TLocal, TRemote>): void $configure
      * @return JunctionTable<TLocal, TRemote>
      */
-    public function junctionTable(string $key, string $local, string $remote, callable $configure = null): JunctionTable
+    public function junctionTable(string $key, string $local, string $remote, ?callable $configure = null): JunctionTable
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->references->get($key, function () use ($local, $remote, $configure) {

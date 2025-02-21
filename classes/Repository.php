@@ -48,7 +48,7 @@ class Repository implements RepositoryInterface
         string $table,
         array $key,
         array $properties,
-        callable $factory = null
+        ?callable $factory = null
     ) {
         $this->connection = $connection;
         $this->class      = $class;
@@ -96,7 +96,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function select(string $alias = null): Query
+    public function select(?string $alias = null): Query
     {
         $quotedTable = $this->connection->quoteIdentifier($this->table);
 

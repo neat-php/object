@@ -33,7 +33,7 @@ class OneTest extends TestCase
      * @param Reference|null $reference
      * @return One
      */
-    public function one(Reference $reference = null): One
+    public function one(?Reference $reference = null): One
     {
         $user     = new User();
         $user->id = 1;

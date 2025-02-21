@@ -27,7 +27,7 @@ class Policy
      * @param EventDispatcherInterface|null $dispatcher
      * @param null|callable(string): string $pluralize
      */
-    public function __construct(EventDispatcherInterface $dispatcher = null, callable $pluralize = null)
+    public function __construct(?EventDispatcherInterface $dispatcher = null, ?callable $pluralize = null)
     {
         $this->dispatcher = $dispatcher;
         $this->pluralize  = $pluralize;

@@ -46,7 +46,7 @@ trait Storage
      * @return Query<static>
      * @see RepositoryInterface::select()
      */
-    public static function select(string $alias = null): Query
+    public static function select(?string $alias = null): Query
     {
         return static::repository()->select($alias);
     }

@@ -41,7 +41,7 @@ trait RepositoryDecorator
     /**
      * @inheritDoc
      */
-    public function select(string $alias = null): Query
+    public function select(?string $alias = null): Query
     {
         return $this->repository()->select($alias);
     }

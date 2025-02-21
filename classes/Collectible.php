@@ -145,7 +145,7 @@ trait Collectible
      * @param null|callable(T): bool $callback
      * @return static
      */
-    public function filter(callable $callback = null): self
+    public function filter(?callable $callback = null): self
     {
         if (!$callback) {
             $callback = [$this, 'falsyFilter'];
@@ -199,7 +199,7 @@ trait Collectible
      * @param null|callable(T):int $callback
      * @return static<T>
      */
-    public function sort(callable $callback = null): self
+    public function sort(?callable $callback = null): self
     {
         $new   = clone $this;
         $items = &$new->items();

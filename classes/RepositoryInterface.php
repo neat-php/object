@@ -42,7 +42,7 @@ interface RepositoryInterface
      * @param string|null $alias Table alias (optional)
      * @return Query<T>
      */
-    public function select(string $alias = null): Query;
+    public function select(?string $alias = null): Query;
 
     /**
      * Create select query with conditions

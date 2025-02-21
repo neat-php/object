@@ -34,7 +34,7 @@ class ManyTest extends TestCase
      * @param Reference|null $reference
      * @return Many
      */
-    public function many(Reference $reference = null): Many
+    public function many(?Reference $reference = null): Many
     {
         $user     = new User();
         $user->id = 1;

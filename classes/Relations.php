@@ -42,7 +42,7 @@ trait Relations
      * @param null|callable(RemoteKeyBuilder):void $configure
      * @return One<static, T>
      */
-    public function hasOne(string $remoteClass, string $role = null, callable $configure = null): One
+    public function hasOne(string $remoteClass, ?string $role = null, ?callable $configure = null): One
     {
         $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
@@ -72,7 +72,7 @@ trait Relations
      * @param null|callable(RemoteKeyBuilder):void $configure
      * @return Many<static, T>
      */
-    public function hasMany(string $remoteClass, string $role = null, callable $configure = null): Many
+    public function hasMany(string $remoteClass, ?string $role = null, ?callable $configure = null): Many
     {
         $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
@@ -92,7 +92,7 @@ trait Relations
      * @param null|callable(LocalKeyBuilder):void $configure
      * @return One<static, T>
      */
-    public function belongsToOne(string $remoteClass, string $role = null, callable $configure = null): One
+    public function belongsToOne(string $remoteClass, ?string $role = null, ?callable $configure = null): One
     {
         $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
@@ -112,7 +112,7 @@ trait Relations
      * @param null|callable(JunctionTableBuilder):void $configure
      * @return Many<static, T>
      */
-    public function belongsToMany(string $remoteClass, string $role = null, callable $configure = null): Many
+    public function belongsToMany(string $remoteClass, ?string $role = null, ?callable $configure = null): Many
     {
         $key = get_class($this) . ($role ?? __FUNCTION__) . $remoteClass;
 
