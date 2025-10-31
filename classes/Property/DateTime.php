@@ -3,7 +3,6 @@
 namespace Neat\Object\Property;
 
 use DateTimeInterface;
-use Exception;
 use Neat\Object\Property;
 
 class DateTime extends Property
@@ -12,8 +11,6 @@ class DateTime extends Property
      * Cast value from bool to scalar
      *
      * @param mixed $value
-     * @return string
-     * @throws Exception
      */
     public function toString($value): string
     {
@@ -25,11 +22,7 @@ class DateTime extends Property
     }
 
     /**
-     * Cast value from scalar to type
-     *
-     * @param string $value
-     * @return \DateTime
-     * @throws Exception
+     * Cast value from scalar to a DateTime
      */
     public function fromString(string $value): \DateTime
     {

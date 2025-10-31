@@ -10,9 +10,6 @@ class Property
     protected $reflection;
 
     /**
-     * Property constructor
-     *
-     * @param ReflectionProperty $reflection
      * @note Activates the reflection's accessible flag
      */
     public function __construct(ReflectionProperty $reflection)
@@ -22,30 +19,18 @@ class Property
         $this->reflection = $reflection;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
     public function name(): string
     {
         return $this->reflection->getName();
     }
 
-    /**
-     * Is static?
-     *
-     * @return bool
-     */
     public function static(): bool
     {
         return $this->reflection->isStatic();
     }
 
     /**
-     * Get doc comment
-     *
-     * @return string
+     * Get the doc comment
      */
     public function comment(): string
     {
@@ -56,19 +41,16 @@ class Property
      * Cast value to string
      *
      * @param mixed $value
-     * @return string
      */
     public function toString($value): string
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
      * Cast value from string
      *
-     * @param string $value
      * @return mixed
-     * @noinspection PhpMissingReturnTypeInspection
      */
     public function fromString(string $value)
     {
@@ -86,10 +68,7 @@ class Property
     }
 
     /**
-     * Get Value
-     *
-     * @param object $object
-     * @return string|null
+     * Get the value from the given object
      */
     public function get(object $object): ?string
     {
@@ -102,11 +81,9 @@ class Property
     }
 
     /**
-     * Set value
+     * Set the given value on the given object
      *
-     * @param object $object
      * @param mixed  $value
-     * @return void
      */
     public function set(object $object, $value): void
     {

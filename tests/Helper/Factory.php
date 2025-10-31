@@ -42,6 +42,7 @@ CREATE TABLE user
     middle_name   TEXT     NULL,
     last_name     TEXT     NOT NULL,
     active        INTEGER  NOT NULL DEFAULT 1,
+    score         FLOAT    NULL,
     register_date DATETIME NOT NULL,
     update_date   DATETIME NOT NULL,
     deleted_date  DATETIME NULL,

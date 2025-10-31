@@ -6,23 +6,6 @@ use Neat\Object\Property;
 
 class Integer extends Property
 {
-    /**
-     * Cast value from bool to scalar
-     *
-     * @param mixed $value
-     * @return string
-     */
-    public function toString($value): string
-    {
-        return (string) $value;
-    }
-
-    /**
-     * Cast value from scalar to type
-     *
-     * @param string $value
-     * @return int
-     */
     public function fromString(string $value): int
     {
         return (int) $value;

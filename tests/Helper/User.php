@@ -43,6 +43,11 @@ class User extends Entity
     public $active;
 
     /**
+     * @var float
+     */
+    public $score;
+
+    /**
      * @var int
      * @nostorage
      */

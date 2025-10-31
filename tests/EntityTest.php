@@ -271,16 +271,17 @@ class EntityTest extends TestCase
         Manager::set($this->manager());
 
         $data = [
+            'id'            => null,
+            "type_id"       => '1',
             "username"      => 'tdevries',
-            "type_id"       => 1,
             "first_name"    => "Thijs",
             "middle_name"   => "de",
             "last_name"     => "Vries",
-            "active"        => 1,
-            "update_date"   => date("Y-m-d H:i:s"),
+            "active"        => '1',
+            "score"         => null,
             'register_date' => null,
+            "update_date"   => date("Y-m-d H:i:s"),
             'deleted_date'  => null,
-            'id'            => null,
         ];
 
         $user = new User();
@@ -288,7 +289,7 @@ class EntityTest extends TestCase
 
         $this->assertEquals("Thijs", $user->firstName);
         $this->assertEquals(true, $user->active);
-        $this->assertEquals($data, $user->toArray());
+        $this->assertSame($data, $user->toArray());
     }
 
     /**
@@ -300,7 +301,8 @@ class EntityTest extends TestCase
         Manager::set(new Manager($this->connection(), new Policy($dispatcher)));
 
         $user = new User();
-        $dispatcher->expects($this->once())
+        $dispatcher
+            ->expects($this->once())
             ->method('dispatch')
             ->with(new Custom($user));
 

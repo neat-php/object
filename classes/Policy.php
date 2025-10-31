@@ -24,7 +24,6 @@ class Policy
     private $pluralize;
 
     /**
-     * @param EventDispatcherInterface|null $dispatcher
      * @param null|callable(string): string $pluralize
      */
     public function __construct(?EventDispatcherInterface $dispatcher = null, ?callable $pluralize = null)
@@ -34,11 +33,9 @@ class Policy
     }
 
     /**
-     * Get repository
+     * Create a repository and apply the applicable decorators for the given class
      *
      * @param class-string $class
-     * @param Connection   $connection
-     * @return RepositoryInterface
      */
     public function repository(string $class, Connection $connection): RepositoryInterface
     {
@@ -68,7 +65,6 @@ class Policy
      * Get table name for class
      *
      * @param class-string $class
-     * @return string
      */
     public function table(string $class): string
     {
@@ -82,7 +78,6 @@ class Policy
      *
      * @param class-string $classA
      * @param class-string $classB
-     * @return string
      */
     public function junctionTable(string $classA, string $classB): string
     {
@@ -94,9 +89,6 @@ class Policy
 
     /**
      * Get column name for property
-     *
-     * @param string $property
-     * @return string
      */
     public function column(string $property): string
     {
@@ -107,7 +99,6 @@ class Policy
      * Get column name for a foreign key
      *
      * @param class-string $class
-     * @return string
      */
     public function foreignKey(string $class): string
     {
@@ -141,10 +132,6 @@ class Policy
         return $properties;
     }
 
-    /**
-     * @param ReflectionProperty $reflection
-     * @return Property
-     */
     public function property(ReflectionProperty $reflection): Property
     {
         if (PHP_VERSION_ID >= 70400) {
@@ -160,13 +147,16 @@ class Policy
                 case 'bool':
                 case 'boolean':
                     return new Property\Boolean($reflection);
-                case 'int':
-                case 'integer':
-                    return new Property\Integer($reflection);
                 case 'DateTime':
                     return new Property\DateTime($reflection);
                 case 'DateTimeImmutable':
                     return new Property\DateTimeImmutable($reflection);
+                case 'double':
+                case 'float':
+                    return new Property\FloatProperty($reflection);
+                case 'int':
+                case 'integer':
+                    return new Property\Integer($reflection);
             }
         }
 
@@ -188,6 +178,8 @@ class Policy
                 return new Property\DateTime($reflection);
             case 'DateTimeImmutable':
                 return new Property\DateTimeImmutable($reflection);
+            case 'float':
+                return new Property\FloatProperty($reflection);
             case 'int':
                 return new Property\Integer($reflection);
             case 'string':
@@ -197,12 +189,6 @@ class Policy
         throw new TypeError("Unsupported property type $type");
     }
 
-    /**
-     * Skip property?
-     *
-     * @param Property $property
-     * @return bool
-     */
     public function skip(Property $property): bool
     {
         return $property->static() || preg_match('/\\s@nostorage\\s/', $property->comment());
@@ -211,8 +197,9 @@ class Policy
     /**
      * Get factory method
      *
-     * @param class-string $class
-     * @return callable|null
+     * @template T
+     * @param class-string<T> $class
+     * @return callable(array): T|null
      */
     public function factory(string $class): ?callable
     {
@@ -228,7 +215,7 @@ class Policy
     public function events(string $class): array
     {
         if (defined($class . '::EVENTS')) {
-            return (array)constant($class . '::EVENTS');
+            return (array) constant($class . '::EVENTS');
         }
 
         return [];
@@ -238,7 +225,6 @@ class Policy
      * Get delete stamp property
      *
      * @param class-string $class
-     * @return string|null
      */
     public function softDelete(string $class): ?string
     {
@@ -249,7 +235,6 @@ class Policy
      * Get create stamp property
      *
      * @param class-string $class
-     * @return string|null
      */
     public function createdStamp(string $class): ?string
     {
@@ -257,10 +242,9 @@ class Policy
     }
 
     /**
-     * Get create stamp property
+     * Get update stamp property
      *
      * @param class-string $class
-     * @return string|null
      */
     public function updatedStamp(string $class): ?string
     {
@@ -269,10 +253,6 @@ class Policy
 
     /**
      * Get accessor relation method
-     *
-     * @param string $operation
-     * @param string $relation
-     * @return string
      */
     public function accessorRelationMethod(string $operation, string $relation): string
     {
@@ -292,7 +272,7 @@ class Policy
     public function key(string $class): array
     {
         if (defined($class . '::KEY')) {
-            return (array)constant($class . '::KEY');
+            return (array) constant($class . '::KEY');
         }
 
         if (property_exists($class, 'id')) {

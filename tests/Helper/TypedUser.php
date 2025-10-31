@@ -28,6 +28,8 @@ class TypedUser extends Entity
 
     public bool $active;
 
+    public ?float $score;
+
     /**
      * @nostorage
      */

@@ -3,7 +3,6 @@
 namespace Neat\Object\Property;
 
 use DateTimeInterface;
-use Exception;
 use Neat\Object\Property;
 
 class DateTimeImmutable extends Property
@@ -12,8 +11,6 @@ class DateTimeImmutable extends Property
      * Cast DateTimeImmutable to string
      *
      * @param mixed $value
-     * @return string
-     * @throws Exception
      */
     public function toString($value): string
     {
@@ -25,11 +22,7 @@ class DateTimeImmutable extends Property
     }
 
     /**
-     * Cast value from scalar to type
-     *
-     * @param string $value
-     * @return \DateTimeImmutable
-     * @throws Exception
+     * Cast value from scalar to a DateTimeImmutable
      */
     public function fromString(string $value): \DateTimeImmutable
     {
