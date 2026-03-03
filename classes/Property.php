@@ -14,7 +14,9 @@ class Property
      */
     public function __construct(ReflectionProperty $reflection)
     {
-        $reflection->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $reflection->setAccessible(true);
+        }
 
         $this->reflection = $reflection;
     }
